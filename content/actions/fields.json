@@ -1,0 +1,34 @@
+{
+  "actions": [
+    {
+      "id": "drive-harvest",
+      "screen": "fields",
+      "label": "Drive the Harvest",
+      "desc": "Push the whole coven into the fields from dawn to dark. The granary fills; the spirit frays.",
+      "effects": [{ "add": ["provisions", 14] }, { "add": ["faith", -6] }]
+    },
+    {
+      "id": "bless-fields",
+      "screen": "fields",
+      "label": "Bless the Fields",
+      "desc": "Coax the crops with growth-runes and a little spent mana.",
+      "requires": { "gte": ["mana", 10] },
+      "effects": [{ "add": ["mana", -10] }, { "add": ["provisions", 12] }]
+    },
+    {
+      "id": "buy-seed-grain",
+      "screen": "fields",
+      "label": "Buy Seed-Grain",
+      "desc": "Send coin down the market roads for grain and good seed.",
+      "requires": { "gte": ["coin", 10] },
+      "effects": [{ "add": ["coin", -10] }, { "add": ["provisions", 15] }]
+    },
+    {
+      "id": "forage-wastes",
+      "screen": "fields",
+      "label": "Forage the Wastes",
+      "desc": "Send gatherers into the broken lands. There is food out there — and worse than food.",
+      "effects": [{ "add": ["provisions", 8] }, { "add": ["fracture", 3] }]
+    }
+  ]
+}

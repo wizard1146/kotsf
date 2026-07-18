@@ -1,0 +1,43 @@
+{
+  "id": "the-coven-divided",
+  "type": "interactive",
+  "title": "The Coven Divided",
+  "weight": 8,
+  "trigger": { "lt": ["faith", 40] },
+  "intro": "The Circle quarrels openly now. Two camps have formed at the hearth, and both look to you to name which Runehold will be: a coven of careful memory, or a coven that dares the Flame.",
+  "advisors": [
+    { "member": "vela-the-blue", "text": "Tell them we are keepers of memory first. Caution has kept us alive this long." },
+    { "member": "wisp", "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices." }
+  ],
+  "choices": [
+    {
+      "id": "side-memory",
+      "label": "Declare for memory and caution",
+      "win": {
+        "text": "You name Runehold a house of remembrance. The careful are heartened; the bold go quiet, and a little cold.",
+        "effects": [{ "add": ["faith", 10] }, { "add": ["lore", 5] }, { "add": ["flamesRegard", -8] }]
+      }
+    },
+    {
+      "id": "side-flame",
+      "label": "Declare for the Flame and daring",
+      "win": {
+        "text": "You name Runehold a house of the Flame. The devout blaze up; the cautious bite their tongues and watch.",
+        "effects": [{ "add": ["faith", 10] }, { "add": ["flamesRegard", 10] }, { "add": ["fracture", 4] }]
+      }
+    },
+    {
+      "id": "hold-both",
+      "label": "Refuse to choose — hold the Circle together",
+      "test": { "stat": "faith", "vs": 50 },
+      "win": {
+        "text": "You speak for an hour and somehow both camps leave believing they won. It will not hold forever. It holds tonight.",
+        "effects": [{ "add": ["faith", 8] }]
+      },
+      "lose": {
+        "text": "Your careful words satisfy no one. Both camps decide you are weak, and say so.",
+        "effects": [{ "add": ["faith", -8] }]
+      }
+    }
+  ]
+}

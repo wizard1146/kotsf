@@ -1,0 +1,38 @@
+{
+  "id": "overtures-to-the-red",
+  "type": "interactive",
+  "title": "Overtures to the Red",
+  "weight": 7,
+  "trigger": { "lt": ["cult.red", 0] },
+  "intro": "A Red factor you once snubbed sends a careful letter. The Stock Sanctuary, it seems, would rather profit from Runehold than feud with it — if you will make the first gesture.",
+  "advisors": [
+    { "member": "korr-ashen", "text": "Enemies cost more than tribute. Swallow the pride, Archon. Red gold spends the same as any." }
+  ],
+  "choices": [
+    {
+      "id": "send-tribute",
+      "label": "Send a generous tribute to mend the breach",
+      "requires": { "gte": ["coin", 16] },
+      "win": {
+        "text": "The gift is received with a counting-house smile. The feud cools to mere commerce.",
+        "effects": [{ "add": ["coin", -16] }, { "adjust_cult": ["red", 20] }]
+      }
+    },
+    {
+      "id": "offer-trade-rights",
+      "label": "Offer Red factors trade rights in Runehold",
+      "win": {
+        "text": "Red stalls rise in your market square. Coin trickles in, and so does Red influence you cannot quite see.",
+        "effects": [{ "adjust_cult": ["red", 12] }, { "add": ["coin", 8] }, { "add": ["faith", -4] }]
+      }
+    },
+    {
+      "id": "let-it-fester",
+      "label": "Let the feud stand",
+      "win": {
+        "text": "You burn the letter. The coven likes a leader who holds a grudge — until the price of one comes due.",
+        "effects": [{ "adjust_cult": ["red", -4] }, { "add": ["faith", 3] }]
+      }
+    }
+  ]
+}

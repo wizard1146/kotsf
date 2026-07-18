@@ -1,0 +1,18 @@
+{
+  "id": "ash-on-the-wind",
+  "type": "news",
+  "title": "Ash on the Wind",
+  "weight": 3,
+  "trigger": { "gte": ["fracture", 15] },
+  "intro": "Grey ash drifts in from the east for three days running. The old ones say the Fracture is breathing again.",
+  "choices": [
+    {
+      "id": "note",
+      "label": "Record it in the saga and move on",
+      "win": {
+        "text": "You note the omen. The coven mutters and watches the horizon.",
+        "effects": [{ "add": ["fracture", 2] }]
+      }
+    }
+  ]
+}

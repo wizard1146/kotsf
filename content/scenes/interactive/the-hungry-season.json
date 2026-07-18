@@ -1,0 +1,36 @@
+{
+  "id": "the-hungry-season",
+  "type": "interactive",
+  "title": "The Hungry Season",
+  "weight": 12,
+  "trigger": { "lt": ["provisions", 45] },
+  "intro": "The stores run thin before the Highsun harvest. The coven looks to you with hollow eyes.",
+  "advisors": [
+    { "member": "korr-ashen", "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep." },
+    { "member": "vela-the-blue", "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both." }
+  ],
+  "choices": [
+    {
+      "id": "raid",
+      "label": "Raid a Warrior caravan for grain",
+      "test": { "stat": "faith", "vs": 50 },
+      "win": {
+        "text": "The raid succeeds; wagons roll into Runehold heavy with grain.",
+        "effects": [{ "add": ["provisions", 22] }, { "add": ["fracture", 6] }]
+      },
+      "lose": {
+        "text": "The Warriors were ready for you. You return with wounded and little else.",
+        "effects": [{ "add": ["faith", -10] }, { "add": ["fracture", 10] }, { "add": ["provisions", -4] }]
+      }
+    },
+    {
+      "id": "trade",
+      "label": "Trade coin for grain",
+      "requires": { "gte": ["coin", 10] },
+      "win": {
+        "text": "A fair price, fairly paid. The stores fill, and no blood is owed.",
+        "effects": [{ "add": ["coin", -10] }, { "add": ["provisions", 18] }]
+      }
+    }
+  ]
+}

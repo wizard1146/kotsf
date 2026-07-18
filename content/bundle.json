@@ -1,0 +1,2029 @@
+{
+  "scenes": [
+    {
+      "id": "a-strayed-herd",
+      "type": "interactive",
+      "title": "A Strayed Herd",
+      "weight": 5,
+      "trigger": {
+        "lt": [
+          "provisions",
+          50
+        ]
+      },
+      "intro": "A herd of Elysian ponies — manes like banked coals, eyes too knowing — drifts down from the high passes and lingers in Runehold's lower meadow. They are no one's, for now.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "Meat and hides through Deepfrost, Archon. The meadow will not feed us; they might."
+        },
+        {
+          "member": "ember",
+          "text": "Ride them! Tame one and you have a friend out of the Elysian Fields. Eat one and you have a sad winter dinner."
+        }
+      ],
+      "choices": [
+        {
+          "id": "slaughter",
+          "label": "Take the herd for meat and hide",
+          "win": {
+            "text": "The meadow runs red and the granary fills. The coven eats; something old in the high passes takes note.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  18
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -4
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "tame",
+          "label": "Try to gentle and keep the herd",
+          "test": {
+            "stat": "faith",
+            "vs": 45
+          },
+          "win": {
+            "text": "Patient hands and quiet runes win them over. Runehold has mounts now, and a little wonder it had forgotten.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The herd will not be held. By morning they are gone over the ridge, and you are left with trampled fields.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  -4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "a-warrior-at-the-gate",
+      "type": "interactive",
+      "title": "A Warrior at the Gate",
+      "weight": 8,
+      "trigger": {
+        "gte": [
+          "fracture",
+          22
+        ]
+      },
+      "intro": "A Warrior war-band makes camp at the edge of Runehold's fields. Their captain — sword on her back, a hawk on her glove — sends word: she will guard your borders against the things the Fracture spits out. For a price, or for a pact.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come."
+        },
+        {
+          "member": "wisp",
+          "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter."
+        }
+      ],
+      "choices": [
+        {
+          "id": "make-the-pact",
+          "label": "Swear a pact of mutual defense",
+          "win": {
+            "text": "You clasp the captain's forearm. Warriors walk your walls that night, and for the first time in a season the watch sleeps.",
+            "effects": [
+              {
+                "add": [
+                  "fracture",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  -6
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "pay-coin",
+          "label": "Pay them in coin, owe them nothing",
+          "requires": {
+            "gte": [
+              "coin",
+              14
+            ]
+          },
+          "win": {
+            "text": "Coin changes hands; the war-band patrols a season and asks no loyalty. A clean bargain, while it lasts.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -14
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "turn-them-away",
+          "label": "Turn them away — Wizards keep their own walls",
+          "win": {
+            "text": "You thank the captain and decline. The coven approves; the dark beyond the fields does not.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "markertropolis-envoy",
+      "type": "interactive",
+      "title": "The Envoy from Markertropolis",
+      "weight": 8,
+      "trigger": {
+        "lt": [
+          "coin",
+          50
+        ]
+      },
+      "intro": "A Red Wizard in counting-house silks arrives from Markertropolis — smiling, with a ledger under one arm and an offer on his lips.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor."
+        }
+      ],
+      "choices": [
+        {
+          "id": "pay-tribute",
+          "label": "Pay tribute to secure Red favour",
+          "requires": {
+            "gte": [
+              "coin",
+              10
+            ]
+          },
+          "win": {
+            "text": "The ledger closes with a soft clap. You are, for now, a friend of the Stock Sanctuary.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -10
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse — Runehold is no one's debtor",
+          "win": {
+            "text": "The envoy's smile thins as he goes. Word will travel.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "red",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "overtures-to-the-red",
+      "type": "interactive",
+      "title": "Overtures to the Red",
+      "weight": 7,
+      "trigger": {
+        "lt": [
+          "cult.red",
+          0
+        ]
+      },
+      "intro": "A Red factor you once snubbed sends a careful letter. The Stock Sanctuary, it seems, would rather profit from Runehold than feud with it — if you will make the first gesture.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "Enemies cost more than tribute. Swallow the pride, Archon. Red gold spends the same as any."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send-tribute",
+          "label": "Send a generous tribute to mend the breach",
+          "requires": {
+            "gte": [
+              "coin",
+              16
+            ]
+          },
+          "win": {
+            "text": "The gift is received with a counting-house smile. The feud cools to mere commerce.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -16
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  20
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "offer-trade-rights",
+          "label": "Offer Red factors trade rights in Runehold",
+          "win": {
+            "text": "Red stalls rise in your market square. Coin trickles in, and so does Red influence you cannot quite see.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "red",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "coin",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "let-it-fester",
+          "label": "Let the feud stand",
+          "win": {
+            "text": "You burn the letter. The coven likes a leader who holds a grudge — until the price of one comes due.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "red",
+                  -4
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-athenaeums-price",
+      "type": "interactive",
+      "title": "The Athenaeum's Price",
+      "weight": 8,
+      "trigger": {
+        "all": [
+          {
+            "lt": [
+              "lore",
+              55
+            ]
+          },
+          {
+            "lt": [
+              "cult.blue",
+              60
+            ]
+          }
+        ]
+      },
+      "intro": "A grey-robed reader of the Forgotten Athenaeum comes north with a locked book and a proposal: Blue will share what Runehold has forgotten — for a tithe of coin, and a debt of deference.",
+      "advisors": [
+        {
+          "member": "vela-the-blue",
+          "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them."
+        },
+        {
+          "member": "korr-ashen",
+          "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours."
+        }
+      ],
+      "choices": [
+        {
+          "id": "pay-the-tithe",
+          "label": "Pay the tithe and take the book",
+          "requires": {
+            "gte": [
+              "coin",
+              12
+            ]
+          },
+          "win": {
+            "text": "The reader unlocks the book and lets your scribes copy through the night. Runehold remembers a little more of itself.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -12
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  16
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "trade-our-own",
+          "label": "Offer a working of your own in exchange",
+          "requires": {
+            "gte": [
+              "mana",
+              14
+            ]
+          },
+          "test": {
+            "stat": "lore",
+            "vs": 45
+          },
+          "win": {
+            "text": "You trade craft for craft. The reader leaves impressed, and Runehold keeps its coin and its pride.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -14
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your working falters under the reader's polite gaze. The book goes home unopened, and word of the fumble travels.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -14
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  -6
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "send-away",
+          "label": "Send the reader away — Runehold bows to no library",
+          "win": {
+            "text": "The reader bows, unbowed, and goes. The coven stands a little prouder over an emptier shelf.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "blue",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  -3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-coven-divided",
+      "type": "interactive",
+      "title": "The Coven Divided",
+      "weight": 8,
+      "trigger": {
+        "lt": [
+          "faith",
+          40
+        ]
+      },
+      "intro": "The Circle quarrels openly now. Two camps have formed at the hearth, and both look to you to name which Runehold will be: a coven of careful memory, or a coven that dares the Flame.",
+      "advisors": [
+        {
+          "member": "vela-the-blue",
+          "text": "Tell them we are keepers of memory first. Caution has kept us alive this long."
+        },
+        {
+          "member": "wisp",
+          "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices."
+        }
+      ],
+      "choices": [
+        {
+          "id": "side-memory",
+          "label": "Declare for memory and caution",
+          "win": {
+            "text": "You name Runehold a house of remembrance. The careful are heartened; the bold go quiet, and a little cold.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  5
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  -8
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "side-flame",
+          "label": "Declare for the Flame and daring",
+          "win": {
+            "text": "You name Runehold a house of the Flame. The devout blaze up; the cautious bite their tongues and watch.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "hold-both",
+          "label": "Refuse to choose — hold the Circle together",
+          "test": {
+            "stat": "faith",
+            "vs": 50
+          },
+          "win": {
+            "text": "You speak for an hour and somehow both camps leave believing they won. It will not hold forever. It holds tonight.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  8
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your careful words satisfy no one. Both camps decide you are weak, and say so.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -8
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-disputed-relic",
+      "type": "interactive",
+      "title": "The Disputed Relic",
+      "weight": 6,
+      "once": true,
+      "trigger": {
+        "gte": [
+          "lore",
+          30
+        ]
+      },
+      "intro": "Your diggers unearth a pre-Burning reliquary — a coil of rune-etched copper that hums when touched. Word travels fast. Within a week both Red and Blue send envoys, each certain the relic is theirs by right.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "Red will pay in coin we can spend this winter. Sentiment does not fill a granary."
+        },
+        {
+          "member": "vela-the-blue",
+          "text": "Sell it to a counting-house and it vanishes into a vault. Give it to the Athenaeum and it is studied, copied, remembered."
+        }
+      ],
+      "choices": [
+        {
+          "id": "sell-to-red",
+          "label": "Sell the relic to Markertropolis",
+          "win": {
+            "text": "Red coin floods in; the copper coil disappears into a Stock Sanctuary vault, and Blue does not forget the slight.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  20
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  14
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  -12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "give-to-blue",
+          "label": "Entrust the relic to the Athenaeum",
+          "win": {
+            "text": "Blue scholars weep over the coil and share their findings freely. Red marks the lost sale in a ledger somewhere.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  18
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  14
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  -12
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "keep-it",
+          "label": "Keep the relic and study it yourselves",
+          "requires": {
+            "gte": [
+              "mana",
+              12
+            ]
+          },
+          "test": {
+            "stat": "lore",
+            "vs": 50
+          },
+          "win": {
+            "text": "Your own scribes coax the coil's secret loose. Both cults leave empty-handed and faintly insulted.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -12
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  14
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  6
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  -5
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  -5
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The coil stays silent for you, and now both cults know you hoarded it for nothing.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  -6
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  -6
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-fading-rune",
+      "type": "interactive",
+      "title": "The Fading Rune",
+      "weight": 10,
+      "trigger": {
+        "lt": [
+          "lore",
+          50
+        ]
+      },
+      "intro": "A master-rune carved into the hall's keystone has begun to blur. Left alone, its working will be gone by the next thaw.",
+      "advisors": [
+        {
+          "member": "vela-the-blue",
+          "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can."
+        }
+      ],
+      "choices": [
+        {
+          "id": "preserve",
+          "label": "Pour mana into the archive",
+          "requires": {
+            "gte": [
+              "mana",
+              15
+            ]
+          },
+          "win": {
+            "text": "Apprentices chant through the night; the rune deepens and holds.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  15
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  -15
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "let-fade",
+          "label": "Let it fade — we have more pressing needs",
+          "win": {
+            "text": "By morning the keystone is smooth and silent, and no one alive recalls what it said.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -3
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-flickering-door",
+      "type": "interactive",
+      "title": "The Flickering Door",
+      "art": "art/scenes/secret-tower-basement.png",
+      "weight": 6,
+      "once": true,
+      "trigger": {
+        "all": [
+          {
+            "lt": [
+              "lore",
+              45
+            ]
+          },
+          {
+            "gte": [
+              "flamesRegard",
+              20
+            ]
+          }
+        ]
+      },
+      "intro": "A door breathes light at the foot of the stair. Behind it, the Sacred Flame waits — and the coven is forgetting faster than it can learn.",
+      "advisors": [
+        {
+          "member": "vela-the-blue",
+          "text": "We forget faster than we learn. The Flame remembers everything. Use it."
+        },
+        {
+          "member": "korr-ashen",
+          "text": "And what walks back out wearing our faces? I have buried Souls before, Archon."
+        }
+      ],
+      "choices": [
+        {
+          "id": "step-into-flame",
+          "label": "Send an apprentice into the Flame",
+          "requires": {
+            "gte": [
+              "mana",
+              10
+            ]
+          },
+          "test": {
+            "stat": "flamesRegard",
+            "vs": 50
+          },
+          "win": {
+            "text": "She returns wreathed in old knowledge, eyes bright and strange. The lost runes are lost no longer.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  25
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  10
+                ]
+              },
+              {
+                "set_flag": "first_soul_blessing"
+              }
+            ]
+          },
+          "lose": {
+            "text": "What returns is not her. The Circle does not speak for three days.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -15
+                ]
+              },
+              {
+                "transform_member": "random_apprentice_to_soul"
+              }
+            ]
+          }
+        },
+        {
+          "id": "seal-the-door",
+          "label": "Seal the door. Some things should stay forgotten.",
+          "win": {
+            "text": "You wall the stair with rune and stone. The light goes out beneath your hand.",
+            "effects": [
+              {
+                "add": [
+                  "flamesRegard",
+                  -5
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              },
+              {
+                "unlock": "the-sealed-stair"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-hungry-season",
+      "type": "interactive",
+      "title": "The Hungry Season",
+      "weight": 12,
+      "trigger": {
+        "lt": [
+          "provisions",
+          45
+        ]
+      },
+      "intro": "The stores run thin before the Highsun harvest. The coven looks to you with hollow eyes.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep."
+        },
+        {
+          "member": "vela-the-blue",
+          "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both."
+        }
+      ],
+      "choices": [
+        {
+          "id": "raid",
+          "label": "Raid a Warrior caravan for grain",
+          "test": {
+            "stat": "faith",
+            "vs": 50
+          },
+          "win": {
+            "text": "The raid succeeds; wagons roll into Runehold heavy with grain.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  22
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The Warriors were ready for you. You return with wounded and little else.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "trade",
+          "label": "Trade coin for grain",
+          "requires": {
+            "gte": [
+              "coin",
+              10
+            ]
+          },
+          "win": {
+            "text": "A fair price, fairly paid. The stores fill, and no blood is owed.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  18
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-sealed-stair",
+      "type": "interactive",
+      "title": "The Sealed Stair",
+      "weight": 1,
+      "once": true,
+      "trigger": {
+        "flag": "__never"
+      },
+      "intro": "Something scratches behind the sealed door, patient and unhurried. The mortar is cold to the touch, and getting colder.",
+      "advisors": [
+        {
+          "member": "korr-ashen",
+          "text": "It remembers that we shut it out. Walls have a way of becoming doors again."
+        }
+      ],
+      "choices": [
+        {
+          "id": "reinforce",
+          "label": "Reinforce the seal with deeper runes",
+          "requires": {
+            "gte": [
+              "mana",
+              10
+            ]
+          },
+          "win": {
+            "text": "You bind the stair with deeper wards. The scratching stops — for now.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  -3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "listen",
+          "label": "Press your ear to the stone and listen",
+          "win": {
+            "text": "For a single heartbeat, a voice you knew. Then nothing. The Flame's Regard stirs in your chest.",
+            "effects": [
+              {
+                "add": [
+                  "flamesRegard",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-trembling-ground",
+      "type": "interactive",
+      "title": "The Trembling Ground",
+      "weight": 9,
+      "trigger": {
+        "gte": [
+          "fracture",
+          40
+        ]
+      },
+      "intro": "At Deepfrost the ground shudders and a seam of cold light splits the hillside above Runehold — the Fracture, surfacing. Through the crack, something the colour of nothing turns over in its sleep.",
+      "advisors": [
+        {
+          "member": "vela-the-blue",
+          "text": "The old wards can close it, but the working will cost us. Better cost than catastrophe."
+        },
+        {
+          "member": "ember",
+          "text": "Or we go down and look. Whatever sleeps there knows things the Flame itself forgot."
+        }
+      ],
+      "choices": [
+        {
+          "id": "seal-the-seam",
+          "label": "Pour mana and lore into sealing the seam",
+          "requires": {
+            "gte": [
+              "mana",
+              16
+            ]
+          },
+          "win": {
+            "text": "Apprentices chant until their voices fail; the seam knits shut and the light goes out. The hill is whole, and so are you — barely.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -16
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  -5
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -14
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "descend",
+          "label": "Descend into the seam to learn what sleeps there",
+          "requires": {
+            "gte": [
+              "mana",
+              10
+            ]
+          },
+          "test": {
+            "stat": "lore",
+            "vs": 55
+          },
+          "win": {
+            "text": "You return wide-eyed with a fragment of the world's first memory — and the seam, satisfied, closes behind you.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  22
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -6
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "What you find down there finds you back. You climb out changed, and the seam stays open, breathing.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  8
+                ]
+              },
+              {
+                "transform_member": "random_apprentice_to_soul"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-wanderer-in-the-ash",
+      "type": "interactive",
+      "title": "The Wanderer in the Ash",
+      "weight": 5,
+      "trigger": {
+        "gte": [
+          "flamesRegard",
+          35
+        ]
+      },
+      "intro": "A figure walks out of the ash-haze at dusk and stops at the edge of the firelight. A Forgotten Soul — robes you almost recognize, a face the Flame has rewritten. It does not speak. It waits to be known.",
+      "advisors": [
+        {
+          "member": "wisp",
+          "text": "It came to us. The Flame sends nothing by accident. Let it in."
+        },
+        {
+          "member": "korr-ashen",
+          "text": "I have seen what wears a familiar face and means us harm. Keep the gate shut, Archon."
+        }
+      ],
+      "choices": [
+        {
+          "id": "welcome-it",
+          "label": "Welcome the Soul to the fire",
+          "test": {
+            "stat": "flamesRegard",
+            "vs": 45
+          },
+          "win": {
+            "text": "It sits among you and, in a voice like settling embers, gives up a rune the living had lost. By dawn it is gone, but the knowledge stays.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -4
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Whatever sat at your fire that night left something wrong behind it. The coven sleeps badly for a long while.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "turn-it-away",
+          "label": "Turn the Soul away into the dark",
+          "win": {
+            "text": "You bar the gate. It stands a long moment, then walks back into the ash. The coven breathes easier; you do not.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  -8
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ash-on-the-wind",
+      "type": "news",
+      "title": "Ash on the Wind",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "fracture",
+          15
+        ]
+      },
+      "intro": "Grey ash drifts in from the east for three days running. The old ones say the Fracture is breathing again.",
+      "choices": [
+        {
+          "id": "note",
+          "label": "Record it in the saga and move on",
+          "win": {
+            "text": "You note the omen. The coven mutters and watches the horizon.",
+            "effects": [
+              {
+                "add": [
+                  "fracture",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-long-dark",
+      "type": "news",
+      "title": "The Long Dark",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "fracture",
+          50
+        ]
+      },
+      "intro": "The sun comes up wrong three mornings running — dim, and a finger's width south of where it should be. Across the Runiverse, holds light their hearths early and speak in low voices.",
+      "choices": [
+        {
+          "id": "steady-them",
+          "label": "Walk among the coven and steady them",
+          "requires": {
+            "gte": [
+              "mana",
+              4
+            ]
+          },
+          "win": {
+            "text": "You make the rounds, hearth to hearth, until the muttering settles into resolve.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "record-omen",
+          "label": "Record the omen and let it pass",
+          "win": {
+            "text": "You set it down in the saga. The dark does not lift, but it does not deepen.",
+            "effects": [
+              {
+                "add": [
+                  "fracture",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "circle": [
+    {
+      "id": "ember",
+      "name": "Ember",
+      "color": "yellow",
+      "leaning": "flame",
+      "rank": "apprentice",
+      "bio": "Young, reckless, and drawn to the Sacred Flame like a moth to its namesake. The Circle worries about her. She does not."
+    },
+    {
+      "id": "korr-ashen",
+      "name": "Korr Ashen",
+      "color": "red",
+      "leaning": "caution",
+      "rank": "advisor",
+      "bio": "Survived the Great Burning with the scars to prove it. Has buried more Souls than apprentices, and will tell you so unprompted."
+    },
+    {
+      "id": "vela-the-blue",
+      "name": "Vela",
+      "color": "blue",
+      "leaning": "lore",
+      "rank": "advisor",
+      "bio": "Keeper of Runehold's half-burned Athenaeum-scrolls. Believes memory is the only wealth the cataclysm cannot take, and argues it at every Circle."
+    },
+    {
+      "id": "wisp",
+      "name": "Wisp",
+      "color": "white",
+      "leaning": "flame",
+      "rank": "apprentice",
+      "bio": "Quiet and devout, already half-listening to something the others cannot hear. Speaks of the Flame as though it has spoken to him first."
+    }
+  ],
+  "codex": [
+    {
+      "id": "pressures",
+      "title": "The Pressures",
+      "blurb": "Seven meters and your standing with the Cults. Every scene reads and writes them.",
+      "entries": [
+        {
+          "term": "Mana",
+          "body": "Your spellcasting reserve. Powers workings, quests, and defenses. Regenerates slowly, spent in bursts."
+        },
+        {
+          "term": "Provisions",
+          "body": "Food for the coven in a broken world. Famine is a constant low threat; a coven cannot eat runes."
+        },
+        {
+          "term": "Coin",
+          "body": "The mercantile axis, ruled by Markertropolis and the Red Cult. Buys what magic and farming cannot — and ties you to aristocrat politics."
+        },
+        {
+          "term": "Lore",
+          "body": "Runes and memory: the signature meter. Unlocks great workings, but DECAYS every season — 'The Forgetting' made mechanical. Maintain libraries, train apprentices, or watch power slip away."
+        },
+        {
+          "term": "Faith",
+          "body": "The coven's morale — whether your Wizards believe you can lead them through the dark. Driven by Circle relationships and consistency with your values."
+        },
+        {
+          "term": "Flame's Regard",
+          "body": "The cosmic meter. Drawing on the Sacred Flame is the highest reward and the highest risk: salvation, transformation, or undesirable loss."
+        },
+        {
+          "term": "The Fracture",
+          "body": "The doom track. The cataclysm is not finished — Imps, stirring Beasts, and the slow Forgetting advance it. Reaches its limit and Runehold is consumed."
+        }
+      ]
+    },
+    {
+      "id": "cults",
+      "title": "The Seven Color Cults",
+      "blurb": "Seven independent reputations. Acting for one often costs another.",
+      "entries": [
+        {
+          "term": "Red",
+          "body": "Markertropolis — greedy aristocrats and the Stock Sanctuary. The mercantile and coin power of the Runiverse."
+        },
+        {
+          "term": "Blue",
+          "body": "The Bastion — the largest libraries and the Forgotten Athenaeum. The lore and knowledge power."
+        },
+        {
+          "term": "Yellow",
+          "body": "The chroniclers have not yet fixed this cult's character."
+        },
+        {
+          "term": "Brown",
+          "body": "The chroniclers have not yet fixed this cult's character."
+        },
+        {
+          "term": "Green",
+          "body": "The chroniclers have not yet fixed this cult's character."
+        },
+        {
+          "term": "Purple",
+          "body": "The chroniclers have not yet fixed this cult's character."
+        },
+        {
+          "term": "White",
+          "body": "The chroniclers have not yet fixed this cult's character."
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "title": "Powers & Perils",
+      "blurb": "The forces your saga is written against.",
+      "entries": [
+        {
+          "term": "The Sacred Flame",
+          "body": "In the basement of the Secret Tower it burns. Wizards who step into it become Forgotten Souls — you might get back something greater, or something undesirable (roughly one in ten). The greatest power and the greatest loss in the world."
+        },
+        {
+          "term": "The Forgetting",
+          "body": "Magic is real but thinning; the world is literally forgetting itself. Lore decays every season unless held — gains erode if unmaintained."
+        },
+        {
+          "term": "The Fracture",
+          "body": "The cataclysm that tore the world apart is not finished. It is the long game beneath all the others — the doom that takes Runehold if neglected."
+        },
+        {
+          "term": "The Circle",
+          "body": "Your advisor ring of named Wizards, each with a color leaning and a temperament. They advise per their leanings, feud with each other, and remember how you have treated them."
+        },
+        {
+          "term": "Forgotten Souls",
+          "body": "Wizards transformed by the Flame. When a Circle member is taken, the loss is permanent — they leave the Circle but persist in the world as a Soul you may later meet, bargain with, or mourn."
+        },
+        {
+          "term": "Runehold",
+          "body": "Your coven seat — a few dozen souls around a guttering hearth-rune and a half-remembered claim to old power. Grow it from a hearth to a power, or dwindle into a Forgotten hold."
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "drive-harvest",
+      "screen": "fields",
+      "label": "Drive the Harvest",
+      "desc": "Push the whole coven into the fields from dawn to dark. The granary fills; the spirit frays.",
+      "effects": [
+        {
+          "add": [
+            "provisions",
+            14
+          ]
+        },
+        {
+          "add": [
+            "faith",
+            -6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bless-fields",
+      "screen": "fields",
+      "label": "Bless the Fields",
+      "desc": "Coax the crops with growth-runes and a little spent mana.",
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "mana",
+            -10
+          ]
+        },
+        {
+          "add": [
+            "provisions",
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "buy-seed-grain",
+      "screen": "fields",
+      "label": "Buy Seed-Grain",
+      "desc": "Send coin down the market roads for grain and good seed.",
+      "requires": {
+        "gte": [
+          "coin",
+          10
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "coin",
+            -10
+          ]
+        },
+        {
+          "add": [
+            "provisions",
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "forage-wastes",
+      "screen": "fields",
+      "label": "Forage the Wastes",
+      "desc": "Send gatherers into the broken lands. There is food out there — and worse than food.",
+      "effects": [
+        {
+          "add": [
+            "provisions",
+            8
+          ]
+        },
+        {
+          "add": [
+            "fracture",
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sell-rune-craft",
+      "screen": "market",
+      "label": "Sell Rune-Craft",
+      "desc": "Send worked charms and minor enchantments down the market roads for coin.",
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "mana",
+            -10
+          ]
+        },
+        {
+          "add": [
+            "coin",
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "buy-mana-reagents",
+      "screen": "market",
+      "label": "Buy Mana-Reagents",
+      "desc": "Purchase rare salts and ash-glass to replenish the coven's reserve.",
+      "requires": {
+        "gte": [
+          "coin",
+          12
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "coin",
+            -12
+          ]
+        },
+        {
+          "add": [
+            "mana",
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trade-surplus",
+      "screen": "market",
+      "label": "Trade the Surplus",
+      "desc": "Sell what the granary can spare while the price is good.",
+      "requires": {
+        "gte": [
+          "provisions",
+          20
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "provisions",
+            -10
+          ]
+        },
+        {
+          "add": [
+            "coin",
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "court-red-factors",
+      "screen": "market",
+      "label": "Court the Red Factors",
+      "desc": "Grease the Stock Sanctuary's palms; Markertropolis remembers a paying friend.",
+      "requires": {
+        "gte": [
+          "coin",
+          12
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "coin",
+            -12
+          ]
+        },
+        {
+          "adjust_cult": [
+            "red",
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "raid-caravans",
+      "screen": "war",
+      "label": "Raid the Caravans",
+      "desc": "Fall on the trade-roads and take what Runehold needs. The world remembers a raider.",
+      "effects": [
+        {
+          "add": [
+            "provisions",
+            14
+          ]
+        },
+        {
+          "add": [
+            "coin",
+            6
+          ]
+        },
+        {
+          "add": [
+            "fracture",
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muster-coven",
+      "screen": "war",
+      "label": "Muster the Coven",
+      "desc": "Call every hand to arms and feed them well; a coven that can fight stands taller.",
+      "requires": {
+        "gte": [
+          "provisions",
+          10
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "provisions",
+            -6
+          ]
+        },
+        {
+          "add": [
+            "faith",
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fortify-hold",
+      "screen": "war",
+      "label": "Fortify the Hold",
+      "desc": "Raise watchfires and deepen the walls against what the Fracture sends.",
+      "requires": {
+        "gte": [
+          "coin",
+          10
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "coin",
+            -10
+          ]
+        },
+        {
+          "add": [
+            "fracture",
+            -5
+          ]
+        },
+        {
+          "add": [
+            "faith",
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hire-mercenaries",
+      "screen": "war",
+      "label": "Hire Warrior Mercenaries",
+      "desc": "Steel you cannot cast walks your walls — and the coven mutters at trusting those who fear the Flame.",
+      "requires": {
+        "gte": [
+          "coin",
+          14
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "coin",
+            -14
+          ]
+        },
+        {
+          "add": [
+            "fracture",
+            -7
+          ]
+        },
+        {
+          "add": [
+            "faith",
+            -3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mend-wards",
+      "screen": "workings",
+      "label": "Mend the Wards",
+      "desc": "Reinforce the rune-wards of Runehold against the spreading Fracture.",
+      "requires": {
+        "gte": [
+          "mana",
+          12
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "mana",
+            -12
+          ]
+        },
+        {
+          "add": [
+            "fracture",
+            -6
+          ]
+        },
+        {
+          "add": [
+            "faith",
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deepen-runes",
+      "screen": "workings",
+      "label": "Deepen the Runes",
+      "desc": "Apprentices chant the old runes deeper into memory, holding back the Forgetting.",
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "mana",
+            -10
+          ]
+        },
+        {
+          "add": [
+            "lore",
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tend-flame",
+      "screen": "workings",
+      "label": "Tend the Hearth-Flame",
+      "desc": "Keep the hearth-rune bright through the long dark; the coven takes heart.",
+      "requires": {
+        "gte": [
+          "mana",
+          8
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "mana",
+            -8
+          ]
+        },
+        {
+          "add": [
+            "faith",
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "court-flame",
+      "screen": "workings",
+      "label": "Court the Sacred Flame",
+      "desc": "Draw on the Flame's power. Its regard grows — but drawing deep stirs what should stay still.",
+      "requires": {
+        "gte": [
+          "mana",
+          16
+        ]
+      },
+      "effects": [
+        {
+          "add": [
+            "mana",
+            -16
+          ]
+        },
+        {
+          "add": [
+            "flamesRegard",
+            7
+          ]
+        },
+        {
+          "add": [
+            "fracture",
+            2
+          ]
+        }
+      ]
+    }
+  ]
+}

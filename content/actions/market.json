@@ -1,0 +1,36 @@
+{
+  "actions": [
+    {
+      "id": "sell-rune-craft",
+      "screen": "market",
+      "label": "Sell Rune-Craft",
+      "desc": "Send worked charms and minor enchantments down the market roads for coin.",
+      "requires": { "gte": ["mana", 10] },
+      "effects": [{ "add": ["mana", -10] }, { "add": ["coin", 12] }]
+    },
+    {
+      "id": "buy-mana-reagents",
+      "screen": "market",
+      "label": "Buy Mana-Reagents",
+      "desc": "Purchase rare salts and ash-glass to replenish the coven's reserve.",
+      "requires": { "gte": ["coin", 12] },
+      "effects": [{ "add": ["coin", -12] }, { "add": ["mana", 10] }]
+    },
+    {
+      "id": "trade-surplus",
+      "screen": "market",
+      "label": "Trade the Surplus",
+      "desc": "Sell what the granary can spare while the price is good.",
+      "requires": { "gte": ["provisions", 20] },
+      "effects": [{ "add": ["provisions", -10] }, { "add": ["coin", 10] }]
+    },
+    {
+      "id": "court-red-factors",
+      "screen": "market",
+      "label": "Court the Red Factors",
+      "desc": "Grease the Stock Sanctuary's palms; Markertropolis remembers a paying friend.",
+      "requires": { "gte": ["coin", 12] },
+      "effects": [{ "add": ["coin", -12] }, { "adjust_cult": ["red", 14] }]
+    }
+  ]
+}

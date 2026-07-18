@@ -1,0 +1,39 @@
+{
+  "id": "a-warrior-at-the-gate",
+  "type": "interactive",
+  "title": "A Warrior at the Gate",
+  "weight": 8,
+  "trigger": { "gte": ["fracture", 22] },
+  "intro": "A Warrior war-band makes camp at the edge of Runehold's fields. Their captain — sword on her back, a hawk on her glove — sends word: she will guard your borders against the things the Fracture spits out. For a price, or for a pact.",
+  "advisors": [
+    { "member": "korr-ashen", "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come." },
+    { "member": "wisp", "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter." }
+  ],
+  "choices": [
+    {
+      "id": "make-the-pact",
+      "label": "Swear a pact of mutual defense",
+      "win": {
+        "text": "You clasp the captain's forearm. Warriors walk your walls that night, and for the first time in a season the watch sleeps.",
+        "effects": [{ "add": ["fracture", -8] }, { "add": ["provisions", -6] }, { "add": ["faith", -5] }]
+      }
+    },
+    {
+      "id": "pay-coin",
+      "label": "Pay them in coin, owe them nothing",
+      "requires": { "gte": ["coin", 14] },
+      "win": {
+        "text": "Coin changes hands; the war-band patrols a season and asks no loyalty. A clean bargain, while it lasts.",
+        "effects": [{ "add": ["coin", -14] }, { "add": ["fracture", -5] }]
+      }
+    },
+    {
+      "id": "turn-them-away",
+      "label": "Turn them away — Wizards keep their own walls",
+      "win": {
+        "text": "You thank the captain and decline. The coven approves; the dark beyond the fields does not.",
+        "effects": [{ "add": ["faith", 4] }, { "add": ["fracture", 4] }]
+      }
+    }
+  ]
+}

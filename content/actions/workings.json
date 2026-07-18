@@ -1,0 +1,36 @@
+{
+  "actions": [
+    {
+      "id": "mend-wards",
+      "screen": "workings",
+      "label": "Mend the Wards",
+      "desc": "Reinforce the rune-wards of Runehold against the spreading Fracture.",
+      "requires": { "gte": ["mana", 12] },
+      "effects": [{ "add": ["mana", -12] }, { "add": ["fracture", -6] }, { "add": ["faith", 1] }]
+    },
+    {
+      "id": "deepen-runes",
+      "screen": "workings",
+      "label": "Deepen the Runes",
+      "desc": "Apprentices chant the old runes deeper into memory, holding back the Forgetting.",
+      "requires": { "gte": ["mana", 10] },
+      "effects": [{ "add": ["mana", -10] }, { "add": ["lore", 7] }]
+    },
+    {
+      "id": "tend-flame",
+      "screen": "workings",
+      "label": "Tend the Hearth-Flame",
+      "desc": "Keep the hearth-rune bright through the long dark; the coven takes heart.",
+      "requires": { "gte": ["mana", 8] },
+      "effects": [{ "add": ["mana", -8] }, { "add": ["faith", 5] }]
+    },
+    {
+      "id": "court-flame",
+      "screen": "workings",
+      "label": "Court the Sacred Flame",
+      "desc": "Draw on the Flame's power. Its regard grows — but drawing deep stirs what should stay still.",
+      "requires": { "gte": ["mana", 16] },
+      "effects": [{ "add": ["mana", -16] }, { "add": ["flamesRegard", 7] }, { "add": ["fracture", 2] }]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "the-athenaeums-price",
+  "type": "interactive",
+  "title": "The Athenaeum's Price",
+  "weight": 8,
+  "trigger": { "all": [{ "lt": ["lore", 55] }, { "lt": ["cult.blue", 60] }] },
+  "intro": "A grey-robed reader of the Forgotten Athenaeum comes north with a locked book and a proposal: Blue will share what Runehold has forgotten — for a tithe of coin, and a debt of deference.",
+  "advisors": [
+    { "member": "vela-the-blue", "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them." },
+    { "member": "korr-ashen", "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours." }
+  ],
+  "choices": [
+    {
+      "id": "pay-the-tithe",
+      "label": "Pay the tithe and take the book",
+      "requires": { "gte": ["coin", 12] },
+      "win": {
+        "text": "The reader unlocks the book and lets your scribes copy through the night. Runehold remembers a little more of itself.",
+        "effects": [{ "add": ["coin", -12] }, { "add": ["lore", 16] }, { "adjust_cult": ["blue", 12] }, { "adjust_cult": ["red", -4] }]
+      }
+    },
+    {
+      "id": "trade-our-own",
+      "label": "Offer a working of your own in exchange",
+      "requires": { "gte": ["mana", 14] },
+      "test": { "stat": "lore", "vs": 45 },
+      "win": {
+        "text": "You trade craft for craft. The reader leaves impressed, and Runehold keeps its coin and its pride.",
+        "effects": [{ "add": ["mana", -14] }, { "add": ["lore", 12] }, { "adjust_cult": ["blue", 8] }, { "add": ["faith", 3] }]
+      },
+      "lose": {
+        "text": "Your working falters under the reader's polite gaze. The book goes home unopened, and word of the fumble travels.",
+        "effects": [{ "add": ["mana", -14] }, { "adjust_cult": ["blue", -6] }, { "add": ["faith", -4] }]
+      }
+    },
+    {
+      "id": "send-away",
+      "label": "Send the reader away — Runehold bows to no library",
+      "win": {
+        "text": "The reader bows, unbowed, and goes. The coven stands a little prouder over an emptier shelf.",
+        "effects": [{ "adjust_cult": ["blue", -8] }, { "add": ["faith", 5] }, { "add": ["lore", -3] }]
+      }
+    }
+  ]
+}

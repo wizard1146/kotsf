@@ -1,0 +1,35 @@
+{
+  "actions": [
+    {
+      "id": "raid-caravans",
+      "screen": "war",
+      "label": "Raid the Caravans",
+      "desc": "Fall on the trade-roads and take what Runehold needs. The world remembers a raider.",
+      "effects": [{ "add": ["provisions", 14] }, { "add": ["coin", 6] }, { "add": ["fracture", 5] }]
+    },
+    {
+      "id": "muster-coven",
+      "screen": "war",
+      "label": "Muster the Coven",
+      "desc": "Call every hand to arms and feed them well; a coven that can fight stands taller.",
+      "requires": { "gte": ["provisions", 10] },
+      "effects": [{ "add": ["provisions", -6] }, { "add": ["faith", 6] }]
+    },
+    {
+      "id": "fortify-hold",
+      "screen": "war",
+      "label": "Fortify the Hold",
+      "desc": "Raise watchfires and deepen the walls against what the Fracture sends.",
+      "requires": { "gte": ["coin", 10] },
+      "effects": [{ "add": ["coin", -10] }, { "add": ["fracture", -5] }, { "add": ["faith", 3] }]
+    },
+    {
+      "id": "hire-mercenaries",
+      "screen": "war",
+      "label": "Hire Warrior Mercenaries",
+      "desc": "Steel you cannot cast walks your walls — and the coven mutters at trusting those who fear the Flame.",
+      "requires": { "gte": ["coin", 14] },
+      "effects": [{ "add": ["coin", -14] }, { "add": ["fracture", -7] }, { "add": ["faith", -3] }]
+    }
+  ]
+}

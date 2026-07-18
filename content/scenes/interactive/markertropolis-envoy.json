@@ -1,0 +1,30 @@
+{
+  "id": "markertropolis-envoy",
+  "type": "interactive",
+  "title": "The Envoy from Markertropolis",
+  "weight": 8,
+  "trigger": { "lt": ["coin", 50] },
+  "intro": "A Red Wizard in counting-house silks arrives from Markertropolis — smiling, with a ledger under one arm and an offer on his lips.",
+  "advisors": [
+    { "member": "korr-ashen", "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor." }
+  ],
+  "choices": [
+    {
+      "id": "pay-tribute",
+      "label": "Pay tribute to secure Red favour",
+      "requires": { "gte": ["coin", 10] },
+      "win": {
+        "text": "The ledger closes with a soft clap. You are, for now, a friend of the Stock Sanctuary.",
+        "effects": [{ "add": ["coin", -10] }, { "adjust_cult": ["red", 12] }]
+      }
+    },
+    {
+      "id": "refuse",
+      "label": "Refuse — Runehold is no one's debtor",
+      "win": {
+        "text": "The envoy's smile thins as he goes. Word will travel.",
+        "effects": [{ "adjust_cult": ["red", -10] }, { "add": ["faith", 4] }]
+      }
+    }
+  ]
+}

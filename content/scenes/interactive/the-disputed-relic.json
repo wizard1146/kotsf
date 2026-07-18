@@ -1,0 +1,45 @@
+{
+  "id": "the-disputed-relic",
+  "type": "interactive",
+  "title": "The Disputed Relic",
+  "weight": 6,
+  "once": true,
+  "trigger": { "gte": ["lore", 30] },
+  "intro": "Your diggers unearth a pre-Burning reliquary — a coil of rune-etched copper that hums when touched. Word travels fast. Within a week both Red and Blue send envoys, each certain the relic is theirs by right.",
+  "advisors": [
+    { "member": "korr-ashen", "text": "Red will pay in coin we can spend this winter. Sentiment does not fill a granary." },
+    { "member": "vela-the-blue", "text": "Sell it to a counting-house and it vanishes into a vault. Give it to the Athenaeum and it is studied, copied, remembered." }
+  ],
+  "choices": [
+    {
+      "id": "sell-to-red",
+      "label": "Sell the relic to Markertropolis",
+      "win": {
+        "text": "Red coin floods in; the copper coil disappears into a Stock Sanctuary vault, and Blue does not forget the slight.",
+        "effects": [{ "add": ["coin", 20] }, { "adjust_cult": ["red", 14] }, { "adjust_cult": ["blue", -12] }]
+      }
+    },
+    {
+      "id": "give-to-blue",
+      "label": "Entrust the relic to the Athenaeum",
+      "win": {
+        "text": "Blue scholars weep over the coil and share their findings freely. Red marks the lost sale in a ledger somewhere.",
+        "effects": [{ "add": ["lore", 18] }, { "adjust_cult": ["blue", 14] }, { "adjust_cult": ["red", -12] }]
+      }
+    },
+    {
+      "id": "keep-it",
+      "label": "Keep the relic and study it yourselves",
+      "requires": { "gte": ["mana", 12] },
+      "test": { "stat": "lore", "vs": 50 },
+      "win": {
+        "text": "Your own scribes coax the coil's secret loose. Both cults leave empty-handed and faintly insulted.",
+        "effects": [{ "add": ["mana", -12] }, { "add": ["lore", 14] }, { "add": ["faith", 6] }, { "adjust_cult": ["red", -5] }, { "adjust_cult": ["blue", -5] }]
+      },
+      "lose": {
+        "text": "The coil stays silent for you, and now both cults know you hoarded it for nothing.",
+        "effects": [{ "add": ["mana", -12] }, { "adjust_cult": ["red", -6] }, { "adjust_cult": ["blue", -6] }]
+      }
+    }
+  ]
+}

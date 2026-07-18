@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kotsf/schema/scene.schema.json",
+  "title": "KOTSF Scene",
+  "description": "The content contract: a scene = text + trigger + choices(+effects). Declarative only, no executable code.",
+  "type": "object",
+  "required": ["id", "type", "title", "choices"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "type": { "enum": ["interactive", "news", "quest"] },
+    "title": { "type": "string" },
+    "art": { "type": "string" },
+    "music": { "type": "string" },
+    "weight": { "type": "number", "minimum": 0 },
+    "once": { "type": "boolean" },
+    "trigger": { "$ref": "#/$defs/condition" },
+    "intro": { "type": "string" },
+    "advisors": { "type": "array", "items": { "$ref": "#/$defs/advisorLine" } },
+    "choices": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/choice" } }
+  },
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "all": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "any": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+        "not": { "$ref": "#/$defs/condition" },
+        "flag": { "type": "string" },
+        "gte": { "$ref": "#/$defs/comparison" },
+        "lte": { "$ref": "#/$defs/comparison" },
+        "gt": { "$ref": "#/$defs/comparison" },
+        "lt": { "$ref": "#/$defs/comparison" },
+        "eq": { "$ref": "#/$defs/comparison" }
+      }
+    },
+    "comparison": {
+      "type": "array",
+      "items": [{ "type": "string" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "advisorLine": {
+      "type": "object",
+      "required": ["member", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "member": { "type": "string" },
+        "text": { "type": "string" },
+        "if": { "$ref": "#/$defs/condition" }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "required": ["id", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "requires": { "$ref": "#/$defs/condition" },
+        "test": {
+          "type": "object",
+          "required": ["stat", "vs"],
+          "additionalProperties": false,
+          "properties": { "stat": { "type": "string" }, "vs": { "type": "number" } }
+        },
+        "win": { "$ref": "#/$defs/outcome" },
+        "lose": { "$ref": "#/$defs/outcome" }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "effects": { "type": "array", "items": { "$ref": "#/$defs/effect" } }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "add": { "type": "array" },
+        "set": { "type": "array" },
+        "adjust_cult": { "type": "array" },
+        "set_flag": { "type": "string" },
+        "clear_flag": { "type": "string" },
+        "unlock": { "type": "string" },
+        "transform_member": { "type": "string" }
+      }
+    }
+  }
+}

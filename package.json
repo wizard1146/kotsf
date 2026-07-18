@@ -1,0 +1,13 @@
+{
+  "name": "kotsf",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Keeper of the Sacred Flame — a storylet-driven strategy game set in the Forgotten Runes Runiverse",
+  "scripts": {
+    "dev": "node tools/serve.js",
+    "bundle": "node tools/bundle.js",
+    "harness": "node tools/harness.js",
+    "harness:long": "node tools/harness.js 200"
+  }
+}

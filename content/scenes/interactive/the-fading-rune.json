@@ -1,0 +1,30 @@
+{
+  "id": "the-fading-rune",
+  "type": "interactive",
+  "title": "The Fading Rune",
+  "weight": 10,
+  "trigger": { "lt": ["lore", 50] },
+  "intro": "A master-rune carved into the hall's keystone has begun to blur. Left alone, its working will be gone by the next thaw.",
+  "advisors": [
+    { "member": "vela-the-blue", "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can." }
+  ],
+  "choices": [
+    {
+      "id": "preserve",
+      "label": "Pour mana into the archive",
+      "requires": { "gte": ["mana", 15] },
+      "win": {
+        "text": "Apprentices chant through the night; the rune deepens and holds.",
+        "effects": [{ "add": ["lore", 15] }, { "add": ["mana", -15] }, { "add": ["faith", 2] }]
+      }
+    },
+    {
+      "id": "let-fade",
+      "label": "Let it fade — we have more pressing needs",
+      "win": {
+        "text": "By morning the keystone is smooth and silent, and no one alive recalls what it said.",
+        "effects": [{ "add": ["lore", -10] }, { "add": ["faith", -3] }, { "add": ["fracture", 2] }]
+      }
+    }
+  ]
+}

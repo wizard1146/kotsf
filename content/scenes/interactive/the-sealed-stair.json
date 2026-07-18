@@ -1,0 +1,31 @@
+{
+  "id": "the-sealed-stair",
+  "type": "interactive",
+  "title": "The Sealed Stair",
+  "weight": 1,
+  "once": true,
+  "trigger": { "flag": "__never" },
+  "intro": "Something scratches behind the sealed door, patient and unhurried. The mortar is cold to the touch, and getting colder.",
+  "advisors": [
+    { "member": "korr-ashen", "text": "It remembers that we shut it out. Walls have a way of becoming doors again." }
+  ],
+  "choices": [
+    {
+      "id": "reinforce",
+      "label": "Reinforce the seal with deeper runes",
+      "requires": { "gte": ["mana", 10] },
+      "win": {
+        "text": "You bind the stair with deeper wards. The scratching stops — for now.",
+        "effects": [{ "add": ["mana", -10] }, { "add": ["fracture", -4] }, { "add": ["lore", -3] }]
+      }
+    },
+    {
+      "id": "listen",
+      "label": "Press your ear to the stone and listen",
+      "win": {
+        "text": "For a single heartbeat, a voice you knew. Then nothing. The Flame's Regard stirs in your chest.",
+        "effects": [{ "add": ["flamesRegard", 8] }, { "add": ["faith", -4] }]
+      }
+    }
+  ]
+}
