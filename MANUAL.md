@@ -4,8 +4,8 @@
 fledgling coven of Wizards around a guttering hearth-rune. The world is forgetting itself; the Flame
 still burns beneath the Secret Tower; the seven Color Cults circle. Tend the flame, or be forgotten.*
 
-> Companion to the design docs: `PLANNING_01.md` (world + pressures), `SCREENS.md` (interface),
-> `NORTH_STAR.md` (design philosophy), `ROADMAP.md` (build plan). This manual describes the game
+> Companion to the design docs: `PLANNING_01.md` (world + pressures), `NORTH_STAR.md` (design philosophy),
+> and `ROADMAP.md` (architecture, screen patterns & build plan). This manual describes the game
 > **as it actually plays today** — it grows as the game does.
 
 ---

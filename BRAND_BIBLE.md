@@ -19,8 +19,11 @@ hero lockup.
 
 **Variants**
 - **Static flame** — favicon, inline UI, small use.
-- **Animated flame** — a 3-frame ping-pong flicker (~130 ms/frame) for splash, loading, and the hearth-rune.
-  Must respect `prefers-reduced-motion` (hold frame 1).
+- **Animated flame** — a **variable-per-frame** flicker built from the 3 hand-placed frames. The chosen
+  profile is **"Gust"** (slow build → fast flare → slow settle, ~1.7 s, irregular so the loop point isn't
+  obvious); alternates live in `design/flame-v2.html`. Ships as a transparent GIF —
+  `icon_flame_gem.gif` (splash, flame+gem) / `icon_flame_anim.gif` (menu, flame-only).
+  *(Reduced-motion: a GIF can't be paused by CSS — swap to a static frame is a TODO.)*
 - **Flame + gem** — richer splash/hero lockup only.
 
 **Rules**
@@ -108,9 +111,11 @@ circular rune-medallion**. White-on-dark. **Zero rounded "SaaS" strokes. Nothing
 
 Because that grunge/hand-inked finish is a *render/illustration* job, we split the set:
 
-- **Tier A — Functional UI icons** (the always-on, tiny ones: 7 pressures, chrome, feedback). Authored as
-  **sharp vector** — miter joins, no rounded caps, angular geometry, the flame-tongue motif recurring. Must
-  read at 16–24 px in the circle bar. Kept in a single SVG sprite the UI `<use>`s.
+- **Tier A — Functional UI icons** (the always-on ones: 7 pressures, the 9 screen-tab runes, feedback).
+  **AI-generated** (Midjourney; prompts in `design/ICON_PROMPTS_SMALL.md`) then post-processed into a
+  uniform set — knocked out to transparent, recoloured to one cream (`--ink`), and optically size-balanced.
+  Kept as raster PNGs (`assets/icons/icon_min_*`), reviewed in `design/icon-gallery.html`. *(The original
+  plan here was a hand-drawn vector sprite; AI-raster won on speed and on matching the Tier-B look.)*
 - **Tier B — Hero / ornate icons** (brand flame, the 10 screen runes, cult sigils, achievements, big moments).
   **AI-generated** in the Aion/Mad-Monkies/FRWC idiom, then cleaned/vectorised. Generation prompts live in
   `design/ICON_PROMPTS.md`. These carry the texture and the rune-medallion frame.
@@ -150,7 +155,7 @@ counsel is a feature, telegraphed in-fiction, not as percentages.
 
 ## 7. Motion
 
-- **Signature motion:** the flame flicker (3-frame ping-pong). Subtle, warm, alive.
+- **Signature motion:** the flame flicker (the "Gust" variable-timing profile — see §1). Subtle, warm, alive.
 - Keep motion **restrained** — occasional flicker/glow, gentle rises on modals. No bouncy/springy easing
   (that reads cutesy). Honour `prefers-reduced-motion` everywhere (the game already has a Reduce Motion setting).
 

@@ -165,6 +165,35 @@ This surface is intentionally small; it covers KODP-class scenes without a scrip
 
 ---
 
+## 4b. Screen architecture — the two UI patterns  *(absorbed from the retired `SCREENS.md`)*
+
+The interface is the KODP chrome (Hearth bar / Stage / Circle bar) over the pressure model, built from
+**exactly two reusable patterns — do not add a third:**
+
+1. **`gameView` stage-swap** — the *management* screens: Coven, Fields, Market, War, Cults, Workings,
+   Map, Saga, and the default **Season** (the current event). One controller field (`gameView` in
+   `main.js`) selects which view `stageHTML()` renders; the Hearth bar + Circle bar persist as chrome.
+   Switching a view **never advances time** — pure presentation; events pull focus back to the Season.
+2. **Full-page overlays** (`fullpage()` + the `panel-*` layout) — the *reference* screens: Codex, Options,
+   Saves. They layer on top of any screen.
+
+**Per-screen actions** (Workings, Fields, Market, War) are one data pool: `content/actions/*.json`, each
+`{ id, screen, label, desc, requires, effects }` (cost folded into `effects`, gated by `requires`, usable
+once/season via `state.actionsUsed`). One renderer (`actionScreenHTML`) + one handler (`doAction`) serve
+them all — a new action-screen is just content + a `gameView` branch.
+
+**Invariants:** the engine never knows about screens (`gameView`/`overlay` live in `main.js` only); a
+screen is a pure `ctx → HTML` function in `view.js` that reads state, never mutates it; list+detail
+screens (Cults, Coven) reuse the `panel-*` sidebar layout. *(UI-shell specifics — Split layout, the
+hand-of-cards Circle bar, the hamburger, and the "redraw kills CSS transitions" gotcha — are documented in
+the code + agent memory, not here.)*
+
+**Motifs still worth stealing (not yet built):** the KODP *megalith* → a central Hearth-rune showing
+**active workings** (a small `state.workings` list of temporary blessings/curses ticked in `loop.js`);
+and the *Tula view* → a fullscreen **end-of-year Runehold recap** (an annual rhythm + natural autosave point).
+
+---
+
 ## 5. Phased roadmap
 
 ### Phase 0 — Foundations (the spine) ✅ in progress
@@ -186,9 +215,14 @@ This surface is intentionally small; it covers KODP-class scenes without a scrip
 
 ### §7 — What the first harness run revealed (honest findings, not blockers)
 1. **The Fracture is a one-way death spiral.** It only rises (+1/tick, +raids, +ash); its sole *content* sink (`the-sealed-stair` reinforce, −4) is gated behind sealing the Flame door. **Partially addressed:** the **Workings** screen adds a repeatable player-controlled sink — *Mend the Wards* (−6 Fracture for 12 Mana, once/season). Random play still loses (it never works the wards — by design; the fix is a *player tool*, not an auto-win). Remaining: more Fracture-reducing *scene* choices so it's not solely a Workings chore.
-2. ~~**Cult standing is clamped 0–100, so enmity is impossible**~~ — **RESOLVED.** Standings are now **signed (−100…+100)**, neutral at 0; refusing a cult can now make a sworn enemy. `effects.js` clamps `cult.*` to ±100 (pressures stay 0–100). Visualized on the new **Cults screen** (see `SCREENS.md`).
+2. ~~**Cult standing is clamped 0–100, so enmity is impossible**~~ — **RESOLVED.** Standings are now **signed (−100…+100)**, neutral at 0; refusing a cult can now make a sworn enemy. `effects.js` clamps `cult.*` to ±100 (pressures stay 0–100). Visualized on the new **Cults screen** (see §4b).
 3. ~~**Mana is too abundant**~~ — **RESOLVED.** Regen trimmed **+5→+3/tick** (`loop.js`) and the **Workings** screen gives Mana a real sink (8–16 each, one of each per season). Harness now ends Mana ~12 instead of pinned at 80.
 4. **The model already produces emergent story.** Seed 12345: an apprentice (Wisp) lost to the Flame in Year 1, then years of hunger and forgetting, the Fracture creeping to catastrophe by Year 9 — a coherent tragic arc from random choices. The core premise works.
+5. **The harness only plays *scenes*, never the action screens** (Workings / Fields / Market / War) — the
+   only sinks for Provisions and the Fracture. So its balance numbers measure a game no human plays
+   (random play dies of famine at every seed). **Open (the P0 from the retired `ASSESSMENT_01.md`):** give
+   the harness a heuristic policy that also spends each season's actions, then re-derive balance. Companion
+   open item: scale the scene pool toward 30–50 (Phase 1).
 
 ### Phase 2 — Substantial demo (~1–2 months part-time) — *prove the world*
 - [ ] ~150 interactive scenes; news system live; first rune-quest (Infinity Veil)
@@ -209,3 +243,20 @@ This surface is intentionally small; it covers KODP-class scenes without a scrip
 
 ## 6. Open decisions blocking build
 Tracked in `PLANNING_01.md §5`. **Flame/Soul stakes: DECIDED — permanent** (see `PLANNING_01.md §5a`). Engine consequence: `transform_member` **moves** a member from the `circle` roster to a `souls` roster (persists as an NPC) rather than deleting them; recruitment paths must outpace worst-case attrition to avoid softlock. Remaining open items: color characterizations (Yellow/Brown/Green/Purple/White), time model (seasonal/finite vs. open-ended), and CC0 confirmation.
+
+---
+
+## 7. Web build & deploy (PWA — live)
+
+The web build is **static / serverless** — `tools/serve.js` is dev-only (ES modules + `fetch` need an http
+origin locally); production is just files on a static host.
+
+- **Live at** `wizard1146.github.io/kotsf/` (GitHub Pages, repo `wizard1146/kotsf`, branch `main`).
+- **All asset paths are relative** (never root-absolute `/…`) — the Pages *project* subpath `/kotsf/`
+  would 404 them otherwise. Applies to `index.html`, `main.js`'s bundle fetch, `styles.css` `url()`s,
+  `view.js` icon srcs, `manifest.webmanifest`, and `sw.js` (which resolves its precache list against its
+  own directory).
+- **PWA:** installable + offline via `manifest.webmanifest` + `sw.js` (precache the app shell, runtime-cache
+  the rest). **Bump the `CACHE` string in `sw.js` (`kotsf-vN`) on every shell change** so returning players
+  update. `content/bundle.json` must stay committed (the static deploy fetches it).
+- The Phase-3 Tauri/Steam wrapper (§5) is separate; this is the web / marketing build.
