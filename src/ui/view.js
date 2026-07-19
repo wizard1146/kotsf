@@ -129,8 +129,9 @@ const SCREENS = [
 // small UI runes for the rune tabs + pressure readout (Tier-A icon_min_* set)
 const runeIco = (s) => s.icon ? `<img class="rune-ico" src="assets/icons/icon_min_${s.icon}.png" alt="" aria-hidden="true">` : '';
 const P_ICON = { mana: 'mana', provisions: 'provisions', coin: 'coin', lore: 'lore', faith: 'faith', flamesRegard: 'flames_regard', fracture: 'fracture' };
-// clicking a pressure jumps to the screen that governs it (coin → Market, etc.)
-const P_TAB = { mana: 'workings', provisions: 'fields', coin: 'market', lore: 'codex', faith: 'coven', flamesRegard: 'map', fracture: 'war' };
+// clicking a pressure jumps to the screen that governs it (coin → Market, etc.);
+// pressures with no governing screen (lore) are shown but not clickable.
+const P_TAB = { mana: 'workings', provisions: 'fields', coin: 'market', faith: 'coven', flamesRegard: 'map', fracture: 'war' };
 // short labels for the cramped bottom bar
 const P_SHORT = { mana: 'Mana', provisions: 'Food', coin: 'Coin', lore: 'Lore', faith: 'Faith', flamesRegard: 'Regard', fracture: 'Fracture' };
 // flavor for screens not yet built — all 9 are built now, kept for future screens
@@ -403,9 +404,11 @@ function circleBarHTML(ctx) {
     `<span class="cb-soul" title="Lost to the Flame"><i style="background:${CULT_HEX[m.color] || '#777'}"></i>${esc(m.name)}</span>`).join('');
   const res = P_ORDER.map((k) => {
     const tab = P_TAB[k];
-    const act = tab === 'codex' ? 'data-action="open" data-overlay="codex"' : `data-action="game-view" data-view="${tab}"`;
-    return `<button class="cb-res ${k === 'fracture' ? 'danger' : ''}" ${act} title="${P_SHORT[k]}">
-        <img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span></button>`;
+    const cls = `cb-res ${k === 'fracture' ? 'danger' : ''}`;
+    const inner = `<img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span>`;
+    return tab
+      ? `<button class="${cls}" data-action="game-view" data-view="${tab}" title="${P_SHORT[k]}">${inner}</button>`
+      : `<span class="${cls}" title="${P_SHORT[k]}">${inner}</span>`;
   }).join('');
   return `<div class="circle-bar">
     <div class="cb-hand">${cards}${souls ? `<span class="cb-souls">${souls}</span>` : ''}</div>
