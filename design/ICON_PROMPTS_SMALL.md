@@ -1,21 +1,20 @@
 # KOTSF — Small / UI Icon Prompts (48px-legible, Tier A)
 
-The ornate Tier-B icons (`ICON_PROMPTS.md`) blur to a blob below ~48px. These prompts generate the
-**small, functional** versions for the always-on UI — pressures, rune-menu tabs, feedback. Different rules:
+The ornate Tier-B icons (`ICON_PROMPTS.md`) blur to a blob below ~48px. These prompts generate the **small, functional** versions for the always-on UI — pressures, rune-menu tabs, feedback. Different rules:
 
-- **No** rune-medallion frame, **no** grunge/cracks, **no** fine detail, **no** shading.
-- **Bold, flat, chunky** single silhouette, thick even weight, sharp angular corners (still not rounded/cutesy).
-- Maximum negative space; one clear idea per icon.
+- **No** rune-medallion frame, **no** grunge/cracks, **no** heavy shading — but **keep enough internal detail that the subject reads** (a sheaf looks like a sheaf, a book like a book). Flat, not blank.
+- **Bold, flat** silhouette with **clear internal lines**; crisp angular linework (still not rounded/cutesy).
+- Balanced negative space; one clear idea per icon, described legibly — not abstracted into spikes.
 
 **How to use**
-1. Same MJ setup: generate one, pin its URL as `--sref` on the rest for a matched set. Fixed `--seed` helps.
+1. **The anchor is the cropped coin** (`assets/icons/icon_min_coin.png`) — it sets the scale, ink weight, cream tone, and pure-black ground for the whole set. In the MJ web app, **drag the coin onto the prompt bar and tag it as the Style Reference**, then paste any prompt below (each is scaffolded with `--sw 250 --seed 777`). Tune the bind: raise `--sw` toward 300–1000 to hug the coin harder, lower it if the reference over-constrains.
+   *(Discord / URL route: send the coin in a channel, right-click → Copy Link, and add `--sref <that-url>`.)*
 2. **Downscale each result to 48 / 32 / 24px and judge there** — if it survives 24px, it's good.
-3. These are a **starting point**: for the truly tiny pips (16–24px in the circle bar), the cleanest result is
-   to **vectorise the winner** (Illustrator Image Trace / `vtracer`) → hand-tidy → SVG that scales perfectly.
+3. These are a **starting point**: for the truly tiny pips (16–24px in the circle bar), the cleanest result is to **vectorise the winner** (Illustrator Image Trace / `vtracer`) → hand-tidy → SVG that scales perfectly.
 4. Generate on **solid black**, then knock out to transparent for UI use.
 
 **Shared style suffix** (already baked into every prompt below):
-> `minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details`
+> `bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d`
 
 ---
 
@@ -23,37 +22,37 @@ The ornate Tier-B icons (`ICON_PROMPTS.md`) blur to a blob below ~48px. These pr
 
 **1 · Mana**
 ```
-a single four-pointed arcane spark star, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a single four-pointed arcane spark star, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **2 · Provisions**
 ```
-a simple bound wheat sheaf, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple bound wheat sheaf, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **3 · Coin**
 ```
-a single round coin with one small rune mark, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a single round coin with one small rune mark, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **4 · Lore**
 ```
-a simple open book, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple open book, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **5 · Faith**
 ```
-a single small flame, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+two hands pressed together in prayer, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **6 · Flame's Regard**
 ```
-a single eye with one small flame above it, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a single eye with one small flame above it, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **7 · Fracture**
 ```
-a single bold jagged crack, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+an ancient rune-stone split cleanly in two with a dark gap down the middle and a few ash motes, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 ---
@@ -62,52 +61,52 @@ a single bold jagged crack, minimalist flat pictogram, single bold solid cream-w
 
 **8 · Season**
 ```
-a disc that is half sun half moon, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a single disc split down the middle, one half a rayed sun and the other half a crescent moon, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **9 · Coven**
 ```
-three simple hooded figures grouped together, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+three simple hooded figures grouped together, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **10 · Fields**
 ```
-a wheat sheaf crossed with a scythe, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a single grain stalk sprouting upward from a cracked rune-stone, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **11 · Market**
 ```
-a simple balance scale, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple balance scale, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **12 · War**
 ```
-a wizard staff crossed with a sword, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a wizard's gnarled staff crossed with a warrior's sword in an X with a small spark where they cross, no figure, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **13 · Cults**
 ```
-a bold seven-pointed star, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a ring of seven small distinct rune sigils arranged evenly around a circle, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **14 · Workings**
 ```
-a circle with a single flame at its center, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+an open casting hand, fingers spread, a single glowing rune in the palm, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **15 · Map**
 ```
-a simple folded map with a single location pin, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple folded map with a single location pin, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **16 · Codex**
 ```
-a simple closed book with one rune on the cover, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple closed book with one rune on the cover, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **17 · Saga**
 ```
-a simple unrolled scroll, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+an unfurled scroll with a wax seal at the foot, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 ---
@@ -116,42 +115,42 @@ a simple unrolled scroll, minimalist flat pictogram, single bold solid cream-whi
 
 **18 · Forgotten Soul**
 ```
-a simple hooded ghost wisp, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple hooded ghost wisp, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **19 · Hearth-rune**
 ```
-a single bold angular rune glyph, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a standing stone fire-basin brazier with a flame rising from it, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **20 · Gain (up)**
 ```
-a bold upward chevron arrow, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+an upward-pointing angular rune arrow with a small rising spark above it, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **21 · Loss (down)**
 ```
-a bold downward chevron arrow, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a downward-pointing angular rune arrow with a small ash fleck falling below it, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **22 · Contest (skill test)**
 ```
-a simple six-sided die, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple six-sided die, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **23 · Locked / requirement**
 ```
-a simple closed padlock, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a simple closed padlock, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **24 · Danger / Flame-loss warning**
 ```
-a warning triangle containing a small flame, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a skull with a small flame burning in its brow, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 **25 · Advance the season**
 ```
-a three-armed triskelion spiral, minimalist flat pictogram, single bold solid cream-white silhouette on solid black, thick even weight, chunky simplified shape, sharp angular corners not rounded, no frame, no border, no grunge, no texture, no shading, high contrast, generous negative space, centered, reads clearly at 24-48px --ar 1:1 --style raw --v 6 --no text, letters, runic border, circle frame, cracks, gradient, small details
+a three-armed triskelion spiral, bold flat two-tone icon, solid cream-white silhouette on near-black, clear internal detail lines, moderate detail, crisp angular hand-inked linework, not rounded or cutesy, occult folk dark-fantasy character, no frame, no border, high contrast, balanced negative space, centered, reads clearly at 32-48px --ar 1:1 --style raw --sw 250 --seed 777 --no text, letters, runic border, circle frame, gradient, photoreal, 3d
 ```
 
 ---

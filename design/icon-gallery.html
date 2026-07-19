@@ -45,6 +45,10 @@
   .tile{position:relative;width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:var(--radius);
     overflow:hidden;background:#0a0709;cursor:zoom-in;transition:transform .18s ease, box-shadow .18s ease, z-index 0s;transform-origin:center}
   .tile img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .2s}
+  /* Tier-A minis are silhouettes, not full-bleed badges — show them contained in a
+     uniform safe area on one consistent ground so size/framing is honest. */
+  #gridmin .tile{background:#0a0709}
+  #gridmin .tile img{object-fit:contain;padding:16%}
   figcaption{margin-top:.45rem;font-size:.78rem;color:var(--ink-dim);font-family:var(--mono)}
   body[data-bg="light"] figcaption{color:#6a5a44}
 
@@ -97,11 +101,19 @@
 </header>
 
 <main>
+  <h2 style="margin-top:.4rem">Ornate badges — Tier B</h2>
+  <p class="note">The full rune-medallion set (<code>icon_*</code>). Reads as a badge large; blurs toward a blob small.</p>
   <div class="grid" id="grid" data-hover="zoom" data-filter="none"></div>
 
+  <h2>Small / UI runes — Tier A</h2>
+  <p class="note">The 48px-legible set (<code>icon_min_*</code>) for the always-on UI — pressure pips, rune-menu tabs, state &amp; feedback.
+  These are meant to hold up small: drag <strong>Size</strong> down toward 32–48px to judge them honestly.</p>
+  <div class="grid" id="gridmin" data-hover="zoom" data-filter="none"></div>
+  <div class="ladder" id="laddermin"></div>
+
   <h2>How small do they hold up?</h2>
-  <p class="note">These icons are dense — the rune-frame + grunge means they read as a badge large, but blur toward a blob small.
-  Use this to decide the minimum size in the UI (and which ones need a simplified small variant). Representative icon:</p>
+  <p class="note">The dense Tier-B badges read large but blur small; the Tier-A minis should survive further down.
+  Use this to decide the minimum size in the UI. Left: a Tier-B badge, right: a Tier-A mini.</p>
   <div class="ladder" id="ladder"></div>
 </main>
 
@@ -110,35 +122,40 @@
 <script>
   const DIR = "../assets/icons/";
   const FILES = ["icon_kotsf.png","icon_hearthrune.png","icon_mana.png","icon_provision.png","icon_lore.png","icon_faith.png","icon_flames_regard.png","icon_fracture.png","icon_season.png","icon_coven.png","icon_coven_2.png","icon_empty_coven.png","icon_fields.png","icon_market.png","icon_war.png","icon_war_2.png","icon_cults.png","icon_cults_2.png","icon_workings.png","icon_map.png","icon_codex.png","icon_saga.png","icon_soul.png","icon_secret_tower.png","icon_infinity_veil.png","icon_the_fracture.png","icon_main_01.png","icon_main_02.png","icon_main_03.png","icon_main_04.png","icon_main_05.png","icon_main_06.png","icon_main_07.png","icon_main_08.png"];
-  const label = (f)=> f.replace(/^icon_/,'').replace(/\.png$/,'').replace(/_/g,' ');
-
-  // grid
-  document.getElementById('grid').innerHTML = FILES.map(f=>
+  // Tier-A small / UI runes — pressures, screen tabs, state & feedback
+  const MIN_FILES = ["icon_min_mana.png","icon_min_coin.png","icon_min_provisions.png","icon_min_lore.png","icon_min_faith.png","icon_min_flames_regard.png","icon_min_fracture.png","icon_min_seasons.png","icon_min_coven.png","icon_min_fields.png","icon_min_market.png","icon_min_war.png","icon_min_cults.png","icon_min_workings.png","icon_min_map.png","icon_min_codex.png","icon_min_saga.png","icon_min_forgotten_soul.png","icon_min_hearth.png","icon_min_gain.png","icon_min_loss.png","icon_min_contest.png","icon_min_locked.png","icon_min_danger.png","icon_min_advance.png"];
+  const label = (f)=> f.replace(/^icon_(min_)?/,'').replace(/\.png$/,'').replace(/_/g,' ');
+  const tiles = (list)=> list.map(f=>
     `<figure><div class="tile" data-src="${DIR}${f}" data-label="${label(f)}"><img loading="lazy" src="${DIR}${f}" alt="${label(f)}"></div><figcaption>${label(f)}</figcaption></figure>`
   ).join('');
-  document.getElementById('count').textContent = FILES.length + ' icons';
 
-  // size ladder (one representative icon at increasing sizes)
-  const rep = "icon_kotsf.png";
-  document.getElementById('ladder').innerHTML = [24,32,48,64,96,128,180].map(s=>
+  // grids
+  document.getElementById('grid').innerHTML = tiles(FILES);
+  document.getElementById('gridmin').innerHTML = tiles(MIN_FILES);
+  document.getElementById('count').textContent = (FILES.length + MIN_FILES.length) + ' icons';
+
+  // size ladders (one representative icon at increasing sizes)
+  const ladder = (el, rep, sizes)=> document.getElementById(el).innerHTML = sizes.map(s=>
     `<figure><img src="${DIR}${rep}" width="${s}" height="${s}" alt=""><figcaption>${s}px</figcaption></figure>`
   ).join('');
+  ladder('ladder', "icon_kotsf.png", [24,32,48,64,96,128,180]);
+  ladder('laddermin', "icon_min_provisions.png", [16,24,32,48,64,96]);
 
   // controls
-  const grid = document.getElementById('grid');
+  const grids = [...document.querySelectorAll('.grid')];
   const size = document.getElementById('size');
   size.oninput = ()=>{ document.documentElement.style.setProperty('--size', size.value+'px'); document.getElementById('sizeval').textContent = size.value+'px'; };
   function seg(id, apply){ const box=document.getElementById(id);
     box.onclick=(e)=>{ const b=e.target.closest('button'); if(!b) return;
       box.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); apply(b.dataset.v); }; }
   seg('bg', v=> document.body.dataset.bg=v);
-  seg('hover', v=> grid.dataset.hover=v);
-  seg('filter', v=> grid.dataset.filter=v);
-  seg('layout', v=> grid.classList.toggle('mosaic', v==='mosaic'));
+  seg('hover', v=> grids.forEach(g=> g.dataset.hover=v));
+  seg('filter', v=> grids.forEach(g=> g.dataset.filter=v));
+  seg('layout', v=> grids.forEach(g=> g.classList.toggle('mosaic', v==='mosaic')));
 
   // lightbox
   const lb=document.getElementById('lb'), lbimg=document.getElementById('lbimg'), lbcap=document.getElementById('lbcap');
-  grid.addEventListener('click',(e)=>{ const t=e.target.closest('.tile'); if(!t) return;
+  document.querySelector('main').addEventListener('click',(e)=>{ const t=e.target.closest('.grid .tile'); if(!t) return;
     lbimg.src=t.dataset.src; lbcap.textContent=t.dataset.label; lb.classList.add('on'); });
   lb.onclick=()=>lb.classList.remove('on');
   addEventListener('keydown',(e)=>{ if(e.key==='Escape') lb.classList.remove('on'); });

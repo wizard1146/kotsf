@@ -138,6 +138,12 @@ function proceed() {
 // ---- shell navigation + saves ---------------------------------------------
 function startGame() { overlay = null; screen = 'game'; gameView = 'scene'; newRun(); }
 
+// New Coven overwrites the single continuous campaign — confirm first if one exists.
+function confirmNewCoven() {
+  if (state || readSlot(AUTOSAVE_KEY)) { overlay = 'confirm-new'; draw(); }
+  else startGame();
+}
+
 // Perform a per-screen action: apply its effects (cost included), once per season.
 function doAction(id) {
   if (!state) return;
@@ -198,6 +204,7 @@ function persist() {
 }
 
 function draw() {
+  const runesScroll = app.querySelector('.runes')?.scrollLeft ?? 0;   // survive the innerHTML swap
   app.className = `screen-${screen}${overlay ? ' has-overlay' : ''}`;
   app.innerHTML = render(ctx());
   // innerHTML replacement drops focus; hand it back to the search box mid-type
@@ -215,8 +222,35 @@ function draw() {
     }
     codexTarget = null;
   }
+  // rune tab bar: restore prior scroll (no snap on nav), wire scroll listener + arrow affordances
+  const runes = app.querySelector('.runes');
+  if (runes) {
+    runes.scrollLeft = runesScroll;
+    runes.addEventListener('scroll', updateRuneArrows, { passive: true });
+    updateRuneArrows();
+  }
   persist();
 }
+
+// The rune tab bar flexes into the width between the hearth id and the actions;
+// these page it and light the arrows only when there's more to reveal that way.
+function scrollRunes(dir) {
+  const nav = app.querySelector('.runes');
+  if (!nav) return;
+  nav.scrollBy({ left: dir * nav.clientWidth * 0.75, behavior: settings.reduceMotion ? 'auto' : 'smooth' });
+}
+function updateRuneArrows() {
+  const wrap = app.querySelector('.runes-wrap');
+  if (!wrap) return;
+  const nav = wrap.querySelector('.runes');
+  const overflow = nav.scrollWidth - nav.clientWidth > 1;
+  wrap.classList.toggle('has-overflow', overflow);
+  const atStart = nav.scrollLeft <= 1;
+  const atEnd = nav.scrollLeft >= nav.scrollWidth - nav.clientWidth - 1;
+  wrap.querySelector('.runes-arrow.prev')?.classList.toggle('can', overflow && !atStart);
+  wrap.querySelector('.runes-arrow.next')?.classList.toggle('can', overflow && !atEnd);
+}
+window.addEventListener('resize', updateRuneArrows);
 
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
@@ -230,9 +264,11 @@ app.addEventListener('click', (e) => {
     case 'enter': screen = 'menu'; draw(); break;
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
     case 'game-view': gameView = el.dataset.view; draw(); break;
+    case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
     case 'do-action': doAction(el.dataset.act); break;
     case 'resume-game': overlay = null; screen = 'game'; draw(); break;
-    case 'start-game': startGame(); break;
+    case 'start-game': confirmNewCoven(); break;
+    case 'confirm-new-yes': startGame(); break;
     case 'open': overlay = el.dataset.overlay; if (overlay === 'codex') codexQuery = ''; draw(); break;
     case 'close': overlay = null; draw(); break;
     case 'codex-tab': codexTab = el.dataset.tab; codexQuery = ''; draw(); break;
