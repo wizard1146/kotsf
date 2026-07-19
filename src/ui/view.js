@@ -96,10 +96,13 @@ function centerHTML(ctx) {
     return `<section class="scene"><p class="intro">The season passes quietly over Runehold.</p>
       <button class="choice cont" data-action="continue">Continue &rarr;</button></section>`;
   }
-  return `<section class="scene">${sigil(current.title)}
-    <p class="intro">${esc(current.intro || '')}</p>
-    ${advisorsHTML(state, defs, current)}
-    <div class="choices">${choicesHTML(state, current)}</div></section>`;
+  return `<section class="scene scene-split">
+    <div class="scene-art">${sigil(current.title)}</div>
+    <div class="scene-body">
+      <p class="intro">${esc(current.intro || '')}</p>
+      ${advisorsHTML(state, defs, current)}
+      <div class="choices">${choicesHTML(state, current)}</div>
+    </div></section>`;
 }
 
 // ---- the game screen: three KODP-style zones (hearth bar / stage / circle bar)
@@ -115,7 +118,6 @@ const SCREENS = [
   { id: 'cults', label: 'Cults', icon: 'cults' },
   { id: 'war', label: 'War', icon: 'war' },
   { id: 'saga', label: 'Saga', icon: 'saga' },
-  { id: 'codex', label: 'Codex', overlay: 'codex', icon: 'codex' },
 ];
 // small UI runes for the rune tabs + pressure readout (Tier-A icon_min_* set)
 const runeIco = (s) => s.icon ? `<img class="rune-ico" src="assets/icons/icon_min_${s.icon}.png" alt="" aria-hidden="true">` : '';
@@ -381,7 +383,7 @@ function circleBarHTML(ctx) {
   const cards = state.circle.map((m, i) => {
     const def = defs[m.id] || {};
     const role = i === 0 ? 'leader' : (m.leaning || m.rank || '');
-    return `<button class="cb-card" style="--i:${i};--cult:${CULT_HEX[m.color] || '#777'}" aria-label="${esc(def.name || m.name)}">
+    return `<button class="cb-card${ctx.pinnedCard === i ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.color] || '#777'}" aria-label="${esc(def.name || m.name)}">
         <span class="cb-face">
           <span class="cb-dot"></span>
           <span class="cb-name">${esc(m.name)}</span>
@@ -414,6 +416,7 @@ function gameHTML(ctx) {
       <div class="hearth-menu${ctx.hearthMenuOpen ? ' open' : ''}">
         <button class="hamburger" data-action="toggle-hearth-menu" aria-label="Menu" aria-expanded="${ctx.hearthMenuOpen ? 'true' : 'false'}"><span></span><span></span><span></span></button>
         <div class="hearth-pop">
+          <button data-action="open" data-overlay="codex">Codex</button>
           <button data-action="open" data-overlay="options">Options</button>
           <button data-action="save-manual">Save</button>
           <button data-action="go-menu">Menu</button>

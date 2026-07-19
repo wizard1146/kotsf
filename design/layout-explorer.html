@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Game-Screen Layout Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#14110f; --panel:#1f1a16; --panel-2:#2a231d; --line:#3a3128;
+    --ink:#e7dccb; --ink-dim:#9c8f7d; --flame:#e8a33d; --flame-deep:#b5641c; --danger:#c0392b;
+    --sans:"Barlow",system-ui,sans-serif; --display:"Barlow Semi Condensed",sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#0c0a08;color:var(--ink);font-family:var(--sans);padding:0 0 4rem}
+
+  /* ---- explorer chrome ---- */
+  header{position:sticky;top:0;z-index:40;background:#0c0a08e6;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.9rem 1.4rem}
+  .hbar{display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;max-width:1280px;margin:0 auto}
+  .brand{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.15rem}
+  .picker{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex-wrap:wrap}
+  .picker button{background:transparent;border:0;color:var(--ink-dim);font-family:var(--sans);font-size:.9rem;padding:.5rem .9rem;cursor:pointer}
+  .picker button.on{background:var(--flame);color:#1a130a;font-weight:700}
+  .sizes{display:inline-flex;gap:.4rem;margin-left:auto;align-items:center}
+  .sizes label{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.08em}
+  .sizes button{background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:7px;padding:.35rem .6rem;font-size:.8rem;cursor:pointer}
+  .sizes button.on{border-color:var(--flame);color:var(--flame)}
+
+  main{max-width:1280px;margin:1.4rem auto 0;padding:0 1.4rem}
+  .caption{margin:0 0 1rem;color:var(--ink-dim);font-size:.95rem;line-height:1.5;max-width:80ch}
+  .caption b{color:var(--ink)}
+
+  /* ---- the simulated device viewport ---- */
+  .device{margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.5);height:660px;transition:max-width .25s}
+  .device[data-size="desktop"]{max-width:1180px}
+  .device[data-size="tablet"]{max-width:900px}
+  .device[data-size="phone"]{max-width:720px;height:400px}
+  .screen{height:100%;display:flex;flex-direction:column;overflow:hidden}
+
+  /* ---- shared game chrome (top nav + bottom bar) ---- */
+  .hearth-bar{flex-shrink:0;display:flex;align-items:center;gap:1rem;padding:.55rem .9rem;border-bottom:1px solid var(--line)}
+  .hearth-id{display:flex;align-items:center;gap:.5rem}
+  .hearth-id img{height:1.7rem;image-rendering:pixelated}
+  .hearth-id b{color:var(--flame);font-family:var(--display);font-size:1.05rem}
+  .hearth-id small{display:block;color:var(--ink-dim);font-variant:small-caps;letter-spacing:.05em;font-size:.8rem}
+  .runes{flex:1;min-width:0;display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none}
+  .runes::-webkit-scrollbar{display:none}
+  .rune-tab{flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;padding:.35rem .5rem;cursor:pointer}
+  .rune-tab img{width:2.2em;height:2.2em;object-fit:contain;opacity:.8;display:block}
+  .rune-tab.on{border-bottom-color:var(--flame)}
+  .rune-tab.on img{opacity:1}
+  .hamburger{flex-shrink:0;display:inline-flex;flex-direction:column;gap:4px;width:2.4rem;height:2rem;justify-content:center;padding:.35rem .45rem;background:none;border:1px solid var(--line);border-radius:7px}
+  .hamburger span{height:2px;background:var(--ink);border-radius:2px}
+
+  .circle-bar{flex-shrink:0;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--line);background:var(--panel);padding:.45rem .9rem}
+  .cb-hand{display:flex;align-items:flex-end;padding-left:.5rem}
+  .cb-card{position:relative;margin-left:-.7rem;transform:rotate(calc((var(--i) - 1.5)*3.5deg));transform-origin:bottom center;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+  .cb-card:first-child{margin-left:0}
+  .cb-face{display:flex;flex-direction:column;align-items:center;gap:1px;width:4.1rem;padding:.35rem .3rem;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-top:3px solid var(--cult);border-radius:8px}
+  .cb-dot{width:11px;height:11px;border-radius:50%;background:var(--cult);margin-bottom:2px}
+  .cb-name{font-size:.78rem;white-space:nowrap}
+  .cb-role{color:var(--ink-dim);font-size:.6rem;font-variant:small-caps}
+  .cb-res-row{margin-left:auto;display:flex;gap:.35rem;flex-wrap:wrap;font-family:var(--mono)}
+  .cb-res{display:inline-flex;align-items:center;gap:.15rem;font-size:.9rem;padding:.15rem .3rem;border-radius:6px}
+  .cb-res img{width:2.1em;height:2.1em;object-fit:contain;opacity:.85}
+  .cb-res.danger{color:var(--danger)}
+
+  /* ---- the stage (this is what the layouts change) ---- */
+  .stage{flex:1;min-height:0;overflow:hidden;position:relative}
+  .scene-title{font-family:var(--display);color:var(--flame);font-size:1.35rem;margin:0}
+  .intro{line-height:1.6;margin:.4rem 0 0;font-size:1.05rem}
+  .advisor{margin-top:.7rem;padding-left:.7rem;border-left:2px solid var(--line);line-height:1.5}
+  .advisor b{color:var(--adv)}
+  .choices{display:flex;flex-direction:column;gap:.5rem;margin-top:1.1rem}
+  .choice{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.7rem .9rem;color:var(--ink);font-family:var(--sans);font-size:1rem;cursor:pointer}
+  .choice:hover{border-color:var(--flame-deep)}
+  .choice .test{display:block;color:var(--ink-dim);font-style:italic;font-size:.82rem;margin-top:.15rem}
+  .artbox{background:radial-gradient(120% 90% at 50% 45%,#241a12 0%,#0a0806 78%);border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;position:relative}
+  .artbox img{width:64px;image-rendering:pixelated;filter:drop-shadow(0 0 24px rgba(232,163,61,.4))}
+  .art-cap{position:absolute;bottom:.5rem;right:.7rem;color:var(--ink-dim);font-style:italic;font-size:.85rem}
+
+  /* scroll region for the read-heavy layouts */
+  .scroll{height:100%;overflow-y:auto;padding:1.1rem 1.25rem}
+  .scroll::-webkit-scrollbar{width:8px}
+  .scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+
+  /* ===== Layout: CURRENT (baseline, cramped) ===== */
+  .stage.current{display:flex;flex-direction:column;padding:1.1rem 1.25rem;gap:0}
+  .stage.current .artbox{flex:0 0 46%;width:100%}
+  .stage.current .body{overflow:hidden}
+
+  /* ===== Layout: SPLIT (art left / text right) ===== */
+  .stage.split{display:flex;gap:0}
+  .stage.split .artcol{flex:0 0 40%;padding:1.1rem;display:flex;flex-direction:column}
+  .stage.split .artcol .artbox{flex:1}
+  .stage.split .artcol .scene-title{margin-top:.8rem}
+  .stage.split .scroll{flex:1;border-left:1px solid var(--line)}
+
+  /* ===== Layout: BANNER (short wide art, full-width text) ===== */
+  .stage.banner{display:flex;flex-direction:column}
+  .stage.banner .artbox{height:132px;border-radius:0;border:0;border-bottom:1px solid var(--line);flex:0 0 auto}
+  .stage.banner .artbox img{width:52px}
+  .stage.banner .art-cap{bottom:.4rem}
+  .stage.banner .scroll{flex:1}
+
+  /* ===== Layout: MEDALLION (tiny art by the title, text dominates) ===== */
+  .stage.medallion .scroll{height:100%}
+  .stage.medallion .head{display:flex;gap:.9rem;align-items:center}
+  .stage.medallion .med{flex:0 0 auto;width:72px;height:72px;border-radius:50%;background:radial-gradient(80% 80% at 50% 45%,#241a12,#0a0806);border:1px solid var(--line);display:grid;place-items:center}
+  .stage.medallion .med img{width:34px;image-rendering:pixelated;filter:drop-shadow(0 0 12px rgba(232,163,61,.5))}
+
+  /* ===== Layout: IMMERSIVE (art as dim background, text on scrim) ===== */
+  .stage.immersive{display:flex;flex-direction:column;justify-content:flex-end}
+  .stage.immersive .bg{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 35%,#2b1f14 0%,#0a0806 80%);display:grid;place-items:center}
+  .stage.immersive .bg img{width:96px;image-rendering:pixelated;opacity:.85;filter:drop-shadow(0 0 30px rgba(232,163,61,.4));margin-top:-6rem}
+  .stage.immersive .scroll{position:relative;max-height:64%;background:linear-gradient(180deg,transparent,rgba(10,8,6,.82)22%,rgba(10,8,6,.94));padding-top:2.5rem}
+  .stage.immersive .art-cap{top:.8rem;bottom:auto}
+
+  /* ===== Chrome density (slims the header + footer without dropping any info) ===== */
+  /* SLIM: everything smaller & tighter — keeps the hand of cards, just shrunk */
+  .chrome-slim .hearth-bar{padding:.35rem .8rem;gap:.7rem}
+  .chrome-slim .hearth-id img{height:1.4rem}
+  .chrome-slim .hearth-id b{font-size:.95rem}
+  .chrome-slim .hearth-id small{font-size:.72rem}
+  .chrome-slim .rune-tab{padding:.25rem .3rem}
+  .chrome-slim .rune-tab img{width:1.55em;height:1.55em}
+  .chrome-slim .hamburger{width:2.1rem;height:1.8rem}
+  .chrome-slim .circle-bar{padding:.3rem .8rem}
+  .chrome-slim .cb-face{width:3.4rem;padding:.25rem .25rem}
+  .chrome-slim .cb-name{font-size:.68rem}
+  .chrome-slim .cb-role{font-size:.52rem}
+  .chrome-slim .cb-dot{width:9px;height:9px}
+  .chrome-slim .cb-res img{width:1.6em;height:1.6em}
+  .chrome-slim .cb-res{font-size:.82rem}
+
+  /* COMPACT: advisor cards flatten to a single thin chip strip (hover would still
+     lift a card + show its bubble in the real game) — the tightest footer */
+  .chrome-compact .hearth-bar{padding:.35rem .8rem;gap:.7rem}
+  .chrome-compact .rune-tab{padding:.25rem .3rem}
+  .chrome-compact .rune-tab img{width:1.55em;height:1.55em}
+  .chrome-compact .hearth-id img{height:1.4rem}
+  .chrome-compact .circle-bar{padding:.28rem .8rem;gap:.5rem}
+  .chrome-compact .cb-hand{padding-left:0;gap:.35rem}
+  .chrome-compact .cb-card{transform:none;margin-left:0;filter:none}
+  .chrome-compact .cb-face{flex-direction:row;align-items:center;width:auto;gap:.35rem;padding:.22rem .6rem;
+    border:1px solid var(--line);border-left:3px solid var(--cult);border-top:1px solid var(--line);border-radius:20px;background:var(--panel-2)}
+  .chrome-compact .cb-dot{margin:0;width:8px;height:8px}
+  .chrome-compact .cb-role{display:none}
+  .chrome-compact .cb-name{font-size:.76rem}
+  .chrome-compact .cb-res img{width:1.6em;height:1.6em}
+  .chrome-compact .cb-res{font-size:.82rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <span class="brand">Layout Explorer</span>
+    <div class="picker" id="picker">
+      <button data-l="current" class="on">Current</button>
+      <button data-l="split">A · Split</button>
+      <button data-l="banner">B · Banner</button>
+      <button data-l="medallion">C · Medallion</button>
+      <button data-l="immersive">D · Immersive</button>
+    </div>
+    <div class="picker" id="chrome">
+      <button data-c="roomy" class="on">Roomy</button>
+      <button data-c="slim">Slim</button>
+      <button data-c="compact">Compact</button>
+    </div>
+    <div class="sizes" id="sizes">
+      <label>Screen</label>
+      <button data-s="desktop" class="on">Desktop</button>
+      <button data-s="tablet">Tablet</button>
+      <button data-s="phone">Phone ldscp</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <p class="caption" id="caption"></p>
+  <div class="device" data-size="desktop">
+    <div class="screen">
+      <div class="hearth-bar" id="hearthbar"></div>
+      <div class="stage current" id="stage"></div>
+      <div class="circle-bar" id="circlebar"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const DIR = "../assets/icons/";
+  const TABS = ["map","seasons","coven","workings","fields","market","cults","war","saga","codex"];
+  const CIRCLE = [
+    {name:"Vela",role:"leader",c:"#2471a3"},
+    {name:"Korr Ashen",role:"caution",c:"#c0392b"},
+    {name:"Ember",role:"flame",c:"#d4ac0d"},
+    {name:"Wisp",role:"flame",c:"#d5d8dc"},
+  ];
+  const PRESS = [["mana",33],["provisions",47],["coin",35],["lore",37],["faith",50],["flames_regard",35],["fracture",11]];
+
+  const SCENE = {
+    title:"The Athenaeum's Price",
+    cap:"The Athenaeum's Price",
+    intro:"A grey-robed reader of the Forgotten Athenaeum comes north with a locked book and a proposal: Blue will share what Runehold has forgotten — for a tithe of coin, and a debt of deference. The pages are warm to the touch, and older than the cataclysm that ate their index.",
+    advisors:[
+      {name:"Vela",c:"#2471a3",text:"Memory is the only wealth the cataclysm cannot burn. Pay the tithe — we cannot re-learn a thousand years by candlelight."},
+      {name:"Korr Ashen",c:"#c0392b",text:"A debt of deference is a leash dressed as a gift. Runehold bows to no library, however old its dust."},
+    ],
+    choices:[
+      {label:"Pay the tithe and take the book", test:"contest: Coin vs 40"},
+      {label:"Refuse — Runehold owes no one its knee"},
+      {label:"Copy it by night and return it unread", test:"contest: Lore vs 55"},
+    ],
+  };
+
+  const CAPTIONS = {
+    current:"<b>Current</b> — the art hero eats ~half the height, so the scene text is truncated and the choices fall below the fold. This is the cramped baseline to compare against.",
+    split:"<b>A · Split</b> — art fixed to the left (~40%), the scene text, advisors, and choices scroll on the right. The KODP-classic reading layout; shows the most text on wide/landscape screens without losing the art.",
+    banner:"<b>B · Banner</b> — the art becomes a short wide header strip with the caption overlaid; everything below is full-width readable text. Keeps a sense of place while roughly doubling visible copy. Works on both wide and narrow screens.",
+    medallion:"<b>C · Medallion</b> — the art shrinks to a small round token beside the title; text dominates the whole stage. Maximum readability; the art is a flourish, not a wall.",
+    immersive:"<b>D · Immersive</b> — the art fills the stage as a dimmed backdrop; the text sits on a legibility scrim rising from the bottom. Most cinematic, but the trade-off is contrast/readability over the art.",
+  };
+
+  // ---- shared chrome ----
+  document.getElementById('hearthbar').innerHTML = `
+    <div class="hearth-id"><img src="${DIR}icon_flame.png" alt=""><div><b>Runehold</b><small>Highsun · Year 1</small></div></div>
+    <nav class="runes">${TABS.map((t,i)=>`<button class="rune-tab ${i===1?'on':''}"><img src="${DIR}icon_min_${t}.png" alt="${t}"></button>`).join('')}</nav>
+    <button class="hamburger"><span></span><span></span><span></span></button>`;
+  document.getElementById('circlebar').innerHTML = `
+    <div class="cb-hand">${CIRCLE.map((m,i)=>`<div class="cb-card" style="--i:${i};--cult:${m.c}"><span class="cb-face"><span class="cb-dot"></span><span class="cb-name">${m.name}</span><span class="cb-role">${m.role}</span></span></div>`).join('')}</div>
+    <div class="cb-res-row">${PRESS.map(([k,v])=>`<span class="cb-res ${k==='fracture'?'danger':''}"><img src="${DIR}icon_min_${k}.png" alt="">${v}</span>`).join('')}</div>`;
+
+  // ---- stage pieces ----
+  const artbox = ()=>`<div class="artbox"><img src="${DIR}icon_flame.png" alt=""><span class="art-cap">${SCENE.cap}</span></div>`;
+  const title = ()=>`<h2 class="scene-title">${SCENE.title}</h2>`;
+  const intro = ()=>`<p class="intro">${SCENE.intro}</p>`;
+  const advisors = ()=>SCENE.advisors.map(a=>`<p class="advisor" style="--adv:${a.c}"><b>${a.name}</b> — &ldquo;${a.text}&rdquo;</p>`).join('');
+  const choices = ()=>`<div class="choices">${SCENE.choices.map(c=>`<button class="choice">${c.label}${c.test?`<em class="test">${c.test}</em>`:''}</button>`).join('')}</div>`;
+  const body = ()=> title()+intro()+advisors()+choices();
+
+  const LAYOUTS = {
+    current: ()=> `${artbox()}<div class="body">${title()}${intro()}</div>`,
+    split:   ()=> `<div class="artcol">${artbox()}${title()}</div><div class="scroll">${intro()}${advisors()}${choices()}</div>`,
+    banner:  ()=> `${artbox()}<div class="scroll">${body()}</div>`,
+    medallion:()=>`<div class="scroll"><div class="head"><div class="med"><img src="${DIR}icon_flame.png" alt=""></div>${title()}</div>${intro()}${advisors()}${choices()}</div>`,
+    immersive:()=>`<div class="bg"><img src="${DIR}icon_flame.png" alt=""><span class="art-cap">${SCENE.cap}</span></div><div class="scroll">${title()}${intro()}${advisors()}${choices()}</div>`,
+  };
+
+  const stage = document.getElementById('stage');
+  function setLayout(l){
+    stage.className = 'stage '+l;
+    stage.innerHTML = LAYOUTS[l]();
+    document.getElementById('caption').innerHTML = CAPTIONS[l];
+    document.querySelectorAll('#picker button').forEach(b=>b.classList.toggle('on', b.dataset.l===l));
+  }
+  document.getElementById('picker').onclick = e=>{ const b=e.target.closest('button'); if(b) setLayout(b.dataset.l); };
+  document.getElementById('sizes').onclick = e=>{ const b=e.target.closest('button'); if(!b) return;
+    document.querySelector('.device').dataset.size=b.dataset.s;
+    document.querySelectorAll('#sizes button').forEach(x=>x.classList.toggle('on', x===b)); };
+
+  const screenEl = document.querySelector('.screen');
+  document.getElementById('chrome').onclick = e=>{ const b=e.target.closest('button'); if(!b) return;
+    screenEl.className = 'screen chrome-'+b.dataset.c;
+    document.querySelectorAll('#chrome button').forEach(x=>x.classList.toggle('on', x===b)); };
+
+  const chromeParam = new URLSearchParams(location.search).get('chrome');
+  if (chromeParam) { screenEl.className = 'screen chrome-'+chromeParam;
+    document.querySelectorAll('#chrome button').forEach(x=>x.classList.toggle('on', x.dataset.c===chromeParam)); }
+
+  setLayout((location.hash.slice(1)) in LAYOUTS ? location.hash.slice(1) : 'split');
+  addEventListener('hashchange', ()=>{ if (location.hash.slice(1) in LAYOUTS) setLayout(location.hash.slice(1)); });
+</script>
+</body>
+</html>

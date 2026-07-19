@@ -28,6 +28,7 @@ let screen = 'splash';         // 'splash' | 'menu' | 'game'
 let overlay = null;            // null | 'options' | 'codex' | 'saves'
 let gameView = 'scene';        // which stage screen is shown (scene | saga | coven | ...)
 let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/Menu)
+let pinnedCard = null;         // index of an advisor card tapped open (tap again to close)
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -195,7 +196,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -256,9 +257,13 @@ window.addEventListener('resize', updateRuneArrows);
 
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
-  if (!el) { if (hearthMenuOpen) { hearthMenuOpen = false; draw(); } return; }  // click-away closes the menu
+  if (!el) {   // click-away closes the menu / unpins any open advisor card
+    if (hearthMenuOpen || pinnedCard !== null) { hearthMenuOpen = false; pinnedCard = null; draw(); }
+    return;
+  }
   const action = el.dataset.action;
-  if (hearthMenuOpen && action !== 'toggle-hearth-menu') hearthMenuOpen = false; // any selection closes it
+  if (hearthMenuOpen && action !== 'toggle-hearth-menu') hearthMenuOpen = false; // any selection closes the menu
+  if (pinnedCard !== null && action !== 'toggle-card') pinnedCard = null;         // any other action unpins
   switch (action) {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
@@ -270,6 +275,7 @@ app.addEventListener('click', (e) => {
     case 'game-view': gameView = el.dataset.view; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
     case 'toggle-hearth-menu': hearthMenuOpen = !hearthMenuOpen; draw(); break;
+    case 'toggle-card': { const i = Number(el.dataset.card); pinnedCard = pinnedCard === i ? null : i; draw(); break; }
     case 'unlock-orientation': setOption('lockLandscape', '0'); break;
     case 'do-action': doAction(el.dataset.act); break;
     case 'resume-game': overlay = null; screen = 'game'; draw(); break;
