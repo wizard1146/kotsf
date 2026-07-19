@@ -69,15 +69,15 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
 .hearth-actions { margin-left: auto; display: flex; gap: 0.4rem; }
 /* in-game hamburger menu (replaces the Options / Save / Menu buttons) */
 .hearth-menu { position: relative; margin-left: 0.4rem; flex-shrink: 0; }
-.hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 2.6rem; height: 2.3rem; padding: 0.4rem; background: none; border: 0; border-radius: 7px; cursor: pointer; }
-.hamburger span { display: block; width: 100%; height: 2.5px; background: var(--ink); border-radius: 2px;
+.hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 7px; width: 2.7rem; height: 2.5rem; padding: 0.4rem; background: none; border: 0; border-radius: 7px; cursor: pointer; }
+.hamburger span { display: block; width: 100%; height: 1.5px; background: var(--ink); border-radius: 2px;
   transition: transform .28s cubic-bezier(.5, 0, .3, 1), opacity .18s ease, background .18s ease; }
 .hamburger:hover:not(:disabled) { background: none; }
 .hamburger:hover:not(:disabled) span { background: var(--flame); }
 .hearth-menu.open .hamburger span { background: var(--flame); }
-.hearth-menu.open .hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.hearth-menu.open .hamburger span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
 .hearth-menu.open .hamburger span:nth-child(2) { opacity: 0; transform: scaleX(0.3); }
-.hearth-menu.open .hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+.hearth-menu.open .hamburger span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
 .hearth-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; display: flex; flex-direction: column; gap: 0.3rem;
   min-width: 9.5rem; padding: 0.45rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
   box-shadow: 0 14px 34px rgba(0,0,0,0.55); opacity: 0; transform: translateY(-8px) scale(0.97); transform-origin: top right;
@@ -115,6 +115,9 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
   border-top: 1px solid var(--line); background: var(--panel);
   padding: 0.35rem 1rem; padding-bottom: max(0.35rem, env(safe-area-inset-bottom));
 }
+/* a faint gradient rising from the footer so the lapping cards read as attached to it */
+.circle-bar::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 2.6rem;
+  background: linear-gradient(to top, var(--panel) 0%, rgba(31, 26, 22, 0.55) 42%, transparent 100%); pointer-events: none; }
 /* the Circle as a held hand of cards — the hand is lifted out of flow so the
    footer itself stays slim while the cards lap up over its top edge. */
 .cb-hand { position: absolute; left: 1rem; bottom: 0.3rem; display: flex; align-items: flex-end; z-index: 6; }
@@ -275,7 +278,7 @@ aside h3 { margin: 0.2rem 0 0.7rem; font-size: 0.8rem; text-transform: uppercase
 /* Split scene: art fixed to the left, text + advisors + choices on the right */
 .scene-split { display: grid; grid-template-columns: minmax(230px, 36%) 1fr; gap: 1.25rem; align-items: start; }
 .scene-split .art { height: auto; aspect-ratio: 4 / 3; margin-bottom: 0; }
-.scene-body { min-width: 0; }
+.scene-body { min-width: 0; display: flex; flex-direction: column; }
 .scene-body .intro { margin-top: 0; }
 @media (max-width: 780px) {
   .scene-split { grid-template-columns: 1fr; gap: 0.9rem; }
@@ -344,6 +347,7 @@ html { -webkit-text-size-adjust: 100%; }
   .circle-bar { padding: 0.5rem 0.7rem; gap: 0.6rem; }
   .cb-res-row { margin-left: 0; width: 100%; }
   .cb-hand { position: static; padding-left: 0.3rem; }
+  .circle-bar::before { display: none; }
 }
 
 /* --- Touch ergonomics: roomier hit targets on any coarse pointer --- */
@@ -351,6 +355,7 @@ html { -webkit-text-size-adjust: 100%; }
   button { padding: 0.5rem 0.85rem; }
   .choice { min-height: 44px; padding: 0.7rem 0.9rem; }
   .rune-tab { padding: 0.55rem 0.8rem; }
+  .fullpage-head .esc-hint { display: none; }   /* no Esc key on touch devices */
 }
 
 /* ============================================================

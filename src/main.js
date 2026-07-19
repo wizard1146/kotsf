@@ -263,7 +263,7 @@ app.addEventListener('click', (e) => {
   }
   const action = el.dataset.action;
   if (hearthMenuOpen && action !== 'toggle-hearth-menu') hearthMenuOpen = false; // any selection closes the menu
-  if (pinnedCard !== null && action !== 'toggle-card') pinnedCard = null;         // any other action unpins
+  if (pinnedCard !== null && action !== 'toggle-card' && action !== 'toggle-hearth-menu') pinnedCard = null; // any other action unpins
   switch (action) {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
@@ -274,7 +274,12 @@ app.addEventListener('click', (e) => {
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
     case 'game-view': gameView = el.dataset.view; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
-    case 'toggle-hearth-menu': hearthMenuOpen = !hearthMenuOpen; draw(); break;
+    case 'toggle-hearth-menu': {   // toggle the class on the LIVE node so the ☰→✕ + popover animate (a full redraw would skip the transition)
+      hearthMenuOpen = !hearthMenuOpen;
+      const hm = app.querySelector('.hearth-menu');
+      if (hm) { hm.classList.toggle('open', hearthMenuOpen); hm.querySelector('.hamburger')?.setAttribute('aria-expanded', String(hearthMenuOpen)); }
+      break;
+    }
     case 'toggle-card': { const i = Number(el.dataset.card); pinnedCard = pinnedCard === i ? null : i; draw(); break; }
     case 'unlock-orientation': setOption('lockLandscape', '0'); break;
     case 'do-action': doAction(el.dataset.act); break;

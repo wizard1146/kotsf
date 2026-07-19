@@ -87,14 +87,21 @@ function centerHTML(ctx) {
       <button data-action="new-run">Begin a new coven</button></section>`;
   }
   if (phase === 'outcome') {
-    return `<section class="scene">${sigil(current.title)}
-      <p class="outcome-text">${esc(lastOutcome.text || '')}</p>
-      <div class="chips">${effectChips(lastOutcome.effects)}</div>
-      <button class="choice cont" data-action="continue">Continue &rarr;</button></section>`;
+    return `<section class="scene scene-split">
+      <div class="scene-art">${sigil(current.title)}</div>
+      <div class="scene-body">
+        <p class="outcome-text">${esc(lastOutcome.text || '')}</p>
+        <div class="chips">${effectChips(lastOutcome.effects)}</div>
+        <button class="choice cont" data-action="continue">Continue &rarr;</button>
+      </div></section>`;
   }
   if (!current) {
-    return `<section class="scene"><p class="intro">The season passes quietly over Runehold.</p>
-      <button class="choice cont" data-action="continue">Continue &rarr;</button></section>`;
+    return `<section class="scene scene-split">
+      <div class="scene-art">${sigil('A Quiet Season')}</div>
+      <div class="scene-body">
+        <p class="intro">The season passes quietly over Runehold.</p>
+        <button class="choice cont" data-action="continue">Continue &rarr;</button>
+      </div></section>`;
   }
   return `<section class="scene scene-split">
     <div class="scene-art">${sigil(current.title)}</div>
@@ -372,7 +379,7 @@ function advisorThought(ctx, m, def) {
     const a = sc.advisors.find((x) => x.member === m.id && meets(ctx.state, x.if));
     if (a) return a.text;
   }
-  return def.bio || 'Keeps their own counsel.';
+  return 'No strong counsel here.';
 }
 
 // the Circle bar (bottom chrome): the Circle as a held hand of cards — hover or
