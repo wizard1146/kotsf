@@ -11,6 +11,8 @@ const PORT = Number(process.env.PORT || 8000);
 const TYPES = {
   '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
   '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml',
+  '.gif': 'image/gif', '.webmanifest': 'application/manifest+json',
+  '.ico': 'image/x-icon', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.woff2': 'font/woff2',
 };
 
 buildBundle();
