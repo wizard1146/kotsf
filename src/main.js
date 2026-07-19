@@ -305,7 +305,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 (async function boot() {
-  const bundle = await (await fetch('/content/bundle.json')).json();
+  const bundle = await (await fetch('content/bundle.json')).json();
   scenes = bundle.scenes;
   defs = Object.fromEntries(bundle.circle.map((c) => [c.id, c]));
   codex = bundle.codex || [];

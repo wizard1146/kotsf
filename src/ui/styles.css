@@ -321,7 +321,7 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
   content: ""; position: fixed; inset: 0; z-index: -1;
   background:
     linear-gradient(180deg, rgba(10,7,12,0.34) 0%, rgba(10,7,12,0.60) 52%, rgba(10,7,12,0.90) 100%),
-    url("/assets/splash.png") center/cover no-repeat;
+    url("../../assets/splash.png") center/cover no-repeat;
 }
 
 /* --- splash --- */
@@ -479,10 +479,10 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
   padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--line);
 }
 .fullpage-head h2 { margin: 0; font-size: 1.3rem; color: var(--flame); text-shadow: 0 0 18px rgba(232, 163, 61, 0.25); }
-.fullpage-head .esc-hint { margin-left: auto; color: var(--ink-dim); font-size: 0.74rem; font-variant: small-caps; letter-spacing: 0.1em; }
+.fullpage-head .esc-hint { margin-left: auto; color: var(--ink-dim); font-size: 0.92rem; font-variant: small-caps; letter-spacing: 0.1em; }
 /* codex search lives inline in the header, next to the title */
 .fullpage-head .panel-search { flex: 1; min-width: 0; max-width: 360px; padding: 0; border: 0; }
-.fullpage-close { font-size: 1.6rem; line-height: 1; padding: 0 0.45rem; color: var(--flame); background: none; border: 0; }
+.fullpage-close { font-size: 2.1rem; line-height: 1; padding: 0 0.45rem; color: var(--flame); background: none; border: 0; }
 .fullpage-close:hover:not(:disabled) { transform: scale(1.15); background: none; border: 0; }
 /* shared panel layout: optional search bar, left nav column, scrolling main.
    Used by BOTH the Codex and the Options full-page panels (fastsugar-style). */

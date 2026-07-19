@@ -75,7 +75,7 @@ function effectChips(effects = []) {
 }
 
 function sigil(title) {
-  return `<div class="art"><img class="rune" src="/assets/icons/icon_flame.png" alt="" aria-hidden="true"><div class="art-cap">${esc(title)}</div></div>`;
+  return `<div class="art"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><div class="art-cap">${esc(title)}</div></div>`;
 }
 
 function centerHTML(ctx) {
@@ -118,7 +118,7 @@ const SCREENS = [
   { id: 'codex', label: 'Codex', overlay: 'codex', icon: 'codex' },
 ];
 // small UI runes for the rune tabs + pressure readout (Tier-A icon_min_* set)
-const runeIco = (s) => s.icon ? `<img class="rune-ico" src="/assets/icons/icon_min_${s.icon}.png" alt="" aria-hidden="true">` : '';
+const runeIco = (s) => s.icon ? `<img class="rune-ico" src="assets/icons/icon_min_${s.icon}.png" alt="" aria-hidden="true">` : '';
 const P_ICON = { mana: 'mana', provisions: 'provisions', coin: 'coin', lore: 'lore', faith: 'faith', flamesRegard: 'flames_regard', fracture: 'fracture' };
 // short labels for the cramped bottom bar
 const P_SHORT = { mana: 'Mana', provisions: 'Food', coin: 'Coin', lore: 'Lore', faith: 'Faith', flamesRegard: 'Regard', fracture: 'Fracture' };
@@ -143,7 +143,7 @@ function runeMenuHTML(ctx) {
 
 function placeholderScreen(title, flavor) {
   return `<section class="screen screen-stub">
-    <img class="rune" src="/assets/icons/icon_flame.png" alt="" aria-hidden="true">
+    <img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
     <h2 class="screen-title">${esc(title)}</h2>
     <p class="muted">${esc(flavor)}</p>
     <p class="muted">This hall is not yet raised. <button class="linkish" data-action="game-view" data-view="scene">Return to the season &rarr;</button></p>
@@ -210,7 +210,7 @@ function recapHTML(ctx) {
   const circle = state.circle.map((m) => esc(m.name)).join(', ');
   const souls = state.souls.length ? ` &middot; <span class="muted">Souls: ${state.souls.map((m) => esc(m.name)).join(', ')}</span>` : '';
   return `<section class="screen recap-screen">
-    <div class="recap-head"><img class="rune" src="/assets/icons/icon_flame.png" alt="" aria-hidden="true">
+    <div class="recap-head"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
       <h2 class="screen-title">Runehold &mdash; the Year ${r.year} Ends</h2></div>
     <p class="muted">The hearth-rune is renewed; the saga turns a page.</p>
     <h3 class="coven-subhead">How the year moved you</h3>
@@ -353,7 +353,7 @@ function mapScreenHTML(ctx) {
       </div>
       ${holds}
       <div class="map-hold map-home" style="left:50%;top:50%" title="Runehold — your coven seat">
-        <img class="rune" src="/assets/icons/icon_flame.png" alt="" aria-hidden="true"><span class="map-label">Runehold</span>
+        <img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><span class="map-label">Runehold</span>
       </div>
     </div>
     <p class="muted map-fracture-note">The Fracture stands at <b class="${fCls}">${fracture}</b>. Its ash creeps further into the known world each season it is left unchecked.</p>
@@ -371,7 +371,7 @@ function circleBarHTML(ctx) {
   const souls = state.souls.map((m) =>
     `<div class="cb-portrait lost" title="Lost to the Flame"><i style="background:${CULT_HEX[m.color] || '#777'}"></i><span class="cb-name">${esc(m.name)}</span><small>soul</small></div>`).join('');
   const res = P_ORDER.map((k) =>
-    `<span class="cb-res ${k === 'fracture' ? 'danger' : ''}" title="${P_SHORT[k]}"><img class="cb-ico" src="/assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span></span>`).join('');
+    `<span class="cb-res ${k === 'fracture' ? 'danger' : ''}" title="${P_SHORT[k]}"><img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span></span>`).join('');
   return `<div class="circle-bar">
     <div class="cb-portraits">${portraits}${souls}</div>
     <div class="cb-res-row">${res}</div>
@@ -381,7 +381,7 @@ function circleBarHTML(ctx) {
 function gameHTML(ctx) {
   const { state } = ctx;
   return `<div class="hearth-bar">
-      <div class="hearth-id"><img class="rune" src="/assets/icons/icon_flame.png" alt="" aria-hidden="true">
+      <div class="hearth-id"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
         <div><b>Runehold</b><small>${seasonName(state.season)} &middot; Year ${state.year}</small></div>
       </div>
       ${runeMenuHTML(ctx)}
@@ -398,7 +398,7 @@ function gameHTML(ctx) {
 // ---- splash + main menu ---------------------------------------------------
 function splashHTML() {
   return `<section class="splash" data-action="enter">
-    <div class="splash-flame"><img class="splash-mark" src="/assets/icons/icon_flame_gem.gif" alt="" /></div>
+    <div class="splash-flame"><img class="splash-mark" src="assets/icons/icon_flame_gem.gif" alt="" /></div>
     <h1>Keeper of the Sacred Flame</h1>
     <p class="splash-sub">A coven-survival saga of the Forgotten Runiverse</p>
     <button class="splash-enter" data-action="enter"><span class="cap">E</span>nter <span class="cap">R</span>unehold &#10095;</button>
@@ -412,7 +412,7 @@ function menuHTML(ctx) {
       ? `<button class="menu-item primary" data-action="restore" data-slot="auto">Continue</button>`
       : '';
   return `<section class="menu">
-    <div class="menu-brand"><img class="rune" src="/assets/icons/icon_flame_anim.gif" alt="" aria-hidden="true">
+    <div class="menu-brand"><img class="rune" src="assets/icons/icon_flame_anim.gif" alt="" aria-hidden="true">
       <h1>Keeper of the Sacred Flame</h1><p>Runehold</p></div>
     <nav class="menu-nav">
       ${resume}

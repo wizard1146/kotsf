@@ -2,19 +2,22 @@
 // game loads and plays fully offline (saves already live in localStorage); other
 // assets (icons, fonts, gifs) are cached at runtime on first fetch.
 // Bump CACHE when the shell changes to roll users onto the new version.
-const CACHE = 'kotsf-v1';
+const CACHE = 'kotsf-v2';
 
+// Resolve every path against the worker's own directory so the app works whether
+// it is served from a domain root or a project subpath (e.g. /kotsf/).
+const BASE = new URL('./', self.location).href;
 const CORE = [
-  '/', '/index.html',
-  '/src/main.js',
-  '/src/ui/view.js', '/src/ui/styles.css',
-  '/src/engine/state.js', '/src/engine/conditions.js', '/src/engine/effects.js',
-  '/src/engine/selector.js', '/src/engine/resolver.js', '/src/engine/loop.js', '/src/engine/save.js',
-  '/content/bundle.json',
-  '/manifest.webmanifest',
-  '/assets/splash.png',
-  '/assets/icons/pwa-192.png', '/assets/icons/pwa-512.png',
-];
+  '', 'index.html',
+  'src/main.js',
+  'src/ui/view.js', 'src/ui/styles.css',
+  'src/engine/state.js', 'src/engine/conditions.js', 'src/engine/effects.js',
+  'src/engine/selector.js', 'src/engine/resolver.js', 'src/engine/loop.js', 'src/engine/save.js',
+  'content/bundle.json',
+  'manifest.webmanifest',
+  'assets/splash.png',
+  'assets/icons/pwa-192.png', 'assets/icons/pwa-512.png',
+].map((p) => new URL(p, BASE).href);
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -34,7 +37,7 @@ self.addEventListener('fetch', (e) => {
 
   // Page loads: try the network, fall back to the cached shell when offline.
   if (request.mode === 'navigate') {
-    e.respondWith(fetch(request).catch(() => caches.match('/index.html')));
+    e.respondWith(fetch(request).catch(() => caches.match(new URL('index.html', BASE).href)));
     return;
   }
 
