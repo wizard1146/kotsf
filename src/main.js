@@ -27,6 +27,7 @@ let actions = [];              // per-screen actions (Workings, Fields, …): re
 let screen = 'splash';         // 'splash' | 'menu' | 'game'
 let overlay = null;            // null | 'options' | 'codex' | 'saves'
 let gameView = 'scene';        // which stage screen is shown (scene | saga | coven | ...)
+let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/Menu)
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -71,12 +72,13 @@ function metaOf(env) {
 // ---- settings -------------------------------------------------------------
 function loadSettings() {
   const s = readSlot(SETTINGS_KEY) || {};
-  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false };
+  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false };
 }
 function applySettings() {
   const r = document.documentElement;
   r.dataset.textSize = settings.textSize;
   r.dataset.reduceMotion = settings.reduceMotion ? '1' : '0';
+  r.dataset.lockLandscape = settings.lockLandscape ? '1' : '0';
 }
 function setOption(key, val) {
   if (key === 'textSize') settings.textSize = val;
@@ -193,7 +195,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -254,8 +256,10 @@ window.addEventListener('resize', updateRuneArrows);
 
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
-  if (!el) return;
-  switch (el.dataset.action) {
+  if (!el) { if (hearthMenuOpen) { hearthMenuOpen = false; draw(); } return; }  // click-away closes the menu
+  const action = el.dataset.action;
+  if (hearthMenuOpen && action !== 'toggle-hearth-menu') hearthMenuOpen = false; // any selection closes it
+  switch (action) {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
     case 'continue': proceed(); break;
@@ -265,6 +269,8 @@ app.addEventListener('click', (e) => {
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
     case 'game-view': gameView = el.dataset.view; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
+    case 'toggle-hearth-menu': hearthMenuOpen = !hearthMenuOpen; draw(); break;
+    case 'unlock-orientation': setOption('lockLandscape', '0'); break;
     case 'do-action': doAction(el.dataset.act); break;
     case 'resume-game': overlay = null; screen = 'game'; draw(); break;
     case 'start-game': confirmNewCoven(); break;

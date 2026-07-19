@@ -106,20 +106,22 @@ function centerHTML(ctx) {
 
 // the rune menu — most entries swap the stage; Codex opens the full-page overlay.
 const SCREENS = [
-  { id: 'scene', label: 'Season', icon: 'seasons' },
-  { id: 'coven', label: 'Coven', icon: 'coven' },
-  { id: 'fields', label: 'Fields', icon: 'fields' },
-  { id: 'market', label: 'Market', icon: 'market' },
-  { id: 'war', label: 'War', icon: 'war' },
-  { id: 'cults', label: 'Cults', icon: 'cults' },
-  { id: 'workings', label: 'Workings', icon: 'workings' },
   { id: 'map', label: 'Map', icon: 'map' },
+  { id: 'scene', label: 'Seasons', icon: 'seasons' },
+  { id: 'coven', label: 'Coven', icon: 'coven' },
+  { id: 'workings', label: 'Workings', icon: 'workings' },
+  { id: 'fields', label: 'Hearthfields', icon: 'fields' },
+  { id: 'market', label: 'Market', icon: 'market' },
+  { id: 'cults', label: 'Cults', icon: 'cults' },
+  { id: 'war', label: 'War', icon: 'war' },
   { id: 'saga', label: 'Saga', icon: 'saga' },
   { id: 'codex', label: 'Codex', overlay: 'codex', icon: 'codex' },
 ];
 // small UI runes for the rune tabs + pressure readout (Tier-A icon_min_* set)
 const runeIco = (s) => s.icon ? `<img class="rune-ico" src="assets/icons/icon_min_${s.icon}.png" alt="" aria-hidden="true">` : '';
 const P_ICON = { mana: 'mana', provisions: 'provisions', coin: 'coin', lore: 'lore', faith: 'faith', flamesRegard: 'flames_regard', fracture: 'fracture' };
+// clicking a pressure jumps to the screen that governs it (coin → Market, etc.)
+const P_TAB = { mana: 'workings', provisions: 'fields', coin: 'market', lore: 'codex', faith: 'coven', flamesRegard: 'map', fracture: 'war' };
 // short labels for the cramped bottom bar
 const P_SHORT = { mana: 'Mana', provisions: 'Food', coin: 'Coin', lore: 'Lore', faith: 'Faith', flamesRegard: 'Regard', fracture: 'Fracture' };
 // flavor for screens not yet built — all 9 are built now, kept for future screens
@@ -360,20 +362,44 @@ function mapScreenHTML(ctx) {
   </section>`;
 }
 
-// the Circle bar (bottom chrome) — advisor portraits + a compact resource readout
+// what an advisor is thinking right now — their take on the live scene if they
+// have one, otherwise their standing character note.
+function advisorThought(ctx, m, def) {
+  const sc = ctx.current;
+  if (sc && Array.isArray(sc.advisors)) {
+    const a = sc.advisors.find((x) => x.member === m.id && meets(ctx.state, x.if));
+    if (a) return a.text;
+  }
+  return def.bio || 'Keeps their own counsel.';
+}
+
+// the Circle bar (bottom chrome): the Circle as a held hand of cards — hover or
+// tap a card to lift it and hear the advisor's thought — plus a clickable
+// resource readout (each pressure jumps to the screen that governs it).
 function circleBarHTML(ctx) {
   const { state, defs } = ctx;
-  const portraits = state.circle.map((m, i) => `<div class="cb-portrait" title="${esc(defs[m.id]?.bio || '')}">
-      <i style="background:${CULT_HEX[m.color] || '#777'}"></i>
-      <span class="cb-name">${esc(m.name)}</span>
-      <small>${i === 0 ? 'leader' : esc(m.leaning || m.rank || '')}</small>
-    </div>`).join('');
+  const cards = state.circle.map((m, i) => {
+    const def = defs[m.id] || {};
+    const role = i === 0 ? 'leader' : (m.leaning || m.rank || '');
+    return `<button class="cb-card" style="--i:${i};--cult:${CULT_HEX[m.color] || '#777'}" aria-label="${esc(def.name || m.name)}">
+        <span class="cb-face">
+          <span class="cb-dot"></span>
+          <span class="cb-name">${esc(m.name)}</span>
+          <span class="cb-role">${esc(role)}</span>
+        </span>
+        <span class="cb-bubble"><b>${esc(def.name || m.name)}</b>${esc(advisorThought(ctx, m, def))}</span>
+      </button>`;
+  }).join('');
   const souls = state.souls.map((m) =>
-    `<div class="cb-portrait lost" title="Lost to the Flame"><i style="background:${CULT_HEX[m.color] || '#777'}"></i><span class="cb-name">${esc(m.name)}</span><small>soul</small></div>`).join('');
-  const res = P_ORDER.map((k) =>
-    `<span class="cb-res ${k === 'fracture' ? 'danger' : ''}" title="${P_SHORT[k]}"><img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span></span>`).join('');
+    `<span class="cb-soul" title="Lost to the Flame"><i style="background:${CULT_HEX[m.color] || '#777'}"></i>${esc(m.name)}</span>`).join('');
+  const res = P_ORDER.map((k) => {
+    const tab = P_TAB[k];
+    const act = tab === 'codex' ? 'data-action="open" data-overlay="codex"' : `data-action="game-view" data-view="${tab}"`;
+    return `<button class="cb-res ${k === 'fracture' ? 'danger' : ''}" ${act} title="${P_SHORT[k]}">
+        <img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span></button>`;
+  }).join('');
   return `<div class="circle-bar">
-    <div class="cb-portraits">${portraits}${souls}</div>
+    <div class="cb-hand">${cards}${souls ? `<span class="cb-souls">${souls}</span>` : ''}</div>
     <div class="cb-res-row">${res}</div>
   </div>`;
 }
@@ -385,11 +411,14 @@ function gameHTML(ctx) {
         <div><b>Runehold</b><small>${seasonName(state.season)} &middot; Year ${state.year}</small></div>
       </div>
       ${runeMenuHTML(ctx)}
-      <span class="hearth-actions">
-        <button data-action="open" data-overlay="options">Options</button>
-        <button data-action="save-manual">Save</button>
-        <button data-action="go-menu">Menu</button>
-      </span>
+      <div class="hearth-menu${ctx.hearthMenuOpen ? ' open' : ''}">
+        <button class="hamburger" data-action="toggle-hearth-menu" aria-label="Menu" aria-expanded="${ctx.hearthMenuOpen ? 'true' : 'false'}"><span></span><span></span><span></span></button>
+        <div class="hearth-pop">
+          <button data-action="open" data-overlay="options">Options</button>
+          <button data-action="save-manual">Save</button>
+          <button data-action="go-menu">Menu</button>
+        </div>
+      </div>
     </div>
     <main class="stage">${stageHTML(ctx)}</main>
     ${circleBarHTML(ctx)}`;
@@ -460,7 +489,8 @@ function optionsHTML(ctx) {
       <p class="muted">Removes saved campaigns and settings from this browser. This cannot be undone.</p>`;
   } else {
     main = `<div class="opt"><label>Text size</label><div class="seg">${seg}</div></div>
-      <div class="opt"><label>Reduce motion</label>${toggle('reduceMotion', s.reduceMotion)}</div>`;
+      <div class="opt"><label>Reduce motion</label>${toggle('reduceMotion', s.reduceMotion)}</div>
+      <div class="opt"><label>Landscape lock <small class="opt-hint">mobile</small></label>${toggle('lockLandscape', s.lockLandscape)}</div>`;
   }
 
   return `<div class="panel-layout">
@@ -571,9 +601,19 @@ function overlayHTML(ctx) {
 }
 
 // ---- top-level dispatch: pick the screen, layer any overlay on top --------
+// shown only on small portrait screens when the landscape lock is on (CSS-gated)
+function rotatePromptHTML() {
+  return `<div class="rotate-prompt" role="dialog" aria-label="Rotate your device">
+    <div class="rotate-ico">&#8635;</div>
+    <h2>Turn your device</h2>
+    <p>Runehold is played in landscape.</p>
+    <button data-action="unlock-orientation">Play in portrait anyway</button>
+  </div>`;
+}
+
 export function render(ctx) {
   const screen = ctx.screen === 'splash' ? splashHTML()
     : ctx.screen === 'menu' ? menuHTML(ctx)
     : gameHTML(ctx);
-  return screen + overlayHTML(ctx);
+  return screen + overlayHTML(ctx) + rotatePromptHTML();
 }

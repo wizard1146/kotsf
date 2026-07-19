@@ -65,8 +65,23 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
 .hearth-id { display: flex; align-items: center; gap: 0.55rem; }
 .hearth-id .rune { font-size: 1.5rem; color: var(--flame); text-shadow: 0 0 16px rgba(232, 163, 61, 0.35); }
 .hearth-id b { color: var(--flame); letter-spacing: 0.02em; }
-.hearth-id small { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 0.74rem; }
+.hearth-id small { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 0.86rem; }
 .hearth-actions { margin-left: auto; display: flex; gap: 0.4rem; }
+/* in-game hamburger menu (replaces the Options / Save / Menu buttons) */
+.hearth-menu { position: relative; margin-left: 0.4rem; flex-shrink: 0; }
+.hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 2.5rem; height: 2.1rem; padding: 0.4rem 0.5rem; background: none; border: 1px solid var(--line); border-radius: 7px; cursor: pointer; }
+.hamburger:hover:not(:disabled) { border-color: var(--flame-deep); background: none; }
+.hamburger span { display: block; width: 100%; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .25s ease, opacity .2s ease; }
+.hearth-menu.open .hamburger { border-color: var(--flame); }
+.hearth-menu.open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hearth-menu.open .hamburger span:nth-child(2) { opacity: 0; }
+.hearth-menu.open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.hearth-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; display: flex; flex-direction: column; gap: 0.3rem;
+  min-width: 9.5rem; padding: 0.45rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.55); opacity: 0; transform: translateY(-8px) scale(0.97); transform-origin: top right;
+  pointer-events: none; transition: opacity .18s ease, transform .18s ease; }
+.hearth-menu.open .hearth-pop { opacity: 1; transform: none; pointer-events: auto; }
+.hearth-pop button { width: 100%; text-align: left; }
 
 .runes-wrap { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 0.1rem; }
 .runes { flex: 1 1 0; min-width: 0; display: flex; gap: 0.2rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -97,14 +112,36 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
   border-top: 1px solid var(--line); background: var(--panel);
   padding: 0.5rem 1rem; padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
-.cb-portraits { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-.cb-portrait { display: flex; align-items: center; gap: 0.35rem; font-size: 0.82rem; }
-.cb-portrait i { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #00000055; }
-.cb-portrait.lost { opacity: 0.5; font-style: italic; }
-.cb-name { color: var(--ink); }
-.cb-portrait small { color: var(--ink-dim); font-size: 0.68rem; }
-.cb-res-row { margin-left: auto; display: flex; gap: 0.55rem; flex-wrap: wrap; font-family: var(--mono); }
-.cb-res { display: inline-flex; align-items: center; gap: 0.18rem; font-size: 0.9rem; color: var(--ink); }
+/* the Circle presented as a held hand of cards */
+.cb-hand { display: flex; align-items: flex-end; padding-left: 0.7rem; }
+.cb-card { position: relative; background: none; border: 0; padding: 0; margin-left: -0.7rem; cursor: pointer;
+  transform: rotate(calc((var(--i) - 1.5) * 3.5deg)) translateY(3px); transform-origin: bottom center;
+  transition: transform .18s ease; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5)); }
+.cb-card:first-child { margin-left: 0; }
+.cb-face { display: flex; flex-direction: column; align-items: center; gap: 1px; width: 4.4rem; padding: 0.4rem 0.3rem 0.35rem;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--line);
+  border-top: 3px solid var(--cult); border-radius: 8px; }
+.cb-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cult); border: 1px solid #00000055; margin-bottom: 2px; }
+.cb-card .cb-name { color: var(--ink); font-size: 0.82rem; line-height: 1.1; white-space: nowrap; }
+.cb-role { color: var(--ink-dim); font-size: 0.64rem; font-variant: small-caps; letter-spacing: 0.04em; }
+.cb-card:hover, .cb-card:focus-visible { transform: rotate(0deg) translateY(-12px); z-index: 21; outline: none; }
+/* the advisor's speech bubble, to the right of the lifted card */
+.cb-bubble { position: absolute; left: calc(100% + 12px); bottom: 0; width: max-content; max-width: 15rem;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.7rem;
+  font-size: 0.8rem; line-height: 1.4; color: var(--ink); text-align: left; white-space: normal;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55); opacity: 0; transform: translateX(-6px); pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease; z-index: 40; }
+.cb-bubble b { display: block; color: var(--flame); font-size: 0.82rem; margin-bottom: 0.15rem; }
+.cb-bubble::before { content: ""; position: absolute; left: -7px; bottom: 14px; border: 7px solid transparent; border-right-color: var(--line); }
+.cb-bubble::after { content: ""; position: absolute; left: -6px; bottom: 15px; border: 6px solid transparent; border-right-color: var(--panel); }
+.cb-card:hover .cb-bubble, .cb-card:focus-visible .cb-bubble { opacity: 1; transform: none; }
+.cb-souls { display: inline-flex; align-items: center; gap: 0.6rem; margin-left: 1rem; }
+.cb-soul { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--ink-dim); font-style: italic; opacity: 0.7; }
+.cb-soul i { width: 10px; height: 10px; border-radius: 50%; }
+.cb-res-row { margin-left: auto; display: flex; gap: 0.4rem; flex-wrap: wrap; font-family: var(--mono); }
+.cb-res { display: inline-flex; align-items: center; gap: 0.18rem; font-size: 0.9rem; color: var(--ink); background: none; border: 0; padding: 0.15rem 0.35rem; border-radius: 6px; cursor: pointer; transition: background .14s ease, transform .12s ease; }
+.cb-res:hover:not(:disabled) { background: rgba(232, 163, 61, 0.12); border: 0; transform: translateY(-1px); }
+.cb-res:active { transform: translateY(0); }
 .cb-val { color: var(--ink); }
 .cb-res.danger .cb-val { color: var(--danger); }
 
@@ -388,7 +425,7 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
 .menu-brand p {
   display: flex; align-items: center; justify-content: center; gap: 0.7rem;
   color: var(--flame-deep); opacity: 0.95; font-family: var(--display); font-weight: 600;
-  font-variant: small-caps; letter-spacing: 0.2em; font-size: 1.15rem; margin: 0.2rem 0 0;
+  font-variant: small-caps; letter-spacing: 0.18em; font-size: 1.5rem; margin: 0.15rem 0 0;
 }
 .menu-brand p::before, .menu-brand p::after { content: ""; height: 1px; width: clamp(1.4rem, 5vw, 2.4rem); background: linear-gradient(90deg, transparent, var(--flame-deep)); }
 .menu-brand p::after { background: linear-gradient(90deg, var(--flame-deep), transparent); }
@@ -543,3 +580,20 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
   .fullpage-head .esc-hint { display: none; }       /* make room for the search */
   .fullpage-head .panel-search { max-width: none; }
 }
+
+/* --- rotate-to-landscape prompt: shown only on small portrait screens while the
+       landscape lock is on. Unlock from here or in Options. --- */
+.rotate-prompt { display: none; }
+@media (orientation: portrait) and (max-width: 920px) {
+  html[data-lock-landscape="1"] .rotate-prompt {
+    display: grid; position: fixed; inset: 0; z-index: 300;
+    place-content: center; justify-items: center; text-align: center;
+    gap: 0.5rem; padding: 2rem; background: var(--bg); color: var(--ink);
+  }
+  .rotate-ico { font-size: 3.6rem; color: var(--flame); display: inline-block; animation: rot-hint 2.6s ease-in-out infinite; }
+  .rotate-prompt h2 { color: var(--flame); margin: 0.3rem 0 0; }
+  .rotate-prompt p { color: var(--ink-dim); margin: 0; max-width: 24ch; }
+  .rotate-prompt button { margin-top: 0.9rem; }
+}
+@keyframes rot-hint { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(80deg); } }
+html[data-reduce-motion="1"] .rotate-ico { animation: none; }
