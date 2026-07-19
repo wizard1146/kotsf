@@ -11,3 +11,9 @@ npm-debug.log*
 .env
 .env.local
 *.log
+
+# Assets: track only our own art (icons + splash); the rest are borrowed
+# placeholders from another project — keep them out of history for now.
+assets/*
+!assets/icons/
+!assets/splash.png

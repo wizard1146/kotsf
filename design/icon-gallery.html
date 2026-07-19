@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Icon Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#14110f; --panel:#1f1a16; --panel2:#2a231d; --line:#3a3128;
+    --ink:#e7dccb; --ink-dim:#9c8f7d; --flame:#e8a33d; --flame-deep:#b5641c;
+    --sans:"Barlow",system-ui,sans-serif; --display:"Barlow Semi Condensed",sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+    --size:160px; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);padding-bottom:5rem;transition:background .2s}
+  /* background test grounds */
+  body[data-bg="black"]{background:#000}
+  body[data-bg="panel"]{background:var(--panel)}
+  body[data-bg="light"]{background:#e9ddc7}
+  body[data-bg="light"]{color:#2a2018}
+
+  header{position:sticky;top:0;z-index:30;backdrop-filter:blur(8px);
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom:1px solid var(--line);padding:.8rem 1.2rem}
+  body[data-bg="light"] header{background:rgba(233,221,199,.85)}
+  .bar{display:flex;flex-wrap:wrap;gap:1.2rem 1.6rem;align-items:center;max-width:1300px;margin:0 auto}
+  .brand{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.15rem;margin-right:.4rem}
+  .ctrl{display:flex;align-items:center;gap:.5rem}
+  .ctrl label{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim)}
+  input[type=range]{accent-color:var(--flame);width:150px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{background:transparent;border:0;color:var(--ink-dim);font-family:var(--sans);font-size:.8rem;padding:.35rem .6rem;cursor:pointer}
+  body[data-bg="light"] .seg button{color:#6a5a44}
+  .seg button.on{background:var(--flame);color:#1a130a;font-weight:600}
+  .count{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin-left:auto}
+
+  main{max-width:1300px;margin:1.6rem auto 0;padding:0 1.2rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--size),1fr));gap:1.1rem;justify-content:center}
+  .grid.mosaic .tile:nth-child(7n){grid-row:span 2}
+  figure{margin:0;text-align:center}
+  .tile{position:relative;width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;background:#0a0709;cursor:zoom-in;transition:transform .18s ease, box-shadow .18s ease, z-index 0s;transform-origin:center}
+  .tile img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .2s}
+  figcaption{margin-top:.45rem;font-size:.78rem;color:var(--ink-dim);font-family:var(--mono)}
+  body[data-bg="light"] figcaption{color:#6a5a44}
+
+  /* filters on the imagery */
+  .grid[data-filter="contrast"] img{filter:contrast(1.35) saturate(1.1)}
+  .grid[data-filter="gray"] img{filter:grayscale(1) contrast(1.05)}
+  .grid[data-filter="bright"] img{filter:brightness(1.18) contrast(1.15)}
+
+  /* hover effects */
+  .grid[data-hover="zoom"] .tile:hover{transform:scale(1.55);z-index:20;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+  .grid[data-hover="glow"] .tile:hover{transform:scale(1.5);z-index:20;box-shadow:0 0 0 1px var(--flame-deep),0 10px 44px rgba(232,163,61,.35)}
+  .grid[data-hover="lift"] .tile:hover{transform:translateY(-10px) scale(1.08);z-index:20;box-shadow:0 18px 40px rgba(0,0,0,.6)}
+
+  h2{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.3rem;margin:2.6rem 0 .3rem}
+  .note{color:var(--ink-dim);font-size:.88rem;margin:.2rem 0 1rem;max-width:70ch}
+  body[data-bg="light"] .note{color:#6a5a44}
+  /* size ladder */
+  .ladder{display:flex;gap:1.1rem;align-items:flex-end;flex-wrap:wrap;background:#0a0709;border:1px solid var(--line);border-radius:14px;padding:1.2rem}
+  body[data-bg="light"] .ladder{background:#d8c9ac}
+  .ladder figure img{border-radius:8px;border:1px solid var(--line);object-fit:cover;display:block}
+  .ladder figcaption{margin-top:.3rem}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(4,3,6,.9);padding:2rem;cursor:zoom-out}
+  .lb.on{display:grid}
+  .lb img{max-width:min(720px,92vw);max-height:88vh;border-radius:16px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.7)}
+  .lb .cap{position:fixed;bottom:1.4rem;left:0;right:0;text-align:center;font-family:var(--mono);color:var(--ink-dim);font-size:.8rem}
+</style>
+</head>
+<body data-bg="dark">
+
+<header>
+  <div class="bar">
+    <span class="brand">Icon Gallery</span>
+    <div class="ctrl"><label>Size</label><input id="size" type="range" min="72" max="320" step="8" value="160"/><span id="sizeval" class="count" style="margin:0">160px</span></div>
+    <div class="ctrl"><label>Ground</label><div class="seg" id="bg">
+      <button data-v="dark" class="on">Dark</button><button data-v="black">Black</button><button data-v="panel">Panel</button><button data-v="light">Light</button>
+    </div></div>
+    <div class="ctrl"><label>Hover</label><div class="seg" id="hover">
+      <button data-v="zoom" class="on">Zoom</button><button data-v="glow">Glow</button><button data-v="lift">Lift</button>
+    </div></div>
+    <div class="ctrl"><label>Filter</label><div class="seg" id="filter">
+      <button data-v="none" class="on">None</button><button data-v="contrast">Contrast</button><button data-v="gray">Gray</button><button data-v="bright">Bright</button>
+    </div></div>
+    <div class="ctrl"><label>Layout</label><div class="seg" id="layout">
+      <button data-v="even" class="on">Even</button><button data-v="mosaic">Mosaic</button>
+    </div></div>
+    <span class="count" id="count"></span>
+  </div>
+</header>
+
+<main>
+  <div class="grid" id="grid" data-hover="zoom" data-filter="none"></div>
+
+  <h2>How small do they hold up?</h2>
+  <p class="note">These icons are dense — the rune-frame + grunge means they read as a badge large, but blur toward a blob small.
+  Use this to decide the minimum size in the UI (and which ones need a simplified small variant). Representative icon:</p>
+  <div class="ladder" id="ladder"></div>
+</main>
+
+<div class="lb" id="lb"><img id="lbimg" alt=""/><div class="cap" id="lbcap"></div></div>
+
+<script>
+  const DIR = "../assets/icons/";
+  const FILES = ["icon_kotsf.png","icon_hearthrune.png","icon_mana.png","icon_provision.png","icon_lore.png","icon_faith.png","icon_flames_regard.png","icon_fracture.png","icon_season.png","icon_coven.png","icon_coven_2.png","icon_empty_coven.png","icon_fields.png","icon_market.png","icon_war.png","icon_war_2.png","icon_cults.png","icon_cults_2.png","icon_workings.png","icon_map.png","icon_codex.png","icon_saga.png","icon_soul.png","icon_secret_tower.png","icon_infinity_veil.png","icon_the_fracture.png","icon_main_01.png","icon_main_02.png","icon_main_03.png","icon_main_04.png","icon_main_05.png","icon_main_06.png","icon_main_07.png","icon_main_08.png"];
+  const label = (f)=> f.replace(/^icon_/,'').replace(/\.png$/,'').replace(/_/g,' ');
+
+  // grid
+  document.getElementById('grid').innerHTML = FILES.map(f=>
+    `<figure><div class="tile" data-src="${DIR}${f}" data-label="${label(f)}"><img loading="lazy" src="${DIR}${f}" alt="${label(f)}"></div><figcaption>${label(f)}</figcaption></figure>`
+  ).join('');
+  document.getElementById('count').textContent = FILES.length + ' icons';
+
+  // size ladder (one representative icon at increasing sizes)
+  const rep = "icon_kotsf.png";
+  document.getElementById('ladder').innerHTML = [24,32,48,64,96,128,180].map(s=>
+    `<figure><img src="${DIR}${rep}" width="${s}" height="${s}" alt=""><figcaption>${s}px</figcaption></figure>`
+  ).join('');
+
+  // controls
+  const grid = document.getElementById('grid');
+  const size = document.getElementById('size');
+  size.oninput = ()=>{ document.documentElement.style.setProperty('--size', size.value+'px'); document.getElementById('sizeval').textContent = size.value+'px'; };
+  function seg(id, apply){ const box=document.getElementById(id);
+    box.onclick=(e)=>{ const b=e.target.closest('button'); if(!b) return;
+      box.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); apply(b.dataset.v); }; }
+  seg('bg', v=> document.body.dataset.bg=v);
+  seg('hover', v=> grid.dataset.hover=v);
+  seg('filter', v=> grid.dataset.filter=v);
+  seg('layout', v=> grid.classList.toggle('mosaic', v==='mosaic'));
+
+  // lightbox
+  const lb=document.getElementById('lb'), lbimg=document.getElementById('lbimg'), lbcap=document.getElementById('lbcap');
+  grid.addEventListener('click',(e)=>{ const t=e.target.closest('.tile'); if(!t) return;
+    lbimg.src=t.dataset.src; lbcap.textContent=t.dataset.label; lb.classList.add('on'); });
+  lb.onclick=()=>lb.classList.remove('on');
+  addEventListener('keydown',(e)=>{ if(e.key==='Escape') lb.classList.remove('on'); });
+</script>
+</body>
+</html>

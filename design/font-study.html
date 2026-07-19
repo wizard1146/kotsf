@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Barlow Type Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#14110f; --panel:#1f1a16; --panel-2:#2a231d; --line:#3a3128;
+    --ink:#e7dccb; --ink-dim:#9c8f7d; --flame:#e8a33d; --flame-deep:#b5641c;
+    --danger:#c0392b; --ok:#4e9a51;
+    --sans:"Barlow",system-ui,sans-serif;
+    --display:"Barlow Semi Condensed","Barlow",sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 800px at 70% -10%, #241c14 0%, var(--bg) 60%);
+    color:var(--ink);font-family:var(--sans);line-height:1.55;padding:0 0 5rem}
+  .wrap{max-width:920px;margin:0 auto;padding:0 1.25rem}
+  header{padding:2.6rem 1.25rem 1.4rem;border-bottom:1px solid var(--line);text-align:center}
+  h1.title{font-family:var(--display);font-weight:700;font-size:2.4rem;color:var(--flame);margin:.3rem 0 .1rem;letter-spacing:.01em}
+  .sub{color:var(--ink-dim);font-style:italic;margin:0}
+  h2{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.3rem;margin:2.4rem 0 .2rem;border-bottom:1px solid var(--line);padding-bottom:.35rem}
+  p.note{color:var(--ink-dim);font-size:.9rem;max-width:70ch;margin:.4rem 0 1rem}
+  code{font-family:var(--mono);font-size:.82em;background:var(--panel-2);padding:.05em .35em;border-radius:4px;color:#e8c9a0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.2rem;margin-top:1rem}
+  .label{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.5rem 0;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:0}
+  .row .spec{font-family:var(--mono);font-size:.7rem;color:var(--ink-dim);white-space:nowrap}
+  .w300{font-weight:300}.w400{font-weight:400}.w500{font-weight:500}.w600{font-weight:600}.w700{font-weight:700}.w800{font-weight:800}
+  .disp{font-family:var(--display)}
+  /* real game-context samples */
+  .screen-title{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.3rem;margin:0 0 .8rem}
+  .intro{font-size:1.05rem;line-height:1.6;margin:0 0 1rem}
+  .advisor{margin:.5rem 0;color:var(--ink)}
+  .advisor b{font-style:normal}
+  .advisor .q{font-style:italic}
+  .choice{display:block;width:100%;text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--sans);font-size:.95rem;font-weight:500;padding:.6rem .8rem;margin:.4rem 0;cursor:pointer}
+  .choice em{display:block;font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin-top:.15rem}
+  .smallcaps{font-variant:small-caps;letter-spacing:.1em;color:var(--ink-dim)}
+  .stats{display:flex;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.78rem;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem}
+  .stats b{color:var(--ink);font-weight:400;margin-right:.3rem}
+  .stats .danger b{color:var(--danger)}
+  .saga li{color:var(--ink-dim);font-size:.92rem;font-style:italic;margin-bottom:.5rem}
+  .end-copy{font-size:1.05rem;color:var(--ink-dim);max-width:40ch}
+  .end-copy h3{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.6rem;margin:.2rem 0 .4rem}
+  .verdict{background:var(--panel);border:1px solid var(--flame-deep);border-radius:12px;padding:1rem 1.2rem;margin-top:1rem}
+  .verdict b{color:var(--flame)}
+  .scale-item{padding:.35rem 0;border-top:1px solid var(--line)}
+  .scale-item:first-child{border-top:0}
+  .scale-item .m{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim)}
+</style>
+</head>
+<body>
+<header>
+  <div class="label">Type study</div>
+  <h1 class="title">Barlow — the one family</h1>
+  <p class="sub">Body · Semi Condensed display · mono numerals. Weight + width carry the whole hierarchy.</p>
+</header>
+
+<div class="wrap">
+
+<h2>Why Barlow</h2>
+<p class="note">Barlow is a low-contrast grotesque with a faint industrial/condensed feel — warm enough for
+firelit fantasy, sturdy enough for dense UI, and it ships a full weight range (300–800) plus true
+<b>Semi Condensed</b> and <b>Condensed</b> cuts. That range means <em>one</em> family can do the whole game:
+condensed heavy for epic titles, regular for prose, mono for the numbers. No second typeface needed.</p>
+
+<h2>Weight ladder — Barlow</h2>
+<div class="card">
+  <div class="row"><span class="w300">The coven forgets faster than it learns.</span><span class="spec">300 Light</span></div>
+  <div class="row"><span class="w400">The coven forgets faster than it learns.</span><span class="spec">400 Regular · body</span></div>
+  <div class="row"><span class="w500">The coven forgets faster than it learns.</span><span class="spec">500 Medium · buttons</span></div>
+  <div class="row"><span class="w600">The coven forgets faster than it learns.</span><span class="spec">600 SemiBold</span></div>
+  <div class="row"><span class="w700">The coven forgets faster than it learns.</span><span class="spec">700 Bold</span></div>
+  <div class="row"><span class="w800">The coven forgets faster than it learns.</span><span class="spec">800 ExtraBold</span></div>
+  <div class="row"><span class="w400" style="font-style:italic">The coven forgets faster than it learns.</span><span class="spec">400 Italic · flavour</span></div>
+</div>
+
+<h2>Display — Barlow Semi Condensed (titles)</h2>
+<p class="note">Titles use the Semi Condensed cut at 700. It packs more character per line (good for a long game
+name) and reads more "epic/game" than the regular width.</p>
+<div class="card">
+  <div class="disp w700" style="font-size:2.4rem;color:var(--flame);line-height:1.1">Keeper of the Sacred Flame</div>
+  <div class="disp w700" style="font-size:1.6rem;margin-top:.6rem">The Fracture Consumes All</div>
+  <div class="disp w600" style="font-size:1.2rem;margin-top:.5rem;color:var(--ink-dim)">The Seven Cults</div>
+</div>
+
+<h2>In context — a scene as the player sees it</h2>
+<div class="card">
+  <div class="smallcaps">Emberfall · Year 7</div>
+  <div class="screen-title" style="margin-top:.3rem">The Flickering Door</div>
+  <p class="intro">A door breathes light at the foot of the stair. Behind it, the Sacred Flame waits — and the
+  coven is forgetting faster than it can learn.</p>
+  <div class="advisor"><b style="color:#2471a3">Vela</b> — <span class="q">“We forget faster than we learn. The Flame remembers everything. Use it.”</span></div>
+  <div class="advisor"><b style="color:#c0392b">Korr Ashen</b> — <span class="q">“And what walks back out wearing our faces? I have buried Souls before, Archon.”</span></div>
+  <button class="choice">Send an apprentice into the Flame<em>contest: Flame's Regard vs 50 · needs Mana 10</em></button>
+  <button class="choice">Seal the door. Some things should stay forgotten.</button>
+</div>
+
+<h2>The numbers stay mono</h2>
+<p class="note">Pressures, counters, and contest values use a monospaced face — alignment beats family here.
+Barlow proportional would make the readout jitter as digits change.</p>
+<div class="card">
+  <div class="stats">
+    <span><b>Mana</b>43</span><span><b>Food</b>21</span><span><b>Coin</b>9</span>
+    <span><b>Lore</b>40</span><span><b>Faith</b>48</span><span><b>Regard</b>39</span>
+    <span class="danger"><b>Fracture</b>66</span>
+  </div>
+</div>
+
+<h2>The Saga — italic body</h2>
+<div class="card">
+  <ol class="saga">
+    <li>[Emberfall Y7] The Trembling Ground: Apprentices chant until their voices fail; the seam knits shut and the light goes out.</li>
+    <li>[Deepfrost Y7] A Strayed Herd: The meadow runs red and the granary fills. The coven eats; something old in the high passes takes note.</li>
+  </ol>
+</div>
+
+<h2>Failure, authored</h2>
+<div class="card">
+  <div class="end-copy">
+    <h3>The Last Hungry Season</h3>
+    <p>The stores ran dry before the harvest. A coven cannot eat runes.</p>
+  </div>
+</div>
+
+<h2>Type scale (rem @ 16px base)</h2>
+<div class="card">
+  <div class="scale-item disp w700" style="font-size:2.4rem">Game title <span class="m">2.4rem · SemiCond 700</span></div>
+  <div class="scale-item disp w700" style="font-size:1.3rem">Screen title <span class="m">1.3rem · SemiCond 700</span></div>
+  <div class="scale-item w400" style="font-size:1.05rem">Scene prose <span class="m">1.05rem · Barlow 400</span></div>
+  <div class="scale-item w500" style="font-size:.95rem">Button / choice <span class="m">0.95rem · Barlow 500</span></div>
+  <div class="scale-item w400" style="font-size:.9rem">Secondary / muted <span class="m">0.9rem · Barlow 400</span></div>
+  <div class="scale-item" style="font-family:var(--mono);font-size:.78rem">Stat readout <span class="m">0.78rem · mono</span></div>
+  <div class="scale-item smallcaps" style="font-size:.74rem">SEASON · YEAR LABEL <span class="m" style="font-variant:normal">0.74rem · small-caps</span></div>
+</div>
+
+<h2>Recommendation</h2>
+<div class="verdict">
+  <p style="margin:.2rem 0"><b>Ship Barlow as the single game family.</b> Three roles:</p>
+  <p style="margin:.2rem 0">• <b>Barlow Semi Condensed 700</b> — titles &amp; screen headings (<code>--display</code>)<br>
+  • <b>Barlow 400/500</b> — all prose, UI, buttons (<code>--sans</code>)<br>
+  • <b>system mono</b> — every number (<code>--mono</code>)</p>
+  <p style="margin:.4rem 0 0;color:var(--ink-dim)">Optional: <b>Barlow Condensed 700</b> for very long/dramatic
+  end-screen titles. Before the desktop build, <b>self-host the woff2</b> so the game runs offline (currently
+  loaded via Google Fonts <code>&lt;link&gt;</code>).</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KOTSF — Flame &amp; Icon Explorer</title>
+<style>
+  :root{
+    --bg:#14100c; --panel:#1c1712; --panel2:#241d16; --line:#3a2f24;
+    --ink:#efe6d8; --ink-dim:#a89a86; --flame:#e6a23c; --flame-deep:#8a5a1f;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;padding:0 0 5rem}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
+  header.hero{padding:3rem 1.25rem 2rem;text-align:center;border-bottom:1px solid var(--line);
+    background:radial-gradient(120% 80% at 50% -10%, #2a1c12 0%, var(--bg) 60%)}
+  h1{font-family:var(--serif);font-size:2.1rem;color:var(--flame);margin:.6rem 0 .2rem;letter-spacing:.01em}
+  .sub{color:var(--ink-dim);font-style:italic;margin:0}
+  h2{font-family:var(--serif);color:var(--flame);font-size:1.4rem;margin:2.6rem 0 .3rem;
+    border-bottom:1px solid var(--line);padding-bottom:.4rem}
+  h3{font-size:1rem;margin:1.6rem 0 .5rem;color:var(--ink)}
+  p.note{color:var(--ink-dim);font-size:.9rem;margin:.3rem 0 1rem;max-width:70ch}
+  code{font-family:var(--mono);font-size:.85em;background:var(--panel2);padding:.05em .35em;border-radius:4px;color:#e8c9a0}
+  .ico{display:inline-block;vertical-align:middle}
+
+  /* flame option cards */
+  .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem;margin-top:1rem}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem}
+  .card .tag{font-family:var(--mono);font-size:.72rem;color:var(--flame);text-transform:uppercase;letter-spacing:.08em}
+  .card h4{margin:.15rem 0 .1rem;font-size:1.05rem}
+  .card .desc{color:var(--ink-dim);font-size:.84rem;margin:0 0 .8rem;min-height:2.4em}
+  .bgrow{display:flex;gap:.5rem;align-items:center;margin-bottom:.7rem}
+  .bgcell{flex:1;border-radius:10px;display:grid;place-items:center;height:96px;border:1px solid var(--line)}
+  .bg-dark{background:#14100c}.bg-brown{background:#241d16}.bg-black{background:#000}
+  .bg-parch{background:#e9ddc7}.bg-blood{background:#2a0d0d}
+  .ladder{display:flex;gap:1rem;align-items:flex-end;padding:.6rem .2rem 0;border-top:1px dashed var(--line)}
+  .ladder .lc{text-align:center}.ladder .lc small{display:block;color:var(--ink-dim);font-family:var(--mono);font-size:.65rem;margin-top:.2rem}
+
+  /* inventory */
+  .inv{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:.8rem}
+  .inv .grp{background:var(--panel);border-top:1px solid var(--line)}
+  .inv .grp:first-child{border-top:0}
+  .inv .grp>summary{cursor:pointer;padding:.7rem 1rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+  .inv .grp>summary::-webkit-details-marker{display:none}
+  .inv .grp>summary .cnt{font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
+  .inv table{width:100%;border-collapse:collapse;font-size:.86rem}
+  .inv td{padding:.4rem 1rem;border-top:1px solid var(--line);vertical-align:top}
+  .inv td.k{font-family:var(--mono);color:#e8c9a0;white-space:nowrap;width:1%}
+  .inv td.d{color:var(--ink-dim)}
+  .pri{font-family:var(--mono);font-size:.66rem;padding:.05em .45em;border-radius:20px;border:1px solid;white-space:nowrap}
+  .p0{color:#ff9b8a;border-color:#7a2a1e}.p1{color:#e6c07a;border-color:#6e561f}.p2{color:#8fb3c9;border-color:#2f4a58}
+  .legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--ink-dim);margin:.4rem 0}
+  .totals{font-family:var(--mono);color:var(--flame);font-size:.85rem;margin-top:.6rem}
+
+  /* icon family */
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.6rem;margin-top:1rem}
+  .glyph{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.8rem .4rem;text-align:center}
+  .glyph small{display:block;color:var(--ink-dim);font-size:.7rem;margin-top:.4rem;font-family:var(--mono)}
+  .stroke{fill:none;stroke:var(--ink);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+  .stroke-f{fill:none;stroke:var(--flame);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="ico" width="86" height="103" viewBox="0 0 100 120"><use href="#flameB"/></svg>
+  <h1>Keeper of the Sacred Flame</h1>
+  <p class="sub">Flame mark &amp; icon system — exploration v1</p>
+</header>
+
+<div class="wrap">
+
+<!-- ============ SVG SYMBOL LIBRARY ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="emberGlow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="3.2" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+
+  <!-- A · Sharp Trinity — three clean straight triangles, central tallest -->
+  <symbol id="flameA" viewBox="0 0 100 120">
+    <polygon points="31,46 24,108 47,108" fill="#9c2f6a" fill-opacity=".5" stroke="#3f0f2c" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="71,40 55,108 78,108" fill="#c0294f" fill-opacity=".5" stroke="#54101d" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="50,10 39,108 61,108" fill="#e23b2a" fill-opacity=".58" stroke="#6e1109" stroke-width="3.2" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- B · Flicker — angulated, leaning tips, asymmetric (the lead candidate) -->
+  <symbol id="flameB" viewBox="0 0 100 120">
+    <polygon points="27,52 22,108 46,108 39,60" fill="#9c2f6a" fill-opacity=".5" stroke="#3f0f2c" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="76,42 60,58 56,108 79,108" fill="#c0294f" fill-opacity=".5" stroke="#54101d" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="54,9 43,58 40,108 62,108 57,56" fill="#e23b2a" fill-opacity=".6" stroke="#6e1109" stroke-width="3.2" stroke-linejoin="round" filter="url(#emberGlow)"/>
+  </symbol>
+
+  <!-- C · Nested — side flames rise close behind, rich translucent overlap -->
+  <symbol id="flameC" viewBox="0 0 100 120">
+    <polygon points="37,30 30,108 52,108" fill="#8e2f74" fill-opacity=".55" stroke="#37102e" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="64,26 49,108 71,108" fill="#c02952" fill-opacity=".55" stroke="#500f1f" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="50,11 40,108 60,108" fill="#e23b2a" fill-opacity=".62" stroke="#6e1109" stroke-width="3.2" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- D · Tall Narrow — steep, higher-opacity: survives 16px favicon size -->
+  <symbol id="flameD" viewBox="0 0 100 120">
+    <polygon points="34,50 29,108 46,108" fill="#9c2f6a" fill-opacity=".8" stroke="#3f0f2c" stroke-width="3.5" stroke-linejoin="round"/>
+    <polygon points="67,44 55,108 72,108" fill="#c0294f" fill-opacity=".8" stroke="#54101d" stroke-width="3.5" stroke-linejoin="round"/>
+    <polygon points="50,12 42,108 58,108" fill="#e23b2a" fill-opacity=".9" stroke="#6e1109" stroke-width="3.8" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- E · Rune-boxed — flame inside the thin rune square (brand continuity) -->
+  <symbol id="flameE" viewBox="0 0 100 120">
+    <rect x="18" y="20" width="64" height="82" rx="5" fill="none" stroke="var(--flame,#e6a23c)" stroke-opacity=".55" stroke-width="3"/>
+    <polygon points="36,48 31,94 46,94" fill="#9c2f6a" fill-opacity=".55" stroke="#3f0f2c" stroke-width="2.6" stroke-linejoin="round"/>
+    <polygon points="66,44 55,94 70,94" fill="#c0294f" fill-opacity=".55" stroke="#54101d" stroke-width="2.6" stroke-linejoin="round"/>
+    <polygon points="50,28 41,94 59,94" fill="#e23b2a" fill-opacity=".62" stroke="#6e1109" stroke-width="2.8" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- F · Fractured — a thin dark seam splits the core flame (the Fracture theme) -->
+  <symbol id="flameF" viewBox="0 0 100 120">
+    <polygon points="31,46 24,108 47,108" fill="#9c2f6a" fill-opacity=".5" stroke="#3f0f2c" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="71,40 55,108 78,108" fill="#c0294f" fill-opacity=".5" stroke="#54101d" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="50,10 39,108 61,108" fill="#e23b2a" fill-opacity=".58" stroke="#6e1109" stroke-width="3.2" stroke-linejoin="round"/>
+    <path d="M50,14 L46,50 L53,74 L47,108" fill="none" stroke="#0e0906" stroke-width="3" stroke-opacity=".85" stroke-linejoin="round" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- ===== first-pass icon family (24-grid, geometric/angular to echo the flame) ===== -->
+  <symbol id="i-mana" viewBox="0 0 24 24"><path class="stroke-f" d="M12 3 L12 21 M4 8 L20 16 M20 8 L4 16"/></symbol>
+  <symbol id="i-provisions" viewBox="0 0 24 24"><path class="stroke" d="M12 22 L12 9 M12 9 L7 4 M12 9 L17 4 M12 13 L7 8 M12 13 L17 8"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><polygon class="stroke" points="12,3 21,12 12,21 3,12"/><path class="stroke" d="M9 12 h6"/></symbol>
+  <symbol id="i-lore" viewBox="0 0 24 24"><rect class="stroke" x="5" y="4" width="14" height="16" rx="1"/><path class="stroke" d="M9 9 h6 M9 13 h6 M9 17 h3"/></symbol>
+  <symbol id="i-faith" viewBox="0 0 24 24"><polygon class="stroke-f" points="12,4 8,20 16,20"/><polygon class="stroke-f" points="12,9 10,20 14,20"/></symbol>
+  <symbol id="i-regard" viewBox="0 0 24 24"><path class="stroke-f" d="M3 12 Q12 4 21 12 Q12 20 3 12 Z"/><polygon class="stroke-f" points="12,9 10,15 14,15"/></symbol>
+  <symbol id="i-fracture" viewBox="0 0 24 24"><path class="stroke" d="M13 3 L7 11 L12 13 L6 21 M13 3 L17 9 L13 11"/></symbol>
+
+  <symbol id="i-season" viewBox="0 0 24 24"><circle class="stroke-f" cx="12" cy="12" r="4"/><path class="stroke-f" d="M12 3 v2 M12 19 v2 M3 12 h2 M19 12 h2 M6 6 l1.4 1.4 M16.6 16.6 L18 18 M18 6 l-1.4 1.4 M7.4 16.6 L6 18"/></symbol>
+  <symbol id="i-coven" viewBox="0 0 24 24"><circle class="stroke" cx="12" cy="8" r="3"/><circle class="stroke" cx="5.5" cy="16" r="2.4"/><circle class="stroke" cx="18.5" cy="16" r="2.4"/></symbol>
+  <symbol id="i-fields" viewBox="0 0 24 24"><path class="stroke" d="M12 21 V8 M12 8 L7 3 M12 8 L17 3 M12 13 L7 8 M12 13 L17 8 M4 21 h16"/></symbol>
+  <symbol id="i-market" viewBox="0 0 24 24"><path class="stroke" d="M12 3 v18 M5 7 h14 M5 7 L3 13 h4 z M19 7 L17 13 h4 z"/></symbol>
+  <symbol id="i-war" viewBox="0 0 24 24"><path class="stroke" d="M4 4 L14 14 M14 8 L20 4 L18 10 M4 20 L9 15"/><path class="stroke-f" d="M20 20 L10 10 M9 16 L4 20"/></symbol>
+  <symbol id="i-cults" viewBox="0 0 24 24"><polygon class="stroke-f" points="12,3 15,9 21,9 16,13 18,20 12,16 6,20 8,13 3,9 9,9"/></symbol>
+  <symbol id="i-workings" viewBox="0 0 24 24"><circle class="stroke-f" cx="12" cy="12" r="8"/><polygon class="stroke-f" points="12,7 9,16 15,16"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><polygon class="stroke" points="12,3 21,12 12,21 3,12"/><path class="stroke-f" d="M12 8 v4 l3 2"/></symbol>
+  <symbol id="i-codex" viewBox="0 0 24 24"><path class="stroke" d="M4 5 Q8 3 12 5 Q16 3 20 5 V19 Q16 17 12 19 Q8 17 4 19 Z M12 5 V19"/></symbol>
+  <symbol id="i-saga" viewBox="0 0 24 24"><path class="stroke" d="M6 4 h9 a3 3 0 0 1 3 3 v13 H9 a3 3 0 0 1 -3 -3 Z M6 4 a3 3 0 0 0 -3 3 a3 3 0 0 0 3 3 M10 9 h5 M10 13 h5"/></symbol>
+
+  <symbol id="i-soul" viewBox="0 0 24 24"><path class="stroke" d="M7 20 V11 a5 5 0 0 1 10 0 V20 M9 20 v-2 M12 20 v-2 M15 20 v-2"/><circle class="stroke" cx="9.5" cy="10" r="1"/><circle class="stroke" cx="14.5" cy="10" r="1"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path class="stroke-f" d="M12 19 V6 M6 12 l6 -6 l6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path class="stroke" d="M12 5 v13 M6 12 l6 6 l6 -6"/></symbol>
+  <symbol id="i-contest" viewBox="0 0 24 24"><rect class="stroke" x="4" y="4" width="16" height="16" rx="3"/><circle class="stroke-f" cx="8.5" cy="8.5" r="1.3"/><circle class="stroke-f" cx="15.5" cy="15.5" r="1.3"/><circle class="stroke-f" cx="15.5" cy="8.5" r="1.3"/></symbol>
+  <symbol id="i-time" viewBox="0 0 24 24"><path class="stroke-f" d="M12 5 a7 7 0 1 0 3 1 M12 3 v4 M12 3 l3 2 M12 3 l-3 2"/></symbol>
+</defs></svg>
+
+
+<!-- ============ THE FLAME OPTIONS ============ -->
+<h2>The Flame — six directions</h2>
+<p class="note">Your brief: three angulated triangle-flames — a translucent <b>red</b> core with a dark-red outline,
+flanked by <b>purplish-red</b> side tongues in different hues with darker outlines. Each option below is the same
+recipe pushed a different way. Every card shows the mark on five grounds and a size ladder down to a
+16&nbsp;px favicon (translucency dies at small sizes — watch which ones survive).</p>
+
+<div class="opts" id="opts"></div>
+
+
+<!-- ============ FAVICON FOCUS ============ -->
+<h2>Favicon — the 16/32&nbsp;px test</h2>
+<p class="note">A favicon has ~256 pixels to work with. Translucent overlaps turn to mud; thin outlines vanish.
+<b>D (Tall Narrow)</b> and a solidened <b>B</b> read cleanest this small. The tab-strip row below simulates the real context.</p>
+<div class="card" style="max-width:640px">
+  <div style="display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap">
+    <div class="lc" style="text-align:center">
+      <div style="display:flex;gap:.5rem;align-items:center;background:#0e0b08;border:1px solid var(--line);border-radius:8px 8px 0 0;padding:.4rem .7rem">
+        <svg width="16" height="16" viewBox="0 0 100 120"><use href="#flameD"/></svg>
+        <span style="font-size:.8rem;color:var(--ink-dim)">Keeper of the Sacred…</span>
+      </div>
+      <small style="color:var(--ink-dim);font-family:var(--mono);font-size:.65rem">D @16px in a browser tab</small>
+    </div>
+    <div class="lc">
+      <svg width="48" height="48" viewBox="0 0 100 120"><use href="#flameD"/></svg>
+      <small style="color:var(--ink-dim);font-family:var(--mono);font-size:.65rem">D @48 (bookmark)</small>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ ICON INVENTORY ============ -->
+<h2>Icon inventory — everything the game will need</h2>
+<p class="note">The full surface, grouped by system. Priority marks what the <em>current</em> build touches vs. later phases.</p>
+<div class="legend">
+  <span><span class="pri p0">P0</span> in the shipping slice now</span>
+  <span><span class="pri p1">P1</span> next content/systems pass</span>
+  <span><span class="pri p2">P2</span> Phase-2 / GTM / future</span>
+</div>
+<div class="inv" id="inv"></div>
+<p class="totals" id="totals"></p>
+
+
+<!-- ============ ICON FAMILY DRAFT ============ -->
+<h2>First-pass icon family</h2>
+<p class="note">Drafted so the set reads as one system with the flame: sharp corners, the same triangle motif recurring
+(Faith is literally a small flame; Mana/Workings/Regard borrow the tongue). Amber = active/magical, ink = material/mundane.
+These are rough — direction, not final geometry.</p>
+
+<h3>The seven pressures <span style="color:var(--ink-dim);font-weight:400;font-size:.85rem">(always on screen — must work tiny)</span></h3>
+<div class="fam" id="fam-p"></div>
+
+<h3>The ten screens (rune menu)</h3>
+<div class="fam" id="fam-s"></div>
+
+<h3>Feedback &amp; system</h3>
+<div class="fam" id="fam-f"></div>
+
+</div>
+
+<script>
+  // ---- flame option cards ----
+  const FLAMES = [
+    ['A','flameA','Sharp Trinity','Three clean straight triangles, central tallest. The most neutral / heraldic read — calm, legible, a touch static.'],
+    ['B','flameB','Flicker ★','Angulated, leaning tips, asymmetric — actual flame motion. Ember-glow on the core. Recommended lead direction.'],
+    ['C','flameC','Nested','Side tongues rise close behind the core; heavy translucent overlap → the richest colour-mixing, most "lit".'],
+    ['D','flameD','Tall Narrow','Steep and higher-opacity so it survives 16px. The favicon-safe workhorse — pair with B for large use.'],
+    ['E','flameE','Rune-boxed','Flame inside the thin rune square, echoing the current hearth glyph. Strongest brand-continuity / app-icon read.'],
+    ['F','flameF','Fractured','A dark seam splits the core — the Fracture doom-theme baked into the mark. Conceptually richest, busiest small.'],
+  ];
+  const GROUNDS = [['bg-dark','game bg'],['bg-brown','panel'],['bg-black','black'],['bg-parch','parchment'],['bg-blood','blood']];
+  document.getElementById('opts').innerHTML = FLAMES.map(([k,id,name,desc])=>`
+    <div class="card">
+      <div class="tag">Option ${k}</div>
+      <h4>${name}</h4>
+      <p class="desc">${desc}</p>
+      <div class="bgrow">
+        ${GROUNDS.map(([c,l])=>`<div class="bgcell ${c}" title="${l}"><svg width="52" height="62" viewBox="0 0 100 120"><use href="#${id}"/></svg></div>`).join('')}
+      </div>
+      <div class="ladder">
+        ${[16,24,32,48,72].map(s=>`<div class="lc"><svg width="${s}" height="${Math.round(s*1.2)}" viewBox="0 0 100 120"><use href="#${id}"/></svg><small>${s}px</small></div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // ---- inventory data ----
+  const INV = [
+    ['Brand &amp; identity', [
+      ['flame-mark','P0','The Flame — master brand (this doc). Also loading/splash sigil.'],
+      ['favicon','P0','16/32px derivative of the flame. Browser tab + PWA icon + app icon.'],
+      ['hearth-rune','P0','Runehold seat-mark (the ᚾ box currently reused everywhere) — retire or re-cut in the new language.'],
+      ['wordmark','P1','"Keeper of the Sacred Flame" lockup with the mark, for splash/menu/share cards.'],
+      ['app-icon','P2','Rounded-square packaged icon (Steam/desktop/Tauri) — flame + ground.'],
+    ]],
+    ['The seven pressures <em>(always visible in the circle bar)</em>', [
+      ['mana','P0','Spellcasting reserve — spark/star.'],
+      ['provisions','P0','Food — grain sheaf.'],
+      ['coin','P0','Mercantile — angular coin.'],
+      ['lore','P0','Runes/Memory — rune tablet/book.'],
+      ['faith','P0','Coven morale — small flame.'],
+      ['flames-regard','P0','Cosmic meter — eye + flame.'],
+      ['fracture','P0','Doom track — crack/rift.'],
+    ]],
+    ['The ten screens (rune menu)', [
+      ['season','P0','The current event / quiet season — sun-cycle.'],
+      ['coven','P0','Clan roster & Faith — three figures.'],
+      ['fields','P0','Farming vs famine — sheaf.'],
+      ['market','P0','Trade / Stock Sanctuary — scales.'],
+      ['war','P0','Magic vs Steel — wand ✕ sword.'],
+      ['cults','P0','Seven-colour relations — seven-point star.'],
+      ['workings','P0','Spend Mana on workings — rune circle.'],
+      ['map','P0','The Runiverse — diamond/compass.'],
+      ['codex','P0','World/glossary — book.'],
+      ['saga','P0','Running chronicle — scroll.'],
+    ]],
+    ['The seven Cult sigils <em>(colour + emblem each)</em>', [
+      ['cult-red','P0','Markertropolis / Stock Sanctuary — mercantile.'],
+      ['cult-blue','P0','The Bastion / Forgotten Athenaeum — lore.'],
+      ['cult-yellow','P1','Emblem TBD (characterisation open, PLANNING §5.4).'],
+      ['cult-brown','P1','Emblem TBD.'],
+      ['cult-green','P1','Emblem TBD.'],
+      ['cult-purple','P1','Emblem TBD.'],
+      ['cult-white','P1','Emblem TBD.'],
+    ]],
+    ['Circle, ranks &amp; leanings', [
+      ['rank-leader','P0','Ring-leader marker (the circled portrait).'],
+      ['rank-advisor','P1','Advisor rank pip.'],
+      ['rank-apprentice','P1','Apprentice rank pip.'],
+      ['lean-flame','P0','Temperament: Flame-touched.'],
+      ['lean-lore','P0','Temperament: Lore-keeper.'],
+      ['lean-caution','P0','Temperament: Cautious.'],
+      ['lean-war','P0','Temperament: War-minded.'],
+      ['forgotten-soul','P0','A member lost to the Flame (memorial/portrait state).'],
+      ['recruit','P1','Recruitment action (anti-softlock, PLANNING §5a).'],
+      ['grief','P2','Grief/resentment relationship marker between members.'],
+    ]],
+    ['Per-screen action verbs', [
+      ['work-mend','P0','Workings: Mend the Wards (−Fracture).'],
+      ['work-deepen','P0','Workings: Deepen the Runes (+Lore).'],
+      ['work-tend','P0','Workings: Tend the Hearth-Flame (+Faith).'],
+      ['work-court','P0','Workings: Court the Sacred Flame (+Regard, +Fracture).'],
+      ['field-harvest','P0','Fields: drive the harvest.'],
+      ['field-forage','P0','Fields: forage.'],
+      ['trade-buy','P0','Market: buy / sell / bargain.'],
+      ['war-raid','P0','War: raid (gain + Fracture).'],
+      ['war-muster','P1','War: muster / fortify / hire steel.'],
+    ]],
+    ['Feedback, tests &amp; state', [
+      ['delta-up','P0','Gain — a pressure rose (green/amber).'],
+      ['delta-down','P0','Loss — a pressure fell (red).'],
+      ['contest','P0','A skill test / contest is attached to a choice.'],
+      ['win-lose','P0','Outcome resolved win / lose.'],
+      ['locked','P1','Choice unavailable — requirement not met.'],
+      ['unlock','P1','A follow-up scene was unlocked.'],
+      ['once','P1','Unique / once-only scene marker.'],
+      ['spent','P0','Action already used this season.'],
+      ['danger','P0','Irreversible / Flame-loss warning (the honesty exception).'],
+      ['advance-time','P0','Advance the season (triskelion analog).'],
+    ]],
+    ['Seasons &amp; calendar', [
+      ['season-thaw','P1','Thaw (spring).'],
+      ['season-highsun','P1','Highsun (summer).'],
+      ['season-emberfall','P1','Emberfall (autumn).'],
+      ['season-deepfrost','P1','Deepfrost (winter).'],
+      ['year','P1','Year turn / recap marker.'],
+    ]],
+    ['World entities (canon)', [
+      ['wizard','P1','Wizard (protagonist people).'],
+      ['warrior','P1','Warrior (cannot use magic; outnumber you).'],
+      ['secret-tower','P0','The Secret Tower — already a map pin; needs a real glyph.'],
+      ['infinity-veil','P2','The Infinity Veil (houses the Flame; rune-quest hub).'],
+      ['beast','P2','Beasts / Beast-spawn behind the Gate.'],
+      ['pony','P2','Ponies (mounts).'],
+      ['ash','P0','The Fracture ash overlay (already on the map).'],
+    ]],
+    ['Map markers', [
+      ['pin-home','P0','Runehold (your seat).'],
+      ['pin-hold','P0','A cult hold (live standing colour).'],
+      ['pin-tower','P0','The Secret Tower.'],
+      ['pin-uncharted','P1','Uncharted / forgotten hold.'],
+    ]],
+    ['UI chrome &amp; navigation', [
+      ['menu','P0','Menu / back to shell.'],
+      ['options','P0','Settings.'],
+      ['save','P0','Save.'],
+      ['load','P0','Load / restore slot.'],
+      ['close','P0','Close overlay (✕).'],
+      ['search','P0','Codex search.'],
+      ['external','P1','External link / goto.'],
+      ['check','P0','Confirm / done.'],
+      ['info','P1','In-fiction tooltip / help.'],
+    ]],
+    ['Meta &amp; go-to-market <em>(future)</em>', [
+      ['share','P2','Share the saga card.'],
+      ['saga-card','P2','The end-of-run shareable card frame.'],
+      ['seed','P2','Seed / challenge marker ("beat my seed").'],
+      ['leaderboard','P2','Daily-seed leaderboard.'],
+      ['wizard-import','P2','Import your own Forgotten Runes Wizard.'],
+      ['book-of-souls','P2','Public memorial aggregate.'],
+    ]],
+  ];
+  let n0=0,n1=0,n2=0,tot=0;
+  document.getElementById('inv').innerHTML = INV.map(([grp,rows])=>{
+    const c = rows.length; tot+=c;
+    rows.forEach(r=>{ if(r[1]==='P0')n0++; else if(r[1]==='P1')n1++; else n2++; });
+    return `<details class="grp" open><summary><span>${grp}</span><span class="cnt">${c} icons</span></summary>
+      <table>${rows.map(([k,p,d])=>`<tr><td class="k">${k}</td><td><span class="pri ${p.toLowerCase()}">${p}</span></td><td class="d">${d}</td></tr>`).join('')}</table>
+    </details>`;
+  }).join('');
+  document.getElementById('totals').textContent =
+    `Total distinct icons: ${tot}  ·  P0 (now) ${n0}  ·  P1 (next) ${n1}  ·  P2 (future) ${n2}`;
+
+  // ---- icon family draft ----
+  const cell = (id,label)=>`<div class="glyph"><svg width="34" height="34" viewBox="0 0 24 24"><use href="#${id}"/></svg><small>${label}</small></div>`;
+  document.getElementById('fam-p').innerHTML =
+    [['i-mana','mana'],['i-provisions','provisions'],['i-coin','coin'],['i-lore','lore'],['i-faith','faith'],['i-regard','regard'],['i-fracture','fracture']].map(([i,l])=>cell(i,l)).join('');
+  document.getElementById('fam-s').innerHTML =
+    [['i-season','season'],['i-coven','coven'],['i-fields','fields'],['i-market','market'],['i-war','war'],['i-cults','cults'],['i-workings','workings'],['i-map','map'],['i-codex','codex'],['i-saga','saga']].map(([i,l])=>cell(i,l)).join('');
+  document.getElementById('fam-f').innerHTML =
+    [['i-soul','forgotten soul'],['i-up','gain'],['i-down','loss'],['i-contest','contest'],['i-time','advance']].map(([i,l])=>cell(i,l)).join('');
+</script>
+</body>
+</html>

@@ -10,7 +10,8 @@
   --line: #3a3128;
   --danger: #c0392b;
   --ok: #4e9a51;
-  --serif: Georgia, "Times New Roman", serif;
+  --sans: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --display: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
   --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
@@ -19,8 +20,14 @@ html, body { margin: 0; height: 100%; }
 body {
   background: radial-gradient(1200px 800px at 70% -10%, #241c14 0%, var(--bg) 60%);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   line-height: 1.55;
+}
+/* Barlow does the whole game; weight + condensed width carry the hierarchy. */
+h1, h2, h3, .screen-title, .splash h1, .menu-brand h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 .booting { padding: 3rem; color: var(--ink-dim); font-style: italic; }
 
@@ -38,7 +45,7 @@ header .meta { color: var(--ink-dim); font-variant: small-caps; letter-spacing: 
 header .actions { margin-left: auto; display: flex; gap: 0.4rem; }
 
 button {
-  font-family: var(--serif); color: var(--ink); cursor: pointer;
+  font-family: var(--sans); color: var(--ink); cursor: pointer;
   background: var(--panel-2); border: 1px solid var(--line);
   border-radius: 6px; padding: 0.35rem 0.7rem; font-size: 0.85rem;
   transition: border-color 0.15s, background 0.15s;
@@ -293,6 +300,16 @@ html[data-text-size="l"] { font-size: 18px; }
 html[data-reduce-motion="1"] * { animation: none !important; transition: none !important; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
+/* --- shared cover art for the entrance screens (splash + menu) ---
+   A fixed, full-bleed painting behind both, with a scrim for legibility. */
+.splash, .menu { position: relative; z-index: 0; }
+.splash::before, .menu::before {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(10,7,12,0.34) 0%, rgba(10,7,12,0.60) 52%, rgba(10,7,12,0.90) 100%),
+    url("/assets/splash.png") center/cover no-repeat;
+}
+
 /* --- splash --- */
 .splash {
   min-height: calc(100dvh - 4rem);
@@ -300,22 +317,48 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
   gap: 0.3rem; cursor: pointer;
 }
 .splash-flame .rune { font-size: 6rem; color: var(--flame); text-shadow: 0 0 40px rgba(232, 163, 61, 0.5); animation: flicker 3.2s ease-in-out infinite; }
-.splash h1 { color: var(--flame); font-size: 2rem; margin: 0.5rem 0 0; letter-spacing: 0.03em; text-shadow: 0 0 24px rgba(232, 163, 61, 0.25); }
-.splash-sub { color: var(--ink-dim); font-style: italic; margin: 0 0 1.3rem; }
+.splash h1 { color: var(--flame); font-size: clamp(1.5rem, 6.5vw, 2.4rem); margin: 0.5rem 0 0; letter-spacing: 0.02em; text-shadow: 0 2px 24px rgba(0,0,0,0.6), 0 0 24px rgba(232, 163, 61, 0.25); }
+.splash-sub { color: var(--ink); opacity: 0.9; font-style: italic; margin: 0 0 1.3rem; text-shadow: 0 1px 8px rgba(0,0,0,0.7); }
 .splash-enter { font-size: 1rem; padding: 0.6rem 1.2rem; }
 @keyframes flicker { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.82; transform: translateY(-1px); } }
 
-/* --- main menu (doubles as pause screen) --- */
+/* --- main menu (doubles as pause screen) ---
+   Two panels: brand centred on the left, the nav a column on the right.
+   Desktop: nav rows are ~3em, centred mid-page. Landscape phones: the nav
+   fills the full height, split equally. Portrait phones: stack. */
 .menu {
   min-height: calc(100dvh - 4rem);
-  display: grid; place-content: center; justify-items: center; gap: 1.4rem; text-align: center;
+  display: flex; align-items: stretch; gap: 2rem;
 }
-.menu-brand .rune { font-size: 3.2rem; color: var(--flame); text-shadow: 0 0 26px rgba(232, 163, 61, 0.4); }
-.menu-brand h1 { color: var(--flame); font-size: 1.6rem; margin: 0.3rem 0 0; }
-.menu-brand p { color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.14em; margin: 0.1rem 0 0; }
-.menu-nav { display: flex; flex-direction: column; gap: 0.6rem; width: min(320px, 80vw); }
-.menu-item { width: 100%; padding: 0.7rem 1rem; font-size: 1rem; }
-.menu-item.primary { border-color: var(--flame-deep); color: var(--flame); background: #2a2018; }
+.menu-brand {
+  flex: 1 1 auto; min-width: 0;
+  display: grid; place-content: center; justify-items: center; text-align: center; gap: 0.3rem;
+}
+.menu-brand .rune { font-size: 3.6rem; color: var(--flame); text-shadow: 0 0 26px rgba(232, 163, 61, 0.45); }
+.menu-brand h1 { color: var(--flame); font-size: clamp(1.4rem, 5.5vw, 2rem); margin: 0.3rem 0 0; text-shadow: 0 2px 20px rgba(0,0,0,0.6); word-break: break-word; }
+.menu-brand p { color: var(--ink); opacity: 0.85; font-variant: small-caps; letter-spacing: 0.14em; margin: 0.1rem 0 0; }
+.menu-nav {
+  flex: 0 0 clamp(240px, 30vw, 330px);
+  display: flex; flex-direction: column; justify-content: center; gap: 0.7rem;
+  padding-left: 2rem; border-left: 1px solid var(--line);
+}
+.menu-item { width: 100%; min-height: 3em; padding: 0.7rem 1rem; font-size: 1rem; background: rgba(31,26,22,0.72); }
+.menu-item:hover:not(:disabled) { background: rgba(51,42,34,0.85); }
+.menu-item.primary { border-color: var(--flame-deep); color: var(--flame); background: rgba(42,32,24,0.85); }
+
+/* Landscape phones: nav bands fill the full height, split equally. */
+@media (orientation: landscape) and (max-height: 600px) {
+  .menu { gap: 0; }
+  .menu-nav { justify-content: stretch; gap: 0; padding-left: 0; }
+  .menu-item { flex: 1; min-height: 0; border-radius: 0; border-width: 0 0 1px 1px; }
+  .menu-item:last-child { border-bottom: 0; }
+}
+/* Portrait phones: stack brand over nav, no side split. */
+@media (orientation: portrait) and (max-width: 560px) {
+  .menu { flex-direction: column; gap: 1.2rem; }
+  .menu-brand { flex: 0 0 auto; padding-top: 8vh; }
+  .menu-nav { flex: 1 1 auto; width: 100%; padding-left: 0; border-left: 0; justify-content: flex-start; }
+}
 
 /* --- full-page modal (options / codex / saves) --- */
 .overlay {
@@ -379,7 +422,7 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
    Used by BOTH the Codex and the Options full-page panels (fastsugar-style). */
 .panel-search { flex-shrink: 0; padding: 0.8rem 1.25rem; border-bottom: 1px solid var(--line); }
 .panel-search input {
-  width: 100%; font-family: var(--serif); font-size: 0.95rem; color: var(--ink);
+  width: 100%; font-family: var(--sans); font-size: 0.95rem; color: var(--ink);
   background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem;
 }
 .panel-search input:focus { outline: none; border-color: var(--flame-deep); }

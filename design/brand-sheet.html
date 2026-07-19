@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Brand Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#14110f; --panel:#1f1a16; --panel2:#2a231d; --line:#3a3128;
+    --ink:#e7dccb; --ink-dim:#9c8f7d; --flame:#e8a33d; --flame-deep:#b5641c;
+    --danger:#c0392b; --ok:#4e9a51;
+    --sans:"Barlow",system-ui,sans-serif; --display:"Barlow Semi Condensed","Barlow",sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;padding:0 0 5rem}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+  header.hero{position:relative;padding:3rem 1.5rem 2.4rem;text-align:center;border-bottom:1px solid var(--line);
+    background:radial-gradient(80% 120% at 50% -20%, #241305 0%, var(--bg) 60%)}
+  header.hero svg{display:block;margin:0 auto;image-rendering:pixelated;shape-rendering:crispEdges}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;color:var(--ink-dim);text-transform:uppercase}
+  h1{font-family:var(--display);font-weight:700;font-size:2.6rem;color:var(--flame);margin:.5rem 0 .1rem;letter-spacing:.01em}
+  .hero .sub{color:var(--ink-dim);font-style:italic;margin:0}
+  section{margin-top:3rem}
+  h2{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.5rem;margin:0 0 .2rem;display:flex;align-items:baseline;gap:.6rem}
+  h2 .n{font-family:var(--mono);font-size:.9rem;color:var(--flame-deep);font-weight:400}
+  h2+.rule{height:1px;background:var(--line);margin:.5rem 0 1.1rem}
+  h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-dim);margin:1.4rem 0 .6rem}
+  p{margin:.5rem 0}.muted{color:var(--ink-dim)}
+  code{font-family:var(--mono);font-size:.82em;background:var(--panel2);padding:.05em .35em;border-radius:4px;color:#e8c9a0}
+  .grid{display:grid;gap:1rem}
+  .cards3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.2rem}
+  /* swatches */
+  .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem}
+  .sw{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+  .sw .chip{height:64px}
+  .sw .meta{padding:.5rem .6rem}
+  .sw .name{font-weight:600;font-size:.9rem}
+  .sw .hex{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);text-transform:uppercase}
+  .sw .role{font-size:.74rem;color:var(--ink-dim);margin-top:.15rem}
+  /* flame plates */
+  .plate{background:#0a0709;border:1px solid var(--line);border-radius:12px;padding:1rem;display:grid;place-items:center}
+  .plate svg{image-rendering:pixelated;shape-rendering:crispEdges}
+  .flrow{display:flex;gap:1rem;flex-wrap:wrap;align-items:end}
+  .cap{text-align:center}.cap small{display:block;color:var(--ink-dim);font-family:var(--mono);font-size:.66rem;margin-top:.35rem}
+  /* type */
+  .wl div{padding:.4rem 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+  .wl div:first-child{border-top:0}
+  .wl .spec{font-family:var(--mono);font-size:.7rem;color:var(--ink-dim);white-space:nowrap}
+  .w300{font-weight:300}.w400{font-weight:400}.w500{font-weight:500}.w600{font-weight:600}.w700{font-weight:700}.w800{font-weight:800}
+  .disp{font-family:var(--display)}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:.4rem}
+  td,th{text-align:left;padding:.45rem .6rem;border-top:1px solid var(--line);vertical-align:top}
+  th{color:var(--ink-dim);font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em}
+  /* do / dont */
+  .dd{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .do,.dont{border-radius:10px;padding:.9rem 1rem;border:1px solid}
+  .do{border-color:#2f5a30;background:#16211660}.dont{border-color:#5a2a24;background:#25141160}
+  .do h4,.dont h4{margin:0 0 .5rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em}
+  .do h4{color:var(--ok)}.dont h4{color:var(--danger)}
+  .do p,.dont p{margin:.2rem 0;font-size:.92rem}
+  ul.checks{list-style:none;padding:0;margin:.4rem 0}
+  ul.checks li{padding:.28rem 0 .28rem 1.5rem;position:relative;color:var(--ink-dim);font-size:.92rem}
+  ul.checks li::before{content:"✕";position:absolute;left:0;color:var(--danger);font-weight:700}
+  .twocol{columns:2;column-gap:2rem}@media(max-width:640px){.twocol{columns:1}.dd{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div id="heroFlame"></div>
+  <div class="kicker">Brand Sheet · v1</div>
+  <h1>Keeper of the Sacred Flame</h1>
+  <p class="sub">Dark · runic · occult-folk · flame-lit. When in doubt, warmer and grimmer — never clean, never cute.</p>
+</header>
+
+<div class="wrap">
+
+<!-- 1 · THE MARK -->
+<section>
+  <h2><span class="n">01</span> The Mark — the Sacred Flame</h2><div class="rule"></div>
+  <p class="muted">A <b>pixel-art</b> flame in the idiom of the real Forgotten Runes Sacred Flame. Canon colour zones,
+  top→bottom: crimson tips → orange body → white-hot core → violet/magenta base glow. No outline — it glows against the dark.</p>
+  <div class="flrow" style="margin:1rem 0">
+    <div class="cap"><div class="plate" id="mFav"></div><small>favicon · 32px</small></div>
+    <div class="cap"><div class="plate" id="mStatic"></div><small>static</small></div>
+    <div class="cap"><div class="plate" id="mAnim"></div><small>animated · flicker loop</small></div>
+    <div class="cap"><div class="plate" id="mGem"></div><small>flame + gem · hero lockup</small></div>
+  </div>
+  <div class="dd">
+    <div class="do"><h4>Do</h4>
+      <p>Export the favicon at native 32×32; scale at integer multiples only.</p>
+      <p>Place on warm near-black. Keep one flame-width of clear space.</p>
+      <p>Use the animated flicker for splash / loading (respect reduced-motion).</p></div>
+    <div class="dont"><h4>Don't</h4>
+      <p>No drop-shadow, bevel, or outline. No smooth-scaling the pixels.</p>
+      <p>Don't recolour outside the canon zones. Don't rotate or stretch.</p>
+      <p>Retired: the v1 vector triangles and the old <code>ᚾ</code> box glyph.</p></div>
+  </div>
+</section>
+
+<!-- 2 · COLOUR -->
+<section>
+  <h2><span class="n">02</span> Colour</h2><div class="rule"></div>
+  <p class="muted">Warm-dark and firelit. <b>Cool</b> = magic, cults, the arcane. <b>Warm</b> = fire, hearth, danger. Keep the split.</p>
+  <h3>The Flame palette</h3>
+  <div class="sw-grid" id="swFlame"></div>
+  <h3>UI neutrals <span style="text-transform:none;letter-spacing:0">(<code>styles.css</code>)</span></h3>
+  <div class="sw-grid" id="swUI"></div>
+  <h3>The seven Cult colours <span style="text-transform:none;letter-spacing:0">(identity — never repurpose)</span></h3>
+  <div class="sw-grid" id="swCult"></div>
+</section>
+
+<!-- 3 · TYPOGRAPHY -->
+<section>
+  <h2><span class="n">03</span> Typography — Barlow, everywhere</h2><div class="rule"></div>
+  <p class="muted">One family; weight + width carry the hierarchy. <a style="color:var(--flame)" href="font-study.html">Full specimen →</a></p>
+  <div class="grid cards3" style="margin-top:1rem">
+    <div class="card">
+      <h3 style="margin-top:0">Weight ladder — Barlow</h3>
+      <div class="wl">
+        <div><span class="w300">Keeper of the Flame</span><span class="spec">300</span></div>
+        <div><span class="w400">Keeper of the Flame</span><span class="spec">400 · body</span></div>
+        <div><span class="w500">Keeper of the Flame</span><span class="spec">500 · buttons</span></div>
+        <div><span class="w600">Keeper of the Flame</span><span class="spec">600</span></div>
+        <div><span class="w700">Keeper of the Flame</span><span class="spec">700</span></div>
+        <div><span class="w800">Keeper of the Flame</span><span class="spec">800</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Display · Semi Condensed</h3>
+      <div class="disp w700" style="font-size:1.9rem;color:var(--flame);line-height:1.05">Keeper of the Sacred Flame</div>
+      <div class="disp w700" style="font-size:1.3rem;margin-top:.6rem">The Fracture Consumes All</div>
+      <p class="muted" style="font-size:.85rem;margin-top:.7rem">Titles &amp; screen headings, 700, tight tracking, amber.</p>
+    </div>
+  </div>
+  <table>
+    <tr><th>Role</th><th>Family</th><th>Token</th><th>Used for</th></tr>
+    <tr><td>Display</td><td>Barlow Semi Condensed 700</td><td><code>--display</code></td><td>title, screen headings, h1–h3</td></tr>
+    <tr><td>Body</td><td>Barlow 400 / 500</td><td><code>--sans</code></td><td>prose, UI, buttons (500)</td></tr>
+    <tr><td>Emphasis</td><td>Barlow italic 400</td><td><code>--sans</code></td><td>advisor quotes, saga, flavour</td></tr>
+    <tr><td>Numeric</td><td>system mono</td><td><code>--mono</code></td><td>every stat / counter / contest value</td></tr>
+  </table>
+  <p class="muted" style="font-size:.85rem">Loaded via Google Fonts <code>&lt;link&gt;</code>; self-host woff2 before the desktop/offline build.</p>
+</section>
+
+<!-- 4 · ICONOGRAPHY -->
+<section>
+  <h2><span class="n">04</span> Iconography — two tiers</h2><div class="rule"></div>
+  <p class="muted">Reference bar: Aion Rising badges × Mad Monkies grunge × forgottenrunes.com occult-folk.
+  <b>Bold filled silhouettes, sharp/angular, grunge-textured, framed.</b> Zero rounded "SaaS" strokes. Nothing cutesy.</p>
+  <div class="dd" style="margin-top:1rem">
+    <div class="card"><h3 style="margin-top:0;color:var(--flame)">Tier A — Functional (vector, hand-authored)</h3>
+      <p class="muted" style="font-size:.92rem">The tiny always-on icons: 7 pressures, chrome, feedback. Sharp vector — miter joins, no rounded caps, the flame-tongue motif recurring. Must read at 16–24px. One SVG sprite.</p></div>
+    <div class="card"><h3 style="margin-top:0;color:var(--flame)">Tier B — Hero / ornate (AI-gen)</h3>
+      <p class="muted" style="font-size:.92rem">Brand flame, the 10 screen runes, cult sigils, achievements. Generated in the Aion/Mad-Monkies idiom, then vectorised. Prompts in <code>ICON_PROMPTS.md</code>; inventory in <code>flame-explorer.html</code>.</p></div>
+  </div>
+  <p class="muted" style="font-size:.9rem">One family across both tiers · white/cream on dark · sharp corners · cult icons always keyed to the cult colour.</p>
+</section>
+
+<!-- 5 · IMAGERY -->
+<section>
+  <h2><span class="n">05</span> Imagery &amp; art direction</h2><div class="rule"></div>
+  <div class="twocol muted" style="font-size:.94rem">
+    <p><b style="color:var(--ink)">Splash / hero:</b> painterly, cinematic dark-fantasy (see <code>assets/splash.png</code>) — always behind a dark scrim so amber text stays legible.</p>
+    <p><b style="color:var(--ink)">In-world / scenes:</b> pixel-art, matching the Runiverse (the Flame, holds, the Fracture ash).</p>
+    <p><b style="color:var(--ink)">Mood:</b> firelit dark, occult, folk-mythic, patchwork-broken world. Never clean high-fantasy gloss, never bright/flat.</p>
+    <p><b style="color:var(--ink)">Boundary:</b> respect canon/invention — never imply official Forgotten Runes endorsement; keep our invented content clearly ours.</p>
+  </div>
+</section>
+
+<!-- 6 · VOICE -->
+<section>
+  <h2><span class="n">06</span> Voice &amp; tone</h2><div class="rule"></div>
+  <p class="muted">Terse, mythic, a little grim — a saga being remembered, not a UI being narrated. Losses are authored tragedies. Advisors disagree; odds are telegraphed in-fiction.</p>
+  <div class="dd" style="margin-top:1rem">
+    <div class="do"><h4>In voice</h4>
+      <p>"The stores ran dry before the harvest. A coven cannot eat runes."</p>
+      <p>"And what walks back out wearing our faces? I have buried Souls before, Archon."</p></div>
+    <div class="dont"><h4>Out of voice</h4>
+      <p>"You have 0 Provisions. Game over."</p>
+      <p>"Success chance: 42%. Confirm action?"</p></div>
+  </div>
+</section>
+
+<!-- 7 · MOTION + DON'TS -->
+<section>
+  <h2><span class="n">07</span> Motion &amp; the quick don'ts</h2><div class="rule"></div>
+  <div class="dd">
+    <div class="card"><h3 style="margin-top:0">Motion</h3>
+      <p class="muted" style="font-size:.92rem">Signature = the flame flicker (3-frame ping-pong). Keep motion restrained — occasional flicker/glow, gentle modal rises. No bouncy/springy easing (reads cutesy). Honour <code>prefers-reduced-motion</code> everywhere.</p></div>
+    <div class="card"><h3 style="margin-top:0">Never</h3>
+      <ul class="checks">
+        <li>Rounded, thin, "friendly" icon strokes</li>
+        <li>Smooth-scaling the pixel flame (integer scales only)</li>
+        <li>A second / third typeface (Barlow + mono numbers only)</li>
+        <li>A cult colour used as generic UI chrome</li>
+        <li>Light-on-light — the brand lives on warm near-black</li>
+        <li>Implying official Forgotten Runes endorsement</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<p class="muted" style="margin-top:3rem;font-size:.82rem;text-align:center">Full text reference: <code>BRAND_BIBLE.md</code> · Assets &amp; explorations: <code>design/</code></p>
+</div>
+
+<script>
+  // ---- pixel flame (shared with flame-v2) ----
+  const PAL={r:'#c62a1e',o:'#e86a1c',y:'#f4a92a',w:'#fde7bf',m:'#b83a86',p:'#7a2f9e'};
+  const F1=["................",".......r........","......rr........","......ro........",".....rroo.......",".....rooo...r...","....rrooo..rr...","....roooo..ro...","...rroooo.roo...","...roooyoorooo..","...rooyyyyoooo..","..rrooyywyoooo..","..roooyywyyooo..","..rooyywwwyyoo..","..rooyywwwwyoo..","..rrooyywwwyoo..","...roooyywwyo...","...mrooyyyyom...","...mmrooooomm...","....mmpoopmm....",".....mppppm.....","......pppp......"];
+  const F2=["................","......r.........","......rr........",".....rro........",".....rroo.......","....rrooo..r....","....roooo..rr...","...rroooo..roo..","...roooo..rooo..","..rrooyoo.rooo..","..roooyyyyoooo..","..rooyywwyoooo..","..rooyywwwyooo..",".rrooyywwwyyoo..",".rooyywwwwwyoo..","..rooyywwwyoo...","..rroooyywwyo...","..mrooyyyyoom...","..mmrooooomm....","...mmpoopmm.....","....mppppm......",".....pppp......."];
+  const F3=["................","........r.......",".......rr.......",".......orr......","......oorr......","...r..ooor......","..rr..oooor.....","..oor.ooooor....","..oor.oooooo....","..roorooyoooo...","..oooyyyyyooo...","..oooyywywooo...",".rooyywwwywoo...",".rooyywwwwwyo...",".rooyywwwwyoo...","..roooyywwyoo...","...mrooyywwo....","...mmrooyyom....","....mmoooomm....",".....mppmm......","......mppm......","......ppp......."];
+  const GEM=["................","....wwwwwww.....","....yoooooy.....",".....yooop......","......ymp.......",".......p........"];
+  const FRAMES=[F1,F2,F3,F2];
+  function rects(rows,ox=0,oy=0){let s='';for(let y=0;y<rows.length;y++)for(let x=0;x<16;x++){const c=rows[y][x];if(PAL[c])s+=`<rect x="${x+ox}" y="${y+oy}" width="1.02" height="1.02" fill="${PAL[c]}"/>`;}return s;}
+  function flameSVG(px,f=F1){const h=Math.round(px*22/16);return `<svg width="${px}" height="${h}" viewBox="0 0 16 22">${rects(f)}</svg>`;}
+  function markSVG(px,f=F1){const H=f.length+2+GEM.length;const h=Math.round(px*H/16);return `<svg width="${px}" height="${h}" viewBox="0 0 16 ${H}">${rects(f,0,0)}${rects(GEM,1,f.length+2)}</svg>`;}
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const flameT=[['heroFlame',88],['mStatic',72],['mAnim',72],['mFav',32]];
+  const markT=[['mGem',96]];
+  flameT.forEach(([id,px])=>{const e=document.getElementById(id);if(e)e.innerHTML=flameSVG(px);});
+  markT.forEach(([id,px])=>{const e=document.getElementById(id);if(e)e.innerHTML=markSVG(px);});
+  let fi=0;
+  if(!reduce) setInterval(()=>{fi=(fi+1)%FRAMES.length;const f=FRAMES[fi];
+    // only the "animated" ones flicker; static/favicon hold frame 1
+    document.getElementById('heroFlame').innerHTML=flameSVG(88,f);
+    document.getElementById('mAnim').innerHTML=flameSVG(72,f);
+    document.getElementById('mGem').innerHTML=markSVG(96,f);
+  },130);
+
+  // ---- swatches ----
+  const FLAME=[['Crimson tip','#c62a1e','flame edges, danger'],['Orange body','#e86a1c','flame mid, warm hi'],['Amber','#f4a92a','flame inner'],['White-hot core','#fde7bf','brightest points'],['Magenta base','#b83a86','arcane accents'],['Violet glow','#7a2f9e','magic / mana']];
+  const UI=[['--bg','#14110f','app background'],['--panel','#1f1a16','panels'],['--panel-2','#2a231d','raised / buttons'],['--ink','#e7dccb','primary text'],['--ink-dim','#9c8f7d','secondary text'],['--line','#3a3128','borders'],['--flame','#e8a33d','primary accent'],['--flame-deep','#b5641c','accent border'],['--danger','#c0392b','loss / Fracture'],['--ok','#4e9a51','gain / allied']];
+  const CULT=[['Red','#c0392b','Markertropolis'],['Yellow','#d4ac0d','—'],['Brown','#8a5a1f','—'],['Green','#229954','—'],['Blue','#2471a3','The Bastion'],['Purple','#7d3c98','—'],['White','#d5d8dc','—']];
+  const swHTML=(list)=>list.map(([n,hex,role])=>`<div class="sw"><div class="chip" style="background:${hex}"></div><div class="meta"><div class="name">${n}</div><div class="hex">${hex}</div><div class="role">${role}</div></div></div>`).join('');
+  document.getElementById('swFlame').innerHTML=swHTML(FLAME);
+  document.getElementById('swUI').innerHTML=swHTML(UI);
+  document.getElementById('swCult').innerHTML=swHTML(CULT);
+</script>
+</body>
+</html>

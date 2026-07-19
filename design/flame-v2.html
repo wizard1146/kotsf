@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Flame v2 (pixel-art, canon palette)</title>
+<style>
+  :root{--bg:#0c0a10;--panel:#16121b;--line:#332a3d;--ink:#efe6d8;--ink-dim:#a89a86;
+    --flame:#e6a23c;--mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --serif:"Iowan Old Style",Palatino,Georgia,serif;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;padding:0 0 5rem}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 1.25rem}
+  header{padding:2.6rem 1.25rem 1.6rem;text-align:center;border-bottom:1px solid var(--line);
+    background:radial-gradient(120% 90% at 50% 0%, #241033 0%, var(--bg) 62%)}
+  h1{font-family:var(--serif);font-size:1.9rem;color:var(--flame);margin:.7rem 0 .2rem}
+  .sub{color:var(--ink-dim);font-style:italic;margin:0}
+  h2{font-family:var(--serif);color:var(--flame);font-size:1.35rem;margin:2.4rem 0 .3rem;border-bottom:1px solid var(--line);padding-bottom:.4rem}
+  p.note{color:var(--ink-dim);font-size:.9rem;max-width:72ch;margin:.4rem 0 1rem}
+  code{font-family:var(--mono);font-size:.85em;background:#241b2b;padding:.05em .35em;border-radius:4px;color:#e8c9a0}
+  .row{display:flex;gap:1.4rem;align-items:flex-end;flex-wrap:wrap;margin-top:1rem}
+  .cell{text-align:center}
+  .cell small{display:block;color:var(--ink-dim);font-family:var(--mono);font-size:.66rem;margin-top:.35rem}
+  .plate{background:#080609;border:1px solid var(--line);border-radius:12px;padding:1rem;display:grid;place-items:center}
+  .arch{background:radial-gradient(70% 80% at 50% 60%, #1a0e0a 0%, #050406 75%)}
+  svg{display:block}
+  svg.px{shape-rendering:crispEdges;image-rendering:pixelated}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-top:1rem}
+  .swatches{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+  .sw{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);border:1px solid var(--line);border-radius:20px;padding:.2rem .6rem}
+  .sw i{width:14px;height:14px;border-radius:3px;display:inline-block}
+  .tabrow{display:flex;gap:.5rem;align-items:center;background:#0e0b08;border:1px solid var(--line);border-radius:8px 8px 0 0;padding:.4rem .7rem;width:max-content}
+  .compare{display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end;margin-top:1rem}
+</style>
+</head>
+<body>
+<header>
+  <div id="hero"></div>
+  <h1>The Sacred Flame — v2</h1>
+  <p class="sub">Pixel-art, canon palette, organic silhouette. (Triangles retired.)</p>
+</header>
+
+<div class="wrap">
+
+<h2>What changed</h2>
+<p class="note">v1 was smooth-vector triangles — wrong idiom (FRWC is <b>pixel-art</b>) and too geometric.
+This redraw is a hand-placed pixel flame using the <b>actual Sacred Flame colour zones</b> from the NFT:
+crimson licking tips → orange body → white-hot core → a violet/magenta glow pooling at the base. No rounded
+strokes, no outline — it glows against the dark like the real one. Pixel art also scales crisply and is
+genuinely authorable (unlike the grunge-textured hero icons, which want AI-gen — see <code>ICON_PROMPTS.md</code>).</p>
+
+<div class="swatches" id="sw"></div>
+
+<h2>Animated — the looping flicker</h2>
+<p class="note">A 3-frame pixel-fire loop (ping-pong at ~130ms) — this is the splash / loading / hearth-rune version.
+Ship it as inline SVG with the tiny frame-cycler below, or bake the frames into a CSS <code>steps()</code> sprite.
+Respects <code>prefers-reduced-motion</code> (holds frame 1).</p>
+<div class="row">
+  <div class="cell"><div class="plate arch" id="anim48"></div><small>@48 loading</small></div>
+  <div class="cell"><div class="plate arch" id="anim96"></div><small>@96</small></div>
+  <div class="cell"><div class="plate arch" id="anim160"></div><small>@160 splash</small></div>
+</div>
+
+<h2>Size ladder — flame only</h2>
+<p class="note">Pixel art holds its edges at every integer scale. The <b>32px</b> render is the favicon sweet spot;
+16px works but simplify one more step for a true 16&times;16 export.</p>
+<div class="row" id="ladder"></div>
+
+<h2>On the arch (brand / splash treatment)</h2>
+<p class="note">The flame reads best on near-black, exactly like the NFT in the Secret Tower basement.</p>
+<div class="grid2" id="onarch"></div>
+
+<h2>With the floating gem (fuller brand mark)</h2>
+<p class="note">The NFT floats a faceted diamond beneath the flame. Optional — richer for splash/hero, drop it for the favicon.</p>
+<div class="row" id="withgem"></div>
+
+<h2>Favicon in context</h2>
+<div class="compare">
+  <div class="cell">
+    <div class="tabrow"><span id="tab16"></span><span style="font-size:.8rem;color:var(--ink-dim)">Keeper of the Sacred…</span></div>
+    <small>32px grid rendered @16 in a tab</small>
+  </div>
+  <div class="cell"><div class="plate arch" id="fav48"></div><small>@48 bookmark</small></div>
+  <div class="cell"><div class="plate arch" id="fav64"></div><small>@64 PWA</small></div>
+</div>
+
+</div>
+
+<script>
+// ---- palette ----
+const PAL = {
+  r:'#c62a1e', o:'#e86a1c', y:'#f4a92a', w:'#fde7bf',
+  m:'#b83a86', p:'#7a2f9e', g:'#e86a1c'
+};
+const SWNAMES = {r:'crimson tip',o:'orange body',y:'amber',w:'white-hot core',m:'magenta base',p:'violet glow'};
+
+// ---- the flame grid (16 wide) : organic licking bonfire, canon colour zones ----
+const FLAME = [
+  '................',
+  '.......r........',
+  '......rr........',
+  '......ro........',
+  '.....rroo.......',
+  '.....rooo...r...',
+  '....rrooo..rr...',
+  '....roooo..ro...',
+  '...rroooo.roo...',
+  '...roooyoorooo..',
+  '...rooyyyyoooo..',
+  '..rrooyywyoooo..',
+  '..roooyywyyooo..',
+  '..rooyywwwyyoo..',
+  '..rooyywwwwyoo..',
+  '..rrooyywwwyoo..',
+  '...roooyywwyo...',
+  '...mrooyyyyom...',
+  '...mmrooooomm...',
+  '....mmpoopmm....',
+  '.....mppppm.....',
+  '......pppp......',
+];
+// Two more flame frames for a 3-frame flicker loop (ping-pong 1→2→3→2).
+// Same silhouette, tongues + core perturbed — classic pixel-fire animation.
+const FLAME2 = [
+  '................',
+  '......r.........',
+  '......rr........',
+  '.....rro........',
+  '.....rroo.......',
+  '....rrooo..r....',
+  '....roooo..rr...',
+  '...rroooo..roo..',
+  '...roooo..rooo..',
+  '..rrooyoo.rooo..',
+  '..roooyyyyoooo..',
+  '..rooyywwyoooo..',
+  '..rooyywwwyooo..',
+  '.rrooyywwwyyoo..',
+  '.rooyywwwwwyoo..',
+  '..rooyywwwyoo...',
+  '..rroooyywwyo...',
+  '..mrooyyyyoom...',
+  '..mmrooooomm....',
+  '...mmpoopmm.....',
+  '....mppppm......',
+  '.....pppp.......',
+];
+const FLAME3 = [
+  '................',
+  '........r.......',
+  '.......rr.......',
+  '.......orr......',
+  '......oorr......',
+  '...r..ooor......',
+  '..rr..oooor.....',
+  '..oor.ooooor....',
+  '..oor.oooooo....',
+  '..roorooyoooo...',
+  '..oooyyyyyooo...',
+  '..oooyywywooo...',
+  '.rooyywwwywoo...',
+  '.rooyywwwwwyo...',
+  '.rooyywwwwyoo...',
+  '..roooyywwyoo...',
+  '...mrooyywwo....',
+  '...mmrooyyom....',
+  '....mmoooomm....',
+  '.....mppmm......',
+  '......mppm......',
+  '......ppp.......',
+];
+const FRAMES = [FLAME, FLAME2, FLAME3, FLAME2]; // ping-pong loop
+
+// small faceted gem (point-down), 16 wide
+const GEM = [
+  '................',
+  '....wwwwwww.....',
+  '....yoooooy.....',
+  '.....yooop......',
+  '......ymp.......',
+  '.......p........',
+];
+
+function gridSVG(rows, {cell=1, cls='px', pad=0}={}){
+  const W = rows[0].length, H = rows.length;
+  let cells='';
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+    const c = rows[y][x];
+    if(c==='.'||!PAL[c]) continue;
+    cells += `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${PAL[c]}"/>`;
+  }
+  return {vb:`0 0 ${W} ${H}`, cells, W, H};
+}
+function svgAt(rows, px){
+  const {vb,cells,W,H} = gridSVG(rows);
+  const h = Math.round(px * (H/W));
+  return `<svg class="px" width="${px}" height="${h}" viewBox="${vb}">${cells}</svg>`;
+}
+// flame + gem stacked in one viewBox (gem sits below with a 2-row gap).
+// The gem base is nudged +1 unit to the right; the flame arg lets it animate.
+function markSVG(px, flame=FLAME){
+  const gap=2, W=16, H=flame.length+gap+GEM.length;
+  let cells='';
+  const put=(rows,oy,ox=0)=>{for(let y=0;y<rows.length;y++)for(let x=0;x<16;x++){const c=rows[y][x];if(c==='.'||!PAL[c])continue;cells+=`<rect x="${x+ox}" y="${y+oy}" width="1.02" height="1.02" fill="${PAL[c]}"/>`;}};
+  put(flame,0,0); put(GEM,flame.length+gap,1);
+  const h=Math.round(px*(H/W));
+  return `<svg class="px" width="${px}" height="${h}" viewBox="0 0 ${W} ${H}">${cells}</svg>`;
+}
+
+// hero (animated)
+document.getElementById('hero').innerHTML = svgAt(FLAME, 120);
+// ---- frame cycler: swaps innerHTML across a ping-pong frame list ----
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const animTargets = []; // flame-only {el, px}
+const markTargets = []; // flame+gem {el, px}
+function registerAnim(id, px){ const el=document.getElementById(id); if(el){ el.innerHTML=svgAt(FLAME,px); animTargets.push({el,px}); } }
+let fi = 0;
+function tick(){
+  fi = (fi+1) % FRAMES.length;
+  const f = FRAMES[fi];
+  animTargets.forEach(({el,px})=> el.innerHTML = svgAt(f,px));
+  markTargets.forEach(({el,px})=> el.innerHTML = markSVG(px,f));
+  document.getElementById('hero').innerHTML = svgAt(f,120);
+}
+registerAnim('anim48',48); registerAnim('anim96',96); registerAnim('anim160',160);
+if(!reduce) setInterval(tick, 130);
+// swatches
+document.getElementById('sw').innerHTML = Object.entries(SWNAMES)
+  .map(([k,n])=>`<span class="sw"><i style="background:${PAL[k]}"></i>${n}</span>`).join('');
+// ladder
+document.getElementById('ladder').innerHTML = [16,24,32,48,72,120].map(s=>
+  `<div class="cell">${svgAt(FLAME,s)}<small>${s}px</small></div>`).join('');
+// on arch
+document.getElementById('onarch').innerHTML = [64,96,140].map(s=>
+  `<div class="plate arch">${svgAt(FLAME,s)}</div>`).join('');
+// with gem — animated flame over a static gem base (gem nudged +1 right)
+const MARKS = [[0,72],[1,120],[2,170]];
+document.getElementById('withgem').innerHTML = MARKS.map(([i,s])=>
+  `<div class="cell"><div class="plate arch" id="mark${i}">${markSVG(s)}</div><small>flame+gem @${s}</small></div>`).join('');
+MARKS.forEach(([i,s])=>{ const el=document.getElementById('mark'+i); if(el) markTargets.push({el,px:s}); });
+// favicon contexts
+document.getElementById('tab16').innerHTML = svgAt(FLAME,16);
+document.getElementById('fav48').innerHTML = svgAt(FLAME,48);
+document.getElementById('fav64').innerHTML = svgAt(FLAME,64);
+</script>
+</body>
+</html>
