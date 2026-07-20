@@ -1,5 +1,5 @@
 {
-  "_note": "Ambient advisor counsel per management screen. When you pin a footer portrait OFF the scene page, they speak to THIS screen. `lean` gates a line to a personality pole (bold/cautious, devout/worldly, fiery/cool) or a competence (strong/wise/cunning/brave) or a school/class; untagged lines fit anyone. The line is cast in the member's voice — {name}/{they}/{class}/{school} tokens work.",
+  "_note": "Ambient advisor counsel per management screen. When you pin a footer portrait OFF the scene page, they speak to THIS screen. `lean` gates a line to a personality pole (bold/cautious, devout/worldly, fiery/cool) or a competence (strong/wise/cunning/brave) or a school/class; untagged lines fit anyone. `if` gates a line to a pressure state (same condition vocabulary as scenes, e.g. {\"lte\":[\"provisions\",25]}); when any `if` line is currently true it takes PRIORITY — the advisor raises the crisis. The line is cast in the member's voice — {name}/{they}/{class}/{school} tokens work.",
   "screens": {
     "coven": [
       { "lean": "devout", "text": "Faith is the only wall that never falls. Tend the coven's heart before its stones." },
@@ -7,6 +7,8 @@
       { "lean": "bold", "text": "A coven grows by daring. Send me where the danger is — the others will follow." },
       { "lean": "cautious", "text": "Guard who we have. Every Wizard lost is a rune we never chant again." },
       { "lean": "fiery", "text": "Half these apprentices have never bled for the hold. That should change." },
+      { "if": { "lte": ["faith", 30] }, "text": "Their faith is guttering like the hearth-rune. Mend it now, or we lose them one by one." },
+      { "if": { "gte": ["faith", 82] }, "text": "The coven would follow you into the Flame itself. Don't spend that trust lightly." },
       { "text": "We are what remains of the old Circle. Lead us well, and we hold." }
     ],
     "fields": [
@@ -15,6 +17,8 @@
       { "lean": "devout", "text": "Bless the fields. The Flame has fed us through darker springs than this." },
       { "lean": "worldly", "text": "Buy seed-grain while the Reach still trades. Coin keeps better than hope." },
       { "lean": "strong", "text": "Drive the harvest hard. Backs will ache, but bellies won't." },
+      { "if": { "lte": ["provisions", 25] }, "text": "The stores are nearly bare. This is no season for half-measures — we plant or forage now." },
+      { "if": { "lte": ["provisions", 12] }, "text": "We're a bad week from famine. Whatever you mean to do, do it this season." },
       { "text": "A coven cannot eat runes. Mind the stores before they mind us." }
     ],
     "market": [
@@ -23,6 +27,7 @@
       { "lean": "cunning", "text": "I can turn this coin twice before the factors notice. Let me do the dealing." },
       { "lean": "devout", "text": "Trade if we must — but do not kneel to aristocrats who forgot the Flame." },
       { "lean": "bold", "text": "Buy Red's favour now. We'll want a friend with a full purse before long." },
+      { "if": { "lte": ["coin", 15] }, "text": "The purse is near empty. We've little left to trade our way out of trouble." },
       { "text": "Give the coin a job, or it does nothing at all." }
     ],
     "war": [
@@ -31,6 +36,7 @@
       { "lean": "fiery", "text": "Hire mercenaries and let them bleed for us. I'd sooner cast than swing a blade." },
       { "lean": "devout", "text": "The coven distrusts steel it cannot enchant. Do not lean on hired swords." },
       { "lean": "brave", "text": "Muster the coven. If the Warriors come, let them find us ready." },
+      { "if": { "gte": ["fracture", 65] }, "text": "The ash is at the walls. Fortify, or the Fracture ends this hold before any Warrior does." },
       { "text": "Magic against steel — choose the ground before they choose it for you." }
     ],
     "workings": [
@@ -39,6 +45,9 @@
       { "lean": "devout", "text": "Court the Flame if you dare — but send someone whose soul you can spare." },
       { "lean": "cautious", "text": "Mend the wards first. A working undone is cheaper than a hold unmade." },
       { "lean": "cunning", "text": "Match the caster to the colour. Waste no mana on a spell that fights the hand that casts it." },
+      { "if": { "lte": ["mana", 12] }, "text": "We're all but dry. One working, chosen well — and no more this season." },
+      { "if": { "gte": ["fracture", 65] }, "text": "Mend the wards before anything else. The Fracture is close enough to feel now." },
+      { "if": { "lte": ["lore", 20] }, "text": "The old runes are slipping from us. Deepen them while any of us still remember them." },
       { "text": "Mana sits idle. Put it to work before it's needed and gone." }
     ],
     "cults": [
@@ -54,12 +63,15 @@
       { "lean": "cautious", "text": "Every hold on that map can become a grave. Scout before you stride." },
       { "lean": "devout", "text": "All roads bend back to the Tower and its Flame. That is the only road that matters." },
       { "lean": "wise", "text": "The world forgets itself a little more each season. Map it while it still holds a shape." },
+      { "if": { "gte": ["fracture", 65] }, "text": "Look how the ash has eaten the edges. Soon there'll be no map left to read." },
+      { "if": { "gte": ["flamesRegard", 70] }, "text": "The Flame leans toward us. The Tower is nearer now than it has ever been — press on." },
       { "text": "Runehold at the centre, the ash at the edge. Watch which of them grows." }
     ],
     "saga": [
       { "lean": "devout", "text": "What we do is written whether we will it or not. Give the chroniclers worthy ink." },
       { "lean": "cool", "text": "The saga keeps no lies. Read it when you doubt the road we've walked." },
       { "lean": "bold", "text": "Let them write that Runehold dared. Better a bright saga than a long grey one." },
+      { "if": { "gte": ["fracture", 65] }, "text": "If this is to be our last chapter, let it read that we did not go quietly." },
       { "text": "Every choice becomes a line in this. Make it a saga worth the telling." }
     ]
   }

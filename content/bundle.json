@@ -2288,6 +2288,24 @@
         "text": "Half these apprentices have never bled for the hold. That should change."
       },
       {
+        "if": {
+          "lte": [
+            "faith",
+            30
+          ]
+        },
+        "text": "Their faith is guttering like the hearth-rune. Mend it now, or we lose them one by one."
+      },
+      {
+        "if": {
+          "gte": [
+            "faith",
+            82
+          ]
+        },
+        "text": "The coven would follow you into the Flame itself. Don't spend that trust lightly."
+      },
+      {
         "text": "We are what remains of the old Circle. Lead us well, and we hold."
       }
     ],
@@ -2311,6 +2329,24 @@
       {
         "lean": "strong",
         "text": "Drive the harvest hard. Backs will ache, but bellies won't."
+      },
+      {
+        "if": {
+          "lte": [
+            "provisions",
+            25
+          ]
+        },
+        "text": "The stores are nearly bare. This is no season for half-measures — we plant or forage now."
+      },
+      {
+        "if": {
+          "lte": [
+            "provisions",
+            12
+          ]
+        },
+        "text": "We're a bad week from famine. Whatever you mean to do, do it this season."
       },
       {
         "text": "A coven cannot eat runes. Mind the stores before they mind us."
@@ -2338,6 +2374,15 @@
         "text": "Buy Red's favour now. We'll want a friend with a full purse before long."
       },
       {
+        "if": {
+          "lte": [
+            "coin",
+            15
+          ]
+        },
+        "text": "The purse is near empty. We've little left to trade our way out of trouble."
+      },
+      {
         "text": "Give the coin a job, or it does nothing at all."
       }
     ],
@@ -2363,6 +2408,15 @@
         "text": "Muster the coven. If the Warriors come, let them find us ready."
       },
       {
+        "if": {
+          "gte": [
+            "fracture",
+            65
+          ]
+        },
+        "text": "The ash is at the walls. Fortify, or the Fracture ends this hold before any Warrior does."
+      },
+      {
         "text": "Magic against steel — choose the ground before they choose it for you."
       }
     ],
@@ -2386,6 +2440,33 @@
       {
         "lean": "cunning",
         "text": "Match the caster to the colour. Waste no mana on a spell that fights the hand that casts it."
+      },
+      {
+        "if": {
+          "lte": [
+            "mana",
+            12
+          ]
+        },
+        "text": "We're all but dry. One working, chosen well — and no more this season."
+      },
+      {
+        "if": {
+          "gte": [
+            "fracture",
+            65
+          ]
+        },
+        "text": "Mend the wards before anything else. The Fracture is close enough to feel now."
+      },
+      {
+        "if": {
+          "lte": [
+            "lore",
+            20
+          ]
+        },
+        "text": "The old runes are slipping from us. Deepen them while any of us still remember them."
       },
       {
         "text": "Mana sits idle. Put it to work before it's needed and gone."
@@ -2434,6 +2515,24 @@
         "text": "The world forgets itself a little more each season. Map it while it still holds a shape."
       },
       {
+        "if": {
+          "gte": [
+            "fracture",
+            65
+          ]
+        },
+        "text": "Look how the ash has eaten the edges. Soon there'll be no map left to read."
+      },
+      {
+        "if": {
+          "gte": [
+            "flamesRegard",
+            70
+          ]
+        },
+        "text": "The Flame leans toward us. The Tower is nearer now than it has ever been — press on."
+      },
+      {
         "text": "Runehold at the centre, the ash at the edge. Watch which of them grows."
       }
     ],
@@ -2449,6 +2548,15 @@
       {
         "lean": "bold",
         "text": "Let them write that Runehold dared. Better a bright saga than a long grey one."
+      },
+      {
+        "if": {
+          "gte": [
+            "fracture",
+            65
+          ]
+        },
+        "text": "If this is to be our last chapter, let it read that we did not go quietly."
       },
       {
         "text": "Every choice becomes a line in this. Make it a saga worth the telling."

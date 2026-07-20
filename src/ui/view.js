@@ -508,11 +508,16 @@ function stableHash(s) {
   return h >>> 0;
 }
 // A member's ambient counsel for the CURRENT management screen (off the scene page).
+// A live `if` (pressure) line takes priority — the advisor raises the crisis;
+// otherwise a personality-fit ambient line. Stable per member+screen (no RNG).
 function screenCounsel(ctx, m) {
   const pool = (ctx.counsel || {})[ctx.gameView];
   if (!pool || !pool.length) return 'No strong counsel here.';
-  const fit = pool.filter((l) => !l.lean || memberLeans(m, l.lean));
-  const list = fit.length ? fit : pool;
+  const leanOk = (l) => !l.lean || memberLeans(m, l.lean);
+  const urgent = pool.filter((l) => l.if && meets(ctx.state, l.if) && leanOk(l));   // a crisis, in this member's voice
+  const general = pool.filter((l) => !l.if && leanOk(l));                            // calm ambient, fits this member
+  const list = urgent.length ? urgent : general.length ? general : pool.filter((l) => !l.if);
+  if (!list.length) return 'No strong counsel here.';
   return castText(list[stableHash(m.id + '|' + ctx.gameView) % list.length].text, m);
 }
 
