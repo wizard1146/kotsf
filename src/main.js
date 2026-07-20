@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v15';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v16';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -35,6 +35,7 @@ let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/M
 let pinnedCard = null;         // index of an advisor card tapped open (tap again to close)
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
 let selectedMember = null;     // Coven screen: advisor whose full sheet is open (null → roster)
+let cardsOpen = false;         // card bar raised (tuck mode): tap the tucked hand to lift it
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -79,7 +80,7 @@ function metaOf(env) {
 // ---- settings -------------------------------------------------------------
 function loadSettings() {
   const s = readSlot(SETTINGS_KEY) || {};
-  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false };
+  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false, tuckCards: s.tuckCards !== false };
 }
 function applySettings() {
   const r = document.documentElement;
@@ -149,7 +150,7 @@ function openYearRecap(year) {
 function newRun(seed) {
   state = createInitialState(seed ?? (Date.now() & 0xffffffff));
   end = null; lastOutcome = null; current = null; yearRecap = null;
-  casterId = null; selectedMember = null;   // fresh coven — clear per-Circle UI selections
+  casterId = null; selectedMember = null; cardsOpen = false;   // fresh coven — clear per-Circle UI selections
   yearOpenPressures = { ...state.pressures };
   advanceToScene();
   draw();
@@ -254,7 +255,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -323,12 +324,14 @@ if (typeof screen !== 'undefined' && screen.orientation && screen.orientation.ad
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
   if (!el) {   // click-away closes the menu / unpins any open advisor card
-    if (hearthMenuOpen || pinnedCard !== null) { hearthMenuOpen = false; pinnedCard = null; draw(); }
+    if (hearthMenuOpen || pinnedCard !== null) { hearthMenuOpen = false; pinnedCard = null; cardsOpen = false; draw(); }
+    else if (cardsOpen) { cardsOpen = false; app.querySelector('.circle-bar')?.classList.remove('cb-open'); } // animate the hand back down
     return;
   }
   const action = el.dataset.action;
   if (hearthMenuOpen && action !== 'toggle-hearth-menu') hearthMenuOpen = false; // any selection closes the menu
   if (pinnedCard !== null && action !== 'toggle-card' && action !== 'toggle-hearth-menu') pinnedCard = null; // any other action unpins
+  if (cardsOpen && action !== 'toggle-card') { cardsOpen = false; app.querySelector('.circle-bar')?.classList.remove('cb-open'); } // any other action lowers the hand
   switch (action) {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
@@ -347,7 +350,17 @@ app.addEventListener('click', (e) => {
       if (hm) { hm.classList.toggle('open', hearthMenuOpen); hm.querySelector('.hamburger')?.setAttribute('aria-expanded', String(hearthMenuOpen)); }
       break;
     }
-    case 'toggle-card': { const i = Number(el.dataset.card); pinnedCard = pinnedCard === i ? null : i; draw(); break; }
+    case 'toggle-card': {
+      if (settings.tuckCards && !cardsOpen) {   // tucked → first tap raises the hand (animate on the live node, no redraw)
+        cardsOpen = true;
+        app.querySelector('.circle-bar')?.classList.add('cb-open');
+      } else {
+        const i = Number(el.dataset.card);
+        pinnedCard = pinnedCard === i ? null : i;
+        draw();
+      }
+      break;
+    }
     case 'do-action': doAction(el.dataset.act); break;
     case 'set-caster': casterId = el.dataset.caster; draw(); break;
     case 'resume-game': overlay = null; screen = 'game'; draw(); break;

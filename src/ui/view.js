@@ -589,7 +589,9 @@ function circleBarHTML(ctx) {
       ? `<button class="${cls}" data-action="game-view" data-view="${tab}" title="${P_SHORT[k]}">${inner}</button>`
       : `<span class="${cls}" title="${P_SHORT[k]}">${inner}</span>`;
   }).join('');
-  return `<div class="circle-bar">
+  const tuck = ctx.settings?.tuckCards !== false;
+  const barCls = `circle-bar${tuck ? ' cb-tuck' : ''}${tuck && ctx.cardsOpen ? ' cb-open' : ''}`;
+  return `<div class="${barCls}">
     <div class="cb-hand">${cards}${souls ? `<span class="cb-souls">${souls}</span>` : ''}</div>
     <div class="cb-res-row">${res}</div>
   </div>`;
@@ -693,7 +695,9 @@ function optionsHTML(ctx) {
       <div class="opt"><label>Show Fracture &amp; Regard</label>${toggle('revealMeters', s.revealMeters)}</div>
       <p class="muted opt-note">Off (default): the Fracture and Flame's Regard are veiled — you feel their pull through what your choices cost, but the running number stays hidden. On: show the exact meters.</p>
       <div class="opt"><label>Portraits in the card bar</label>${toggle('footerPortraits', s.footerPortraits)}</div>
-      <p class="muted opt-note">Show each advisor's portrait on their card in the bottom bar, instead of a plain colour dot.</p>`;
+      <p class="muted opt-note">Show each advisor's portrait on their card in the bottom bar, instead of a plain colour dot.</p>
+      <div class="opt"><label>Tuck the card bar</label>${toggle('tuckCards', s.tuckCards)}</div>
+      <p class="muted opt-note">On (default): the advisor cards sit low to save space — tap them to raise the hand, tap away to lower it. Off: the cards stay up.</p>`;
   }
 
   return `<div class="panel-layout">

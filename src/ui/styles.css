@@ -120,7 +120,13 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
   background: linear-gradient(to top, var(--panel) 0%, rgba(31, 26, 22, 0.55) 42%, transparent 100%); pointer-events: none; }
 /* the Circle as a held hand of cards — the hand is lifted out of flow so the
    footer itself stays slim while the cards lap up over its top edge. */
-.cb-hand { position: absolute; left: 1rem; bottom: 0.3rem; display: flex; align-items: flex-end; z-index: 6; }
+.cb-hand { position: absolute; left: 1rem; bottom: 0.3rem; display: flex; align-items: flex-end; z-index: 6; transition: transform .3s cubic-bezier(.34,.1,.24,1); }
+/* tuck mode: the hand rests low (tops peek); tap a card to raise it, tap away to lower */
+.circle-bar.cb-tuck:not(.cb-open) .cb-hand { transform: translateY(64%); }
+.circle-bar.cb-tuck:not(.cb-open) .cb-card:hover, .circle-bar.cb-tuck:not(.cb-open) .cb-card:focus-visible {
+  transform: rotate(calc((var(--i) - 1.5) * 3.5deg)) translateY(3px);   /* no lift while tucked — the tap raises the whole hand */
+}
+.circle-bar.cb-tuck:not(.cb-open) .cb-bubble { opacity: 0 !important; }
 .cb-card { position: relative; background: none; border: 0; padding: 0; margin-left: -0.7rem; cursor: pointer;
   transform: rotate(calc((var(--i) - 1.5) * 3.5deg)) translateY(3px); transform-origin: bottom center;
   transition: transform .18s ease; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5)); }
