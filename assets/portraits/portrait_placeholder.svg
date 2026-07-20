@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Wizard portrait placeholder">
+  <g fill="#e7dccb" fill-opacity="0.16">
+    <!-- robe / shoulders -->
+    <path d="M52 400c0-72 42-108 98-108s98 36 98 108z"/>
+    <!-- head -->
+    <circle cx="150" cy="236" r="45"/>
+    <!-- pointed wizard hat over the crown -->
+    <path d="M150 92c-9 42-32 96-60 126 31-17 89-17 120 0-28-30-51-84-60-126z"/>
+  </g>
+</svg>

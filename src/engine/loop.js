@@ -21,7 +21,10 @@ export function advanceTime(state) {
     }
     state.actionsUsed = [];
     state.season = (state.season + 1) % 4;
-    if (state.season === 0) state.year += 1;
+    if (state.season === 0) {
+      state.year += 1;
+      for (const m of state.circle) m.age = (m.age || 0) + 1;   // the Circle grows older each year
+    }
   }
 }
 

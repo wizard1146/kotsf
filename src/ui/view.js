@@ -1,7 +1,7 @@
 // view.js — pure rendering. Turns the game state into HTML. The swappable layer:
 // the engine never imports this; this imports only read-only engine helpers.
 import { meets } from '../engine/conditions.js';
-import { seasonName, timeName, CULTS, castMember, castText, workingOdds } from '../engine/state.js';
+import { seasonName, timeName, CULTS, castMember, castText, workingOdds, ageVariant } from '../engine/state.js';
 
 const P_LABELS = {
   mana: 'Mana', provisions: 'Provisions', coin: 'Coin', lore: 'Lore',
@@ -322,11 +322,38 @@ function faithBand(v) {
 }
 // A Coven member as a portrait card: a school-tinted portrait (initial placeholder
 // for now), the name, and the class; full stats on hover.
-function memberCard(m, isLeader) {
-  const init = (m.name[0] || '?').toUpperCase();
+// ---- member portraits: match a file to a member by school + gender + age ----
+// Filenames: portrait_<school>_<gender>_<NNN><a|b|c>.webp  (a/b/c = young/middle/old).
+// Member rank sets the preferred age (apprentice→young, adept→mid, ring-leader→old);
+// no match at all falls back to the silhouette placeholder.
+const PORTRAIT_PLACEHOLDER = 'assets/portraits/portrait_placeholder.svg';
+const GENDER_TOKEN = { she: 'female', he: 'male' };
+const RANK_AGE = { apprentice: 'a', adept: 'b', 'ring-leader': 'c' };
+function portraitFor(m, portraits) {
+  if (!portraits || !portraits.length) return null;
+  const g = GENDER_TOKEN[m.gender] || 'male';
+  const matches = portraits.map((f) => {
+    const [school, gender, idv = ''] = f.replace(/^portraits?_/, '').replace(/\.[a-z0-9]+$/i, '').split('_');
+    return { f, school, gender, age: (idv.match(/[a-z]$/i) || [''])[0].toLowerCase() };
+  }).filter((p) => p.school === m.school && p.gender === g);
+  if (!matches.length) return null;
+  const want = m.age != null ? ageVariant(m.age) : RANK_AGE[m.rank];   // by real age; rank fallback for old saves
+  const aged = matches.filter((p) => p.age === want);
+  const pool = aged.length ? aged : matches;                 // prefer the right age, else any of school+gender
+  return `assets/portraits/${pool[stableHash(m.id + '|portrait') % pool.length].f}`;
+}
+// portrait or silhouette-placeholder fill for a member frame (keeps the initial as a
+// faint identity on the placeholder only)
+function portraitFill(m, portraits) {
+  const photo = portraitFor(m, portraits);
+  if (photo) return `<img class="member-photo" src="${esc(photo)}" alt="" loading="lazy">`;
+  return `<img class="member-photo is-placeholder" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`;
+}
+
+function memberCard(m, isLeader, portraits) {
   const tip = `${m.name} — ${CLASS_LABEL[m.class] || m.class} · ${CULT_NAMES[m.school]} · ${m.rank} · Pow ${m.power} Wis ${m.wisdom} Gui ${m.guile} Cou ${m.courage}`;
   return `<button class="pcard${isLeader ? ' leader' : ''}" data-action="view-member" data-member="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
-    <div class="pcard-img"><span class="pcard-init">${esc(init)}</span></div>
+    <div class="pcard-img">${portraitFill(m, portraits)}</div>
     <div class="pcard-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</div>
     <div class="pcard-sub">${esc(CLASS_LABEL[m.class] || m.class)}</div>
   </button>`;
@@ -351,7 +378,6 @@ function sheetStat(label, v, word) {
 function advisorSheetHTML(ctx, m) {
   const state = ctx.state;
   const isLeader = state.circle[0] && state.circle[0].id === m.id;
-  const init = (m.name[0] || '?').toUpperCase();
   const cls = CLASS_LABEL[m.class] || m.class;
   const school = CULT_NAMES[m.school] || cap(m.school);
   const rank = RANK_LABEL[m.rank] || m.rank;
@@ -362,10 +388,10 @@ function advisorSheetHTML(ctx, m) {
     <button class="sheet-back" data-action="close-member">&#8592; The Coven</button>
     <div class="sheet-layout">
       <aside class="sheet-portrait-col">
-        <div class="sheet-portrait"><span class="pcard-init">${esc(init)}</span></div>
+        <div class="sheet-portrait">${portraitFill(m, ctx.portraits)}</div>
         <h2 class="sheet-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</h2>
         <div class="sheet-tags"><span class="wk-school" style="--cult:${CULT_HEX[m.school] || '#777'}">${cap(m.school)}</span> <span class="sheet-class">${esc(cls)}</span></div>
-        <div class="sheet-rank">${esc(rank)}</div>
+        <div class="sheet-rank">${esc(rank)}${m.age != null ? ` &middot; ${m.age} years` : ''}</div>
       </aside>
       <div class="sheet-body">
         <p class="sheet-flavour">${esc(flavour)}</p>
@@ -390,7 +416,7 @@ function covenScreenHTML(ctx) {
   const [fLabel, fCls] = faithBand(faith);
   const n = state.circle.length;
   const soulCount = state.souls.length;
-  const members = state.circle.map((m, i) => memberCard(m, i === 0)).join('');
+  const members = state.circle.map((m, i) => memberCard(m, i === 0, ctx.portraits)).join('');
   const souls = soulCount
     ? `<h3 class="coven-subhead">Forgotten Souls <small>${soulCount}</small></h3>
        <div class="souls-roll">${state.souls.map((m) =>
@@ -536,13 +562,17 @@ function circleBarHTML(ctx) {
   // On the scene (questing) page the advisors answer the scene; on every other
   // screen they answer THAT screen (ambient counsel).
   const onScene = ctx.gameView === 'scene';
+  const useThumb = ctx.settings?.footerPortraits !== false;   // portrait thumb vs the plain colour dot
   const voices = onScene ? new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text])) : null;
   const cards = state.circle.map((m, i) => {
     const role = m.rank === 'ring-leader' ? 'leader' : (CLASS_LABEL[m.class] || m.class);
     const thought = onScene ? (voices.get(m.id) || 'No strong counsel here.') : screenCounsel(ctx, m);
+    const face = useThumb
+      ? `<span class="cb-photo"><img src="${esc(portraitFor(m, ctx.portraits) || PORTRAIT_PLACEHOLDER)}" alt="" loading="lazy"></span>`
+      : '<span class="cb-dot"></span>';
     return `<button class="cb-card${ctx.pinnedCard === i ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
         <span class="cb-face">
-          <span class="cb-dot"></span>
+          ${face}
           <span class="cb-name">${esc(m.name)}</span>
           <span class="cb-role">${esc(role)}</span>
         </span>
@@ -661,7 +691,9 @@ function optionsHTML(ctx) {
       <div class="opt"><label>Flip landscape side</label>${toggle('landscapeFlip', s.landscapeFlip)}</div>
       <p class="muted opt-note">Rotate the locked view 180° — for holding the phone the other way, or lying on your other side.</p>
       <div class="opt"><label>Show Fracture &amp; Regard</label>${toggle('revealMeters', s.revealMeters)}</div>
-      <p class="muted opt-note">Off (default): the Fracture and Flame's Regard are veiled — you feel their pull through what your choices cost, but the running number stays hidden. On: show the exact meters.</p>`;
+      <p class="muted opt-note">Off (default): the Fracture and Flame's Regard are veiled — you feel their pull through what your choices cost, but the running number stays hidden. On: show the exact meters.</p>
+      <div class="opt"><label>Portraits in the card bar</label>${toggle('footerPortraits', s.footerPortraits)}</div>
+      <p class="muted opt-note">Show each advisor's portrait on their card in the bottom bar, instead of a plain colour dot.</p>`;
   }
 
   return `<div class="panel-layout">

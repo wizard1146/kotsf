@@ -131,6 +131,7 @@ start is reproducible, but no two covens need be alike. You open with **four**: 
   of their magic;
 - a **class** — one of nine (Magus, Sorcerer, Druid, Necromancer, Pyromancer, Enchanter, Charmer, Chaos
   Mage, Ghost Eater): what they *do best*;
+- an **age** — which climbs a year each year; their portrait ages young → middle → old with them;
 - four **competence** stats — **Power, Wisdom, Guile, Courage** — that feed contests (*what they can pull
   off*);
 - three **temperament** axes — **Boldness, Piety, Temper** — that colour their counsel (*what they urge*).

@@ -17,3 +17,5 @@ npm-debug.log*
 assets/*
 !assets/icons/
 !assets/splash.png
+!assets/portraits/
+assets/portraits/originals/

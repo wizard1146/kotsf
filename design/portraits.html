@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOTSF · Portrait Gallery</title>
+<style>
+  :root { --bg:#14110f; --panel:#1c1815; --panel2:#241f1b; --line:#3a322b; --ink:#e7dccb; --dim:#a99e8d; --flame:#e8a33d; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); padding:1.5rem clamp(1rem,4vw,3rem) 4rem; }
+  h1 { color:var(--flame); font-size:1.5rem; margin:0 0 .2rem; }
+  .sub { color:var(--dim); margin:0 0 1.2rem; font-size:.9rem; }
+  .school-hex { display:inline-block; width:.7em; height:.7em; border-radius:2px; vertical-align:middle; margin-right:.35em; }
+
+  .controls { display:flex; flex-wrap:wrap; gap:1.2rem; align-items:center; margin:0 0 1.4rem; padding:.7rem .9rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+  .controls label { font-size:.85rem; color:var(--dim); display:inline-flex; align-items:center; gap:.4rem; cursor:pointer; }
+  .controls .seg { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+  .controls .seg button { background:var(--panel2); color:var(--dim); border:0; padding:.35rem .7rem; font:inherit; font-size:.82rem; cursor:pointer; }
+  .controls .seg button.on { background:#2a2018; color:var(--flame); }
+
+  /* coverage matrix */
+  .coverage { margin:0 0 1.8rem; overflow-x:auto; }
+  table { border-collapse:collapse; font-size:.8rem; }
+  th, td { border:1px solid var(--line); padding:.3rem .55rem; text-align:center; }
+  th { color:var(--dim); font-weight:600; }
+  td.cell { font-family:var(--mono); }
+  td.have { color:var(--flame); }
+  td.none { color:#5c5348; }
+  .rowlabel { text-align:left; color:var(--ink); text-transform:capitalize; }
+
+  .group-h { color:var(--flame); font-size:1.05rem; margin:1.6rem 0 .7rem; text-transform:capitalize; border-bottom:1px solid var(--line); padding-bottom:.3rem; }
+  .warn { color:#e0803e; font-size:.8rem; margin-left:.5rem; font-weight:400; text-transform:none; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .frame { position:relative; aspect-ratio:3/4; background:repeating-conic-gradient(#211c18 0% 25%, #191510 0% 50%) 50%/22px 22px; display:grid; place-items:center; }
+  .frame img { width:100%; height:100%; display:block; }
+  body[data-fit="cover"] .frame img { object-fit:cover; }
+  body[data-fit="contain"] .frame img { object-fit:contain; }
+  .meta { padding:.5rem .6rem .6rem; }
+  .fname { font-family:var(--mono); font-size:.72rem; color:var(--ink); word-break:break-all; margin-bottom:.3rem; }
+  .tags { display:flex; flex-wrap:wrap; gap:.3rem; font-size:.68rem; }
+  .tag { background:var(--panel2); border:1px solid var(--line); border-radius:4px; padding:.1rem .4rem; color:var(--dim); }
+  .tag.age { color:var(--flame); }
+  .tag.bad { color:#e0803e; border-color:#5a3a22; }
+  .dim-note { font-family:var(--mono); font-size:.68rem; color:var(--dim); margin-top:.35rem; }
+  .dim-note.small { color:#e0803e; }
+  .err { color:#e0803e; background:var(--panel); border:1px solid #5a3a22; border-radius:8px; padding:1rem; }
+</style>
+</head>
+<body data-fit="cover">
+  <h1>Portrait Gallery</h1>
+  <p class="sub">Every file in <code>assets/portraits/</code> (from the build manifest). Naming: <code>portrait_&lt;school&gt;_&lt;gender&gt;_&lt;NNN&gt;&lt;a|b|c&gt;.webp</code> — a/b/c = young/middle/old. Serve via the dev server (this page fetches the bundle).</p>
+
+  <div class="controls">
+    <span style="color:var(--dim);font-size:.85rem">Fit</span>
+    <div class="seg" id="fit">
+      <button data-fit="cover" class="on">Cropped (in-game 3:4)</button>
+      <button data-fit="contain">Full image</button>
+    </div>
+    <span id="count" style="color:var(--dim);font-size:.85rem;margin-left:auto"></span>
+  </div>
+
+  <div id="out"><p class="sub">Loading…</p></div>
+
+<script>
+const SCHOOLS = ['red','yellow','brown','green','blue','purple','white'];
+const HEX = { red:'#c0392b', yellow:'#d4ac0d', brown:'#8a5a1f', green:'#229954', blue:'#2471a3', purple:'#7d3c98', white:'#d5d8dc' };
+const AGE = { a:'young', b:'middle', c:'old' };
+const PLACEHOLDER = '../assets/portraits/portrait_placeholder.svg';
+
+function parseName(f) {
+  const base = f.replace(/^portraits?_/, '').replace(/\.[a-z0-9]+$/i, '');
+  const [school, gender, idv = ''] = base.split('_');
+  const v = (idv.match(/[a-z]$/i) || [''])[0].toLowerCase();
+  return { f, school, gender, num: idv.replace(/[a-z]$/i, ''), variant: v, age: AGE[v] || '?' };
+}
+
+function card(p) {
+  const badSchool = !SCHOOLS.includes(p.school);
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div class="frame"><img src="../assets/portraits/${p.f}" alt="${p.f}" loading="lazy"></div>
+    <div class="meta">
+      <div class="fname">${p.f}</div>
+      <div class="tags">
+        <span class="tag ${badSchool ? 'bad' : ''}">${badSchool ? '⚠ ' : ''}<span class="school-hex" style="background:${HEX[p.school] || '#777'}"></span>${p.school}</span>
+        <span class="tag">${p.gender}</span>
+        <span class="tag age">${p.age}${p.variant ? ' ('+p.variant+')' : ''}</span>
+        ${p.num ? `<span class="tag">#${p.num}</span>` : ''}
+      </div>
+      <div class="dim-note" data-dim>measuring…</div>
+    </div>`;
+  const img = el.querySelector('img');
+  const dim = el.querySelector('[data-dim]');
+  img.addEventListener('load', () => {
+    const w = img.naturalWidth, h = img.naturalHeight;
+    dim.textContent = `${w}×${h}px · ${(w/h).toFixed(2)}:1`;
+    if (Math.min(w, h) < 360) dim.classList.add('small'), dim.textContent += '  ⚠ small';
+  });
+  img.addEventListener('error', () => { dim.textContent = '⚠ failed to load'; dim.classList.add('small'); });
+  return el;
+}
+
+function coverage(items) {
+  const wrap = document.createElement('div');
+  wrap.className = 'coverage';
+  const genders = ['female','male'], ages = ['a','b','c'];
+  let head = '<tr><th>school</th>';
+  for (const g of genders) for (const a of ages) head += `<th>${g[0]}·${AGE[a]}</th>`;
+  head += '</tr>';
+  let rows = '';
+  for (const s of SCHOOLS) {
+    let r = `<tr><td class="rowlabel"><span class="school-hex" style="background:${HEX[s]}"></span>${s}</td>`;
+    for (const g of genders) for (const a of ages) {
+      const n = items.filter(p => p.school === s && p.gender === g && p.variant === a).length;
+      r += `<td class="cell ${n ? 'have' : 'none'}">${n || '·'}</td>`;
+    }
+    rows += r + '</tr>';
+  }
+  wrap.innerHTML = `<table>${head}${rows}</table>`;
+  return wrap;
+}
+
+(async () => {
+  const out = document.getElementById('out');
+  let bundle;
+  try { bundle = await (await fetch('../content/bundle.json', { cache: 'no-store' })).json(); }
+  catch (e) { out.innerHTML = `<div class="err">Couldn't load <code>../content/bundle.json</code>. Open this page through the dev server (<code>http://localhost:8000/design/portraits.html</code>), not via file://.</div>`; return; }
+  const files = (bundle.portraits || []).slice().sort();
+  const items = files.map(parseName);
+  document.getElementById('count').textContent = `${items.length} portraits`;
+
+  out.innerHTML = '';
+  out.appendChild(coverage(items));
+
+  // placeholder preview
+  const ph = document.createElement('div');
+  ph.innerHTML = `<div class="group-h">Placeholder <span class="warn">shown for any member with no matching portrait</span></div>`;
+  const phGrid = document.createElement('div'); phGrid.className = 'grid';
+  const phCard = document.createElement('div'); phCard.className = 'card';
+  phCard.innerHTML = `<div class="frame" style="background:radial-gradient(120% 90% at 50% 28%, #2a2018, #0c0a08)"><img src="${PLACEHOLDER}" alt="placeholder"></div><div class="meta"><div class="fname">portrait_placeholder.svg</div></div>`;
+  phGrid.appendChild(phCard); ph.appendChild(phGrid); out.appendChild(ph);
+
+  // group by school (unknown schools last)
+  const bySchool = {};
+  for (const p of items) (bySchool[p.school] ||= []).push(p);
+  const order = [...SCHOOLS.filter(s => bySchool[s]), ...Object.keys(bySchool).filter(s => !SCHOOLS.includes(s))];
+  for (const s of order) {
+    const h = document.createElement('div');
+    const bad = !SCHOOLS.includes(s);
+    h.className = 'group-h';
+    h.innerHTML = `<span class="school-hex" style="background:${HEX[s] || '#777'}"></span>${s}${bad ? ` <span class="warn">— not one of the seven schools; these never match a member</span>` : ''}`;
+    out.appendChild(h);
+    const grid = document.createElement('div'); grid.className = 'grid';
+    for (const p of bySchool[s].sort((a,b) => (a.gender+a.num+a.variant).localeCompare(b.gender+b.num+b.variant))) grid.appendChild(card(p));
+    out.appendChild(grid);
+  }
+})();
+
+document.getElementById('fit').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.body.dataset.fit = b.dataset.fit;
+  for (const x of e.currentTarget.children) x.classList.toggle('on', x === b);
+});
+</script>
+</body>
+</html>

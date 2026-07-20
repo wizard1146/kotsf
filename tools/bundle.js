@@ -35,6 +35,13 @@ export function buildBundle() {
       for (const [k, arr] of Object.entries(f.screens || {})) (acc[k] ||= []).push(...arr);
       return acc;
     }, {}),
+    // member portrait filenames: portrait_<school>_<gender>_<NNN><a|b|c>.webp
+    // (a/b/c = young/middle/old). The view matches one to each Circle member; the
+    // originals/ subfolder is skipped (only webp/png files are listed).
+    portraits: (() => {
+      try { return readdirSync(join(ROOT, 'assets', 'portraits')).filter((f) => /\.(webp|png)$/i.test(f)); }
+      catch { return []; }
+    })(),
   };
   writeFileSync(join(ROOT, 'content', 'bundle.json'), JSON.stringify(bundle, null, 2));
   return bundle;

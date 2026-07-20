@@ -80,12 +80,18 @@ const rollRange = (state, lo, hi) => lo + pickIndex(state, hi - lo + 1);
 // Roll the opening ring of four: a leader, a second (the default caster), two apprentices.
 const shuffle = (state, arr) => { for (let i = arr.length - 1; i > 0; i--) { const j = pickIndex(state, i + 1); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
 
+// Age band → portrait variant letter (a/b/c = young/middle/old). Members carry a
+// real `age` that ticks up each year, so their portrait can age with them.
+export const ageBand = (age) => (age < 33 ? 'young' : age <= 51 ? 'middle' : 'old');
+export const ageVariant = (age) => (age < 33 ? 'a' : age <= 51 ? 'b' : 'c');
+
 export function rollCircle(state) {
   const names = shuffle(state, NAMES.slice());
   const classes = shuffle(state, CLASSES.slice());   // distinct class per member — no clustering
   const schools = shuffle(state, CULTS.slice());      // distinct school per member (4 of 7)
   const ranks = ['ring-leader', 'adept', 'apprentice', 'apprentice'];
   const rankBase = { 'ring-leader': 56, adept: 50, apprentice: 38 };
+  const rankAge = { 'ring-leader': 54, adept: 38, apprentice: 22 };   // seniority reads as age
   return ranks.map((rank, i) => {
     const [name, gender] = names[i];
     const cls = classes[i];
@@ -94,6 +100,7 @@ export function rollCircle(state) {
     const stat = (k) => clampStat(rankBase[rank] + (bias[k] || 0) + rollRange(state, -14, 14));
     return {
       id: `wz-${i}`, name, gender, school, class: cls, rank,
+      age: rankAge[rank] + rollRange(state, -6, 8),
       power: stat('power'), wisdom: stat('wisdom'), guile: stat('guile'), courage: stat('courage'),
       boldness: rollRange(state, 15, 85), piety: rollRange(state, 15, 85), temper: rollRange(state, 15, 85),
     };

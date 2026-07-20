@@ -1705,7 +1705,7 @@
         },
         {
           "term": "The Circle",
-          "body": "Your advisor ring is rolled fresh each campaign — Wizards, each with a school (colour), a class, a rank, four competence stats (Power, Wisdom, Guile, Courage) and a temperament (Boldness, Piety, Temper). On a scene, whoever fits the moment speaks — and they disagree. Competence decides what they can pull off; temperament decides what they urge. The second-in-command casts your workings by default."
+          "body": "Your advisor ring is rolled fresh each campaign — Wizards, each with a school (colour), a class, a rank, an age, four competence stats (Power, Wisdom, Guile, Courage) and a temperament (Boldness, Piety, Temper). They grow a year older each year — their portrait ages with them. On a scene, whoever fits the moment speaks — and they disagree. Competence decides what they can pull off; temperament decides what they urge. The second-in-command casts your workings by default."
         },
         {
           "term": "Schools & Classes",
@@ -2562,5 +2562,17 @@
         "text": "Every choice becomes a line in this. Make it a saga worth the telling."
       }
     ]
-  }
+  },
+  "portraits": [
+    "portrait_black_male_001a.webp",
+    "portrait_black_male_001c.webp",
+    "portrait_blue_female_001c.webp",
+    "portrait_blue_male_001a.webp",
+    "portrait_blue_male_001b.webp",
+    "portrait_yellow_female_001a.webp",
+    "portrait_yellow_female_001c.webp",
+    "portrait_yellow_female_002a.webp",
+    "portrait_yellow_female_003a.webp",
+    "portraits_green_female_001b.webp"
+  ]
 }

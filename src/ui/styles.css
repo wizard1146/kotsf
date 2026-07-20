@@ -129,6 +129,8 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
   background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--line);
   border-top: 3px solid var(--cult); border-radius: 8px; }
 .cb-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cult); border: 1px solid #00000055; margin-bottom: 2px; }
+.cb-photo { width: 46px; height: 46px; border-radius: 50%; overflow: hidden; margin-bottom: 3px; border: 2px solid var(--cult); background: radial-gradient(120% 90% at 50% 26%, color-mix(in srgb, var(--cult) 45%, #14110f), #0c0a08); }
+.cb-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .cb-card .cb-name { color: var(--ink); font-size: 0.82rem; line-height: 1.1; white-space: nowrap; }
 .cb-role { color: var(--ink-dim); font-size: 0.64rem; font-variant: small-caps; letter-spacing: 0.04em; }
 .cb-card:hover, .cb-card:focus-visible, .cb-card.pinned { transform: rotate(0deg) translateY(-14px); z-index: 21; outline: none; }
@@ -217,7 +219,11 @@ button.cb-res:active { transform: translateY(0); }
 .pcard { width: 108px; background: var(--panel-2); border: 1px solid var(--line); border-top: 3px solid var(--cult); border-radius: 10px; overflow: hidden; padding: 0; text-align: left; font: inherit; color: inherit; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
 .pcard:hover { border-color: color-mix(in srgb, var(--cult) 60%, var(--line)); }
 .pcard:active { transform: translateY(1px); }
-.pcard-img { aspect-ratio: 3 / 4; display: grid; place-items: center; background: radial-gradient(120% 90% at 50% 28%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); }
+.pcard-img { position: relative; aspect-ratio: 3 / 4; display: grid; place-items: center; overflow: hidden; background: radial-gradient(120% 90% at 50% 28%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); }
+/* portrait photo (or silhouette placeholder) fills the frame; the initial letter
+   shows only over the placeholder, as a faint identity until real art exists */
+.member-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.pcard-init { position: relative; z-index: 1; }
 .pcard-init { font-family: var(--display); font-weight: 700; font-size: 2.6rem; color: color-mix(in srgb, var(--cult) 55%, #e7dccb); }
 .pcard-name { padding: 0.4rem 0.5rem 0; font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pcard-star { color: var(--flame); font-size: 0.8em; }
@@ -231,7 +237,7 @@ button.cb-res:active { transform: translateY(0); }
 .sheet-back:hover { color: var(--flame); }
 .sheet-layout { display: flex; gap: 1.6rem; align-items: flex-start; }
 .sheet-portrait-col { flex: 0 0 clamp(140px, 22%, 200px); text-align: center; }
-.sheet-portrait { aspect-ratio: 3 / 4; display: grid; place-items: center; border-radius: 12px; border: 1px solid var(--line); border-top: 3px solid var(--cult); background: radial-gradient(120% 90% at 50% 28%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); margin-bottom: 0.7rem; }
+.sheet-portrait { position: relative; overflow: hidden; aspect-ratio: 3 / 4; display: grid; place-items: center; border-radius: 12px; border: 1px solid var(--line); border-top: 3px solid var(--cult); background: radial-gradient(120% 90% at 50% 28%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); margin-bottom: 0.7rem; }
 .sheet-portrait .pcard-init { font-size: 4.5rem; }
 .sheet-name { margin: 0 0 0.3rem; font-size: 1.4rem; }
 .sheet-tags { display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-bottom: 0.3rem; }

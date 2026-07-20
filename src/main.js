@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v14';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v15';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -25,6 +25,7 @@ let defs = {};                 // circle id -> definition (name, color, bio)
 let codex = [];                // wiki/codex categories
 let actions = [];              // per-screen actions (Workings, Fields, …): requires + effects
 let counsel = {};              // screen id -> ambient advisor line pool (footer counsel off-scene)
+let portraits = [];            // member portrait filenames (assets/portraits/*.webp)
 
 // app-shell UI state
 let screen = 'splash';         // 'splash' | 'menu' | 'game'
@@ -78,7 +79,7 @@ function metaOf(env) {
 // ---- settings -------------------------------------------------------------
 function loadSettings() {
   const s = readSlot(SETTINGS_KEY) || {};
-  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters };
+  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false };
 }
 function applySettings() {
   const r = document.documentElement;
@@ -253,7 +254,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, settings, codex, actions, counsel, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -395,6 +396,7 @@ window.addEventListener('keydown', (e) => {
   codex = bundle.codex || [];
   actions = bundle.actions || [];
   counsel = bundle.counsel || {};
+  portraits = bundle.portraits || [];
   applySettings();
   screen = 'splash'; overlay = null;
   draw();
