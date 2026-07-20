@@ -1,6 +1,7 @@
 {
   "id": "the-flickering-door",
   "type": "interactive",
+  "tags": ["flame"],
   "title": "The Flickering Door",
   "art": "art/scenes/secret-tower-basement.png",
   "weight": 6,

@@ -1,6 +1,7 @@
 {
   "id": "the-disputed-relic",
   "type": "interactive",
+  "tags": ["cults", "lore"],
   "title": "The Disputed Relic",
   "weight": 6,
   "once": true,

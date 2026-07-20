@@ -1,6 +1,7 @@
 {
   "id": "the-trembling-ground",
   "type": "interactive",
+  "tags": ["fracture", "lore"],
   "title": "The Trembling Ground",
   "weight": 9,
   "trigger": { "gte": ["fracture", 40] },

@@ -62,14 +62,14 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   padding: 0.6rem 1rem; padding-top: max(0.6rem, env(safe-area-inset-top));
   border-bottom: 1px solid var(--line);
 }
-.hearth-id { display: flex; align-items: center; gap: 0.55rem; }
+.hearth-id { display: flex; align-items: center; gap: 0.55rem; min-width: 13rem; }   /* reserve width so a longer date doesn't shove the rune tabs */
 .hearth-id .rune { font-size: 1.5rem; color: var(--flame); text-shadow: 0 0 16px rgba(232, 163, 61, 0.35); }
 .hearth-id b { color: var(--flame); letter-spacing: 0.02em; }
-.hearth-id small { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 0.86rem; }
+.hearth-id small { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 0.86rem; white-space: nowrap; }
 .hearth-actions { margin-left: auto; display: flex; gap: 0.4rem; }
 /* in-game hamburger menu (replaces the Options / Save / Menu buttons) */
 .hearth-menu { position: relative; margin-left: 0.4rem; flex-shrink: 0; }
-.hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 9px; width: 2.5rem; height: 2.6rem; padding: 0.4rem; background: none; border: 0; border-radius: 7px; cursor: pointer; transform: translateY(-3px); }
+.hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 9px; width: 2.5rem; height: 2.6rem; padding: 0.4rem; background: none; border: 0; border-radius: 7px; cursor: pointer; transform: translateY(-5px); }
 .hamburger span { display: block; width: 100%; height: 1.5px; background: var(--ink); opacity: 0.8; border-radius: 2px;
   transition: transform .28s cubic-bezier(.5, 0, .3, 1), opacity .18s ease, background .18s ease; }
 .hamburger:hover:not(:disabled) { background: none; }

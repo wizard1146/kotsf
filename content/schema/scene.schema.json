@@ -9,6 +9,7 @@
   "properties": {
     "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
     "type": { "enum": ["interactive", "news", "quest"] },
+    "tags": { "type": "array", "items": { "type": "string" }, "description": "Themes for grouping in the storyboard; the first tag is the primary category." },
     "title": { "type": "string" },
     "art": { "type": "string" },
     "music": { "type": "string" },

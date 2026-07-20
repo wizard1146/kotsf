@@ -1,6 +1,7 @@
 {
   "id": "a-strayed-herd",
   "type": "interactive",
+  "tags": ["famine"],
   "title": "A Strayed Herd",
   "weight": 5,
   "trigger": { "lt": ["provisions", 50] },

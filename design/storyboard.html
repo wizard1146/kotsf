@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Storyboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#14110f;--panel:#1f1a16;--panel2:#2a231d;--line:#3a3128;--ink:#e7dccb;--ink-dim:#9c8f7d;
+    --flame:#e8a33d;--flame-deep:#b5641c;--ok:#4e9a51;--danger:#c0392b;
+    --sans:"Barlow",system-ui,sans-serif;--display:"Barlow Semi Condensed",sans-serif;--mono:ui-monospace,Menlo,monospace;
+    --red:#c0392b;--yellow:#d4ac0d;--brown:#8a5a1f;--green:#229954;--blue:#2471a3;--purple:#7d3c98;--white:#d5d8dc;}
+  *{box-sizing:border-box}
+  body{margin:0;background:#100d0b;color:var(--ink);font-family:var(--sans);padding-bottom:4rem}
+  header{position:sticky;top:0;z-index:20;background:#100d0be8;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.8rem 1.2rem}
+  .bar{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;max-width:1500px;margin:0 auto}
+  .brand{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.1rem}
+  .stat{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{background:none;border:0;color:var(--ink-dim);font-family:var(--sans);font-size:.82rem;padding:.35rem .7rem;cursor:pointer}
+  .seg button.on{background:var(--flame);color:#1a130a;font-weight:600}
+  input[type=search]{background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:.4rem .7rem;font-family:var(--sans);font-size:.85rem;min-width:200px}
+  main{max-width:1500px;margin:1.2rem auto 0;padding:0 1.2rem}
+
+  /* coverage strip */
+  .coverage{display:flex;gap:1.4rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem;margin-bottom:1.2rem}
+  .cov{font-family:var(--mono);font-size:.74rem}
+  .cov b{color:var(--ink);display:block;font-family:var(--sans);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin-bottom:.2rem}
+  .cov .up{color:var(--ok)}.cov .dn{color:var(--danger)}
+
+  /* scene cards */
+  .cardcols{columns:340px;column-gap:1.1rem}
+  .sect{margin:0 0 1.7rem}
+  .sect>h2{font-family:var(--display);font-size:1.18rem;margin:0 0 .85rem;padding-bottom:.35rem;border-bottom:2px solid;display:flex;align-items:baseline;gap:.5rem}
+  .sect>h2 span{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);font-weight:400}
+  .card{break-inside:avoid;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.9rem 1rem;margin:0 0 1.1rem;scroll-margin-top:5rem}
+  .card.flash{outline:2px solid var(--flame);transition:outline .1s}
+  .card h3{font-family:var(--display);color:var(--flame);margin:0;font-size:1.12rem;display:flex;align-items:baseline;gap:.5rem}
+  .card h3 .id{font-family:var(--mono);font-size:.62rem;color:var(--ink-dim);font-weight:400;margin-left:auto}
+  .tags{display:flex;gap:.35rem;flex-wrap:wrap;margin:.35rem 0}
+  .tag{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--line);border-radius:20px;padding:.08rem .45rem;color:var(--ink-dim)}
+  .tag.type{color:var(--flame);border-color:var(--flame-deep)}
+  .tag.followup{color:#c9a0e0;border-color:#5b3a70}
+  .tag.opens{color:#7fbf86;border-color:#2e5a34}
+  .trigger{font-family:var(--mono);font-size:.72rem;color:#c8b89a;background:#0e0b09;border:1px solid var(--line);border-radius:7px;padding:.35rem .5rem;margin:.35rem 0;line-height:1.5}
+  .intro{font-size:.86rem;color:var(--ink-dim);line-height:1.45;margin:.4rem 0}
+  .advisors{margin:.3rem 0}
+  .adv{font-size:.78rem;line-height:1.4;color:var(--ink);border-left:2px solid var(--line);padding-left:.5rem;margin:.25rem 0}
+  .adv b{color:var(--adv,var(--flame))}
+  .choice{border-top:1px dashed var(--line);padding:.45rem 0 .1rem}
+  .choice .lbl{font-size:.9rem;font-weight:600}
+  .choice .req{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim)}
+  .choice .test{font-family:var(--mono);font-size:.68rem;color:#c8b89a;font-style:italic}
+  .br{margin:.2rem 0 .1rem;padding-left:.6rem;border-left:2px solid #2a231d}
+  .br .brn{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim)}
+  .chips{display:flex;gap:.3rem;flex-wrap:wrap;margin:.2rem 0}
+  .chip{font-family:var(--mono);font-size:.68rem;border-radius:5px;padding:.06rem .35rem;border:1px solid var(--line)}
+  .chip.up{color:var(--ok);border-color:#2e5a34}.chip.dn{color:var(--danger);border-color:#5b2a23}
+  .chip.flag{color:#d4ac0d;border-color:#5a4a10}.chip.soul{color:#c9a0e0;border-color:#5b3a70}
+  .chip.unlock{color:var(--flame);border-color:var(--flame-deep);cursor:pointer}
+  .chip.cult{color:#fff}
+  .empty{color:var(--ink-dim);font-style:italic;padding:2rem;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <span class="brand">Storyboard</span>
+    <span class="stat" id="count"></span>
+    <div class="seg" id="type"><button data-t="all" class="on">All</button><button data-t="interactive">Interactive</button><button data-t="news">News</button><button data-t="quest">Quest</button></div>
+    <div class="seg" id="flow"><button data-f="all" class="on">Every scene</button><button data-f="entry">Entry only</button><button data-f="followup">Follow-ups</button></div>
+    <div class="seg" id="group"><button data-g="category" class="on">By category</button><button data-g="type">By type</button><button data-g="none">Flat</button></div>
+    <input type="search" id="q" placeholder="Search title / id / text…"/>
+    <span class="stat" id="note" style="margin-left:auto"></span>
+  </div>
+</header>
+<main>
+  <div class="coverage" id="coverage"></div>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" style="display:none">No scenes match.</p>
+</main>
+
+<script>
+const P = ['mana','provisions','coin','lore','faith','flamesRegard','fracture'];
+const PL = {mana:'Mana',provisions:'Food',coin:'Coin',lore:'Lore',faith:'Faith',flamesRegard:'Regard',fracture:'Fracture'};
+const CULTHEX={red:'#c0392b',yellow:'#d4ac0d',brown:'#8a5a1f',green:'#229954',blue:'#2471a3',purple:'#7d3c98',white:'#d5d8dc'};
+const OPS={gte:'≥',lte:'≤',gt:'>',lt:'<',eq:'='};
+const CATS={
+  flame:{label:'The Flame & Souls',col:'#e8a33d'},
+  lore:{label:'Lore & the Forgetting',col:'#2471a3'},
+  cults:{label:'The Seven Cults',col:'#7d3c98'},
+  famine:{label:'Famine & the Fields',col:'#4e9a51'},
+  fracture:{label:'The Fracture & Steel',col:'#c0392b'},
+  hearth:{label:'The Circle & Hearth',col:'#d4ac0d'},
+};
+const CAT_ORDER=['flame','lore','cults','famine','fracture','hearth'];
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const path=p=>p.startsWith('cult.')?p.slice(5)[0].toUpperCase()+p.slice(6)+' cult':(PL[p]||p);
+
+function cond(c){ if(!c) return '';
+  if(c.all) return c.all.map(cond).join(' AND ');
+  if(c.any) return '('+c.any.map(cond).join(' OR ')+')';
+  if(c.not) return 'NOT '+cond(c.not);
+  if(c.flag) return 'flag:'+c.flag;
+  for(const k of Object.keys(OPS)) if(c[k]) return `${path(c[k][0])} ${OPS[k]} ${c[k][1]}`;
+  return JSON.stringify(c); }
+
+function effChips(effects){ return (effects||[]).map(e=>{
+  if(e.add){const[p,d]=e.add;return `<span class="chip ${d>=0?'up':'dn'}">${PL[p]||p} ${d>0?'+':''}${d}</span>`;}
+  if(e.adjust_cult){const[c,d]=e.adjust_cult;return `<span class="chip cult" style="border-color:${CULTHEX[c]};color:${CULTHEX[c]}">${c} ${d>0?'+':''}${d}</span>`;}
+  if(e.unlock)return `<span class="chip unlock" data-goto="${e.unlock}">⟶ ${e.unlock}</span>`;
+  if(e.set_flag)return `<span class="chip flag">⚑ ${e.set_flag}</span>`;
+  if(e.clear_flag)return `<span class="chip flag">⚑✕ ${e.clear_flag}</span>`;
+  if(e.transform_member)return `<span class="chip soul">Soul lost</span>`;
+  if(e.set)return `<span class="chip flag">set ${e.set[0]}=${e.set[1]}</span>`;
+  return `<span class="chip">${esc(JSON.stringify(e))}</span>`;
+}).join(''); }
+
+let SCENES=[], TARGETS=new Set(), OPENERS=new Set();
+const state={type:'all',flow:'all',group:'category',q:''};
+
+function card(s){
+  const isFollow=TARGETS.has(s.id), opens=OPENERS.has(s.id);
+  const tags=[`<span class="tag type">${s.type||'?'}</span>`,
+    ...(s.tags||[]).map(t=>`<span class="tag">#${t}</span>`),
+    s.weight!=null?`<span class="tag">w${s.weight}</span>`:'',
+    s.once?`<span class="tag">once</span>`:'',
+    isFollow?`<span class="tag followup">follow-up</span>`:'',
+    opens?`<span class="tag opens">opens chain</span>`:''].filter(Boolean).join('');
+  const adv=(s.advisors||[]).map(a=>`<div class="adv" style="--adv:${flameOrCult(a)}"><b>${esc(a.member)}</b>${a.if?` <span class="req">[${cond(a.if)}]</span>`:''} — ${esc(a.text)}</div>`).join('');
+  const choices=(s.choices||[]).map(ch=>{
+    const branches=['win','lose'].filter(b=>ch[b]).map(b=>`<div class="br"><span class="brn">${b}${ch.test?'':' →'}</span> ${esc(ch[b].text||'')}<div class="chips">${effChips(ch[b].effects)}</div></div>`).join('');
+    return `<div class="choice"><div class="lbl">${esc(ch.label)}</div>
+      ${ch.requires?`<span class="req">needs ${cond(ch.requires)}</span> `:''}${ch.test?`<span class="test">contest: ${PL[ch.test.stat]||ch.test.stat} vs ${ch.test.vs}</span>`:''}
+      ${branches}</div>`;
+  }).join('');
+  return `<div class="card" id="sc-${s.id}"><h3>${esc(s.title||s.id)}<span class="id">${s.id}</span></h3>
+    <div class="tags">${tags}</div>
+    ${s.trigger?`<div class="trigger">WHEN ${cond(s.trigger)}</div>`:'<div class="trigger">WHEN (always eligible)</div>'}
+    ${s.intro?`<div class="intro">${esc(s.intro)}</div>`:''}
+    ${adv?`<div class="advisors">${adv}</div>`:''}
+    ${choices}</div>`;
+}
+function flameOrCult(a){ return 'var(--flame)'; }
+
+function coverage(){
+  const el=document.getElementById('coverage');
+  const cells=P.map(p=>{ let up=0,dn=0; for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) for(const e of (ch[b]?.effects)||[]) if(e.add&&e.add[0]===p){ e.add[1]>=0?up++:dn++; }
+    return `<div class="cov"><b>${PL[p]}</b><span class="up">▲${up}</span> <span class="dn">▼${dn}</span></div>`; }).join('');
+  const cults=Object.keys(CULTHEX).map(c=>{ let n=0; for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) for(const e of (ch[b]?.effects)||[]) if(e.adjust_cult&&e.adjust_cult[0]===c) n++; return `<span style="color:${CULTHEX[c]}">${c[0].toUpperCase()}·${n}</span>`; }).join(' ');
+  el.innerHTML=cells+`<div class="cov"><b>Cult touches</b><span class="stat">${cults}</span></div>`;
+}
+
+function render(){
+  const g=document.getElementById('grid');
+  let list=SCENES.filter(s=>{
+    if(state.type!=='all'&&s.type!==state.type) return false;
+    if(state.flow==='entry'&&TARGETS.has(s.id)&&!s.trigger) return false;
+    if(state.flow==='followup'&&!TARGETS.has(s.id)) return false;
+    if(state.q){ const hay=(s.id+' '+(s.title||'')+' '+(s.intro||'')+' '+JSON.stringify(s.choices||'')).toLowerCase(); if(!hay.includes(state.q)) return false; }
+    return true;
+  });
+  document.getElementById('empty').style.display=list.length?'none':'block';
+  const cols=arr=>`<div class="cardcols">${arr.map(card).join('')}</div>`;
+  if(state.group==='none'){ g.innerHTML=cols(list); }
+  else {
+    const gk=s=> state.group==='type' ? (s.type||'?') : ((s.tags&&s.tags[0])||'untagged');
+    const groups={}; for(const s of list){ (groups[gk(s)]=groups[gk(s)]||[]).push(s); }
+    const known=state.group==='category'?CAT_ORDER:[];
+    const keys=known.filter(k=>groups[k]).concat(Object.keys(groups).filter(k=>!known.includes(k)).sort());
+    g.innerHTML=keys.map(k=>{ const m=(state.group==='category'&&CATS[k])||{label:k,col:'#9c8f7d'};
+      return `<section class="sect"><h2 style="border-color:${m.col};color:${m.col}">${m.label} <span>${groups[k].length}</span></h2>${cols(groups[k])}</section>`; }).join('');
+  }
+  document.getElementById('count').textContent=`${list.length} / ${SCENES.length} scenes`;
+  g.querySelectorAll('.chip.unlock').forEach(c=>c.onclick=()=>{ const t=document.getElementById('sc-'+c.dataset.goto); if(t){ t.scrollIntoView({block:'center',behavior:'smooth'}); t.classList.add('flash'); setTimeout(()=>t.classList.remove('flash'),1200);} });
+}
+
+function seg(id,key,dk){ document.getElementById(id).onclick=e=>{ const b=e.target.closest('button'); if(!b)return; state[key]=b.dataset[dk]; document.querySelectorAll(`#${id} button`).forEach(x=>x.classList.toggle('on',x===b)); render(); }; }
+seg('type','type','t'); seg('flow','flow','f'); seg('group','group','g');
+document.getElementById('q').oninput=e=>{ state.q=e.target.value.trim().toLowerCase(); render(); };
+
+(async()=>{
+  try{
+    const bundle=await (await fetch('../content/bundle.json')).json();
+    SCENES=(bundle.scenes||[]).slice().sort((a,b)=>(a.type||'').localeCompare(b.type||'')||(a.title||'').localeCompare(b.title||''));
+    for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) for(const e of (ch[b]?.effects)||[]) if(e.unlock){ TARGETS.add(e.unlock); OPENERS.add(s.id); }
+    const chains=OPENERS.size;
+    document.getElementById('note').textContent=`${chains} scene(s) open follow-ups · ${TARGETS.size} follow-up(s)`;
+    coverage(); render();
+  }catch(err){ document.getElementById('grid').innerHTML=`<p class="empty">Couldn't load <code>content/bundle.json</code> — run <code>npm run dev</code> (it builds the bundle) and open this via the server, not file://.<br><br>${esc(err.message)}</p>`; }
+})();
+</script>
+</body>
+</html>

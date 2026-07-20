@@ -1,6 +1,7 @@
 {
   "id": "the-hungry-season",
   "type": "interactive",
+  "tags": ["famine"],
   "title": "The Hungry Season",
   "weight": 12,
   "trigger": { "lt": ["provisions", 45] },

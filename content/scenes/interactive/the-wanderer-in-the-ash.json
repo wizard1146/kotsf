@@ -1,6 +1,7 @@
 {
   "id": "the-wanderer-in-the-ash",
   "type": "interactive",
+  "tags": ["flame"],
   "title": "The Wanderer in the Ash",
   "weight": 5,
   "trigger": { "gte": ["flamesRegard", 35] },

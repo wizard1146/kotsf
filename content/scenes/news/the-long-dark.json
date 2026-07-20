@@ -1,6 +1,7 @@
 {
   "id": "the-long-dark",
   "type": "news",
+  "tags": ["fracture"],
   "title": "The Long Dark",
   "weight": 3,
   "trigger": { "gte": ["fracture", 50] },

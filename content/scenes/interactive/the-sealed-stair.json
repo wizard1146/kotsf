@@ -1,6 +1,7 @@
 {
   "id": "the-sealed-stair",
   "type": "interactive",
+  "tags": ["flame"],
   "title": "The Sealed Stair",
   "weight": 1,
   "once": true,

@@ -1,6 +1,7 @@
 {
   "id": "the-athenaeums-price",
   "type": "interactive",
+  "tags": ["lore", "cults"],
   "title": "The Athenaeum's Price",
   "weight": 8,
   "trigger": { "all": [{ "lt": ["lore", 55] }, { "lt": ["cult.blue", 60] }] },

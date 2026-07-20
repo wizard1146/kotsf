@@ -1,6 +1,7 @@
 {
   "id": "a-warrior-at-the-gate",
   "type": "interactive",
+  "tags": ["fracture"],
   "title": "A Warrior at the Gate",
   "weight": 8,
   "trigger": { "gte": ["fracture", 22] },

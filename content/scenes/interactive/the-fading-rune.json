@@ -1,6 +1,7 @@
 {
   "id": "the-fading-rune",
   "type": "interactive",
+  "tags": ["lore"],
   "title": "The Fading Rune",
   "weight": 10,
   "trigger": { "lt": ["lore", 50] },

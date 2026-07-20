@@ -1,6 +1,7 @@
 {
   "id": "markertropolis-envoy",
   "type": "interactive",
+  "tags": ["cults"],
   "title": "The Envoy from Markertropolis",
   "weight": 8,
   "trigger": { "lt": ["coin", 50] },

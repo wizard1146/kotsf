@@ -1,6 +1,7 @@
 {
   "id": "overtures-to-the-red",
   "type": "interactive",
+  "tags": ["cults"],
   "title": "Overtures to the Red",
   "weight": 7,
   "trigger": { "lt": ["cult.red", 0] },

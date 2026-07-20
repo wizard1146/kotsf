@@ -1,6 +1,7 @@
 {
   "id": "the-coven-divided",
   "type": "interactive",
+  "tags": ["hearth"],
   "title": "The Coven Divided",
   "weight": 8,
   "trigger": { "lt": ["faith", 40] },

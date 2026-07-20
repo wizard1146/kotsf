@@ -1,6 +1,7 @@
 {
   "id": "ash-on-the-wind",
   "type": "news",
+  "tags": ["fracture"],
   "title": "Ash on the Wind",
   "weight": 3,
   "trigger": { "gte": ["fracture", 15] },

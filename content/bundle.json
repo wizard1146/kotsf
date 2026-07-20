@@ -3,6 +3,9 @@
     {
       "id": "a-strayed-herd",
       "type": "interactive",
+      "tags": [
+        "famine"
+      ],
       "title": "A Strayed Herd",
       "weight": 5,
       "trigger": {
@@ -97,6 +100,9 @@
     {
       "id": "a-warrior-at-the-gate",
       "type": "interactive",
+      "tags": [
+        "fracture"
+      ],
       "title": "A Warrior at the Gate",
       "weight": 8,
       "trigger": {
@@ -197,6 +203,9 @@
     {
       "id": "markertropolis-envoy",
       "type": "interactive",
+      "tags": [
+        "cults"
+      ],
       "title": "The Envoy from Markertropolis",
       "weight": 8,
       "trigger": {
@@ -266,6 +275,9 @@
     {
       "id": "overtures-to-the-red",
       "type": "interactive",
+      "tags": [
+        "cults"
+      ],
       "title": "Overtures to the Red",
       "weight": 7,
       "trigger": {
@@ -362,6 +374,10 @@
     {
       "id": "the-athenaeums-price",
       "type": "interactive",
+      "tags": [
+        "lore",
+        "cults"
+      ],
       "title": "The Athenaeum's Price",
       "weight": 8,
       "trigger": {
@@ -529,6 +545,9 @@
     {
       "id": "the-coven-divided",
       "type": "interactive",
+      "tags": [
+        "hearth"
+      ],
       "title": "The Coven Divided",
       "weight": 8,
       "trigger": {
@@ -638,6 +657,10 @@
     {
       "id": "the-disputed-relic",
       "type": "interactive",
+      "tags": [
+        "cults",
+        "lore"
+      ],
       "title": "The Disputed Relic",
       "weight": 6,
       "once": true,
@@ -790,6 +813,9 @@
     {
       "id": "the-fading-rune",
       "type": "interactive",
+      "tags": [
+        "lore"
+      ],
       "title": "The Fading Rune",
       "weight": 10,
       "trigger": {
@@ -871,6 +897,9 @@
     {
       "id": "the-flickering-door",
       "type": "interactive",
+      "tags": [
+        "flame"
+      ],
       "title": "The Flickering Door",
       "art": "art/scenes/secret-tower-basement.png",
       "weight": 6,
@@ -980,6 +1009,9 @@
     {
       "id": "the-hungry-season",
       "type": "interactive",
+      "tags": [
+        "famine"
+      ],
       "title": "The Hungry Season",
       "weight": 12,
       "trigger": {
@@ -1080,6 +1112,9 @@
     {
       "id": "the-sealed-stair",
       "type": "interactive",
+      "tags": [
+        "flame"
+      ],
       "title": "The Sealed Stair",
       "weight": 1,
       "once": true,
@@ -1153,6 +1188,10 @@
     {
       "id": "the-trembling-ground",
       "type": "interactive",
+      "tags": [
+        "fracture",
+        "lore"
+      ],
       "title": "The Trembling Ground",
       "weight": 9,
       "trigger": {
@@ -1280,6 +1319,9 @@
     {
       "id": "the-wanderer-in-the-ash",
       "type": "interactive",
+      "tags": [
+        "flame"
+      ],
       "title": "The Wanderer in the Ash",
       "weight": 5,
       "trigger": {
@@ -1374,6 +1416,9 @@
     {
       "id": "ash-on-the-wind",
       "type": "news",
+      "tags": [
+        "fracture"
+      ],
       "title": "Ash on the Wind",
       "weight": 3,
       "trigger": {
@@ -1404,6 +1449,9 @@
     {
       "id": "the-long-dark",
       "type": "news",
+      "tags": [
+        "fracture"
+      ],
       "title": "The Long Dark",
       "weight": 3,
       "trigger": {
