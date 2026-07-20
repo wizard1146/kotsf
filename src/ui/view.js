@@ -657,7 +657,9 @@ function optionsHTML(ctx) {
     main = `<div class="opt"><label>Text size</label><div class="seg">${seg}</div></div>
       <div class="opt"><label>Reduce motion</label>${toggle('reduceMotion', s.reduceMotion)}</div>
       <div class="opt"><label>Landscape lock <small class="opt-hint">mobile</small></label>${toggle('lockLandscape', s.lockLandscape)}</div>
-      <p class="muted opt-note">On: the game stays horizontal even when you hold the phone upright. Off: it displays in portrait.</p>
+      <p class="muted opt-note">On: the game stays horizontal, pinned to one side, even when you turn the phone. Off: it follows the device.</p>
+      <div class="opt"><label>Flip landscape side</label>${toggle('landscapeFlip', s.landscapeFlip)}</div>
+      <p class="muted opt-note">Rotate the locked view 180° — for holding the phone the other way, or lying on your other side.</p>
       <div class="opt"><label>Show Fracture &amp; Regard</label>${toggle('revealMeters', s.revealMeters)}</div>
       <p class="muted opt-note">Off (default): the Fracture and Flame's Regard are veiled — you feel their pull through what your choices cost, but the running number stays hidden. On: show the exact meters.</p>`;
   }

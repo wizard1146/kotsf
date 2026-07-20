@@ -680,24 +680,31 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
   .fullpage-head .panel-search { max-width: none; }
 }
 
-/* --- Force landscape: when the lock is on (default) and the device is held in
-       portrait, rotate the whole app 90° so play is always horizontal. Turn the
-       lock off in Options to allow the game to display upright in portrait.
-       Viewport units stay physical-viewport-relative through the transform, so
-       inner "full height" rules are re-mapped to the rotated frame (100dvw). --- */
-@media (orientation: portrait) {
-  html[data-lock-landscape="1"], html[data-lock-landscape="1"] body { overflow: hidden; }
-  html[data-lock-landscape="1"] #app {
-    position: fixed; top: 0; left: 0;
-    width: 100vh; width: 100dvh;      /* app's width  = physical viewport height (the long side) */
-    height: 100vw; height: 100dvw;    /* app's height = physical viewport width  (the short side) */
-    transform-origin: top left;
-    transform: rotate(90deg) translate(0, -100%);
-    overflow: hidden;
-  }
-  /* re-map viewport-height sizing to the rotated frame's height (= physical width) */
-  html[data-lock-landscape="1"] #app.screen-game { height: 100dvw; }
-  html[data-lock-landscape="1"] .splash,
-  html[data-lock-landscape="1"] .menu { min-height: calc(100dvw - 4rem); }
-  html[data-lock-landscape="1"] .modal { max-height: 90dvw; }
+/* --- Force landscape, pinned to ONE side. JS reads the real device orientation
+       (all four) and sets data-rotate to the CSS rotation that lands the app on the
+       chosen landscape side — so it never flips upside-down when you turn onto your
+       other side. data-rotate="0" = no transform (already correct, or lock off).
+       90/270 = physical portrait (frame dims swapped); 180 = the opposite landscape.
+       Flip sides in Options → Display. --- */
+html[data-rotate="90"], html[data-rotate="180"], html[data-rotate="270"],
+html[data-rotate="90"] body, html[data-rotate="180"] body, html[data-rotate="270"] body { overflow: hidden; }
+html[data-rotate="90"] #app, html[data-rotate="180"] #app, html[data-rotate="270"] #app {
+  position: fixed; top: 0; left: 0; overflow: hidden; transform-origin: top left;
 }
+/* physical landscape, wrong side → just spin 180° in place (dims stay normal) */
+html[data-rotate="180"] #app {
+  width: 100vw; width: 100dvw; height: 100vh; height: 100dvh;
+  transform-origin: center; transform: rotate(180deg);
+}
+/* physical portrait → rotate 90/270 into a landscape frame (dims swapped) */
+html[data-rotate="90"] #app, html[data-rotate="270"] #app {
+  width: 100vh; width: 100dvh;      /* app width  = physical viewport height (long side) */
+  height: 100vw; height: 100dvw;    /* app height = physical viewport width  (short side) */
+}
+html[data-rotate="90"] #app  { transform: rotate(90deg) translate(0, -100%); }
+html[data-rotate="270"] #app { transform: rotate(270deg) translate(-100%, 0); }
+/* re-map viewport-height sizing to the rotated frame's height (= physical width) */
+html[data-rotate="90"] #app.screen-game, html[data-rotate="270"] #app.screen-game { height: 100dvw; }
+html[data-rotate="90"] .splash, html[data-rotate="270"] .splash,
+html[data-rotate="90"] .menu, html[data-rotate="270"] .menu { min-height: calc(100dvw - 4rem); }
+html[data-rotate="90"] .modal, html[data-rotate="270"] .modal { max-height: 90dvw; }
