@@ -1,6 +1,6 @@
 // loop.js — the heartbeat. Composes the six verbs into a playable turn.
 // The harness (and later the UI) drives these; this file holds the rules of time.
-import { seasonName } from './state.js';
+import { timeName } from './state.js';
 import { resolveTest } from './resolver.js';
 import { applyEffects } from './effects.js';
 
@@ -9,14 +9,20 @@ import { applyEffects } from './effects.js';
 // Mana regen trimmed +5→+3 (ROADMAP §7 #3) now that Workings give it a real sink.
 const DECAY = { lore: -3, mana: +3, provisions: -3, fracture: +1 };
 
+// A tick is now a *sub-season* (Early → Mid → Late). Events can fire at any third,
+// but the season economy is unchanged: decay + the per-season action refresh land
+// only when a full season turns over (every 3rd tick), so the yearly totals hold.
 export function advanceTime(state) {
-  for (const [k, d] of Object.entries(DECAY)) {
-    state.pressures[k] = Math.max(0, Math.min(100, state.pressures[k] + d));
-  }
-  state.actionsUsed = [];    // per-screen actions refresh each season
   state.turn += 1;
-  state.season = (state.season + 1) % 4;
-  if (state.season === 0) state.year += 1;
+  state.phase = ((state.phase || 0) + 1) % 3;
+  if (state.phase === 0) {                 // a full season has turned
+    for (const [k, d] of Object.entries(DECAY)) {
+      state.pressures[k] = Math.max(0, Math.min(100, state.pressures[k] + d));
+    }
+    state.actionsUsed = [];
+    state.season = (state.season + 1) % 4;
+    if (state.season === 0) state.year += 1;
+  }
 }
 
 export function applyChoice(state, scene, choice) {
@@ -25,7 +31,7 @@ export function applyChoice(state, scene, choice) {
   const branch = choice[outcome] || choice.win;
   if (branch) {
     if (branch.text) {
-      state.saga.push(`[${seasonName(state.season)} Y${state.year}] ${scene.title}: ${branch.text}`);
+      state.saga.push(`[${timeName(state.phase, state.season)} Y${state.year}] ${scene.title}: ${branch.text}`);
     }
     applyEffects(state, branch.effects);
   }

@@ -1,7 +1,7 @@
 // view.js — pure rendering. Turns the game state into HTML. The swappable layer:
 // the engine never imports this; this imports only read-only engine helpers.
 import { meets } from '../engine/conditions.js';
-import { seasonName, CULTS } from '../engine/state.js';
+import { seasonName, timeName, CULTS } from '../engine/state.js';
 
 const P_LABELS = {
   mana: 'Mana', provisions: 'Provisions', coin: 'Coin', lore: 'Lore',
@@ -420,7 +420,7 @@ function gameHTML(ctx) {
   const { state } = ctx;
   return `<div class="hearth-bar">
       <div class="hearth-id"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
-        <div><b>Runehold</b><small>${seasonName(state.season)} &middot; Year ${state.year}</small></div>
+        <div><b>Runehold</b><small>${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></div>
       </div>
       ${runeMenuHTML(ctx)}
       <div class="hearth-menu${ctx.hearthMenuOpen ? ' open' : ''}">

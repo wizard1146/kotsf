@@ -9,7 +9,8 @@ export const CULTS = ['red', 'yellow', 'brown', 'green', 'blue', 'purple', 'whit
 export function createInitialState(seed = 1) {
   return {
     turn: 0,
-    season: 0,          // 0..3
+    season: 0,          // 0..3 (Thaw…Deepfrost)
+    phase: 0,           // 0..2 within a season (Early/Mid/Late) — 12 sub-seasons per year
     year: 1,
     seed,
     rngState: seed >>> 0,
@@ -32,6 +33,12 @@ export function createInitialState(seed = 1) {
 
 const SEASON_NAMES = ['Thaw', 'Highsun', 'Emberfall', 'Deepfrost'];
 export const seasonName = (s) => SEASON_NAMES[s % 4];
+
+// Each season now ticks in thirds — Early / Mid / Late — for a finer decision cadence.
+const PHASE_NAMES = ['Early', 'Mid', 'Late'];
+export const phaseName = (p) => PHASE_NAMES[(p || 0) % 3];
+// full time label, e.g. "Early Thaw" (phase defaults to 0 for pre-sub-season saves)
+export const timeName = (phase, season) => `${PHASE_NAMES[(phase || 0) % 3]} ${SEASON_NAMES[season % 4]}`;
 
 // Seeded, serializable RNG (mulberry32). Mutates state.rngState; returns [0,1).
 // Storing the integer state in the save makes runs reproducible — which is what

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Knowledge Graph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#14110f;--panel:#1f1a16;--panel2:#2a231d;--line:#3a3128;--ink:#e7dccb;--ink-dim:#9c8f7d;
+    --flame:#e8a33d;--sans:"Barlow",system-ui,sans-serif;--display:"Barlow Semi Condensed",sans-serif;--mono:ui-monospace,Menlo,monospace;
+    /* node type palette */
+    --canon:#2471a3;      /* canon — must respect (cool/blue = the established world) */
+    --ours:#e8a33d;       /* invented — ours (flame) */
+    --mech:#4e9a51;       /* mechanic / system */
+    --content:#b83a86;    /* content seed */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden}
+  header{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;
+    padding:.7rem 1rem;background:linear-gradient(180deg,#14110feb,#14110f00);pointer-events:none}
+  header>*{pointer-events:auto}
+  .brand{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.05rem}
+  .legend{display:flex;gap:.5rem;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--ink-dim);border:1px solid var(--line);
+    border-radius:20px;padding:.25rem .6rem;background:var(--panel);cursor:pointer;user-select:none}
+  .chip.off{opacity:.35}
+  .chip i{width:11px;height:11px;border-radius:50%}
+  .hint{margin-left:auto;font-family:var(--mono);font-size:.68rem;color:var(--ink-dim)}
+  canvas{display:block;position:absolute;inset:0}
+  /* detail panel */
+  #detail{position:absolute;right:0;top:0;bottom:0;width:320px;z-index:6;background:#1b1713f2;border-left:1px solid var(--line);
+    padding:3.4rem 1.1rem 1.1rem;transform:translateX(100%);transition:transform .22s ease;overflow-y:auto}
+  #detail.on{transform:none}
+  #detail h2{font-family:var(--display);color:var(--flame);margin:.2rem 0 .1rem;font-size:1.3rem}
+  #detail .type{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+  #detail p{line-height:1.5;color:var(--ink);font-size:.92rem}
+  #detail .links b{color:var(--ink-dim);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;display:block;margin:1rem 0 .3rem}
+  #detail .links a{display:block;color:var(--flame);cursor:pointer;padding:.15rem 0;font-size:.9rem}
+  #detail .close{position:absolute;top:.7rem;right:.9rem;background:none;border:0;color:var(--flame);font-size:1.6rem;cursor:pointer}
+  .note{position:absolute;left:1rem;bottom:1rem;z-index:5;color:var(--ink-dim);font-size:.78rem;max-width:52ch;line-height:1.45}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">KOTSF Knowledge Graph</span>
+  <div class="legend" id="legend"></div>
+  <span class="hint">drag nodes · scroll to zoom · click for detail</span>
+</header>
+<canvas id="c"></canvas>
+<aside id="detail"><button class="close" id="dclose">&times;</button><div id="dbody"></div></aside>
+<p class="note">A living map of KOTSF's lore, mechanics & content — canon (blue) we must respect, our
+inventions (flame), systems (green), content seeds (magenta). Edges = causal / thematic links. Seeded from
+the Shadowing myth + wizzypedia canon; grows as we design.</p>
+
+<script>
+// ---- the concept graph (edit this block to grow the map) ----
+const T = { canon:'canon', ours:'ours', mech:'mechanic', content:'content' };
+const COL = { canon:getVar('--canon'), ours:getVar('--ours'), mechanic:getVar('--mech'), content:getVar('--content') };
+function getVar(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+const NODES = [
+  // — canon (must respect) —
+  ['great_burning','The Great Burning',T.canon,'Canon: on All Hallows Eve, Wizards stepped into the Sacred Flame and became Forgotten Souls (~1-in-10 "undesirable"). Ongoing, no time limit.'],
+  ['sacred_flame','The Sacred Flame',T.canon,'Canon: the Flame in the Secret Tower basement; the greatest power and greatest loss in the world.'],
+  ['secret_tower','The Secret Tower',T.canon,'Canon: a location with "the door with flickering flames." Canon is SILENT on who tended it or its fate — our invention space.'],
+  ['infinity_veil','The Infinity Veil',T.canon,'Canon: houses the Flame. Our rune-quest / heroquest analog (re-walk the runes).'],
+  ['forgotten_souls','Forgotten Souls',T.canon,'Canon: Wizards transformed by the Flame. In KOTSF they persist as NPCs on a souls roster (permanent loss).'],
+  ['wizards','Wizards',T.canon,'Canon: 10,000 magic-wielders; our protagonists. Magic "defies standardization… uniquely interpreted by each Wizard."'],
+  ['warriors','Warriors',T.canon,'Canon: 16,000, cannot use magic, outnumber Wizards. Our "Magic vs Steel" tension.'],
+  ['quantum_shadow','The Quantum Shadow',T.canon,'Canon: primordial darkness; home of the Shadow Hats. Our hook for the Shadowing.'],
+  ['shadow_hats','Shadow Hats',T.canon,'Canon: Black Magic, "custodians of primordial darkness," dwell in the Quantum Shadow. NOT the Wardens.'],
+  ['colour_magic','Colour Magic',T.canon,'Canon: seven schools by colour — each cult IS a school. Layerable with Rune Magic + specialties.'],
+  ['rune_magic','Rune Magic',T.canon,'Canon: a layerable magical influence. Our Lore/Runes economy + rune-quests build on this.'],
+  ['classes','Magic Classes',T.canon,'Canon practitioner titles: Magus, Sorcerer, Druid, Necromancer, Pyromancer, Enchanter, Charmer, Chaos Mage, Ghost Eater.'],
+  ['red_school','Red — wealth/politics',T.canon,'Red Wizard Capital (≈ our Markertropolis). Mercantile magic.'],
+  ['blue_school','Blue — science+magic',T.canon,'Blue Wizard Bastion / the Forgotten Athenaeum. Lore/knowledge magic.'],
+  ['yellow_school','Yellow — time',T.canon,'Chronomancer\'s Riviera. Chronomancy — bending time.'],
+  ['green_school','Green — nature',T.canon,'Green Wizard City (equatorial jungle).'],
+  ['brown_school','Brown — practical',T.canon,'Northern delta. "Orange Magic."'],
+  ['purple_school','Purple — chaos',T.canon,'Purple Pavilion (western island). Chaotic magic.'],
+  ['white_school','White — order',T.canon,'White Wizard Tower. Order/clarity magic.'],
+  // — ours (invented) —
+  ['shadowing','The Shadowing',T.ours,'OURS: after the Wardens left the Secret Tower, it went dark and the Quantum Shadow seeped in. The epochal event that reframes the game. Presaged by the Forgotten Souls.'],
+  ['wardens','The Wardens',T.ours,'OURS: the keepers who abandoned the Secret Tower — a quiet echo of Forgotten Runes\' founders stepping away. Separate from the Shadow Hats.'],
+  ['the_forgetting','The Forgetting',T.ours,'OURS: the world/ magic forgetting itself — the SYMPTOM of the Shadowing, not its cause.'],
+  ['runehold','Runehold',T.ours,'OURS: the coven seat you lead. A guttering hearth-rune, a half-remembered claim to old power.'],
+  ['archon','The Archon',T.ours,'OURS: the player role — aspiring Keeper. Leads through the Circle; decides, the world reacts.'],
+  ['keeper','Keeper of the Flame',T.ours,'OURS: the victory horizon — re-light the Tower, end the Shadowing, become Keeper. Or dwindle into a Forgotten hold.'],
+  // — mechanics —
+  ['circle','The Circle',T.mech,'The advisor ring — named Wizards with a colour leaning + temperament. Personality/recruitment/progression: TBD (braindump).'],
+  ['lore_p','Lore (pressure)',T.mech,'The signature meter — decays each season (the Forgetting made mechanical).'],
+  ['fracture_p','The Fracture (doom)',T.mech,'The doom clock. NOTE: decided SEPARATE from the Quantum Shadow / Shadowing.'],
+  ['regard_p','Flame\'s Regard',T.mech,'The cosmic meter; courting the Flame risks turning Wizards into Souls (permanent).'],
+  ['subseasons','Sub-seasons',T.mech,'Each season now ticks in thirds (Early/Mid/Late) — finer cadence; season economy unchanged.'],
+  // — content seeds (braindump) —
+  ['spirit_world','Spirit world',T.content,'Braindump seed — draw from wizzypedia, pending review.'],
+  ['monsters','Mythic monsters',T.content,'Braindump seed — Beasts, Nightmare Imps, Beast Spawn (canon).'],
+  ['cult_hqs','Cult headquarters',T.content,'Give each of the seven cults its canon seat (see the schools).'],
+];
+
+const EDGES = [
+  ['great_burning','forgotten_souls','made'],
+  ['great_burning','sacred_flame','via'],
+  ['forgotten_souls','shadowing','presaged'],
+  ['wardens','secret_tower','abandoned'],
+  ['wardens','shadowing','caused'],
+  ['secret_tower','sacred_flame','houses'],
+  ['sacred_flame','infinity_veil','housed in'],
+  ['shadowing','the_forgetting','symptom'],
+  ['shadowing','quantum_shadow','let in'],
+  ['quantum_shadow','shadow_hats','home of'],
+  ['the_forgetting','lore_p','drives'],
+  ['sacred_flame','regard_p','meters'],
+  ['forgotten_souls','regard_p','risk of'],
+  ['archon','runehold','leads'],
+  ['archon','circle','leads via'],
+  ['archon','keeper','strives to be'],
+  ['keeper','secret_tower','re-light'],
+  ['keeper','shadowing','ends'],
+  ['wizards','colour_magic','wield'],
+  ['wizards','rune_magic','wield'],
+  ['colour_magic','classes','+ specialties'],
+  ['colour_magic','red_school',''],['colour_magic','blue_school',''],['colour_magic','yellow_school',''],
+  ['colour_magic','green_school',''],['colour_magic','brown_school',''],['colour_magic','purple_school',''],['colour_magic','white_school',''],
+  ['circle','classes','draws from'],
+  ['red_school','cult_hqs',''],['blue_school','cult_hqs',''],['yellow_school','cult_hqs',''],
+  ['circle','wizards','of'],
+  ['warriors','wizards','vs'],
+  ['rune_magic','lore_p','feeds'],
+  ['monsters','fracture_p','stir'],
+  ['spirit_world','forgotten_souls','of'],
+];
+
+// ---- force-directed layout on canvas ----
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let W,H,DPR; function resize(){ DPR=devicePixelRatio||1; W=innerWidth; H=innerHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); } resize(); addEventListener('resize',resize);
+const view = {x:0,y:0,z:1};
+const nodes = NODES.map(([id,label,type,note],i)=>({id,label,type,note,
+  x:W/2+Math.cos(i)*180+(Math.random()-.5)*60, y:H/2+Math.sin(i*1.7)*160+(Math.random()-.5)*60, vx:0,vy:0}));
+const byId = Object.fromEntries(nodes.map(n=>[n.id,n]));
+const edges = EDGES.map(([a,b,l])=>({a:byId[a],b:byId[b],l})).filter(e=>e.a&&e.b);
+const off = {canon:false,ours:false,mechanic:false,content:false};
+let sel=null, drag=null, hover=null;
+
+// legend / filters
+const legend=document.getElementById('legend');
+[['canon','Canon'],['ours','Ours'],['mechanic','Mechanic'],['content','Content']].forEach(([t,lab])=>{
+  const el=document.createElement('button'); el.className='chip'; el.innerHTML=`<i style="background:${COL[t]}"></i>${lab}`;
+  el.onclick=()=>{ off[t]=!off[t]; el.classList.toggle('off',off[t]); }; legend.appendChild(el);
+});
+const vis = n=>!off[n.type];
+
+function tick(){
+  // repulsion
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i],b=nodes[j]; let dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy||1; const f=1900/d2;
+    const d=Math.sqrt(d2); dx/=d;dy/=d; a.vx+=dx*f;a.vy+=dy*f;b.vx-=dx*f;b.vy-=dy*f;
+  }
+  // springs
+  for(const e of edges){ let dx=e.b.x-e.a.x,dy=e.b.y-e.a.y,d=Math.hypot(dx,dy)||1; const f=(d-120)*0.012; dx/=d;dy/=d;
+    e.a.vx+=dx*f;e.a.vy+=dy*f;e.b.vx-=dx*f;e.b.vy-=dy*f; }
+  // centering + integrate
+  for(const n of nodes){ n.vx+=(W/2-n.x)*0.0008; n.vy+=(H/2-n.y)*0.0008; n.vx*=.86;n.vy*=.86;
+    if(n!==drag){ n.x+=n.vx; n.y+=n.vy; } }
+}
+function draw(){
+  ctx.clearRect(0,0,W,H); ctx.save(); ctx.translate(view.x,view.y); ctx.scale(view.z,view.z);
+  // edges
+  ctx.lineWidth=1;
+  for(const e of edges){ if(!vis(e.a)||!vis(e.b))continue; const hot=sel&&(e.a===sel||e.b===sel);
+    ctx.strokeStyle=hot?'#e8a33d99':'#3a3128aa'; ctx.beginPath(); ctx.moveTo(e.a.x,e.a.y); ctx.lineTo(e.b.x,e.b.y); ctx.stroke();
+    if(hot&&e.l){ const mx=(e.a.x+e.b.x)/2,my=(e.a.y+e.b.y)/2; ctx.fillStyle='#c8b89a'; ctx.font='10px '+'ui-monospace,Menlo,monospace'; ctx.textAlign='center'; ctx.fillText(e.l,mx,my-2); } }
+  // nodes
+  ctx.font='600 13px Barlow, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  for(const n of nodes){ if(!vis(n))continue; const r=(n===sel?9:n===hover?8:6.5); ctx.beginPath(); ctx.arc(n.x,n.y,r,0,7);
+    ctx.fillStyle=COL[n.type]; ctx.globalAlpha=(sel&&!isNeighbor(n))?.4:1; ctx.fill();
+    ctx.lineWidth=2; ctx.strokeStyle=n===sel?'#fff':'#0a0709'; ctx.stroke();
+    ctx.fillStyle=(sel&&!isNeighbor(n))?'#9c8f7d':'#e7dccb'; ctx.fillText(n.label,n.x,n.y+r+9); ctx.globalAlpha=1; }
+  ctx.restore();
+}
+function isNeighbor(n){ if(n===sel)return true; return edges.some(e=>(e.a===sel&&e.b===n)||(e.b===sel&&e.a===n)); }
+function loop(){ tick(); draw(); requestAnimationFrame(loop); } loop();
+
+// ---- interaction ----
+function toWorld(px,py){ return {x:(px-view.x)/view.z, y:(py-view.y)/view.z}; }
+function pick(px,py){ const p=toWorld(px,py); let best=null,bd=16; for(const n of nodes){ if(!vis(n))continue; const d=Math.hypot(n.x-p.x,n.y-p.y); if(d<bd){bd=d;best=n;} } return best; }
+cv.addEventListener('mousedown',e=>{ const n=pick(e.clientX,e.clientY); if(n){drag=n;} else {drag={pan:true,x:e.clientX-view.x,y:e.clientY-view.y};} });
+addEventListener('mousemove',e=>{ if(drag){ if(drag.pan){view.x=e.clientX-drag.x;view.y=e.clientY-drag.y;} else {const p=toWorld(e.clientX,e.clientY);drag.x=p.x;drag.y=p.y;drag.vx=0;drag.vy=0;} } else { hover=pick(e.clientX,e.clientY); cv.style.cursor=hover?'pointer':'grab'; } });
+addEventListener('mouseup',e=>{ if(drag&&!drag.pan){ const moved=Math.hypot((drag.vx||0),(drag.vy||0)); const n=pick(e.clientX,e.clientY); if(n===drag) select(drag); } drag=null; });
+cv.addEventListener('wheel',e=>{ e.preventDefault(); const s=e.deltaY<0?1.1:0.9; const mx=e.clientX,my=e.clientY; view.x=mx-(mx-view.x)*s; view.y=my-(my-view.y)*s; view.z*=s; },{passive:false});
+
+function select(n){ sel=n; const d=document.getElementById('detail'), b=document.getElementById('dbody');
+  const links=edges.filter(e=>e.a===n||e.b===n).map(e=>{ const o=e.a===n?e.b:e.a; const dir=e.a===n?`→ ${e.l||''}`:`← ${e.l||''}`; return `<a data-id="${o.id}">${o.label} <span style="color:#9c8f7d;font-size:.8em">${dir.trim()}</span></a>`; }).join('');
+  b.innerHTML=`<div class="type" style="color:${COL[n.type]}">${n.type}</div><h2>${n.label}</h2><p>${n.note}</p><div class="links"><b>Connected</b>${links||'<span style="color:#9c8f7d">—</span>'}</div>`;
+  b.querySelectorAll('a').forEach(a=>a.onclick=()=>select(byId[a.dataset.id]));
+  d.classList.add('on'); }
+document.getElementById('dclose').onclick=()=>{ sel=null; document.getElementById('detail').classList.remove('on'); };
+</script>
+</body>
+</html>
