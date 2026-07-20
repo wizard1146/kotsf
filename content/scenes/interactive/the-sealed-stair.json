@@ -8,7 +8,7 @@
   "trigger": { "flag": "__never" },
   "intro": "Something scratches behind the sealed door, patient and unhurried. The mortar is cold to the touch, and getting colder.",
   "advisors": [
-    { "member": "korr-ashen", "text": "It remembers that we shut it out. Walls have a way of becoming doors again." }
+    { "cast": { "trait": { "boldness": "low" } }, "text": "It remembers that we shut it out. Walls have a way of becoming doors again." }
   ],
   "choices": [
     {

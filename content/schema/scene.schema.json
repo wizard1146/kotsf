@@ -44,10 +44,10 @@
     },
     "advisorLine": {
       "type": "object",
-      "required": ["member", "text"],
+      "required": ["cast", "text"],
       "additionalProperties": false,
       "properties": {
-        "member": { "type": "string" },
+        "cast": { "type": ["string", "object"], "description": "Casting call: 'leader'|'second'|'any' or {class}|{school}|{trait:{axis:'high'|'low'}}|{most:'<stat>'}" },
         "text": { "type": "string" },
         "if": { "$ref": "#/$defs/condition" }
       }

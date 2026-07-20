@@ -28,7 +28,7 @@
       "id": "court-red-factors",
       "screen": "market",
       "label": "Court the Red Factors",
-      "desc": "Grease the Stock Sanctuary's palms; Markertropolis remembers a paying friend.",
+      "desc": "Grease the Stock Sanctuary's palms; the Gilded Reach remembers a paying friend.",
       "requires": { "gte": ["coin", 12] },
       "effects": [{ "add": ["coin", -12] }, { "adjust_cult": ["red", 14] }]
     }

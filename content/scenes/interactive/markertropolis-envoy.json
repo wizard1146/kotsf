@@ -2,12 +2,12 @@
   "id": "markertropolis-envoy",
   "type": "interactive",
   "tags": ["cults"],
-  "title": "The Envoy from Markertropolis",
+  "title": "The Envoy from the Gilded Reach",
   "weight": 8,
   "trigger": { "lt": ["coin", 50] },
-  "intro": "A Red Wizard in counting-house silks arrives from Markertropolis — smiling, with a ledger under one arm and an offer on his lips.",
+  "intro": "A Red Wizard in counting-house silks arrives from the Gilded Reach — smiling, with a ledger under one arm and an offer on his lips.",
   "advisors": [
-    { "member": "korr-ashen", "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor." }
+    { "cast": { "trait": { "boldness": "low" } }, "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor." }
   ],
   "choices": [
     {

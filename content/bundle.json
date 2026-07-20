@@ -17,11 +17,19 @@
       "intro": "A herd of Elysian ponies — manes like banked coals, eyes too knowing — drifts down from the high passes and lingers in Runehold's lower meadow. They are no one's, for now.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "Meat and hides through Deepfrost, Archon. The meadow will not feed us; they might."
         },
         {
-          "member": "ember",
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
           "text": "Ride them! Tame one and you have a friend out of the Elysian Fields. Eat one and you have a sad winter dinner."
         }
       ],
@@ -114,11 +122,19 @@
       "intro": "A Warrior war-band makes camp at the edge of Runehold's fields. Their captain — sword on her back, a hawk on her glove — sends word: she will guard your borders against the things the Fracture spits out. For a price, or for a pact.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come."
         },
         {
-          "member": "wisp",
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
           "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter."
         }
       ],
@@ -206,7 +222,7 @@
       "tags": [
         "cults"
       ],
-      "title": "The Envoy from Markertropolis",
+      "title": "The Envoy from the Gilded Reach",
       "weight": 8,
       "trigger": {
         "lt": [
@@ -214,10 +230,14 @@
           50
         ]
       },
-      "intro": "A Red Wizard in counting-house silks arrives from Markertropolis — smiling, with a ledger under one arm and an offer on his lips.",
+      "intro": "A Red Wizard in counting-house silks arrives from the Gilded Reach — smiling, with a ledger under one arm and an offer on his lips.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor."
         }
       ],
@@ -289,7 +309,11 @@
       "intro": "A Red factor you once snubbed sends a careful letter. The Stock Sanctuary, it seems, would rather profit from Runehold than feud with it — if you will make the first gesture.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "Enemies cost more than tribute. Swallow the pride, Archon. Red gold spends the same as any."
         }
       ],
@@ -399,11 +423,17 @@
       "intro": "A grey-robed reader of the Forgotten Athenaeum comes north with a locked book and a proposal: Blue will share what Runehold has forgotten — for a tithe of coin, and a debt of deference.",
       "advisors": [
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them."
         },
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours."
         }
       ],
@@ -559,11 +589,17 @@
       "intro": "The Circle quarrels openly now. Two camps have formed at the hearth, and both look to you to name which Runehold will be: a coven of careful memory, or a coven that dares the Flame.",
       "advisors": [
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "Tell them we are keepers of memory first. Caution has kept us alive this long."
         },
         {
-          "member": "wisp",
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
           "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices."
         }
       ],
@@ -673,18 +709,24 @@
       "intro": "Your diggers unearth a pre-Burning reliquary — a coil of rune-etched copper that hums when touched. Word travels fast. Within a week both Red and Blue send envoys, each certain the relic is theirs by right.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "Red will pay in coin we can spend this winter. Sentiment does not fill a granary."
         },
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "Sell it to a counting-house and it vanishes into a vault. Give it to the Athenaeum and it is studied, copied, remembered."
         }
       ],
       "choices": [
         {
           "id": "sell-to-red",
-          "label": "Sell the relic to Markertropolis",
+          "label": "Sell the relic to the Gilded Reach",
           "win": {
             "text": "Red coin floods in; the copper coil disappears into a Stock Sanctuary vault, and Blue does not forget the slight.",
             "effects": [
@@ -827,7 +869,9 @@
       "intro": "A master-rune carved into the hall's keystone has begun to blur. Left alone, its working will be gone by the next thaw.",
       "advisors": [
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can."
         }
       ],
@@ -923,11 +967,17 @@
       "intro": "A door breathes light at the foot of the stair. Behind it, the Sacred Flame waits — and the coven is forgetting faster than it can learn.",
       "advisors": [
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "We forget faster than we learn. The Flame remembers everything. Use it."
         },
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "And what walks back out wearing our faces? I have buried Souls before, Archon."
         }
       ],
@@ -1023,11 +1073,17 @@
       "intro": "The stores run thin before the Highsun harvest. The coven looks to you with hollow eyes.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep."
         },
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both."
         }
       ],
@@ -1124,7 +1180,11 @@
       "intro": "Something scratches behind the sealed door, patient and unhurried. The mortar is cold to the touch, and getting colder.",
       "advisors": [
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "It remembers that we shut it out. Walls have a way of becoming doors again."
         }
       ],
@@ -1203,11 +1263,17 @@
       "intro": "At Deepfrost the ground shudders and a seam of cold light splits the hillside above Runehold — the Fracture, surfacing. Through the crack, something the colour of nothing turns over in its sleep.",
       "advisors": [
         {
-          "member": "vela-the-blue",
+          "cast": {
+            "most": "wisdom"
+          },
           "text": "The old wards can close it, but the working will cost us. Better cost than catastrophe."
         },
         {
-          "member": "ember",
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
           "text": "Or we go down and look. Whatever sleeps there knows things the Flame itself forgot."
         }
       ],
@@ -1333,11 +1399,19 @@
       "intro": "A figure walks out of the ash-haze at dusk and stops at the edge of the firelight. A Forgotten Soul — robes you almost recognize, a face the Flame has rewritten. It does not speak. It waits to be known.",
       "advisors": [
         {
-          "member": "wisp",
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
           "text": "It came to us. The Flame sends nothing by accident. Let it in."
         },
         {
-          "member": "korr-ashen",
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
           "text": "I have seen what wears a familiar face and means us harm. Keep the gate shut, Archon."
         }
       ],
@@ -1557,7 +1631,7 @@
         },
         {
           "term": "Coin",
-          "body": "The mercantile axis, ruled by Markertropolis and the Red Cult. Buys what magic and farming cannot — and ties you to aristocrat politics."
+          "body": "The mercantile axis, ruled by the Gilded Reach and the Red Cult. Buys what magic and farming cannot — and ties you to aristocrat politics."
         },
         {
           "term": "Lore",
@@ -1584,7 +1658,7 @@
       "entries": [
         {
           "term": "Red",
-          "body": "Markertropolis — greedy aristocrats and the Stock Sanctuary. The mercantile and coin power of the Runiverse."
+          "body": "the Gilded Reach — greedy aristocrats and the Stock Sanctuary. The mercantile and coin power of the Runiverse."
         },
         {
           "term": "Blue",
@@ -1631,7 +1705,11 @@
         },
         {
           "term": "The Circle",
-          "body": "Your advisor ring of named Wizards, each with a color leaning and a temperament. They advise per their leanings, feud with each other, and remember how you have treated them."
+          "body": "Your advisor ring is rolled fresh each campaign — Wizards, each with a school (colour), a class, a rank, four competence stats (Power, Wisdom, Guile, Courage) and a temperament (Boldness, Piety, Temper). On a scene, whoever fits the moment speaks — and they disagree. Competence decides what they can pull off; temperament decides what they urge. The second-in-command casts your workings by default."
+        },
+        {
+          "term": "Schools & Classes",
+          "body": "Every Wizard practises one of the seven colour schools (Red, Yellow, Brown, Green, Blue, Purple, White) and holds one of nine classes: Magus, Sorcerer, Druid, Necromancer, Pyromancer, Enchanter, Charmer, Chaos Mage, Ghost Eater. School is the flavour of the magic; class is what they do best. Who stands in your Circle shapes what workings the coven can attempt."
         },
         {
           "term": "Forgotten Souls",
@@ -1819,7 +1897,7 @@
       "id": "court-red-factors",
       "screen": "market",
       "label": "Court the Red Factors",
-      "desc": "Grease the Stock Sanctuary's palms; Markertropolis remembers a paying friend.",
+      "desc": "Grease the Stock Sanctuary's palms; the Gilded Reach remembers a paying friend.",
       "requires": {
         "gte": [
           "coin",

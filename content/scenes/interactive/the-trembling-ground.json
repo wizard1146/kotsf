@@ -7,8 +7,8 @@
   "trigger": { "gte": ["fracture", 40] },
   "intro": "At Deepfrost the ground shudders and a seam of cold light splits the hillside above Runehold — the Fracture, surfacing. Through the crack, something the colour of nothing turns over in its sleep.",
   "advisors": [
-    { "member": "vela-the-blue", "text": "The old wards can close it, but the working will cost us. Better cost than catastrophe." },
-    { "member": "ember", "text": "Or we go down and look. Whatever sleeps there knows things the Flame itself forgot." }
+    { "cast": { "most": "wisdom" }, "text": "The old wards can close it, but the working will cost us. Better cost than catastrophe." },
+    { "cast": { "trait": { "boldness": "high" } }, "text": "Or we go down and look. Whatever sleeps there knows things the Flame itself forgot." }
   ],
   "choices": [
     {

@@ -7,8 +7,8 @@
   "trigger": { "lt": ["provisions", 45] },
   "intro": "The stores run thin before the Highsun harvest. The coven looks to you with hollow eyes.",
   "advisors": [
-    { "member": "korr-ashen", "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep." },
-    { "member": "vela-the-blue", "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both." }
+    { "cast": { "trait": { "boldness": "low" } }, "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep." },
+    { "cast": { "most": "wisdom" }, "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both." }
   ],
   "choices": [
     {

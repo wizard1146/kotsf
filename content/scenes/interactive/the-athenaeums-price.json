@@ -7,8 +7,8 @@
   "trigger": { "all": [{ "lt": ["lore", 55] }, { "lt": ["cult.blue", 60] }] },
   "intro": "A grey-robed reader of the Forgotten Athenaeum comes north with a locked book and a proposal: Blue will share what Runehold has forgotten — for a tithe of coin, and a debt of deference.",
   "advisors": [
-    { "member": "vela-the-blue", "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them." },
-    { "member": "korr-ashen", "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours." }
+    { "cast": { "most": "wisdom" }, "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours." }
   ],
   "choices": [
     {

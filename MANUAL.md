@@ -58,7 +58,7 @@ not to solve a puzzle but to **lead a society through the dark** and leave a sag
 - **Beasts** & **Beast Spawn** — epic creatures behind the Gate to the Seventh Realm.
 - **Ponies** — mounts from the Elysian Fields.
 
-**The seven Color Cults.** Two are well-defined: **Red** (Markertropolis; greedy aristocrats; the Stock
+**The seven Color Cults.** Two are well-defined: **Red** (the Gilded Reach; greedy aristocrats; the Stock
 Sanctuary — the coin power) and **Blue** (the Bastion; the Forgotten Athenaeum — the lore power). The
 other five (Yellow, Brown, Green, Purple, White) are not yet fixed in this saga and read as *uncharted*.
 
@@ -101,7 +101,7 @@ Faith 50 · Flame's Regard 35 · Fracture 10.
 |---|---|
 | **Mana** | Your spellcasting reserve. Powers Workings; renews slowly (+3/season), spent in bursts. |
 | **Provisions** | Food for the coven. Decays every season; reaching **0 ends the game in famine**. |
-| **Coin** | The mercantile axis (Red / Markertropolis). Buys what magic and farming cannot. |
+| **Coin** | The mercantile axis (Red / the Gilded Reach). Buys what magic and farming cannot. |
 | **Lore** | Runes and memory — the signature meter. Unlocks power but **decays every season** ("the Forgetting"). |
 | **Faith** | The coven's morale. Whether your Wizards believe in your leadership. Reaching **0 ends the game**. |
 | **Flame's Regard** | The cosmic meter. Reaching **80 wins the game** — you become Keeper. Courting it recklessly burns your own. |
@@ -158,7 +158,7 @@ Proactive labours against famine — **one of each per season**:
 Seed-Grain* (Coin → Provisions), *Forage the Wastes* (Provisions, at a Fracture cost).
 
 ### The Stock Sanctuary (Trade)
-Markertropolis's market — give **Coin** a purpose. Convert Coin ↔ Mana, sell surplus Provisions for
+the Gilded Reach's market — give **Coin** a purpose. Convert Coin ↔ Mana, sell surplus Provisions for
 Coin, or spend Coin to **court the Red factors** (buy Red standing).
 
 ### Magic vs Steel (War)
@@ -179,7 +179,7 @@ Fracture).
 
 ### The Runiverse (Map)
 A map of the known world: **Runehold** at the centre, the seven **cult holds** ringed around it (each
-showing live standing — Markertropolis is Red, the Bastion is Blue), the **Secret Tower**, and the
+showing live standing — the Gilded Reach is Red, the Bastion is Blue), the **Secret Tower**, and the
 **Fracture's ash** creeping in from the edge as the doom clock rises. Holds you've never engaged stay
 **uncharted** — white on the map, or already forgotten.
 

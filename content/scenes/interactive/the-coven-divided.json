@@ -7,8 +7,8 @@
   "trigger": { "lt": ["faith", 40] },
   "intro": "The Circle quarrels openly now. Two camps have formed at the hearth, and both look to you to name which Runehold will be: a coven of careful memory, or a coven that dares the Flame.",
   "advisors": [
-    { "member": "vela-the-blue", "text": "Tell them we are keepers of memory first. Caution has kept us alive this long." },
-    { "member": "wisp", "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices." }
+    { "cast": { "most": "wisdom" }, "text": "Tell them we are keepers of memory first. Caution has kept us alive this long." },
+    { "cast": { "trait": { "piety": "high" } }, "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices." }
   ],
   "choices": [
     {

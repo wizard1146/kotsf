@@ -1,7 +1,7 @@
 // view.js — pure rendering. Turns the game state into HTML. The swappable layer:
 // the engine never imports this; this imports only read-only engine helpers.
 import { meets } from '../engine/conditions.js';
-import { seasonName, timeName, CULTS } from '../engine/state.js';
+import { seasonName, timeName, CULTS, castMember, castText } from '../engine/state.js';
 
 const P_LABELS = {
   mana: 'Mana', provisions: 'Provisions', coin: 'Coin', lore: 'Lore',
@@ -43,15 +43,25 @@ function cultsHTML(state) {
     `<span class="cult" title="${c}"><i style="background:${CULT_HEX[c]}"></i>${state.cults[c]}</span>`).join('')}</div>`;
 }
 
-function advisorsHTML(state, defs, scene) {
-  const inCircle = new Set(state.circle.map((m) => m.id));
-  return (scene.advisors || [])
-    .filter((a) => inCircle.has(a.member) && meets(state, a.if))
-    .map((a) => {
-      const def = defs[a.member] || {};
-      const color = CULT_HEX[def.color] || 'var(--ink)';
-      return `<div class="advisor"><b style="color:${color}">${esc(def.name || a.member)}</b> &mdash; &ldquo;${esc(a.text)}&rdquo;</div>`;
-    }).join('');
+// Cast a scene's advisor lines onto YOUR rolled Circle — a member fills each role
+// ("shape, not name"), each cast at most once per scene; a line with no match is
+// simply not heard (the emergent bit). Returns [{ m, text }].
+function sceneVoices(state, scene) {
+  const out = []; const used = new Set();
+  for (const a of (scene?.advisors || [])) {
+    if (a.if && !meets(state, a.if)) continue;
+    const m = castMember(state, a.cast, used);
+    if (!m) continue;
+    used.add(m.id);
+    out.push({ m, text: castText(a.text, m) });
+  }
+  return out;
+}
+function advisorsHTML(state, scene) {
+  return sceneVoices(state, scene).map(({ m, text }) => {
+    const color = CULT_HEX[m.school] || 'var(--ink)';
+    return `<div class="advisor"><b style="color:${color}">${esc(m.name)}</b> &mdash; &ldquo;${esc(text)}&rdquo;</div>`;
+  }).join('');
 }
 
 function choicesHTML(state, scene) {
@@ -107,7 +117,7 @@ function centerHTML(ctx) {
     <div class="scene-art">${sigil(current.title)}</div>
     <div class="scene-body">
       <p class="intro">${esc(current.intro || '')}</p>
-      ${advisorsHTML(state, defs, current)}
+      ${advisorsHTML(state, current)}
       <div class="choices">${choicesHTML(state, current)}</div>
     </div></section>`;
 }
@@ -205,7 +215,7 @@ const workingsScreenHTML = (ctx) => actionScreenHTML(ctx, 'workings', 'Workings'
 const fieldsScreenHTML = (ctx) => actionScreenHTML(ctx, 'fields', 'The Hearth-fields',
   'Hold the coven against the hungry season — one labour of each kind per season.', 'provisions', 'Provisions');
 const marketScreenHTML = (ctx) => actionScreenHTML(ctx, 'market', 'The Stock Sanctuary',
-  'Trade through Markertropolis — turn coin to craft and back, one bargain of each kind per season.', 'coin', 'Coin');
+  'Trade through the Gilded Reach — turn coin to craft and back, one bargain of each kind per season.', 'coin', 'Coin');
 const warScreenHTML = (ctx) => actionScreenHTML(ctx, 'war', 'Magic vs Steel',
   'Raid, muster, and ward Runehold against the broken world — one action of each kind per season.', 'fracture', 'The Fracture');
 
@@ -259,42 +269,42 @@ function faithBand(v) {
   if (v >= 20) return ['Wavering', 'hostile'];
   return ['Faithless', 'enemy'];
 }
-function memberCard(m, def, isLeader) {
-  const leaning = LEANING_LABEL[m.leaning] || (m.leaning ? m.leaning[0].toUpperCase() + m.leaning.slice(1) : '');
-  const meta = [m.rank, leaning, CULT_NAMES[m.color]].filter(Boolean).join(' · ');
-  return `<div class="member-card">
-    <div class="member-head">
-      <span class="cult-swatch" style="background:${CULT_HEX[m.color] || '#777'}"></span>
-      <b>${esc(def.name || m.name)}</b>
-      ${isLeader ? '<span class="member-leader">Ring leader</span>' : ''}
-    </div>
-    <div class="member-meta">${esc(meta)}</div>
-    <p class="member-bio">${esc(def.bio || '')}</p>
+// A Coven member as a portrait card: a school-tinted portrait (initial placeholder
+// for now), the name, and the class; full stats on hover.
+function memberCard(m, isLeader) {
+  const init = (m.name[0] || '?').toUpperCase();
+  const tip = `${m.name} — ${CLASS_LABEL[m.class] || m.class} · ${CULT_NAMES[m.school]} · ${m.rank} · Pow ${m.power} Wis ${m.wisdom} Gui ${m.guile} Cou ${m.courage}`;
+  return `<div class="pcard${isLeader ? ' leader' : ''}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
+    <div class="pcard-img"><span class="pcard-init">${esc(init)}</span></div>
+    <div class="pcard-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</div>
+    <div class="pcard-sub">${esc(CLASS_LABEL[m.class] || m.class)}</div>
   </div>`;
 }
 function covenScreenHTML(ctx) {
-  const { state, defs } = ctx;
+  const { state } = ctx;
   const faith = state.pressures.faith;
-  const [fLabel, fCls] = faithBand(faith);
+  const [fLabel] = faithBand(faith);
   const n = state.circle.length;
   const soulCount = state.souls.length;
-  const members = state.circle.map((m, i) => memberCard(m, defs[m.id] || {}, i === 0)).join('');
+  const members = state.circle.map((m, i) => memberCard(m, i === 0)).join('');
   const souls = soulCount
     ? `<h3 class="coven-subhead">Forgotten Souls <small>${soulCount}</small></h3>
        <div class="souls-roll">${state.souls.map((m) =>
-         `<div class="soul-chip" title="Lost to the Flame"><span class="cult-swatch" style="background:${CULT_HEX[m.color] || '#777'}"></span>${esc(m.name)}</div>`).join('')}</div>`
+         `<div class="soul-chip" title="Lost to the Flame"><span class="cult-swatch" style="background:${CULT_HEX[m.school] || '#777'}"></span>${esc(m.name)}</div>`).join('')}</div>`
     : '';
   return `<section class="screen coven-screen">
-    <h2 class="screen-title">The Coven of Runehold</h2>
-    <div class="coven-faith">
-      <div class="cult-head"><b>Faith</b><span class="cult-standing ${fCls}">${fLabel} (${faith})</span></div>
-      <div class="bar"><div class="bar-fill" style="width:${faith}%"></div></div>
-      <p class="muted">${n} Wizard${n === 1 ? '' : 's'} stand in the Circle.${soulCount ? ` ${soulCount} ${soulCount === 1 ? 'has' : 'have'} been lost to the Flame.` : ''}</p>
+    <div class="coven-layout">
+      <aside class="coven-tower">
+        <img src="assets/icons/icon_secret_tower.png" alt="The Secret Tower" />
+        <div class="coven-tower-cap">Runehold</div>
+      </aside>
+      <div class="coven-main">
+        <h2 class="screen-title coven-title">The Coven <small>${n} Wizard${n === 1 ? '' : 's'} &middot; Faith ${fLabel} (${faith})</small></h2>
+        <div class="portrait-grid">${members}</div>
+        ${souls}
+        <p class="muted coven-note">Recruitment rites are not yet established — in time, new Wizards will be drawn to a coven of high Faith, and apprentices raised into the Circle.</p>
+      </div>
     </div>
-    <h3 class="coven-subhead">The Circle</h3>
-    <div class="member-grid">${members}</div>
-    ${souls}
-    <p class="muted coven-note">Recruitment rites are not yet established — in time, new Wizards will be drawn to a coven of high Faith, and apprentices raised into the Circle.</p>
   </section>`;
 }
 
@@ -337,7 +347,7 @@ function cultsScreenHTML(ctx) {
 // The Runiverse (Map) — stylized, data-driven: Runehold at centre, the seven
 // cult holds ringed around it (live standing), the Secret Tower, and the
 // Fracture's ash creeping in as it rises. Canon holds named; others generic.
-const HOLD_NAMES = { red: 'Markertropolis', blue: 'The Bastion' };
+const HOLD_NAMES = { red: 'The Gilded Reach', blue: 'The Bastion' };
 function mapScreenHTML(ctx) {
   const { state } = ctx;
   const fracture = state.pressures.fracture;
@@ -372,36 +382,29 @@ function mapScreenHTML(ctx) {
   </section>`;
 }
 
-// what an advisor is thinking right now — their take on the live scene if they
-// have one, otherwise their standing character note.
-function advisorThought(ctx, m, def) {
-  const sc = ctx.current;
-  if (sc && Array.isArray(sc.advisors)) {
-    const a = sc.advisors.find((x) => x.member === m.id && meets(ctx.state, x.if));
-    if (a) return a.text;
-  }
-  return 'No strong counsel here.';
-}
+// short display labels for the 9 classes
+const CLASS_LABEL = { magus: 'Magus', sorcerer: 'Sorcerer', druid: 'Druid', necromancer: 'Necromancer', pyromancer: 'Pyromancer', enchanter: 'Enchanter', charmer: 'Charmer', 'chaos-mage': 'Chaos Mage', 'ghost-eater': 'Ghost Eater' };
 
 // the Circle bar (bottom chrome): the Circle as a held hand of cards — hover or
 // tap a card to lift it and hear the advisor's thought — plus a clickable
 // resource readout (each pressure jumps to the screen that governs it).
 function circleBarHTML(ctx) {
-  const { state, defs } = ctx;
+  const { state } = ctx;
+  const voices = new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text]));
   const cards = state.circle.map((m, i) => {
-    const def = defs[m.id] || {};
-    const role = i === 0 ? 'leader' : (m.leaning || m.rank || '');
-    return `<button class="cb-card${ctx.pinnedCard === i ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.color] || '#777'}" aria-label="${esc(def.name || m.name)}">
+    const role = m.rank === 'ring-leader' ? 'leader' : (CLASS_LABEL[m.class] || m.class);
+    const thought = voices.get(m.id) || 'No strong counsel here.';
+    return `<button class="cb-card${ctx.pinnedCard === i ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
         <span class="cb-face">
           <span class="cb-dot"></span>
           <span class="cb-name">${esc(m.name)}</span>
           <span class="cb-role">${esc(role)}</span>
         </span>
-        <span class="cb-bubble"><b>${esc(def.name || m.name)}</b>${esc(advisorThought(ctx, m, def))}</span>
+        <span class="cb-bubble"><b>${esc(m.name)}</b><span class="cb-sub">${esc(CLASS_LABEL[m.class] || m.class)} &middot; ${CULT_NAMES[m.school] || m.school} &middot; ${esc(m.rank)}</span>${esc(thought)}</span>
       </button>`;
   }).join('');
   const souls = state.souls.map((m) =>
-    `<span class="cb-soul" title="Lost to the Flame"><i style="background:${CULT_HEX[m.color] || '#777'}"></i>${esc(m.name)}</span>`).join('');
+    `<span class="cb-soul" title="Lost to the Flame"><i style="background:${CULT_HEX[m.school] || '#777'}"></i>${esc(m.name)}</span>`).join('');
   const res = P_ORDER.map((k) => {
     const tab = P_TAB[k];
     const cls = `cb-res ${k === 'fracture' ? 'danger' : ''}`;

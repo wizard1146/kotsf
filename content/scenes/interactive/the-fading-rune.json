@@ -7,7 +7,7 @@
   "trigger": { "lt": ["lore", 50] },
   "intro": "A master-rune carved into the hall's keystone has begun to blur. Left alone, its working will be gone by the next thaw.",
   "advisors": [
-    { "member": "vela-the-blue", "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can." }
+    { "cast": { "most": "wisdom" }, "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can." }
   ],
   "choices": [
     {

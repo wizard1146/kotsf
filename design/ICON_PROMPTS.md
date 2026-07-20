@@ -118,7 +118,7 @@ an unfurled scroll inked with a running chronicle and a wax seal, bold cream-whi
 
 ## The seven Cult sigils (coloured to each cult)
 
-**20 · Red — Markertropolis**
+**20 · Red — the Gilded Reach**
 ```
 a mercantile crest of a coin-stack over an arched market gate, deep crimson-red filled silhouette (#c0392b) on near-black, sharp angular hand-inked cuts, subtle screenprint grunge texture, occult folk dark-fantasy, framed in a cracked circular rune-stone medallion with faint radial ticks and small norse runes on the rim, flat high-contrast game achievement icon, no text, no lettering --ar 1:1 --style raw --v 6
 ```

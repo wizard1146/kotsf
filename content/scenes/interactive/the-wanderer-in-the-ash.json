@@ -7,8 +7,8 @@
   "trigger": { "gte": ["flamesRegard", 35] },
   "intro": "A figure walks out of the ash-haze at dusk and stops at the edge of the firelight. A Forgotten Soul — robes you almost recognize, a face the Flame has rewritten. It does not speak. It waits to be known.",
   "advisors": [
-    { "member": "wisp", "text": "It came to us. The Flame sends nothing by accident. Let it in." },
-    { "member": "korr-ashen", "text": "I have seen what wears a familiar face and means us harm. Keep the gate shut, Archon." }
+    { "cast": { "trait": { "piety": "high" } }, "text": "It came to us. The Flame sends nothing by accident. Let it in." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "I have seen what wears a familiar face and means us harm. Keep the gate shut, Archon." }
   ],
   "choices": [
     {

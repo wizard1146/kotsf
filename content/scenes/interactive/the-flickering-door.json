@@ -9,8 +9,8 @@
   "trigger": { "all": [{ "lt": ["lore", 45] }, { "gte": ["flamesRegard", 20] }] },
   "intro": "A door breathes light at the foot of the stair. Behind it, the Sacred Flame waits — and the coven is forgetting faster than it can learn.",
   "advisors": [
-    { "member": "vela-the-blue", "text": "We forget faster than we learn. The Flame remembers everything. Use it." },
-    { "member": "korr-ashen", "text": "And what walks back out wearing our faces? I have buried Souls before, Archon." }
+    { "cast": { "most": "wisdom" }, "text": "We forget faster than we learn. The Flame remembers everything. Use it." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "And what walks back out wearing our faces? I have buried Souls before, Archon." }
   ],
   "choices": [
     {

@@ -7,7 +7,7 @@ export const CULTS = ['red', 'yellow', 'brown', 'green', 'blue', 'purple', 'whit
 // NOTE: the Circle roster below is embedded for the Phase-1 slice. The canonical
 // definitions live in content/circle/*.json; a later phase loads from there.
 export function createInitialState(seed = 1) {
-  return {
+  const state = {
     turn: 0,
     season: 0,          // 0..3 (Thaw…Deepfrost)
     phase: 0,           // 0..2 within a season (Early/Mid/Late) — 12 sub-seasons per year
@@ -17,18 +17,15 @@ export function createInitialState(seed = 1) {
     pressures: { mana: 30, provisions: 50, coin: 35, lore: 40, faith: 50, flamesRegard: 35, fracture: 10 },
     cults: { red: 0, yellow: 0, brown: 0, green: 0, blue: 0, purple: 0, white: 0 },
     flags: {},
-    circle: [
-      { id: 'vela-the-blue', name: 'Vela', color: 'blue', leaning: 'lore', rank: 'advisor' },
-      { id: 'korr-ashen', name: 'Korr Ashen', color: 'red', leaning: 'caution', rank: 'advisor' },
-      { id: 'ember', name: 'Ember', color: 'yellow', leaning: 'flame', rank: 'apprentice' },
-      { id: 'wisp', name: 'Wisp', color: 'white', leaning: 'flame', rank: 'apprentice' },
-    ],
+    circle: [],         // a fresh ring is rolled below (seeded → reproducible) — see rollCircle
     souls: [],          // members lost to the Flame persist here as NPCs (permanent — see PLANNING §5a)
     saga: [],           // the running history log
     scenesSeen: {},     // id -> count (for `once`)
     followups: [],      // queued scene ids (from `unlock` effects)
     actionsUsed: [],    // per-screen action ids performed this season (reset each tick)
   };
+  state.circle = rollCircle(state);
+  return state;
 }
 
 const SEASON_NAMES = ['Thaw', 'Highsun', 'Emberfall', 'Deepfrost'];
@@ -52,6 +49,81 @@ export function nextFloat(state) {
 
 export function pickIndex(state, n) {
   return Math.floor(nextFloat(state) * n);
+}
+
+// ---- character generation: a fresh Circle is rolled each campaign, seeded so a
+// run is reproducible. Names are invented in the Runiverse voice (swap a handful
+// for canon Forgotten Runes names later). See design/MAGIC_AND_CIRCLE.md.
+const NAMES = [
+  ['Vela', 'she'], ['Wisp', 'she'], ['Sabra', 'she'], ['Nyx', 'she'], ['Corvane', 'she'], ['Lyra', 'she'],
+  ['Ashling', 'she'], ['Thessa', 'she'], ['Mirren', 'she'], ['Ondine', 'she'], ['Bryn', 'she'], ['Saffron', 'she'],
+  ['Elowen', 'she'], ['Isolde', 'she'], ['Wren', 'she'], ['Marent', 'she'],
+  ['Korr', 'he'], ['Ember', 'he'], ['Bram', 'he'], ['Dain', 'he'], ['Osric', 'he'], ['Fenn', 'he'], ['Garrow', 'he'],
+  ['Roan', 'he'], ['Cael', 'he'], ['Alric', 'he'], ['Emrys', 'he'], ['Tobar', 'he'], ['Silas', 'he'], ['Vane', 'he'],
+  ['Hale', 'he'], ['Rune', 'he'],
+];
+export const CLASSES = ['magus', 'sorcerer', 'druid', 'necromancer', 'pyromancer', 'enchanter', 'charmer', 'chaos-mage', 'ghost-eater'];
+// mild class → competence lean (a nudge, not a cap)
+const CLASS_BIAS = {
+  magus: { wisdom: 12 }, sorcerer: { power: 16 }, druid: { wisdom: 10 }, necromancer: { courage: 12 },
+  pyromancer: { power: 14 }, enchanter: { power: 10 }, charmer: { guile: 16 }, 'chaos-mage': { guile: 10 }, 'ghost-eater': { courage: 14 },
+};
+const clampStat = (v) => Math.max(5, Math.min(95, Math.round(v)));
+const rollRange = (state, lo, hi) => lo + pickIndex(state, hi - lo + 1);
+
+// Roll the opening ring of four: a leader, a second (the default caster), two apprentices.
+const shuffle = (state, arr) => { for (let i = arr.length - 1; i > 0; i--) { const j = pickIndex(state, i + 1); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+
+export function rollCircle(state) {
+  const names = shuffle(state, NAMES.slice());
+  const classes = shuffle(state, CLASSES.slice());   // distinct class per member — no clustering
+  const schools = shuffle(state, CULTS.slice());      // distinct school per member (4 of 7)
+  const ranks = ['ring-leader', 'adept', 'apprentice', 'apprentice'];
+  const rankBase = { 'ring-leader': 56, adept: 50, apprentice: 38 };
+  return ranks.map((rank, i) => {
+    const [name, gender] = names[i];
+    const cls = classes[i];
+    const school = schools[i];
+    const bias = CLASS_BIAS[cls] || {};
+    const stat = (k) => clampStat(rankBase[rank] + (bias[k] || 0) + rollRange(state, -14, 14));
+    return {
+      id: `wz-${i}`, name, gender, school, class: cls, rank,
+      power: stat('power'), wisdom: stat('wisdom'), guile: stat('guile'), courage: stat('courage'),
+      boldness: rollRange(state, 15, 85), piety: rollRange(state, 15, 85), temper: rollRange(state, 15, 85),
+    };
+  });
+}
+
+// ---- casting: pick which Circle member fills a scene role ("a shape, not a name") ----
+// Selectors: 'leader' | 'second' | 'any' | { class } | { school } | { trait: {axis:'high'|'low'} } | { most: '<stat>' }.
+// Returns null when nobody matches (so that voice simply isn't heard) — the emergent bit.
+export function castMember(state, sel, exclude) {
+  let pool = state.circle.filter((m) => !(exclude && exclude.has(m.id)));
+  if (!pool.length) return null;
+  if (sel === 'leader') return pool.find((m) => m.rank === 'ring-leader') || pool[0];
+  if (sel === 'second') return pool.find((m) => m.rank === 'adept') || pool[1] || pool[0];
+  if (!sel || sel === 'any') return pool[0];
+  if (typeof sel === 'object') {
+    if (sel.class) pool = pool.filter((m) => m.class === sel.class);
+    if (sel.school) pool = pool.filter((m) => m.school === sel.school);
+    if (!pool.length) return null;
+    if (sel.trait) { const [ax, hl] = Object.entries(sel.trait)[0]; return pool.slice().sort((a, b) => (hl === 'low' ? a[ax] - b[ax] : b[ax] - a[ax]))[0]; }
+    if (sel.most) return pool.slice().sort((a, b) => (b[sel.most] || 0) - (a[sel.most] || 0))[0];
+    return pool[0];
+  }
+  return pool[0];
+}
+
+// Substitute {name} + gendered pronoun tokens ({they}/{them}/{their}/{theirs}) into scene text.
+export function castText(text, m) {
+  if (!m || !text) return text || '';
+  const she = m.gender === 'she';
+  const P = { they: she ? 'she' : 'he', them: she ? 'her' : 'him', their: she ? 'her' : 'his', theirs: she ? 'hers' : 'his' };
+  return String(text)
+    .replace(/\{name\}/g, m.name)
+    .replace(/\{(they|them|their|theirs)\}/g, (_, k) => P[k])
+    .replace(/\{(They|Them|Their|Theirs)\}/g, (_, k) => { const w = P[k.toLowerCase()]; return w[0].toUpperCase() + w.slice(1); })
+    .replace(/\{class\}/g, m.class).replace(/\{school\}/g, m.school);
 }
 
 // Path resolution shared by conditions + effects. Keeps content's vocabulary tiny.

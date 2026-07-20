@@ -27,7 +27,7 @@ The **Runiverse** is the world of Forgotten Runes Wizard's Cult (10,000 on-chain
 
 - **A fractured world.** A cataclysm tore the world apart; survivors rebuilt with mismatched magic and technology. Deliberately patchwork — *not* clean medieval fantasy. This fracturing is the justification for a coven-survival game.
 - **Seven Color Cults** — Red, Yellow, Brown, Green, Blue, Purple, White. Both Wizards and Warriors affiliate by color.
-  - **Red** — Markertropolis; greedy aristocrats; the Stock Sanctuary (the mercantile/coin power).
+  - **Red** — the Gilded Reach; greedy aristocrats; the Stock Sanctuary (the mercantile/coin power).
   - **Blue** — the Bastion; largest libraries; the **Forgotten Athenaeum** (the lore/knowledge power).
   - (Yellow, Brown, Green, Purple, White — characterizations to be developed against canon + community lore.)
 - **Distinct peoples:**
@@ -92,7 +92,7 @@ Eight interlocking pressures. **These are the storylet state** — every scene r
 ### Material
 1. **Mana** — spellcasting reserve. Powers workings, quests, defenses. Regenerates slowly; spent in bursts.
 2. **Provisions** — feeding the coven in a broken world. Famine is a constant low-grade threat (KODP herds/crops analog).
-3. **Coin** — the mercantile axis (Markertropolis, Red Cult). Buys what magic and farming can't; ties you to aristocrat politics.
+3. **Coin** — the mercantile axis (the Gilded Reach, Red Cult). Buys what magic and farming can't; ties you to aristocrat politics.
 
 ### Signature pressure
 4. **Lore (Runes / Memory)** — *the* distinctive meter. Unlocks great workings and rune-quests, **but decays every turn** — "The Forgetting," made mechanical. Maintain libraries (echo the Blue Bastion / Athenaeum), train apprentices, or watch power slip from memory. Hoard vs. use vs. preserve is a constant three-way squeeze.

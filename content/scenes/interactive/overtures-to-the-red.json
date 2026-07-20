@@ -7,7 +7,7 @@
   "trigger": { "lt": ["cult.red", 0] },
   "intro": "A Red factor you once snubbed sends a careful letter. The Stock Sanctuary, it seems, would rather profit from Runehold than feud with it — if you will make the first gesture.",
   "advisors": [
-    { "member": "korr-ashen", "text": "Enemies cost more than tribute. Swallow the pride, Archon. Red gold spends the same as any." }
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Enemies cost more than tribute. Swallow the pride, Archon. Red gold spends the same as any." }
   ],
   "choices": [
     {

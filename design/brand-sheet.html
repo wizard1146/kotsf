@@ -235,7 +235,7 @@
   // ---- swatches ----
   const FLAME=[['Crimson tip','#c62a1e','flame edges, danger'],['Orange body','#e86a1c','flame mid, warm hi'],['Amber','#f4a92a','flame inner'],['White-hot core','#fde7bf','brightest points'],['Magenta base','#b83a86','arcane accents'],['Violet glow','#7a2f9e','magic / mana']];
   const UI=[['--bg','#14110f','app background'],['--panel','#1f1a16','panels'],['--panel-2','#2a231d','raised / buttons'],['--ink','#e7dccb','primary text'],['--ink-dim','#9c8f7d','secondary text'],['--line','#3a3128','borders'],['--flame','#e8a33d','primary accent'],['--flame-deep','#b5641c','accent border'],['--danger','#c0392b','loss / Fracture'],['--ok','#4e9a51','gain / allied']];
-  const CULT=[['Red','#c0392b','Markertropolis'],['Yellow','#d4ac0d','—'],['Brown','#8a5a1f','—'],['Green','#229954','—'],['Blue','#2471a3','The Bastion'],['Purple','#7d3c98','—'],['White','#d5d8dc','—']];
+  const CULT=[['Red','#c0392b','The Gilded Reach'],['Yellow','#d4ac0d','—'],['Brown','#8a5a1f','—'],['Green','#229954','—'],['Blue','#2471a3','The Bastion'],['Purple','#7d3c98','—'],['White','#d5d8dc','—']];
   const swHTML=(list)=>list.map(([n,hex,role])=>`<div class="sw"><div class="chip" style="background:${hex}"></div><div class="meta"><div class="name">${n}</div><div class="hex">${hex}</div><div class="role">${role}</div></div></div>`).join('');
   document.getElementById('swFlame').innerHTML=swHTML(FLAME);
   document.getElementById('swUI').innerHTML=swHTML(UI);

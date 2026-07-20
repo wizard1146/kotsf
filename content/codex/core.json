@@ -7,7 +7,7 @@
       "entries": [
         { "term": "Mana", "body": "Your spellcasting reserve. Powers workings, quests, and defenses. Regenerates slowly, spent in bursts." },
         { "term": "Provisions", "body": "Food for the coven in a broken world. Famine is a constant low threat; a coven cannot eat runes." },
-        { "term": "Coin", "body": "The mercantile axis, ruled by Markertropolis and the Red Cult. Buys what magic and farming cannot — and ties you to aristocrat politics." },
+        { "term": "Coin", "body": "The mercantile axis, ruled by the Gilded Reach and the Red Cult. Buys what magic and farming cannot — and ties you to aristocrat politics." },
         { "term": "Lore", "body": "Runes and memory: the signature meter. Unlocks great workings, but DECAYS every season — 'The Forgetting' made mechanical. Maintain libraries, train apprentices, or watch power slip away." },
         { "term": "Faith", "body": "The coven's morale — whether your Wizards believe you can lead them through the dark. Driven by Circle relationships and consistency with your values." },
         { "term": "Flame's Regard", "body": "The cosmic meter. Drawing on the Sacred Flame is the highest reward and the highest risk: salvation, transformation, or undesirable loss." },
@@ -19,7 +19,7 @@
       "title": "The Seven Color Cults",
       "blurb": "Seven independent reputations. Acting for one often costs another.",
       "entries": [
-        { "term": "Red", "body": "Markertropolis — greedy aristocrats and the Stock Sanctuary. The mercantile and coin power of the Runiverse." },
+        { "term": "Red", "body": "the Gilded Reach — greedy aristocrats and the Stock Sanctuary. The mercantile and coin power of the Runiverse." },
         { "term": "Blue", "body": "The Bastion — the largest libraries and the Forgotten Athenaeum. The lore and knowledge power." },
         { "term": "Yellow", "body": "The chroniclers have not yet fixed this cult's character." },
         { "term": "Brown", "body": "The chroniclers have not yet fixed this cult's character." },
@@ -36,7 +36,8 @@
         { "term": "The Sacred Flame", "body": "In the basement of the Secret Tower it burns. Wizards who step into it become Forgotten Souls — you might get back something greater, or something undesirable (roughly one in ten). The greatest power and the greatest loss in the world." },
         { "term": "The Forgetting", "body": "Magic is real but thinning; the world is literally forgetting itself. Lore decays every season unless held — gains erode if unmaintained." },
         { "term": "The Fracture", "body": "The cataclysm that tore the world apart is not finished. It is the long game beneath all the others — the doom that takes Runehold if neglected." },
-        { "term": "The Circle", "body": "Your advisor ring of named Wizards, each with a color leaning and a temperament. They advise per their leanings, feud with each other, and remember how you have treated them." },
+        { "term": "The Circle", "body": "Your advisor ring is rolled fresh each campaign — Wizards, each with a school (colour), a class, a rank, four competence stats (Power, Wisdom, Guile, Courage) and a temperament (Boldness, Piety, Temper). On a scene, whoever fits the moment speaks — and they disagree. Competence decides what they can pull off; temperament decides what they urge. The second-in-command casts your workings by default." },
+        { "term": "Schools & Classes", "body": "Every Wizard practises one of the seven colour schools (Red, Yellow, Brown, Green, Blue, Purple, White) and holds one of nine classes: Magus, Sorcerer, Druid, Necromancer, Pyromancer, Enchanter, Charmer, Chaos Mage, Ghost Eater. School is the flavour of the magic; class is what they do best. Who stands in your Circle shapes what workings the coven can attempt." },
         { "term": "Forgotten Souls", "body": "Wizards transformed by the Flame. When a Circle member is taken, the loss is permanent — they leave the Circle but persist in the world as a Soul you may later meet, bargain with, or mourn." },
         { "term": "Runehold", "body": "Your coven seat — a few dozen souls around a guttering hearth-rune and a half-remembered claim to old power. Grow it from a hearth to a power, or dwindle into a Forgotten hold." }
       ]

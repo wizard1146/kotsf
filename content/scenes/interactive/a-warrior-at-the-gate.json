@@ -7,8 +7,8 @@
   "trigger": { "gte": ["fracture", 22] },
   "intro": "A Warrior war-band makes camp at the edge of Runehold's fields. Their captain — sword on her back, a hawk on her glove — sends word: she will guard your borders against the things the Fracture spits out. For a price, or for a pact.",
   "advisors": [
-    { "member": "korr-ashen", "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come." },
-    { "member": "wisp", "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter." }
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come." },
+    { "cast": { "trait": { "piety": "high" } }, "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter." }
   ],
   "choices": [
     {

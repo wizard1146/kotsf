@@ -7,8 +7,8 @@
   "trigger": { "lt": ["provisions", 50] },
   "intro": "A herd of Elysian ponies — manes like banked coals, eyes too knowing — drifts down from the high passes and lingers in Runehold's lower meadow. They are no one's, for now.",
   "advisors": [
-    { "member": "korr-ashen", "text": "Meat and hides through Deepfrost, Archon. The meadow will not feed us; they might." },
-    { "member": "ember", "text": "Ride them! Tame one and you have a friend out of the Elysian Fields. Eat one and you have a sad winter dinner." }
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Meat and hides through Deepfrost, Archon. The meadow will not feed us; they might." },
+    { "cast": { "trait": { "boldness": "high" } }, "text": "Ride them! Tame one and you have a friend out of the Elysian Fields. Eat one and you have a sad winter dinner." }
   ],
   "choices": [
     {
