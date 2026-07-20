@@ -109,6 +109,12 @@ Faith 50 · Flame's Regard 35 · Fracture 10.
 | **Flame's Regard** | The cosmic meter. Reaching **80 wins the game** — you become Keeper. Courting it recklessly burns your own. |
 | **The Fracture** | The doom clock. Rises every season; reaching **100 ends the game** — the Fracture consumes Runehold. |
 
+**Veiled meters.** By default the two cosmic scales — **Flame's Regard** and **The Fracture** — are
+*hidden*: they don't show a running number in the footer. You still see every effect your choices and
+workings have on them (the `+`/`−` chips), and you can read the Fracture's mood on the Map (*quiet →
+stirring → rising → dire*) — you simply don't get a precise readout of the doom clock or your bid for the
+Tower. To play with the exact numbers shown, turn on **Show Fracture & Regard** in *Options → Display*.
+
 **Cult Standing** is different: **signed, −100 to +100**, starting at **0** (neutral). Below zero is
 hostility; a cult driven to −60 is a **Sworn Enemy**; above +60 is an **Ally**. Acting for one cult often
 costs another — there is no pleasing all seven.

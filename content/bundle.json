@@ -1643,11 +1643,11 @@
         },
         {
           "term": "Flame's Regard",
-          "body": "The cosmic meter. Drawing on the Sacred Flame is the highest reward and the highest risk: salvation, transformation, or undesirable loss."
+          "body": "The cosmic meter. Drawing on the Sacred Flame is the highest reward and the highest risk: salvation, transformation, or undesirable loss. VEILED by default — you feel its pull through what your choices cost, but the running number is hidden. Reveal it under Options → Display."
         },
         {
           "term": "The Fracture",
-          "body": "The doom track. The cataclysm is not finished — Imps, stirring Beasts, and the slow Forgetting advance it. Reaches its limit and Runehold is consumed."
+          "body": "The doom track. The cataclysm is not finished — Imps, stirring Beasts, and the slow Forgetting advance it. Reaches its limit and Runehold is consumed. VEILED by default — read its mood on the Map (quiet → stirring → rising → dire) rather than a number; reveal the exact meter under Options → Display."
         }
       ]
     },

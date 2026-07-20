@@ -258,6 +258,8 @@ button.cb-res:active { transform: translateY(0); }
 /* The Workings screen — Mana sink + the Fracture's player-controlled counter */
 .working-mana { display: flex; align-items: center; gap: 0.6rem; max-width: 420px; margin: 0.6rem 0 1.2rem; font-family: var(--mono); font-size: 0.82rem; }
 .working-mana .bar { flex: 1; height: 8px; }
+.working-mana.veiled { gap: 0.5rem; }
+.meter-veil { font-variant: small-caps; letter-spacing: 0.05em; color: var(--flame); }
 .working-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.8rem; }
 .working-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.85rem 0.9rem; display: flex; flex-direction: column; gap: 0.4rem; }
 .working-card.spent { opacity: 0.6; }
@@ -582,6 +584,7 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
 .opt > label { color: var(--ink); font-size: 0.98rem; }
 .opt-danger > label { color: var(--ink-dim); }
 .opt-version { font-family: var(--mono); color: var(--flame); font-size: 0.9rem; }
+.opt-note { margin: 0.5rem 0 0; font-size: 0.8rem; }
 .seg { display: inline-flex; gap: 0.3rem; }
 .seg button.on, .toggle.on { border-color: var(--flame-deep); color: var(--flame); background: #2a2018; }
 button.danger { border-color: #5b2a23; color: #e29a92; }
@@ -677,19 +680,24 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
   .fullpage-head .panel-search { max-width: none; }
 }
 
-/* --- rotate-to-landscape prompt: shown only on small portrait screens while the
-       landscape lock is on. Unlock from here or in Options. --- */
-.rotate-prompt { display: none; }
-@media (orientation: portrait) and (max-width: 920px) {
-  html[data-lock-landscape="1"] .rotate-prompt {
-    display: grid; position: fixed; inset: 0; z-index: 300;
-    place-content: center; justify-items: center; text-align: center;
-    gap: 0.5rem; padding: 2rem; background: var(--bg); color: var(--ink);
+/* --- Force landscape: when the lock is on (default) and the device is held in
+       portrait, rotate the whole app 90° so play is always horizontal. Turn the
+       lock off in Options to allow the game to display upright in portrait.
+       Viewport units stay physical-viewport-relative through the transform, so
+       inner "full height" rules are re-mapped to the rotated frame (100dvw). --- */
+@media (orientation: portrait) {
+  html[data-lock-landscape="1"], html[data-lock-landscape="1"] body { overflow: hidden; }
+  html[data-lock-landscape="1"] #app {
+    position: fixed; top: 0; left: 0;
+    width: 100vh; width: 100dvh;      /* app's width  = physical viewport height (the long side) */
+    height: 100vw; height: 100dvw;    /* app's height = physical viewport width  (the short side) */
+    transform-origin: top left;
+    transform: rotate(90deg) translate(0, -100%);
+    overflow: hidden;
   }
-  .rotate-ico { font-size: 3.6rem; color: var(--flame); display: inline-block; animation: rot-hint 2.6s ease-in-out infinite; }
-  .rotate-prompt h2 { color: var(--flame); margin: 0.3rem 0 0; }
-  .rotate-prompt p { color: var(--ink-dim); margin: 0; max-width: 24ch; }
-  .rotate-prompt button { margin-top: 0.9rem; }
+  /* re-map viewport-height sizing to the rotated frame's height (= physical width) */
+  html[data-lock-landscape="1"] #app.screen-game { height: 100dvw; }
+  html[data-lock-landscape="1"] .splash,
+  html[data-lock-landscape="1"] .menu { min-height: calc(100dvw - 4rem); }
+  html[data-lock-landscape="1"] .modal { max-height: 90dvw; }
 }
-@keyframes rot-hint { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(80deg); } }
-html[data-reduce-motion="1"] .rotate-ico { animation: none; }

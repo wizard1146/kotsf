@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v12';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v13';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -78,7 +78,7 @@ function metaOf(env) {
 // ---- settings -------------------------------------------------------------
 function loadSettings() {
   const s = readSlot(SETTINGS_KEY) || {};
-  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false };
+  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, revealMeters: !!s.revealMeters };
 }
 function applySettings() {
   const r = document.documentElement;
@@ -314,7 +314,6 @@ app.addEventListener('click', (e) => {
       break;
     }
     case 'toggle-card': { const i = Number(el.dataset.card); pinnedCard = pinnedCard === i ? null : i; draw(); break; }
-    case 'unlock-orientation': setOption('lockLandscape', '0'); break;
     case 'do-action': doAction(el.dataset.act); break;
     case 'set-caster': casterId = el.dataset.caster; draw(); break;
     case 'resume-game': overlay = null; screen = 'game'; draw(); break;

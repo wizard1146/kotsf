@@ -145,6 +145,12 @@ const P_ICON = { mana: 'mana', provisions: 'provisions', coin: 'coin', lore: 'lo
 const P_TAB = { mana: 'workings', provisions: 'fields', coin: 'market', faith: 'coven', flamesRegard: 'map', fracture: 'war' };
 // short labels for the cramped bottom bar
 const P_SHORT = { mana: 'Mana', provisions: 'Food', coin: 'Coin', lore: 'Lore', faith: 'Faith', flamesRegard: 'Regard', fracture: 'Fracture' };
+// The two cosmic/doom meters are VEILED by default — you feel their effects (chips)
+// but don't see the running number. Reveal them in Options. See MANUAL / Codex.
+const HIDDEN_METERS = ['flamesRegard', 'fracture'];
+const showMeter = (ctx, k) => !HIDDEN_METERS.includes(k) || ctx.settings?.revealMeters;
+// qualitative band for a veiled Fracture readout (no number leaked)
+const fractureBand = (v) => (v < 20 ? 'quiet' : v < 45 ? 'stirring' : v < 70 ? 'rising' : 'dire');
 // flavor for screens not yet built — all 9 are built now, kept for future screens
 const STUBS = {};
 
@@ -248,7 +254,9 @@ function actionScreenHTML(ctx, screen, title, intro, resourceKey, resourceLabel)
   return `<section class="screen workings-screen">
     <h2 class="screen-title">${esc(title)}</h2>
     <p class="muted">${esc(intro)}</p>
-    <div class="working-mana"><b>${esc(resourceLabel)}</b><div class="bar${resourceKey === 'fracture' ? ' bar-danger' : ''}"><div class="bar-fill" style="width:${rv}%"></div></div><span>${rv}</span></div>
+    ${HIDDEN_METERS.includes(resourceKey) && !showMeter(ctx, resourceKey)
+      ? `<div class="working-mana veiled"><b>${esc(resourceLabel)}</b><span class="meter-veil" title="Veiled — reveal in Options">${resourceKey === 'fracture' ? fractureBand(rv) : 'veiled'}</span></div>`
+      : `<div class="working-mana"><b>${esc(resourceLabel)}</b><div class="bar${resourceKey === 'fracture' ? ' bar-danger' : ''}"><div class="bar-fill" style="width:${rv}%"></div></div><span>${rv}</span></div>`}
     ${hasCast ? casterPickerHTML(state, caster) : ''}
     <div class="working-grid">${cards}</div>
   </section>`;
@@ -361,11 +369,11 @@ function advisorSheetHTML(ctx, m) {
       </aside>
       <div class="sheet-body">
         <p class="sheet-flavour">${esc(flavour)}</p>
-        <h3 class="sheet-h">Competence <small>what they can pull off</small></h3>
+        <h3 class="sheet-h">Competence</h3>
         <div class="sheet-stats">
           ${sheetStat('Power', m.power)}${sheetStat('Wisdom', m.wisdom)}${sheetStat('Guile', m.guile)}${sheetStat('Courage', m.courage)}
         </div>
-        <h3 class="sheet-h">Temperament <small>what they urge</small></h3>
+        <h3 class="sheet-h">Temperament</h3>
         <div class="sheet-stats">
           ${sheetStat('Boldness', m.boldness, tempWord('boldness', m.boldness))}${sheetStat('Piety', m.piety, tempWord('piety', m.piety))}${sheetStat('Temper', m.temper, tempWord('temper', m.temper))}
         </div>
@@ -391,7 +399,7 @@ function covenScreenHTML(ctx) {
   return `<section class="screen coven-screen">
     <div class="coven-layout">
       <aside class="coven-tower">
-        <img src="assets/icons/icon_secret_tower.png" alt="The Secret Tower" />
+        <img src="assets/icons/icon_cults_3.png" alt="The Coven" />
         <div class="coven-tower-cap">The Coven &mdash; ${n} Wizard${n === 1 ? '' : 's'}</div>
       </aside>
       <div class="coven-main">
@@ -474,7 +482,9 @@ function mapScreenHTML(ctx) {
         <img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><span class="map-label">Runehold</span>
       </div>
     </div>
-    <p class="muted map-fracture-note">The Fracture stands at <b class="${fCls}">${fracture}</b>. Its ash creeps further into the known world each season it is left unchecked.</p>
+    <p class="muted map-fracture-note">${showMeter(ctx, 'fracture')
+      ? `The Fracture stands at <b class="${fCls}">${fracture}</b>.`
+      : `The Fracture is <b class="${fCls}">${fractureBand(fracture)}</b>.`} Its ash creeps further into the known world each season it is left unchecked.</p>
   </section>`;
 }
 
@@ -541,7 +551,7 @@ function circleBarHTML(ctx) {
   }).join('');
   const souls = state.souls.map((m) =>
     `<span class="cb-soul" title="Lost to the Flame"><i style="background:${CULT_HEX[m.school] || '#777'}"></i>${esc(m.name)}</span>`).join('');
-  const res = P_ORDER.map((k) => {
+  const res = P_ORDER.filter((k) => showMeter(ctx, k)).map((k) => {
     const tab = P_TAB[k];
     const cls = `cb-res ${k === 'fracture' ? 'danger' : ''}`;
     const inner = `<img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span>`;
@@ -646,7 +656,10 @@ function optionsHTML(ctx) {
   } else {
     main = `<div class="opt"><label>Text size</label><div class="seg">${seg}</div></div>
       <div class="opt"><label>Reduce motion</label>${toggle('reduceMotion', s.reduceMotion)}</div>
-      <div class="opt"><label>Landscape lock <small class="opt-hint">mobile</small></label>${toggle('lockLandscape', s.lockLandscape)}</div>`;
+      <div class="opt"><label>Landscape lock <small class="opt-hint">mobile</small></label>${toggle('lockLandscape', s.lockLandscape)}</div>
+      <p class="muted opt-note">On: the game stays horizontal even when you hold the phone upright. Off: it displays in portrait.</p>
+      <div class="opt"><label>Show Fracture &amp; Regard</label>${toggle('revealMeters', s.revealMeters)}</div>
+      <p class="muted opt-note">Off (default): the Fracture and Flame's Regard are veiled — you feel their pull through what your choices cost, but the running number stays hidden. On: show the exact meters.</p>`;
   }
 
   return `<div class="panel-layout">
@@ -757,19 +770,9 @@ function overlayHTML(ctx) {
 }
 
 // ---- top-level dispatch: pick the screen, layer any overlay on top --------
-// shown only on small portrait screens when the landscape lock is on (CSS-gated)
-function rotatePromptHTML() {
-  return `<div class="rotate-prompt" role="dialog" aria-label="Rotate your device">
-    <div class="rotate-ico">&#8635;</div>
-    <h2>Turn your device</h2>
-    <p>Runehold is played in landscape.</p>
-    <button data-action="unlock-orientation">Play in portrait anyway</button>
-  </div>`;
-}
-
 export function render(ctx) {
   const screen = ctx.screen === 'splash' ? splashHTML()
     : ctx.screen === 'menu' ? menuHTML(ctx)
     : gameHTML(ctx);
-  return screen + overlayHTML(ctx) + rotatePromptHTML();
+  return screen + overlayHTML(ctx);
 }

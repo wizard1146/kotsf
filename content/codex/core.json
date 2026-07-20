@@ -10,8 +10,8 @@
         { "term": "Coin", "body": "The mercantile axis, ruled by the Gilded Reach and the Red Cult. Buys what magic and farming cannot — and ties you to aristocrat politics." },
         { "term": "Lore", "body": "Runes and memory: the signature meter. Unlocks great workings, but DECAYS every season — 'The Forgetting' made mechanical. Maintain libraries, train apprentices, or watch power slip away." },
         { "term": "Faith", "body": "The coven's morale — whether your Wizards believe you can lead them through the dark. Driven by Circle relationships and consistency with your values." },
-        { "term": "Flame's Regard", "body": "The cosmic meter. Drawing on the Sacred Flame is the highest reward and the highest risk: salvation, transformation, or undesirable loss." },
-        { "term": "The Fracture", "body": "The doom track. The cataclysm is not finished — Imps, stirring Beasts, and the slow Forgetting advance it. Reaches its limit and Runehold is consumed." }
+        { "term": "Flame's Regard", "body": "The cosmic meter. Drawing on the Sacred Flame is the highest reward and the highest risk: salvation, transformation, or undesirable loss. VEILED by default — you feel its pull through what your choices cost, but the running number is hidden. Reveal it under Options → Display." },
+        { "term": "The Fracture", "body": "The doom track. The cataclysm is not finished — Imps, stirring Beasts, and the slow Forgetting advance it. Reaches its limit and Runehold is consumed. VEILED by default — read its mood on the Map (quiet → stirring → rising → dire) rather than a number; reveal the exact meter under Options → Display." }
       ]
     },
     {
