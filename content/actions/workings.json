@@ -4,33 +4,44 @@
       "id": "mend-wards",
       "screen": "workings",
       "label": "Mend the Wards",
-      "desc": "Reinforce the rune-wards of Runehold against the spreading Fracture.",
+      "desc": "Reinforce the rune-wards of Runehold against the spreading Fracture. A White working — order against decay.",
+      "school": "white",
       "requires": { "gte": ["mana", 12] },
-      "effects": [{ "add": ["mana", -12] }, { "add": ["fracture", -6] }, { "add": ["faith", 1] }]
+      "cast": { "stat": "power", "vs": 44 },
+      "win": { "text": "The wards flare and hold. The Fracture's creep slows against Runehold's stones.", "effects": [{ "add": ["mana", -12] }, { "add": ["fracture", -8] }, { "add": ["faith", 2] }] },
+      "lose": { "text": "The runes gutter half-set. The wards barely hold, and the mana is spent all the same.", "effects": [{ "add": ["mana", -12] }, { "add": ["fracture", -2] }] }
     },
     {
       "id": "deepen-runes",
       "screen": "workings",
       "label": "Deepen the Runes",
-      "desc": "Apprentices chant the old runes deeper into memory, holding back the Forgetting.",
+      "desc": "Chant the old runes deeper into memory, holding back the Forgetting. A Blue working — knowledge against loss.",
+      "school": "blue",
       "requires": { "gte": ["mana", 10] },
-      "effects": [{ "add": ["mana", -10] }, { "add": ["lore", 7] }]
+      "cast": { "stat": "wisdom", "vs": 40 },
+      "win": { "text": "The lore sinks in true. The coven's memory deepens against the dark.", "effects": [{ "add": ["mana", -10] }, { "add": ["lore", 9] }] },
+      "lose": { "text": "The chant slips; only fragments take. A little is remembered, most is not.", "effects": [{ "add": ["mana", -10] }, { "add": ["lore", 2] }] }
     },
     {
       "id": "tend-flame",
       "screen": "workings",
       "label": "Tend the Hearth-Flame",
-      "desc": "Keep the hearth-rune bright through the long dark; the coven takes heart.",
+      "desc": "Keep the hearth-rune bright through the long dark; the coven takes heart. A Green working — nurture against despair.",
+      "school": "green",
       "requires": { "gte": ["mana", 8] },
-      "effects": [{ "add": ["mana", -8] }, { "add": ["faith", 5] }]
+      "cast": { "stat": "courage", "vs": 34 },
+      "win": { "text": "The hearth-rune blooms warm and steady. The coven sleeps easier for it.", "effects": [{ "add": ["mana", -8] }, { "add": ["faith", 6] }] },
+      "lose": { "text": "The flame sputters low. It holds, but the warmth does not reach far.", "effects": [{ "add": ["mana", -8] }, { "add": ["faith", 2] }] }
     },
     {
       "id": "court-flame",
       "screen": "workings",
       "label": "Court the Sacred Flame",
-      "desc": "Draw on the Flame's power. Its regard grows — but drawing deep stirs what should stay still.",
+      "desc": "Draw on the Flame itself — beyond any school. Its regard grows, but drawing deep stirs what should stay still. A test of nerve, not colour.",
       "requires": { "gte": ["mana", 16] },
-      "effects": [{ "add": ["mana", -16] }, { "add": ["flamesRegard", 7] }, { "add": ["fracture", 2] }]
+      "cast": { "stat": "courage", "vs": 55 },
+      "win": { "text": "The Flame answers, and does not take. Its regard settles on Runehold like a warm weight.", "effects": [{ "add": ["mana", -16] }, { "add": ["flamesRegard", 9] }, { "add": ["fracture", 2] }] },
+      "lose": { "text": "The Flame stirs and turns cold. It grants a little regard, but something has woken that should have slept.", "effects": [{ "add": ["mana", -16] }, { "add": ["flamesRegard", 3] }, { "add": ["fracture", 6] }] }
     }
   ]
 }

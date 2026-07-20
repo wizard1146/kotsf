@@ -23,8 +23,14 @@ export function createInitialState(seed = 1) {
     scenesSeen: {},     // id -> count (for `once`)
     followups: [],      // queued scene ids (from `unlock` effects)
     actionsUsed: [],    // per-screen action ids performed this season (reset each tick)
+    // Per-school Mastery (0..100) — how much practical command of each colour the coven
+    // holds. SEPARATE from cults[] (that is standing/reputation with the cult). Mastery
+    // raises the odds on that school's workings; casting a working nudges it up.
+    mastery: { red: 0, yellow: 0, brown: 0, green: 0, blue: 0, purple: 0, white: 0 },
   };
   state.circle = rollCircle(state);
+  // Opening mastery reflects who stands in the Circle: each Wizard lends practice to their school.
+  for (const m of state.circle) state.mastery[m.school] += m.rank === 'ring-leader' ? 28 : m.rank === 'adept' ? 22 : 16;
   return state;
 }
 
@@ -114,6 +120,22 @@ export function castMember(state, sel, exclude) {
   return pool[0];
 }
 
+// ---- working (spell) casting: score a caster attempting a working ----
+// score = their competence in the working's stat + a bonus when their school matches
+// the working + the coven's mastery of that school. Fed to resolveContest vs difficulty.
+export function workingScore(state, working, caster) {
+  const cast = working.cast || {};
+  const base = caster ? caster[cast.stat] || 0 : 30;
+  const schoolBonus = caster && working.school && caster.school === working.school ? 15 : 0;
+  const masteryBonus = working.school ? Math.floor((state.mastery?.[working.school] || 0) / 4) : 0; // up to +25
+  return base + schoolBonus + masteryBonus;
+}
+// Win probability [0,1) for the odds hint the UI shows.
+export function workingOdds(state, working, caster) {
+  const s = workingScore(state, working, caster);
+  return s / (s + Math.max(1, (working.cast || {}).vs || 40));
+}
+
 // Substitute {name} + gendered pronoun tokens ({they}/{them}/{their}/{theirs}) into scene text.
 export function castText(text, m) {
   if (!m || !text) return text || '';
@@ -129,6 +151,7 @@ export function castText(text, m) {
 // Path resolution shared by conditions + effects. Keeps content's vocabulary tiny.
 export function getPath(state, path) {
   if (path.startsWith('cult.')) return state.cults[path.slice(5)];
+  if (path.startsWith('mastery.')) return (state.mastery || {})[path.slice(8)];
   if (path in state.pressures) return state.pressures[path];
   if (path === 'turn') return state.turn;
   if (path === 'year') return state.year;

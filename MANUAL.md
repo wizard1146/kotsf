@@ -13,8 +13,8 @@ still burns beneath the Secret Tower; the seven Color Cults circle. Tend the fla
 ## Introduction
 
 Generations after the cataclysm that tore the world apart, the Runiverse is a quilt of fractured holds.
-You lead a **coven of Wizards** — a few dozen souls, four named advisors, and a half-remembered claim
-to old power. Magic is real but *thinning*. The Warriors outnumber you and need no spells to kill you.
+You lead a **coven of Wizards** — a few dozen souls, a **Circle** of advisors rolled fresh for your
+saga, and a half-remembered claim to old power. Magic is real but *thinning*. The Warriors outnumber you and need no spells to kill you.
 And beneath the Secret Tower, the **Sacred Flame** still burns: the greatest power and the greatest loss
 in the world.
 
@@ -37,7 +37,8 @@ not to solve a puzzle but to **lead a society through the dark** and leave a sag
 
 ### If you don't read manuals, read this
 
-- **Listen to the Circle.** On a scene, your advisors speak per their leanings — and they *disagree*.
+- **Listen to the Circle.** On a scene, whoever fits the moment speaks — and they *disagree*. Their
+  **temperament** shapes what they urge; their **competence** decides what they could actually pull off.
   Their counsel serves their own agendas as much as the coven's. Weigh it; don't obey it.
 - **Watch the bottom bar.** Your advisor portraits and your seven pressures live there at all times.
 - **Use the rune menu** (top of the screen) to visit the management screens between events — the
@@ -74,11 +75,12 @@ is the highest-reward, highest-risk power in the game.
 
 ## The turn: seasons, years, and the recap
 
-Time turns through **four seasons** — **Thaw → Highsun → Emberfall → Deepfrost** — and then a new
-**Year** begins. Each season, time advances until something demands you: an **event** (a scene), or the
-**turn of the year**.
+Time turns through **four seasons** — **Thaw → Highsun → Emberfall → Deepfrost** — each ticking in
+**thirds** (**Early → Mid → Late**), so a year runs twelve **sub-seasons**. Time advances sub-season by
+sub-season until something demands you: an **event** (a scene), or the **turn of the year**. The header
+shows where you stand, e.g. *Mid Thaw · Year 1*.
 
-**The drift.** Every season, whether or not anything happens:
+**The drift.** At each **turn of the season** (every third sub-season), whether or not anything happens:
 - **Lore −3** — the Forgetting bites.
 - **Mana +3** — your reserve slowly renews.
 - **Provisions −3** — the stores dwindle.
@@ -115,18 +117,26 @@ costs another — there is no pleasing all seven.
 
 ## The Circle (your advisor ring)
 
-Runehold is led through a **Circle** of named Wizards, each with a **colour** allegiance, a **leaning**
-(what they value), and a **temperament**. The first member is the **Ring leader**. You begin with:
+Runehold is led through a **Circle** of Wizards **rolled fresh for each campaign** — seeded, so a given
+start is reproducible, but no two covens need be alike. You open with **four**: a **Ring-leader**, a
+**second-in-command**, and two **apprentices**. Every member carries:
 
-- **Vela** (Blue, *Lore-keeper*) — keeper of the half-burned Athenaeum-scrolls; believes memory is the
-  only wealth the cataclysm cannot take.
-- **Korr Ashen** (Red, *Cautious*) — survived the Great Burning; has buried more Souls than apprentices.
-- **Ember** (Yellow, *Flame-touched*, apprentice) — young, reckless, drawn to the Flame.
-- **Wisp** (White, *Flame-touched*, apprentice) — quiet, devout, already half-listening to the Flame.
+- a **school** — one of the seven colours (Red, Yellow, Brown, Green, Blue, Purple, White): the *flavour*
+  of their magic;
+- a **class** — one of nine (Magus, Sorcerer, Druid, Necromancer, Pyromancer, Enchanter, Charmer, Chaos
+  Mage, Ghost Eater): what they *do best*;
+- four **competence** stats — **Power, Wisdom, Guile, Courage** — that feed contests (*what they can pull
+  off*);
+- three **temperament** axes — **Boldness, Piety, Temper** — that colour their counsel (*what they urge*).
 
-On a scene, eligible advisors **speak per their leanings, and they disagree** — telling you what *they*
-would do, which is not always what the coven needs. Visit **The Coven** screen to see the full roster
-and the coven's Faith; lost members are remembered there among the **Forgotten Souls**.
+On a scene the engine **casts a role, not a name** — "the wisest here," "the boldest," "a Necromancer" —
+and fills it from whoever fits, substituting their name and pronouns. So the *same* scene is voiced by
+different Wizards in different campaigns, and if nobody fits, that voice simply isn't heard. Eligible
+advisors **disagree**: temperament decides what they push for, competence decides whether they could
+deliver it. The **second-in-command** is your default **caster** of workings (see *Workings*, below).
+
+Visit **The Coven** screen for the full roster — each member's school, class and rank — and the coven's
+Faith; lost members are remembered there among the **Forgotten Souls**.
 
 > *Recruitment* (drawing new Wizards in, raising apprentices into the Circle) is planned but not yet
 > wired — for now the Circle only shrinks, through the Flame.
@@ -172,10 +182,15 @@ Enemy* to *Ally*. Acting for one cult often costs another. Hostility is escapabl
 mend a feud.
 
 ### Workings (Magic)
-Spend **Mana** on workings, **one of each per season**: *Mend the Wards* (lower the Fracture — your
-chief defence against the doom clock), *Deepen the Runes* (hold Lore against the Forgetting), *Tend the
-Hearth-Flame* (raise Faith), *Court the Sacred Flame* (raise Regard toward victory — but it stirs the
-Fracture).
+The coven's own spells, cast on your initiative — **one of each per season**. Each working belongs to a
+**colour school** and is a **contest**: a chosen caster tests one competence (Power / Wisdom / Guile /
+Courage) against a difficulty, branching to a fuller **win** or a weaker **lose** — and it costs **Mana**
+either way. You **pick the caster** at the top of the screen (the **second-in-command** casts by default);
+a caster whose **school matches** the working, backed by high **Mastery**, casts at far better odds, so
+each card shows that caster's chance. Casting also **practises the school**, nudging its Mastery up. The
+four: *Mend the Wards* (**White** — lower the Fracture), *Deepen the Runes* (**Blue** — hold Lore against
+the Forgetting), *Tend the Hearth-Flame* (**Green** — raise Faith), and *Court the Sacred Flame* (beyond
+any school — raise Regard toward victory, but it stirs the Fracture).
 
 ### The Runiverse (Map)
 A map of the known world: **Runehold** at the centre, the seven **cult holds** ringed around it (each
@@ -185,8 +200,8 @@ showing live standing — the Gilded Reach is Red, the Bastion is Blue), the **S
 
 ### The Codex (Background / Lore)
 The world's knowledge — the Pressures, the Seven Cults, and the Powers & Perils (the Flame, the
-Forgetting, the Fracture, the Circle, Forgotten Souls, Runehold). Search it; click a result to jump to
-the entry. *Understanding the world helps you survive it.*
+Forgetting, the Fracture, the Circle, Schools & Classes, Workings, Mastery, Forgotten Souls, Runehold).
+Search it; click a result to jump to the entry. *Understanding the world helps you survive it.*
 
 ### The Saga
 The running chronicle of Runehold's deeds, newest first — the artifact of *your* campaign.
@@ -227,10 +242,16 @@ seam in the trembling ground). Left unchecked, it always wins — so check it.
 
 ## Workings & actions (how the levers work)
 
-The Workings, Fields, Market, and War screens share one model: each is a **declarative action** with a
-cost and a set of effects, usable **once per season** (they refresh at the turn of the season). The cost
-is shown as a chip; an action you can't afford is greyed with the requirement named. This is how you act
-*proactively* between events — to spend down Mana, top up Provisions, ward the Fracture, or mend a feud.
+The **Fields, Market, and War** screens share one model: each is a **declarative action** with a cost
+and a set of effects, usable **once per season** (they refresh at the turn of the season). The cost is
+shown as a chip; an action you can't afford is greyed with the requirement named.
+
+**Workings** keep that once-per-season rhythm but are **rolled, not automatic**: a working is a caster's
+**contest** (above), so its outcome — full or weak — turns on who you send and your Mastery of its school.
+**Mastery** is a per-school command level (**0–100**, separate from Cult standing): it starts high in the
+schools your Circle actually practises and near zero elsewhere, and climbs a little each time you cast in
+that colour. Together this is how you act *proactively* between events — to spend down Mana, top up
+Provisions, ward the Fracture, or mend a feud.
 
 ---
 
@@ -252,8 +273,8 @@ a saga of a few dozen years, not an endless sandbox. The doom clock and the Forg
 
 ## Getting started (and playing well)
 
-- **Keep the Circle full and varied.** Different leanings give you different counsel and different
-  strengths; a Circle of one mind is a blind one.
+- **Keep the Circle full and varied.** Different schools, classes and temperaments give you different
+  counsel, and different Wizards to cast your workings; a Circle of one colour is a blind one.
 - **Hold the Fracture early.** Mend the Wards or fortify before the ash is at your door — it only gets
   harder.
 - **Don't hoard Mana.** It renews slowly but caps out; spend it on Workings rather than letting it sit.

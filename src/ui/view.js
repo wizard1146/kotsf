@@ -1,7 +1,7 @@
 // view.js — pure rendering. Turns the game state into HTML. The swappable layer:
 // the engine never imports this; this imports only read-only engine helpers.
 import { meets } from '../engine/conditions.js';
-import { seasonName, timeName, CULTS, castMember, castText } from '../engine/state.js';
+import { seasonName, timeName, CULTS, castMember, castText, workingOdds } from '../engine/state.js';
 
 const P_LABELS = {
   mana: 'Mana', provisions: 'Provisions', coin: 'Coin', lore: 'Lore',
@@ -21,6 +21,7 @@ const END_COPY = {
 };
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const cap = (s) => (s ? String(s)[0].toUpperCase() + String(s).slice(1) : '');
 
 function reqHint(req) {
   if (!req) return 'unavailable';
@@ -186,13 +187,54 @@ function sagaScreenHTML(state) {
 // one of each per season. The cost is folded into effects (a negative add) and
 // shown as a chip; `requires` gates affordability. This is how the player gets
 // proactive levers between events — e.g. Mana→Fracture, or Coin→Provisions.
+// The active caster for the Workings screen: whoever the player picked, else the
+// second-in-command (the default caster). May be null pre-game / empty Circle.
+function activeCaster(ctx) {
+  const state = ctx.state;
+  return (ctx.casterId && state.circle.find((m) => m.id === ctx.casterId)) || castMember(state, 'second');
+}
+
+function casterPickerHTML(state, caster) {
+  const pills = state.circle.map((m) => {
+    const on = caster && m.id === caster.id;
+    return `<button class="caster-pill${on ? ' on' : ''}" data-action="set-caster" data-caster="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(m.name)} — ${CLASS_LABEL[m.class] || m.class}, ${cap(m.school)} school${m.rank === 'adept' ? ' (default caster)' : ''}">
+      <span class="cp-dot"></span>${esc(m.name)}</button>`;
+  }).join('');
+  return `<div class="caster-bar"><span class="caster-lead">Cast by</span><div class="caster-pills">${pills}</div></div>`;
+}
+
+function workingCardHTML(state, a, caster, isUsed, can, disabled) {
+  // caster-cast working: school badge + the contest + this caster's odds
+  const odds = Math.round(workingOdds(state, a, caster) * 100);
+  const oddsCls = odds >= 66 ? 'odds-good' : odds >= 42 ? 'odds-mid' : 'odds-low';
+  const badge = a.school
+    ? `<span class="wk-school" style="--cult:${CULT_HEX[a.school] || '#777'}">${cap(a.school)}</span>`
+    : `<span class="wk-school wk-flame">Flame</span>`;
+  return `<div class="working-card cast-card${disabled ? ' spent' : ''}">
+    <div class="working-head"><b>${esc(a.label)}</b>${badge}</div>
+    <p class="working-desc">${esc(a.desc)}</p>
+    <div class="wk-meta">
+      <span class="wk-stat">${cap(a.cast.stat)} vs ${a.cast.vs}</span>
+      ${caster ? `<span class="wk-odds ${oddsCls}">${esc(caster.name)} &middot; ~${odds}%</span>` : ''}
+    </div>
+    <div class="chips">${effectChips((a.win || {}).effects)}</div>
+    <button class="choice" data-action="do-action" data-act="${esc(a.id)}" ${disabled ? 'disabled' : ''}>
+      ${isUsed ? 'Cast this season' : can ? 'Cast' : reqHint(a.requires)}
+    </button>
+  </div>`;
+}
+
 function actionScreenHTML(ctx, screen, title, intro, resourceKey, resourceLabel) {
   const { state } = ctx;
   const used = state.actionsUsed || [];
-  const cards = (ctx.actions || []).filter((a) => a.screen === screen).map((a) => {
+  const all = (ctx.actions || []).filter((a) => a.screen === screen);
+  const hasCast = all.some((a) => a.cast);
+  const caster = hasCast ? activeCaster(ctx) : null;
+  const cards = all.map((a) => {
     const isUsed = used.includes(a.id);
     const can = meets(state, a.requires);
     const disabled = isUsed || !can;
+    if (a.cast) return workingCardHTML(state, a, caster, isUsed, can, disabled);
     return `<div class="working-card${disabled ? ' spent' : ''}">
       <div class="working-head"><b>${esc(a.label)}</b></div>
       <p class="working-desc">${esc(a.desc)}</p>
@@ -207,6 +249,7 @@ function actionScreenHTML(ctx, screen, title, intro, resourceKey, resourceLabel)
     <h2 class="screen-title">${esc(title)}</h2>
     <p class="muted">${esc(intro)}</p>
     <div class="working-mana"><b>${esc(resourceLabel)}</b><div class="bar${resourceKey === 'fracture' ? ' bar-danger' : ''}"><div class="bar-fill" style="width:${rv}%"></div></div><span>${rv}</span></div>
+    ${hasCast ? casterPickerHTML(state, caster) : ''}
     <div class="working-grid">${cards}</div>
   </section>`;
 }
@@ -283,7 +326,7 @@ function memberCard(m, isLeader) {
 function covenScreenHTML(ctx) {
   const { state } = ctx;
   const faith = state.pressures.faith;
-  const [fLabel] = faithBand(faith);
+  const [fLabel, fCls] = faithBand(faith);
   const n = state.circle.length;
   const soulCount = state.souls.length;
   const members = state.circle.map((m, i) => memberCard(m, i === 0)).join('');
@@ -296,10 +339,10 @@ function covenScreenHTML(ctx) {
     <div class="coven-layout">
       <aside class="coven-tower">
         <img src="assets/icons/icon_secret_tower.png" alt="The Secret Tower" />
-        <div class="coven-tower-cap">Runehold</div>
+        <div class="coven-tower-cap">The Coven &mdash; ${n} Wizard${n === 1 ? '' : 's'}</div>
       </aside>
       <div class="coven-main">
-        <h2 class="screen-title coven-title">The Coven <small>${n} Wizard${n === 1 ? '' : 's'} &middot; Faith ${fLabel} (${faith})</small></h2>
+        <p class="coven-faithline">Faith &mdash; <b class="cult-standing ${fCls}">${fLabel}</b> (${faith})</p>
         <div class="portrait-grid">${members}</div>
         ${souls}
         <p class="muted coven-note">Recruitment rites are not yet established — in time, new Wizards will be drawn to a coven of high Faith, and apprentices raised into the Circle.</p>
@@ -485,7 +528,7 @@ function modal(kind, title, body) {
 
 function optionsHTML(ctx) {
   const s = ctx.settings;
-  const sections = [{ id: 'display', title: 'Display' }, { id: 'saves', title: 'Saves' }, { id: 'data', title: 'Data' }];
+  const sections = [{ id: 'display', title: 'Display' }, { id: 'saves', title: 'Saves' }, { id: 'data', title: 'Data' }, { id: 'about', title: 'About' }];
   const activeId = sections.some((x) => x.id === ctx.optionsTab) ? ctx.optionsTab : 'display';
   const side = sections.map((x) =>
     `<button class="panel-navitem ${x.id === activeId ? 'on' : ''}" data-action="options-tab" data-tab="${x.id}">${x.title}</button>`).join('');
@@ -503,6 +546,10 @@ function optionsHTML(ctx) {
   } else if (activeId === 'data') {
     main = `<div class="opt opt-danger"><label>Saved data</label><button class="danger" data-action="clear-data">Clear all data</button></div>
       <p class="muted">Removes saved campaigns and settings from this browser. This cannot be undone.</p>`;
+  } else if (activeId === 'about') {
+    main = `<div class="opt"><label>Version</label><span class="opt-version">${esc(ctx.appVersion || '—')}</span></div>
+      <div class="opt"><label>Check for update</label><button data-action="force-update">Update now</button></div>
+      <p class="muted">Runehold installs as an app and runs offline. If a new version is out, this clears the cached app and reloads the latest. Your saved campaign is kept.</p>`;
   } else {
     main = `<div class="opt"><label>Text size</label><div class="seg">${seg}</div></div>
       <div class="opt"><label>Reduce motion</label>${toggle('reduceMotion', s.reduceMotion)}</div>

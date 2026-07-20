@@ -206,12 +206,12 @@ button.cb-res:active { transform: translateY(0); }
 
 /* --- Coven screen: the Secret Tower on the left, portrait cards wrapping right --- */
 .coven-layout { display: flex; gap: 1.5rem; align-items: flex-start; }
-.coven-tower { flex: 0 0 clamp(150px, 24%, 270px); position: sticky; top: 0; text-align: center; }
-.coven-tower img { width: 100%; height: auto; display: block; border-radius: 12px; }
-.coven-tower-cap { font-family: var(--display); color: var(--flame); font-size: 1.1rem; letter-spacing: 0.03em; margin-top: 0.4rem; }
-.coven-main { flex: 1; min-width: 0; }
-.coven-title { margin: 0 0 0.7rem; font-size: 1.25rem; }
-.coven-title small { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-dim); font-weight: normal; margin-left: 0.5rem; letter-spacing: 0; }
+.coven-tower { flex: 0 0 clamp(150px, 24%, 270px); position: sticky; top: 0; padding: 0; text-align: center; }
+.coven-tower img { width: 100%; height: auto; display: block; }
+.coven-tower-cap { font-family: var(--display); color: var(--flame); font-size: 1.15rem; letter-spacing: 0.02em; margin-top: -0.2rem; }
+.coven-main { flex: 1; min-width: 0; padding-top: 0.2rem; }
+.coven-faithline { color: var(--ink-dim); font-family: var(--mono); font-size: 0.82rem; margin: 0 0 0.7rem; }
+.coven-faithline b { font-family: var(--sans); }
 .coven-screen .coven-subhead { margin: 1rem 0 0.45rem; font-size: 0.95rem; }
 .portrait-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .pcard { width: 108px; background: var(--panel-2); border: 1px solid var(--line); border-top: 3px solid var(--cult); border-radius: 10px; overflow: hidden; }
@@ -240,6 +240,24 @@ button.cb-res:active { transform: translateY(0); }
 .working-desc { margin: 0; color: var(--ink-dim); font-size: 0.88rem; line-height: 1.5; }
 .working-card .chips { margin: 0.2rem 0; }
 .working-card .choice { align-items: center; }
+
+/* Caster picker (Workings) — pick who casts; default is the second-in-command */
+.caster-bar { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin: 0 0 1rem; }
+.caster-lead { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); }
+.caster-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.caster-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.28rem 0.6rem; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink-dim); font-size: 0.82rem; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+.caster-pill .cp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cult); flex: none; }
+.caster-pill:hover { color: var(--ink); }
+.caster-pill.on { border-color: var(--cult); color: var(--ink); box-shadow: inset 0 0 0 1px var(--cult); }
+/* caster-cast working card: school badge + contest + odds */
+.wk-school { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.12rem 0.4rem; border-radius: 4px; color: #fff; background: var(--cult); flex: none; }
+.wk-school.wk-flame { background: linear-gradient(120deg, var(--flame), #b4531a); }
+.wk-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; font-family: var(--mono); font-size: 0.76rem; }
+.wk-stat { color: var(--ink-dim); }
+.wk-odds { font-weight: 600; }
+.wk-odds.odds-good { color: #3fae6b; }
+.wk-odds.odds-mid { color: var(--flame); }
+.wk-odds.odds-low { color: #c0563e; }
 
 /* The Runiverse (Map) — stylized, data-driven; no art assets required */
 .map-field {
@@ -536,6 +554,7 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
 .opt:last-child { border-bottom: 0; }
 .opt > label { color: var(--ink); font-size: 0.98rem; }
 .opt-danger > label { color: var(--ink-dim); }
+.opt-version { font-family: var(--mono); color: var(--flame); font-size: 0.9rem; }
 .seg { display: inline-flex; gap: 0.3rem; }
 .seg button.on, .toggle.on { border-color: var(--flame-deep); color: var(--flame); background: #2a2018; }
 button.danger { border-color: #5b2a23; color: #e29a92; }

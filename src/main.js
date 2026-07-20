@@ -4,14 +4,16 @@
 //
 // APP-LEVEL UI STATE LIVES HERE, NEVER IN THE ENGINE. `screen`/`overlay`/
 // `settings` are presentation concerns; the GameState model knows nothing of them.
-import { createInitialState } from './engine/state.js';
+import { createInitialState, castMember, workingScore } from './engine/state.js';
 import { meets } from './engine/conditions.js';
 import { pickScene } from './engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from './engine/loop.js';
 import { applyEffects } from './engine/effects.js';
+import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
+const APP_VERSION = 'v10';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -29,6 +31,7 @@ let overlay = null;            // null | 'options' | 'codex' | 'saves'
 let gameView = 'scene';        // which stage screen is shown (scene | saga | coven | ...)
 let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/Menu)
 let pinnedCard = null;         // index of an advisor card tapped open (tap again to close)
+let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -154,7 +157,18 @@ function doAction(id) {
   if (!a) return;
   if (!state.actionsUsed) state.actionsUsed = [];
   if (state.actionsUsed.includes(id) || !meets(state, a.requires)) return;
-  applyEffects(state, a.effects);
+  if (a.cast) {
+    // a caster-cast working: the chosen caster (default 2iC) contests the difficulty.
+    // Win/lose branches differ; either way the mana is spent and the school is practised.
+    const caster = (casterId && state.circle.find((m) => m.id === casterId)) || castMember(state, 'second');
+    const outcome = resolveContest(state, workingScore(state, a, caster), a.cast.vs);
+    applyEffects(state, (a[outcome] || {}).effects || []);
+    if (a.school) applyEffects(state, [{ adjust_mastery: [a.school, outcome === 'win' ? 4 : 2] }]);
+    const line = (a[outcome] || {}).text;
+    state.saga.push(`${caster ? caster.name : 'The coven'} cast ${a.label} — ${outcome === 'win' ? 'and it held' : 'and it faltered'}.${line ? ' ' + line : ''}`);
+  } else {
+    applyEffects(state, a.effects);
+  }
   state.actionsUsed.push(id);
   end = checkEnd(state);
   if (end) { phase = 'end'; gameView = 'scene'; }   // an action can win (Regard) or surface a loss
@@ -184,6 +198,20 @@ function saveManual(btn) {
 
 function deleteManual() { try { localStorage.removeItem(MANUAL_KEY); } catch { /* noop */ } draw(); }
 
+// Force the PWA onto the latest shell: drop the service-worker caches and re-register,
+// then hard-reload. Saves live in localStorage and are left untouched.
+async function forceUpdate(el) {
+  if (el) { el.textContent = 'Updating…'; el.disabled = true; }
+  try {
+    if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map((k) => caches.delete(k))); }
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((r) => r.unregister().catch(() => {})));
+    }
+  } catch { /* best-effort — reload anyway */ }
+  location.reload();
+}
+
 function clearData() {
   if (!window.confirm('Clear all saved campaigns and settings? This cannot be undone.')) return;
   try { [AUTOSAVE_KEY, MANUAL_KEY, SETTINGS_KEY].forEach((k) => localStorage.removeItem(k)); } catch { /* noop */ }
@@ -196,7 +224,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -283,6 +311,7 @@ app.addEventListener('click', (e) => {
     case 'toggle-card': { const i = Number(el.dataset.card); pinnedCard = pinnedCard === i ? null : i; draw(); break; }
     case 'unlock-orientation': setOption('lockLandscape', '0'); break;
     case 'do-action': doAction(el.dataset.act); break;
+    case 'set-caster': casterId = el.dataset.caster; draw(); break;
     case 'resume-game': overlay = null; screen = 'game'; draw(); break;
     case 'start-game': confirmNewCoven(); break;
     case 'confirm-new-yes': startGame(); break;
@@ -301,6 +330,7 @@ app.addEventListener('click', (e) => {
     case 'delete-manual': deleteManual(); break;
     // options
     case 'set-option': setOption(el.dataset.key, el.dataset.val); break;
+    case 'force-update': forceUpdate(el); break;
     case 'clear-data': clearData(); break;
   }
 });

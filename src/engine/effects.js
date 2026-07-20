@@ -12,6 +12,11 @@ function addPath(state, path, delta) {
     state.cults[c] = clamp((state.cults[c] || 0) + delta, -100, 100);
     return;
   }
+  if (path.startsWith('mastery.')) {
+    const s = path.slice(8);
+    if (state.mastery && s in state.mastery) state.mastery[s] = clamp(state.mastery[s] + delta);
+    return;
+  }
   if (path in state.pressures) {
     state.pressures[path] = clamp(state.pressures[path] + delta);
   }
@@ -37,6 +42,7 @@ export function applyEffects(state, effects = []) {
   for (const e of effects) {
     if (e.add) addPath(state, e.add[0], e.add[1]);
     else if (e.adjust_cult) addPath(state, 'cult.' + e.adjust_cult[0], e.adjust_cult[1]);
+    else if (e.adjust_mastery) addPath(state, 'mastery.' + e.adjust_mastery[0], e.adjust_mastery[1]);
     else if (e.set && e.set[0] in state.pressures) state.pressures[e.set[0]] = clamp(e.set[1]);
     else if (e.set_flag) state.flags[e.set_flag] = true;
     else if (e.clear_flag) delete state.flags[e.clear_flag];
