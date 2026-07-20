@@ -317,14 +317,67 @@ function faithBand(v) {
 function memberCard(m, isLeader) {
   const init = (m.name[0] || '?').toUpperCase();
   const tip = `${m.name} — ${CLASS_LABEL[m.class] || m.class} · ${CULT_NAMES[m.school]} · ${m.rank} · Pow ${m.power} Wis ${m.wisdom} Gui ${m.guile} Cou ${m.courage}`;
-  return `<div class="pcard${isLeader ? ' leader' : ''}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
+  return `<button class="pcard${isLeader ? ' leader' : ''}" data-action="view-member" data-member="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
     <div class="pcard-img"><span class="pcard-init">${esc(init)}</span></div>
     <div class="pcard-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</div>
     <div class="pcard-sub">${esc(CLASS_LABEL[m.class] || m.class)}</div>
+  </button>`;
+}
+
+// full-stage advisor sheet — navigated into from a Coven portrait (not a modal)
+const RANK_LABEL = { 'ring-leader': 'Ring-leader', adept: 'Second-in-command', apprentice: 'Apprentice' };
+const TEMP_WORDS = {
+  boldness: ['Cautious', 'Measured', 'Bold'],
+  piety: ['Worldly', 'Observant', 'Devout'],
+  temper: ['Cool', 'Even', 'Fiery'],
+};
+const tempWord = (axis, v) => TEMP_WORDS[axis][v < 38 ? 0 : v > 62 ? 2 : 1];
+
+function sheetStat(label, v, word) {
+  return `<div class="sheet-stat">
+    <div class="sheet-stat-row"><span>${label}</span><span class="${word ? 'sheet-temp-word' : ''}">${word || v}</span></div>
+    <div class="bar${word ? ' bar-temp' : ''}"><div class="bar-fill" style="width:${v}%"></div></div>
   </div>`;
+}
+
+function advisorSheetHTML(ctx, m) {
+  const state = ctx.state;
+  const isLeader = state.circle[0] && state.circle[0].id === m.id;
+  const init = (m.name[0] || '?').toUpperCase();
+  const cls = CLASS_LABEL[m.class] || m.class;
+  const school = CULT_NAMES[m.school] || cap(m.school);
+  const rank = RANK_LABEL[m.rank] || m.rank;
+  const top = [['Power', m.power], ['Wisdom', m.wisdom], ['Guile', m.guile], ['Courage', m.courage]].sort((a, b) => b[1] - a[1])[0][0];
+  const mastery = (state.mastery || {})[m.school] ?? 0;
+  const flavour = `${m.name} is a ${school} ${cls}, ${rank.toLowerCase()} of the Circle — strongest in ${top}, ${tempWord('boldness', m.boldness).toLowerCase()} and ${tempWord('piety', m.piety).toLowerCase()} by nature.`;
+  return `<section class="screen coven-screen advisor-sheet" style="--cult:${CULT_HEX[m.school] || '#777'}">
+    <button class="sheet-back" data-action="close-member">&#8592; The Coven</button>
+    <div class="sheet-layout">
+      <aside class="sheet-portrait-col">
+        <div class="sheet-portrait"><span class="pcard-init">${esc(init)}</span></div>
+        <h2 class="sheet-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</h2>
+        <div class="sheet-tags"><span class="wk-school" style="--cult:${CULT_HEX[m.school] || '#777'}">${cap(m.school)}</span> <span class="sheet-class">${esc(cls)}</span></div>
+        <div class="sheet-rank">${esc(rank)}</div>
+      </aside>
+      <div class="sheet-body">
+        <p class="sheet-flavour">${esc(flavour)}</p>
+        <h3 class="sheet-h">Competence <small>what they can pull off</small></h3>
+        <div class="sheet-stats">
+          ${sheetStat('Power', m.power)}${sheetStat('Wisdom', m.wisdom)}${sheetStat('Guile', m.guile)}${sheetStat('Courage', m.courage)}
+        </div>
+        <h3 class="sheet-h">Temperament <small>what they urge</small></h3>
+        <div class="sheet-stats">
+          ${sheetStat('Boldness', m.boldness, tempWord('boldness', m.boldness))}${sheetStat('Piety', m.piety, tempWord('piety', m.piety))}${sheetStat('Temper', m.temper, tempWord('temper', m.temper))}
+        </div>
+        <p class="sheet-mastery">Practises the <b>${esc(school)}</b> school &mdash; the coven's ${cap(m.school)} Mastery stands at <b>${mastery}</b>.</p>
+      </div>
+    </div>
+  </section>`;
 }
 function covenScreenHTML(ctx) {
   const { state } = ctx;
+  const sel = ctx.selectedMember && state.circle.find((m) => m.id === ctx.selectedMember);
+  if (sel) return advisorSheetHTML(ctx, sel);   // navigated into a member — show the full sheet
   const faith = state.pressures.faith;
   const [fLabel, fCls] = faithBand(faith);
   const n = state.circle.length;
@@ -431,12 +484,47 @@ const CLASS_LABEL = { magus: 'Magus', sorcerer: 'Sorcerer', druid: 'Druid', necr
 // the Circle bar (bottom chrome): the Circle as a held hand of cards — hover or
 // tap a card to lift it and hear the advisor's thought — plus a clickable
 // resource readout (each pressure jumps to the screen that governs it).
+// Does a member fit a counsel line's `lean` tag? Personality poles, competence
+// highs, or a school/class match. Untagged lines fit everyone.
+function memberLeans(m, lean) {
+  switch (lean) {
+    case 'bold': return m.boldness > 62;
+    case 'cautious': return m.boldness < 38;
+    case 'devout': return m.piety > 62;
+    case 'worldly': return m.piety < 38;
+    case 'fiery': return m.temper > 62;
+    case 'cool': return m.temper < 38;
+    case 'strong': return m.power >= 55;
+    case 'wise': return m.wisdom >= 55;
+    case 'cunning': return m.guile >= 55;
+    case 'brave': return m.courage >= 55;
+    default: return m.school === lean || m.class === lean;
+  }
+}
+// Stable (non-random, render-pure) index so a pinned bubble doesn't reshuffle each draw.
+function stableHash(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+// A member's ambient counsel for the CURRENT management screen (off the scene page).
+function screenCounsel(ctx, m) {
+  const pool = (ctx.counsel || {})[ctx.gameView];
+  if (!pool || !pool.length) return 'No strong counsel here.';
+  const fit = pool.filter((l) => !l.lean || memberLeans(m, l.lean));
+  const list = fit.length ? fit : pool;
+  return castText(list[stableHash(m.id + '|' + ctx.gameView) % list.length].text, m);
+}
+
 function circleBarHTML(ctx) {
   const { state } = ctx;
-  const voices = new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text]));
+  // On the scene (questing) page the advisors answer the scene; on every other
+  // screen they answer THAT screen (ambient counsel).
+  const onScene = ctx.gameView === 'scene';
+  const voices = onScene ? new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text])) : null;
   const cards = state.circle.map((m, i) => {
     const role = m.rank === 'ring-leader' ? 'leader' : (CLASS_LABEL[m.class] || m.class);
-    const thought = voices.get(m.id) || 'No strong counsel here.';
+    const thought = onScene ? (voices.get(m.id) || 'No strong counsel here.') : screenCounsel(ctx, m);
     return `<button class="cb-card${ctx.pinnedCard === i ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
         <span class="cb-face">
           <span class="cb-dot"></span>

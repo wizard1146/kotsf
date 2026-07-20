@@ -29,6 +29,12 @@ export function buildBundle() {
     // per-screen actions (Workings, Fields, …) — declarative requires + effects,
     // tagged by `screen`. One unified pool; the view filters by screen.
     actions: loadJson(join(ROOT, 'content', 'actions'), false).flatMap((f) => f.actions || []),
+    // ambient advisor counsel per management screen — merged by screen key. The
+    // footer casts a personality-fit line to each pinned advisor off the scene page.
+    counsel: loadJson(join(ROOT, 'content', 'counsel'), false).reduce((acc, f) => {
+      for (const [k, arr] of Object.entries(f.screens || {})) (acc[k] ||= []).push(...arr);
+      return acc;
+    }, {}),
   };
   writeFileSync(join(ROOT, 'content', 'bundle.json'), JSON.stringify(bundle, null, 2));
   return bundle;

@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v10';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v11';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -24,6 +24,7 @@ let scenes = [];
 let defs = {};                 // circle id -> definition (name, color, bio)
 let codex = [];                // wiki/codex categories
 let actions = [];              // per-screen actions (Workings, Fields, …): requires + effects
+let counsel = {};              // screen id -> ambient advisor line pool (footer counsel off-scene)
 
 // app-shell UI state
 let screen = 'splash';         // 'splash' | 'menu' | 'game'
@@ -32,6 +33,7 @@ let gameView = 'scene';        // which stage screen is shown (scene | saga | co
 let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/Menu)
 let pinnedCard = null;         // index of an advisor card tapped open (tap again to close)
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
+let selectedMember = null;     // Coven screen: advisor whose full sheet is open (null → roster)
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -120,6 +122,7 @@ function openYearRecap(year) {
 function newRun(seed) {
   state = createInitialState(seed ?? (Date.now() & 0xffffffff));
   end = null; lastOutcome = null; current = null; yearRecap = null;
+  casterId = null; selectedMember = null;   // fresh coven — clear per-Circle UI selections
   yearOpenPressures = { ...state.pressures };
   advanceToScene();
   draw();
@@ -224,7 +227,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, settings, codex, actions, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, settings, codex, actions, counsel, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -300,7 +303,9 @@ app.addEventListener('click', (e) => {
     // shell navigation
     case 'enter': screen = 'menu'; draw(); break;
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
-    case 'game-view': gameView = el.dataset.view; draw(); break;
+    case 'game-view': gameView = el.dataset.view; selectedMember = null; draw(); break;
+    case 'view-member': gameView = 'coven'; selectedMember = el.dataset.member; draw(); break;
+    case 'close-member': selectedMember = null; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
     case 'toggle-hearth-menu': {   // toggle the class on the LIVE node so the ☰→✕ + popover animate (a full redraw would skip the transition)
       hearthMenuOpen = !hearthMenuOpen;
@@ -357,6 +362,7 @@ window.addEventListener('keydown', (e) => {
   defs = Object.fromEntries(bundle.circle.map((c) => [c.id, c]));
   codex = bundle.codex || [];
   actions = bundle.actions || [];
+  counsel = bundle.counsel || {};
   applySettings();
   screen = 'splash'; overlay = null;
   draw();
