@@ -632,29 +632,47 @@ function gameHTML(ctx) {
 
 // ---- Layout B: thin top strip (date + meters) · left advisor rail (peek 60%,
 // pops out on tap) · right vertical rune rail below the hamburger · centre stage.
-function lbAdvisorsHTML(ctx) {
-  const { state } = ctx;
-  const onScene = ctx.gameView === 'scene';
-  const voices = onScene ? new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text])) : null;
-  const cards = state.circle.map((m, i) => {
-    const thought = onScene ? (voices.get(m.id) || 'No strong counsel here.') : screenCounsel(ctx, m);
-    const pinned = ctx.pinnedCard === i;
-    const photo = portraitFor(m, ctx.portraits);
-    return `<button class="lb-adv${pinned ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
-      <span class="lb-adv-img">${photo ? `<img class="member-photo" src="${esc(photo)}" alt="" loading="lazy">` : `<img class="member-photo" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`}</span>
+// counsel line for one member — their scene voice on the questing page, else their
+// ambient screen counsel. Shown in the fixed bottom dock when a tile is tapped.
+function memberCounsel(ctx, m) {
+  if (ctx.gameView === 'scene') {
+    const v = sceneVoices(ctx.state, ctx.current).find((x) => x.m.id === m.id);
+    return v ? v.text : 'No strong counsel here.';
+  }
+  return screenCounsel(ctx, m);
+}
+
+function lbAdvTile(ctx, m, i) {
+  const pinned = ctx.pinnedCard === i;
+  const photo = portraitFor(m, ctx.portraits);
+  const img = photo
+    ? `<img class="member-photo" src="${esc(photo)}" alt="" loading="lazy">`
+    : `<img class="member-photo" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`;
+  return `<button class="lb-adv${pinned ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
+      <span class="lb-adv-img">${img}</span>
       <span class="lb-adv-name">${esc(m.name)}</span>
-      <span class="lb-adv-bubble"><b>${esc(m.name)}</b><span class="cb-sub">${esc(CLASS_LABEL[m.class] || m.class)} &middot; ${CULT_NAMES[m.school] || m.school} &middot; ${esc(m.rank)}</span>${esc(thought)}</span>
     </button>`;
-  }).join('');
+}
+
+function lbAdvisorsHTML(ctx) {
+  const cards = ctx.state.circle.map((m, i) => lbAdvTile(ctx, m, i)).join('');
+  // native vertical scroll (touch + momentum) with ▲▼ affordances outside the scroller
   return `<aside class="lb-advisors">
     <button class="lb-adv-arrow up" data-action="adv-scroll" data-dir="-1" aria-label="Scroll advisors up">&lsaquo;</button>
-    <div class="lb-adv-list">${cards}</div>
+    <div class="lb-adv-scroll"><div class="lb-adv-list">${cards}</div></div>
     <button class="lb-adv-arrow down" data-action="adv-scroll" data-dir="1" aria-label="Scroll advisors down">&rsaquo;</button>
   </aside>`;
 }
 
 function gameHTMLB(ctx) {
   const { state } = ctx;
+  const pm = ctx.pinnedCard != null ? state.circle[ctx.pinnedCard] : null;   // pinned advisor → bottom dock
+  const dockPhoto = pm && (portraitFor(pm, ctx.portraits) || PORTRAIT_PLACEHOLDER);
+  const dock = pm ? `<div class="lb-bubble-dock" style="--cult:${CULT_HEX[pm.school] || '#777'}">
+      <span class="lb-dock-photo"><img class="member-photo" src="${esc(dockPhoto)}" alt=""></span>
+      <div class="lb-dock-body"><b>${esc(pm.name)}</b><span class="cb-sub">${esc(CLASS_LABEL[pm.class] || pm.class)} &middot; ${CULT_NAMES[pm.school] || pm.school} &middot; ${esc(pm.rank)}</span><p>${esc(memberCounsel(ctx, pm))}</p></div>
+      <button class="lb-dock-close" data-action="toggle-card" data-card="${ctx.pinnedCard}" aria-label="Close">&times;</button>
+    </div>` : '';
   return `<div class="lb-strip">
       <span class="lb-date"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><b>Runehold</b> <small class="hearth-date">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></span>
       <div class="cb-res-row lb-res">${pressureMetersHTML(ctx)}</div>
@@ -662,7 +680,8 @@ function gameHTMLB(ctx) {
     </div>
     ${lbAdvisorsHTML(ctx)}
     <main class="stage">${stageHTML(ctx)}</main>
-    <div class="lb-rune-rail">${runeMenuHTML(ctx, true)}</div>`;
+    <div class="lb-rune-rail">${runeMenuHTML(ctx, true)}</div>
+    ${dock}`;
 }
 
 // ---- splash + main menu ---------------------------------------------------

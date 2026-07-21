@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v21';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v22';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -36,7 +36,6 @@ let pinnedCard = null;         // index of an advisor card tapped open (tap agai
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
 let selectedMember = null;     // Coven screen: advisor whose full sheet is open (null → roster)
 let cardsOpen = false;         // card bar raised (tuck mode): tap the tucked hand to lift it
-let advScroll = 0;             // Layout B: pixels the left advisor rail is scrolled down
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -151,7 +150,7 @@ function openYearRecap(year) {
 function newRun(seed) {
   state = createInitialState(seed ?? (Date.now() & 0xffffffff));
   end = null; lastOutcome = null; current = null; yearRecap = null;
-  casterId = null; selectedMember = null; cardsOpen = false; advScroll = 0;   // fresh coven — clear per-Circle UI selections
+  casterId = null; selectedMember = null; cardsOpen = false;   // fresh coven — clear per-Circle UI selections
   yearOpenPressures = { ...state.pressures };
   advanceToScene();
   draw();
@@ -270,6 +269,7 @@ function draw() {
   const runesEl0 = app.querySelector('.runes');                       // survive the innerHTML swap
   const runesScrollL = runesEl0?.scrollLeft ?? 0;
   const runesScrollT = runesEl0?.scrollTop ?? 0;
+  const advScrollT = app.querySelector('.lb-adv-scroll')?.scrollTop ?? 0;   // keep the advisor rail put across redraws
   const layoutB = screen === 'game' && settings.layout === 'b';
   app.className = `screen-${screen}${layoutB ? ' layout-b' : ''}${overlay ? ' has-overlay' : ''}`;
   app.innerHTML = render(ctx());
@@ -295,9 +295,14 @@ function draw() {
     runes.addEventListener('scroll', updateRuneArrows, { passive: true });
     updateRuneArrows();
   }
-  if (layoutB) applyAdvScroll();   // restore the advisor-rail scroll + arrow affordances
+  const advScroll = app.querySelector('.lb-adv-scroll');   // restore native scroll pos + wire arrows
+  if (advScroll) {
+    advScroll.scrollTop = advScrollT;
+    advScroll.addEventListener('scroll', updateAdvArrows, { passive: true });
+    updateAdvArrows();
+  }
   // tab/tile heights can grow once icons + fonts finish laying out — re-measure next frame
-  requestAnimationFrame(() => { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') applyAdvScroll(); });
+  requestAnimationFrame(() => { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') updateAdvArrows(); });
   persist();
 }
 
@@ -311,35 +316,21 @@ function scrollRunes(dir) {
   if (vert) nav.scrollBy({ top: dir * nav.clientHeight * 0.75, ...opts });
   else nav.scrollBy({ left: dir * nav.clientWidth * 0.75, ...opts });
 }
-// Layout B advisor rail: custom scroll (translateY the list) so the peek/pop-out and
-// side bubbles stay un-clipped (overflow must be visible for those). Arrows step it.
-function advMaxScroll() {
-  const rail = app.querySelector('.lb-advisors');
-  const list = app.querySelector('.lb-adv-list');
-  if (!rail || !list) return 0;
-  return Math.max(0, list.offsetHeight - rail.clientHeight);
-}
-function applyAdvScroll() {
-  const list = app.querySelector('.lb-adv-list');
-  if (!list) return;
-  advScroll = Math.min(advScroll, advMaxScroll());
-  if (advScroll < 0) advScroll = 0;
-  list.style.transform = `translateY(${-advScroll}px)`;
-  updateAdvArrows();
-}
+// Layout B advisor rail: NATIVE vertical scroll (touch + momentum). The tapped
+// advisor's counsel shows in a fixed bottom dock, so nothing overflows sideways and
+// the scroller can clip cleanly. Arrows just nudge the native scroll.
 function scrollAdvisors(dir) {
-  const rail = app.querySelector('.lb-advisors');
-  if (!rail) return;
-  advScroll = Math.max(0, Math.min(advMaxScroll(), advScroll + dir * rail.clientHeight * 0.7));
-  applyAdvScroll();
+  const el = app.querySelector('.lb-adv-scroll');
+  if (!el) return;
+  el.scrollBy({ top: dir * el.clientHeight * 0.7, behavior: settings.reduceMotion ? 'auto' : 'smooth' });
 }
 function updateAdvArrows() {
   const rail = app.querySelector('.lb-advisors');
-  if (!rail) return;
-  const max = advMaxScroll();
-  rail.classList.toggle('has-overflow', max > 1);
-  rail.querySelector('.lb-adv-arrow.up')?.classList.toggle('can', advScroll > 1);
-  rail.querySelector('.lb-adv-arrow.down')?.classList.toggle('can', advScroll < max - 1);
+  const el = app.querySelector('.lb-adv-scroll');
+  if (!rail || !el) return;
+  const max = el.scrollHeight - el.clientHeight;
+  rail.querySelector('.lb-adv-arrow.up')?.classList.toggle('can', el.scrollTop > 1);
+  rail.querySelector('.lb-adv-arrow.down')?.classList.toggle('can', el.scrollTop < max - 1);
 }
 function updateRuneArrows() {
   const wrap = app.querySelector('.runes-wrap');
@@ -355,7 +346,7 @@ function updateRuneArrows() {
   wrap.querySelector('.runes-arrow.next')?.classList.toggle('can', overflow && pos < size - client - 1);
 }
 // on any viewport change, re-measure both rails' scroll-arrow affordances
-function remeasureRails() { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') applyAdvScroll(); }
+function remeasureRails() { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') updateAdvArrows(); }
 window.addEventListener('resize', remeasureRails);
 // re-pin the landscape side whenever the device is physically turned
 function onOrientationChange() { applyOrientation(); remeasureRails(); }
