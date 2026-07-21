@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v18';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v19';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -36,6 +36,7 @@ let pinnedCard = null;         // index of an advisor card tapped open (tap agai
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
 let selectedMember = null;     // Coven screen: advisor whose full sheet is open (null → roster)
 let cardsOpen = false;         // card bar raised (tuck mode): tap the tucked hand to lift it
+let advScroll = 0;             // Layout B: pixels the left advisor rail is scrolled down
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
 let optionsTab = 'display';    // active options section
@@ -150,7 +151,7 @@ function openYearRecap(year) {
 function newRun(seed) {
   state = createInitialState(seed ?? (Date.now() & 0xffffffff));
   end = null; lastOutcome = null; current = null; yearRecap = null;
-  casterId = null; selectedMember = null; cardsOpen = false;   // fresh coven — clear per-Circle UI selections
+  casterId = null; selectedMember = null; cardsOpen = false; advScroll = 0;   // fresh coven — clear per-Circle UI selections
   yearOpenPressures = { ...state.pressures };
   advanceToScene();
   draw();
@@ -294,6 +295,9 @@ function draw() {
     runes.addEventListener('scroll', updateRuneArrows, { passive: true });
     updateRuneArrows();
   }
+  if (layoutB) applyAdvScroll();   // restore the advisor-rail scroll + arrow affordances
+  // tab/tile heights can grow once icons + fonts finish laying out — re-measure next frame
+  requestAnimationFrame(() => { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') applyAdvScroll(); });
   persist();
 }
 
@@ -306,6 +310,36 @@ function scrollRunes(dir) {
   const opts = { behavior: settings.reduceMotion ? 'auto' : 'smooth' };
   if (vert) nav.scrollBy({ top: dir * nav.clientHeight * 0.75, ...opts });
   else nav.scrollBy({ left: dir * nav.clientWidth * 0.75, ...opts });
+}
+// Layout B advisor rail: custom scroll (translateY the list) so the peek/pop-out and
+// side bubbles stay un-clipped (overflow must be visible for those). Arrows step it.
+function advMaxScroll() {
+  const rail = app.querySelector('.lb-advisors');
+  const list = app.querySelector('.lb-adv-list');
+  if (!rail || !list) return 0;
+  return Math.max(0, list.offsetHeight - rail.clientHeight);
+}
+function applyAdvScroll() {
+  const list = app.querySelector('.lb-adv-list');
+  if (!list) return;
+  advScroll = Math.min(advScroll, advMaxScroll());
+  if (advScroll < 0) advScroll = 0;
+  list.style.transform = `translateY(${-advScroll}px)`;
+  updateAdvArrows();
+}
+function scrollAdvisors(dir) {
+  const rail = app.querySelector('.lb-advisors');
+  if (!rail) return;
+  advScroll = Math.max(0, Math.min(advMaxScroll(), advScroll + dir * rail.clientHeight * 0.7));
+  applyAdvScroll();
+}
+function updateAdvArrows() {
+  const rail = app.querySelector('.lb-advisors');
+  if (!rail) return;
+  const max = advMaxScroll();
+  rail.classList.toggle('has-overflow', max > 1);
+  rail.querySelector('.lb-adv-arrow.up')?.classList.toggle('can', advScroll > 1);
+  rail.querySelector('.lb-adv-arrow.down')?.classList.toggle('can', advScroll < max - 1);
 }
 function updateRuneArrows() {
   const wrap = app.querySelector('.runes-wrap');
@@ -320,9 +354,11 @@ function updateRuneArrows() {
   wrap.querySelector('.runes-arrow.prev')?.classList.toggle('can', overflow && pos > 1);
   wrap.querySelector('.runes-arrow.next')?.classList.toggle('can', overflow && pos < size - client - 1);
 }
-window.addEventListener('resize', updateRuneArrows);
+// on any viewport change, re-measure both rails' scroll-arrow affordances
+function remeasureRails() { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') applyAdvScroll(); }
+window.addEventListener('resize', remeasureRails);
 // re-pin the landscape side whenever the device is physically turned
-function onOrientationChange() { applyOrientation(); updateRuneArrows(); }
+function onOrientationChange() { applyOrientation(); remeasureRails(); }
 window.addEventListener('orientationchange', onOrientationChange);
 window.addEventListener('resize', applyOrientation);
 if (typeof screen !== 'undefined' && screen.orientation && screen.orientation.addEventListener) {
@@ -352,6 +388,7 @@ app.addEventListener('click', (e) => {
     case 'view-member': gameView = 'coven'; selectedMember = el.dataset.member; draw(); break;
     case 'close-member': selectedMember = null; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
+    case 'adv-scroll': scrollAdvisors(Number(el.dataset.dir)); break;
     case 'toggle-hearth-menu': {   // toggle the class on the LIVE node so the ☰→✕ + popover animate (a full redraw would skip the transition)
       hearthMenuOpen = !hearthMenuOpen;
       const hm = app.querySelector('.hearth-menu');

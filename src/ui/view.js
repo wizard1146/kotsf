@@ -639,13 +639,18 @@ function lbAdvisorsHTML(ctx) {
   const cards = state.circle.map((m, i) => {
     const thought = onScene ? (voices.get(m.id) || 'No strong counsel here.') : screenCounsel(ctx, m);
     const pinned = ctx.pinnedCard === i;
-    return `<button class="lb-adv${pinned ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
-      <span class="lb-adv-img">${portraitFor(m, ctx.portraits) ? `<img class="member-photo" src="${esc(portraitFor(m, ctx.portraits))}" alt="" loading="lazy">` : `<img class="member-photo" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`}</span>
+    const photo = portraitFor(m, ctx.portraits);
+    return `<button class="lb-adv${pinned ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--i:${i};--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
+      <span class="lb-adv-img">${photo ? `<img class="member-photo" src="${esc(photo)}" alt="" loading="lazy">` : `<img class="member-photo" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`}</span>
       <span class="lb-adv-name">${esc(m.name)}</span>
       <span class="lb-adv-bubble"><b>${esc(m.name)}</b><span class="cb-sub">${esc(CLASS_LABEL[m.class] || m.class)} &middot; ${CULT_NAMES[m.school] || m.school} &middot; ${esc(m.rank)}</span>${esc(thought)}</span>
     </button>`;
   }).join('');
-  return `<aside class="lb-advisors">${cards}</aside>`;
+  return `<aside class="lb-advisors">
+    <button class="lb-adv-arrow up" data-action="adv-scroll" data-dir="-1" aria-label="Scroll advisors up">&lsaquo;</button>
+    <div class="lb-adv-list">${cards}</div>
+    <button class="lb-adv-arrow down" data-action="adv-scroll" data-dir="1" aria-label="Scroll advisors down">&rsaquo;</button>
+  </aside>`;
 }
 
 function gameHTMLB(ctx) {
