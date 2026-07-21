@@ -154,19 +154,32 @@ const fractureBand = (v) => (v < 20 ? 'quiet' : v < 45 ? 'stirring' : v < 70 ? '
 // flavor for screens not yet built — all 9 are built now, kept for future screens
 const STUBS = {};
 
-function runeMenuHTML(ctx) {
+function runeMenuHTML(ctx, vertical) {
   const tabs = SCREENS.map((s) => {
     const inner = runeIco(s) || `<span>${s.label}</span>`;   // icon-only; text fallback if no icon
     return s.overlay
       ? `<button class="rune-tab icon-only" data-action="open" data-overlay="${s.overlay}" title="${s.label}" aria-label="${s.label}">${inner}</button>`
       : `<button class="rune-tab icon-only ${ctx.gameView === s.id ? 'on' : ''}" data-action="game-view" data-view="${s.id}" title="${s.label}" aria-label="${s.label}">${inner}</button>`;
   }).join('');
-  // hearth-id + actions take their content width; this wrap flexes to the gap
-  // between them and scrolls the tabs, with ‹ › arrows that brighten when usable.
-  return `<div class="runes-wrap">
-    <button class="runes-arrow prev" data-action="runes-scroll" data-dir="-1" aria-label="Scroll tabs left">&lsaquo;</button>
+  // scrolls the tabs, with arrows that brighten when usable. `vertical` stacks them
+  // (Layout B's right rail); the arrows are rotated to ▲/▼ in CSS.
+  return `<div class="runes-wrap${vertical ? ' vertical' : ''}">
+    <button class="runes-arrow prev" data-action="runes-scroll" data-dir="-1" aria-label="${vertical ? 'Scroll tabs up' : 'Scroll tabs left'}">&lsaquo;</button>
     <nav class="runes">${tabs}</nav>
-    <button class="runes-arrow next" data-action="runes-scroll" data-dir="1" aria-label="Scroll tabs right">&rsaquo;</button>
+    <button class="runes-arrow next" data-action="runes-scroll" data-dir="1" aria-label="${vertical ? 'Scroll tabs down' : 'Scroll tabs right'}">&rsaquo;</button>
+  </div>`;
+}
+
+// the hamburger + its dropdown (Codex / Options / Save / Menu) — shared by both layouts
+function hearthMenuHTML(ctx) {
+  return `<div class="hearth-menu${ctx.hearthMenuOpen ? ' open' : ''}">
+    <button class="hamburger" data-action="toggle-hearth-menu" aria-label="Menu" aria-expanded="${ctx.hearthMenuOpen ? 'true' : 'false'}"><span></span><span></span><span></span></button>
+    <div class="hearth-pop">
+      <button data-action="open" data-overlay="codex">Codex</button>
+      <button data-action="open" data-overlay="options">Options</button>
+      <button data-action="open" data-overlay="confirm-save">Save</button>
+      <button data-action="open" data-overlay="confirm-menu">Menu</button>
+    </div>
   </div>`;
 }
 
@@ -581,7 +594,19 @@ function circleBarHTML(ctx) {
   }).join('');
   const souls = state.souls.map((m) =>
     `<span class="cb-soul" title="Lost to the Flame"><i style="background:${CULT_HEX[m.school] || '#777'}"></i>${esc(m.name)}</span>`).join('');
-  const res = P_ORDER.filter((k) => showMeter(ctx, k)).map((k) => {
+  const tuck = ctx.settings?.tuckCards !== false;
+  const barCls = `circle-bar${tuck ? ' cb-tuck' : ''}${tuck && ctx.cardsOpen ? ' cb-open' : ''}`;
+  return `<div class="${barCls}">
+    <div class="cb-hand">${cards}${souls ? `<span class="cb-souls">${souls}</span>` : ''}</div>
+    <div class="cb-res-row">${pressureMetersHTML(ctx)}</div>
+  </div>`;
+}
+
+// the seven pressure meters (Fracture/Regard hidden unless revealed) — shared by
+// Layout A's footer row and Layout B's top strip.
+function pressureMetersHTML(ctx) {
+  const { state } = ctx;
+  return P_ORDER.filter((k) => showMeter(ctx, k)).map((k) => {
     const tab = P_TAB[k];
     const cls = `cb-res ${k === 'fracture' ? 'danger' : ''}`;
     const inner = `<img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span>`;
@@ -589,33 +614,50 @@ function circleBarHTML(ctx) {
       ? `<button class="${cls}" data-action="game-view" data-view="${tab}" title="${P_SHORT[k]}">${inner}</button>`
       : `<span class="${cls}" title="${P_SHORT[k]}">${inner}</span>`;
   }).join('');
-  const tuck = ctx.settings?.tuckCards !== false;
-  const barCls = `circle-bar${tuck ? ' cb-tuck' : ''}${tuck && ctx.cardsOpen ? ' cb-open' : ''}`;
-  return `<div class="${barCls}">
-    <div class="cb-hand">${cards}${souls ? `<span class="cb-souls">${souls}</span>` : ''}</div>
-    <div class="cb-res-row">${res}</div>
-  </div>`;
 }
 
 function gameHTML(ctx) {
+  if (ctx.settings?.layout === 'b') return gameHTMLB(ctx);
   const { state } = ctx;
   return `<div class="hearth-bar">
       <div class="hearth-id"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
         <div><b>Runehold</b><small class="hearth-date">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></div>
       </div>
-      ${runeMenuHTML(ctx)}
-      <div class="hearth-menu${ctx.hearthMenuOpen ? ' open' : ''}">
-        <button class="hamburger" data-action="toggle-hearth-menu" aria-label="Menu" aria-expanded="${ctx.hearthMenuOpen ? 'true' : 'false'}"><span></span><span></span><span></span></button>
-        <div class="hearth-pop">
-          <button data-action="open" data-overlay="codex">Codex</button>
-          <button data-action="open" data-overlay="options">Options</button>
-          <button data-action="open" data-overlay="confirm-save">Save</button>
-          <button data-action="open" data-overlay="confirm-menu">Menu</button>
-        </div>
-      </div>
+      ${runeMenuHTML(ctx, false)}
+      ${hearthMenuHTML(ctx)}
     </div>
     <main class="stage">${stageHTML(ctx)}</main>
     ${circleBarHTML(ctx)}`;
+}
+
+// ---- Layout B: thin top strip (date + meters) · left advisor rail (peek 60%,
+// pops out on tap) · right vertical rune rail below the hamburger · centre stage.
+function lbAdvisorsHTML(ctx) {
+  const { state } = ctx;
+  const onScene = ctx.gameView === 'scene';
+  const voices = onScene ? new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text])) : null;
+  const cards = state.circle.map((m, i) => {
+    const thought = onScene ? (voices.get(m.id) || 'No strong counsel here.') : screenCounsel(ctx, m);
+    const pinned = ctx.pinnedCard === i;
+    return `<button class="lb-adv${pinned ? ' pinned' : ''}" data-action="toggle-card" data-card="${i}" style="--cult:${CULT_HEX[m.school] || '#777'}" aria-label="${esc(m.name)}">
+      <span class="lb-adv-img">${portraitFor(m, ctx.portraits) ? `<img class="member-photo" src="${esc(portraitFor(m, ctx.portraits))}" alt="" loading="lazy">` : `<img class="member-photo" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`}</span>
+      <span class="lb-adv-name">${esc(m.name)}</span>
+      <span class="lb-adv-bubble"><b>${esc(m.name)}</b><span class="cb-sub">${esc(CLASS_LABEL[m.class] || m.class)} &middot; ${CULT_NAMES[m.school] || m.school} &middot; ${esc(m.rank)}</span>${esc(thought)}</span>
+    </button>`;
+  }).join('');
+  return `<aside class="lb-advisors">${cards}</aside>`;
+}
+
+function gameHTMLB(ctx) {
+  const { state } = ctx;
+  return `<div class="lb-strip">
+      <span class="lb-date"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><b>Runehold</b> <small class="hearth-date">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></span>
+      <div class="cb-res-row lb-res">${pressureMetersHTML(ctx)}</div>
+      ${hearthMenuHTML(ctx)}
+    </div>
+    ${lbAdvisorsHTML(ctx)}
+    <main class="stage">${stageHTML(ctx)}</main>
+    <div class="lb-rune-rail">${runeMenuHTML(ctx, true)}</div>`;
 }
 
 // ---- splash + main menu ---------------------------------------------------
@@ -686,7 +728,9 @@ function optionsHTML(ctx) {
       <div class="opt"><label>Check for update</label><button data-action="force-update">Update now</button></div>
       <p class="muted">Runehold installs as an app and runs offline. If a new version is out, this clears the cached app and reloads the latest. Your saved campaign is kept.</p>`;
   } else {
-    main = `<div class="opt"><label>Text size</label><div class="seg">${seg}</div></div>
+    main = `<div class="opt"><label>Layout</label><div class="seg">${['a', 'b'].map((v) => `<button class="${(s.layout || 'a') === v ? 'on' : ''}" data-action="set-option" data-key="layout" data-val="${v}">Layout ${v.toUpperCase()}</button>`).join('')}</div></div>
+      <p class="muted opt-note">Layout A: classic — header tabs on top, advisor cards along the bottom. Layout B: thin top strip (date + meters), advisor portraits down the left edge, rune tabs down the right.</p>
+      <div class="opt"><label>Text size</label><div class="seg">${seg}</div></div>
       <div class="opt"><label>Reduce motion</label>${toggle('reduceMotion', s.reduceMotion)}</div>
       <div class="opt"><label>Landscape lock <small class="opt-hint">mobile</small></label>${toggle('lockLandscape', s.lockLandscape)}</div>
       <p class="muted opt-note">On: the game stays horizontal, pinned to one side, even when you turn the phone. Off: it follows the device.</p>

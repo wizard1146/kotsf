@@ -153,6 +153,51 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 .cb-card:hover .cb-bubble, .cb-card:focus-visible .cb-bubble, .cb-card.pinned .cb-bubble { opacity: 1; transform: none; }
 .cb-souls { display: inline-flex; align-items: center; gap: 0.6rem; margin-left: 1rem; }
 .cb-soul { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--ink-dim); font-style: italic; opacity: 0.7; }
+
+/* ============================================================
+   Layout B — thin top strip (date + meters) · left advisor rail
+   (peek ~60%, pops out on tap) · right vertical rune rail below the
+   hamburger · centre stage. Toggled in Options (.layout-b on #app).
+   ============================================================ */
+#app.screen-game.layout-b {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 2.6rem 1fr;
+  grid-template-areas: "strip strip" "stage runes";
+}
+.lb-strip { grid-area: strip; display: flex; align-items: center; gap: 0.8rem; height: 2.6rem; padding: 0 0.4rem 0 0.8rem; border-bottom: 1px solid var(--line); background: var(--panel); position: relative; z-index: 25; }
+.lb-date { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; flex: none; }
+.lb-date b { color: var(--flame); letter-spacing: 0.02em; }
+.lb-strip .hearth-date { font-size: 0.9rem; }
+.lb-res { display: flex; align-items: center; gap: 0.7rem; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+.lb-res::-webkit-scrollbar { display: none; }
+.layout-b .hearth-menu { margin-left: 0.2rem; }
+.layout-b .hamburger { transform: none; }
+
+#app.screen-game.layout-b .stage { grid-area: stage; min-height: 0; max-width: none; margin: 0; padding: 1rem 1.2rem 1.2rem 3.4rem; }
+
+/* right rune rail, directly below the hamburger */
+.lb-rune-rail { grid-area: runes; display: flex; border-left: 1px solid var(--line); background: var(--panel); z-index: 15; }
+.runes-wrap.vertical { flex: 1; flex-direction: column; align-items: center; gap: 0.1rem; padding: 0.3rem 0.15rem; }
+.runes-wrap.vertical .runes { flex-direction: column; overflow-x: hidden; overflow-y: auto; align-items: center; }
+.runes-wrap.vertical .runes-arrow { transform: rotate(90deg); padding: 0.1rem 0.3rem; }
+.runes-wrap.vertical .rune-tab.icon-only { padding: 0.5rem 0.55rem; }
+.runes-wrap.vertical .rune-tab { border-bottom: 0; border-radius: 8px; }
+.runes-wrap.vertical .rune-tab.on { background: color-mix(in srgb, var(--flame) 15%, transparent); }
+.runes-wrap.vertical .rune-tab:hover:not(:disabled) { background: color-mix(in srgb, var(--flame) 8%, transparent); }
+
+/* left advisor rail — tiles hang off the left edge, showing ~60%; tap to pop out */
+.lb-advisors { grid-area: stage; align-self: stretch; justify-self: start; z-index: 12; display: flex; flex-direction: column; gap: 0.4rem; padding: 0.5rem 0; overflow: visible; pointer-events: none; }
+.lb-adv { pointer-events: auto; position: relative; width: 4.8rem; flex: none; display: block; padding: 0; background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--line); border-left: 3px solid var(--cult); border-radius: 0 10px 10px 0; cursor: pointer; transform: translateX(-42%); transition: transform .25s cubic-bezier(.34,.1,.24,1); filter: drop-shadow(0 3px 7px rgba(0,0,0,0.5)); }
+.lb-adv:hover, .lb-adv.pinned { transform: translateX(0); z-index: 30; }
+.lb-adv-img { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 0 8px 0 0; background: radial-gradient(120% 90% at 50% 26%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); }
+.lb-adv-img .member-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lb-adv-img .pcard-init { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 1.8rem; color: color-mix(in srgb, var(--cult) 55%, #e7dccb); }
+.lb-adv-name { display: block; padding: 0.22rem 0.3rem; font-size: 0.66rem; text-align: center; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-adv-bubble { position: absolute; left: calc(100% + 10px); top: 0; width: max-content; max-width: 15rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.7rem; font-size: 0.8rem; line-height: 1.4; color: var(--ink); text-align: left; white-space: normal; box-shadow: 0 10px 28px rgba(0,0,0,0.55); opacity: 0; transform: translateX(-6px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 40; }
+.lb-adv.pinned .lb-adv-bubble, .lb-adv:hover .lb-adv-bubble { opacity: 1; transform: none; }
+.lb-adv-bubble b { display: block; color: var(--flame); font-size: 0.82rem; margin-bottom: 0.05rem; }
+.lb-adv-bubble .cb-sub { display: block; color: var(--ink-dim); font-size: 0.7rem; font-variant: small-caps; letter-spacing: 0.04em; margin: 0 0 0.35rem; }
 .cb-soul i { width: 10px; height: 10px; border-radius: 50%; }
 .cb-res-row { margin-left: auto; display: flex; gap: 0.4rem; flex-wrap: wrap; font-family: var(--mono); }
 .cb-res { display: inline-flex; align-items: center; gap: 0.18rem; font-size: 0.9rem; color: var(--ink); background: none; border: 0; padding: 0.15rem 0.35rem; border-radius: 6px; transition: background .14s ease, transform .12s ease; }

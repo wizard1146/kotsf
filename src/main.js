@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v17';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v18';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -80,7 +80,7 @@ function metaOf(env) {
 // ---- settings -------------------------------------------------------------
 function loadSettings() {
   const s = readSlot(SETTINGS_KEY) || {};
-  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false, tuckCards: s.tuckCards !== false };
+  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false, tuckCards: s.tuckCards !== false, layout: s.layout === 'b' ? 'b' : 'a' };
 }
 function applySettings() {
   const r = document.documentElement;
@@ -115,7 +115,7 @@ function applyOrientation() {
   document.documentElement.dataset.rotate = String(rot);
 }
 function setOption(key, val) {
-  if (key === 'textSize') settings.textSize = val;
+  if (key === 'textSize' || key === 'layout') settings[key] = val;   // string-valued options
   else settings[key] = val === '1';
   writeSlot(SETTINGS_KEY, settings);
   applySettings();
@@ -266,8 +266,11 @@ function persist() {
 }
 
 function draw() {
-  const runesScroll = app.querySelector('.runes')?.scrollLeft ?? 0;   // survive the innerHTML swap
-  app.className = `screen-${screen}${overlay ? ' has-overlay' : ''}`;
+  const runesEl0 = app.querySelector('.runes');                       // survive the innerHTML swap
+  const runesScrollL = runesEl0?.scrollLeft ?? 0;
+  const runesScrollT = runesEl0?.scrollTop ?? 0;
+  const layoutB = screen === 'game' && settings.layout === 'b';
+  app.className = `screen-${screen}${layoutB ? ' layout-b' : ''}${overlay ? ' has-overlay' : ''}`;
   app.innerHTML = render(ctx());
   // innerHTML replacement drops focus; hand it back to the search box mid-type
   if (restoreSearchFocus) {
@@ -287,7 +290,7 @@ function draw() {
   // rune tab bar: restore prior scroll (no snap on nav), wire scroll listener + arrow affordances
   const runes = app.querySelector('.runes');
   if (runes) {
-    runes.scrollLeft = runesScroll;
+    runes.scrollLeft = runesScrollL; runes.scrollTop = runesScrollT;   // one axis is always 0
     runes.addEventListener('scroll', updateRuneArrows, { passive: true });
     updateRuneArrows();
   }
@@ -299,18 +302,23 @@ function draw() {
 function scrollRunes(dir) {
   const nav = app.querySelector('.runes');
   if (!nav) return;
-  nav.scrollBy({ left: dir * nav.clientWidth * 0.75, behavior: settings.reduceMotion ? 'auto' : 'smooth' });
+  const vert = nav.closest('.runes-wrap')?.classList.contains('vertical');
+  const opts = { behavior: settings.reduceMotion ? 'auto' : 'smooth' };
+  if (vert) nav.scrollBy({ top: dir * nav.clientHeight * 0.75, ...opts });
+  else nav.scrollBy({ left: dir * nav.clientWidth * 0.75, ...opts });
 }
 function updateRuneArrows() {
   const wrap = app.querySelector('.runes-wrap');
   if (!wrap) return;
   const nav = wrap.querySelector('.runes');
-  const overflow = nav.scrollWidth - nav.clientWidth > 1;
+  const vert = wrap.classList.contains('vertical');
+  const [pos, size, client] = vert
+    ? [nav.scrollTop, nav.scrollHeight, nav.clientHeight]
+    : [nav.scrollLeft, nav.scrollWidth, nav.clientWidth];
+  const overflow = size - client > 1;
   wrap.classList.toggle('has-overflow', overflow);
-  const atStart = nav.scrollLeft <= 1;
-  const atEnd = nav.scrollLeft >= nav.scrollWidth - nav.clientWidth - 1;
-  wrap.querySelector('.runes-arrow.prev')?.classList.toggle('can', overflow && !atStart);
-  wrap.querySelector('.runes-arrow.next')?.classList.toggle('can', overflow && !atEnd);
+  wrap.querySelector('.runes-arrow.prev')?.classList.toggle('can', overflow && pos > 1);
+  wrap.querySelector('.runes-arrow.next')?.classList.toggle('can', overflow && pos < size - client - 1);
 }
 window.addEventListener('resize', updateRuneArrows);
 // re-pin the landscape side whenever the device is physically turned
@@ -351,7 +359,7 @@ app.addEventListener('click', (e) => {
       break;
     }
     case 'toggle-card': {
-      if (settings.tuckCards && !cardsOpen) {   // tucked → first tap raises the hand (animate on the live node, no redraw)
+      if (settings.layout !== 'b' && settings.tuckCards && !cardsOpen) {   // tucked → first tap raises the hand (animate on the live node, no redraw)
         cardsOpen = true;
         app.querySelector('.circle-bar')?.classList.add('cb-open');
       } else {
