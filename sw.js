@@ -2,7 +2,7 @@
 // game loads and plays fully offline (saves already live in localStorage); other
 // assets (icons, fonts, gifs) are cached at runtime on first fetch.
 // Bump CACHE when the shell changes to roll users onto the new version.
-const CACHE = 'kotsf-v19';
+const CACHE = 'kotsf-v20';
 
 // Resolve every path against the worker's own directory so the app works whether
 // it is served from a domain root or a project subpath (e.g. /kotsf/).

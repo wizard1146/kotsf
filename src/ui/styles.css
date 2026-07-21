@@ -161,9 +161,9 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
    ============================================================ */
 #app.screen-game.layout-b {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr;
   grid-template-rows: 2.6rem 1fr;
-  grid-template-areas: "strip strip" "stage runes";
+  grid-template-areas: "strip strip" "runes stage";
 }
 .lb-strip { grid-area: strip; display: flex; align-items: center; gap: 0.8rem; height: 2.6rem; padding: 0 0.4rem 0 0.8rem; border-bottom: 1px solid var(--line); background: var(--panel); position: relative; z-index: 25; }
 .lb-date { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; flex: none; }
@@ -171,16 +171,18 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 .lb-strip .hearth-date { font-size: 0.9rem; }
 .lb-res { display: flex; align-items: center; gap: 0.7rem; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .lb-res::-webkit-scrollbar { display: none; }
-.layout-b .hearth-menu { margin: 0 0.15rem 0 0.5rem; align-self: center; }
-.layout-b .hamburger { transform: none; height: 2.1rem; width: 2.2rem; align-self: center; }
+.layout-b .hearth-menu { margin: 0 0.1rem 0 0.3rem; align-self: center; }
+.layout-b .hamburger { transform: none; height: 2rem; width: 2rem; gap: 5px; align-self: center; }
+.layout-b .hearth-menu.open .hamburger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.layout-b .hearth-menu.open .hamburger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-#app.screen-game.layout-b .stage { grid-area: stage; min-height: 0; max-width: none; margin: 0; padding: 1rem 1.2rem 1.2rem 3.9rem; }
+#app.screen-game.layout-b .stage { grid-area: stage; min-height: 0; max-width: none; margin: 0; padding: 1rem 3.9rem 1.2rem 1.2rem; }
 
-/* right rune rail, directly below the hamburger */
-.lb-rune-rail { grid-area: runes; display: flex; border-left: 1px solid var(--line); background: var(--panel); z-index: 15; }
+/* left rune rail */
+.lb-rune-rail { grid-area: runes; display: flex; border-right: 1px solid var(--line); background: var(--panel); z-index: 15; }
 .runes-wrap.vertical { flex: 1; min-height: 0; flex-direction: column; align-items: center; gap: 0.1rem; padding: 0.3rem 0.15rem; }
 .runes-wrap.vertical .runes { flex: 1 1 0; min-height: 0; flex-direction: column; overflow-x: hidden; overflow-y: auto; align-items: center; }
-.runes-wrap.vertical .runes-arrow { transform: rotate(90deg); padding: 0.1rem 0.3rem; }
+.runes-wrap.vertical .runes-arrow { display: flex; transform: rotate(90deg); padding: 0.1rem 0.3rem; }   /* always visible in the vertical rail */
 .runes-wrap.vertical .rune-tab.icon-only { padding: 0.5rem 0.55rem; }
 .runes-wrap.vertical .rune-tab { border-bottom: 0; border-radius: 8px; }
 .runes-wrap.vertical .rune-tab.on { background: color-mix(in srgb, var(--flame) 15%, transparent); }
@@ -188,22 +190,21 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 
 /* left advisor rail — a transparent see-through strip; portrait tiles hang off the
    left edge (peek ~60%) with a gentle fan, pop out on tap, and scroll with ▲▼. */
-.lb-advisors { grid-area: stage; align-self: stretch; justify-self: start; position: relative; width: 5rem; z-index: 12; background: none; pointer-events: none; }
-.lb-adv-list { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; padding: 0.55rem 0; transition: transform .25s cubic-bezier(.34,.1,.24,1); will-change: transform; }
-.lb-adv { pointer-events: auto; position: relative; width: 4.6rem; flex: none; display: block; padding: 0; background: none; border: 0; cursor: pointer; transform: translateX(-40%) rotate(calc((var(--i) - 1.5) * 2.2deg)); transform-origin: right center; transition: transform .25s cubic-bezier(.34,.1,.24,1); }
+.lb-advisors { grid-area: stage; align-self: stretch; justify-self: end; position: relative; width: 5rem; z-index: 12; background: none; pointer-events: none; }
+.lb-adv-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.45rem; padding: 0.55rem 0; transition: transform .25s cubic-bezier(.34,.1,.24,1); will-change: transform; }
+.lb-adv { pointer-events: auto; position: relative; width: 4.6rem; flex: none; display: block; padding: 0; background: none; border: 0; cursor: pointer; transform: translateX(40%) rotate(calc((var(--i) - 1.5) * -2.2deg)); transform-origin: left center; transition: transform .25s cubic-bezier(.34,.1,.24,1); }
 .lb-adv:hover, .lb-adv.pinned { transform: translateX(0) rotate(0); z-index: 30; }
-.lb-adv-img { position: relative; display: block; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 10px; border: 1px solid var(--line); border-left: 3px solid var(--cult); background: radial-gradient(120% 90% at 50% 26%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6)); }
+.lb-adv-img { position: relative; display: block; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 10px; background: radial-gradient(120% 90% at 50% 26%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6)); }
 .lb-adv-img .member-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .lb-adv-img .pcard-init { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 1.8rem; color: color-mix(in srgb, var(--cult) 55%, #e7dccb); }
 .lb-adv-name { display: block; padding: 0.15rem 0.2rem 0; font-size: 0.62rem; text-align: center; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 3px #000; }
-/* up/down scroll arrows, shown only when the rail overflows */
-.lb-adv-arrow { position: absolute; left: 0; width: 5rem; height: 1.5rem; display: none; align-items: center; justify-content: center; padding: 0; border: 0; color: var(--flame); font-size: 1.4rem; line-height: 1; transform: rotate(90deg); pointer-events: auto; cursor: pointer; opacity: 0.35; z-index: 6; transition: opacity .15s; }
-.lb-adv-arrow.up { top: 0; background: linear-gradient(to bottom, var(--bg) 30%, transparent); }
-.lb-adv-arrow.down { bottom: 0; background: linear-gradient(to top, var(--bg) 30%, transparent); }
-.lb-advisors.has-overflow .lb-adv-arrow { display: flex; }
-.lb-adv-arrow.can { opacity: 1; }
-.lb-adv-arrow.can:hover { text-shadow: 0 0 12px rgba(232, 163, 61, 0.6); }
-.lb-adv-bubble { position: absolute; left: calc(100% + 10px); top: 0; width: max-content; max-width: 15rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.7rem; font-size: 0.8rem; line-height: 1.4; color: var(--ink); text-align: left; white-space: normal; box-shadow: 0 10px 28px rgba(0,0,0,0.55); opacity: 0; transform: translateX(-6px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 40; }
+/* up/down scroll arrows — always present; dim when that direction can't scroll */
+.lb-adv-arrow { position: absolute; right: 0; width: 3rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; padding: 0; border: 0; background: none; color: var(--flame); font-size: 1.5rem; line-height: 1; transform: rotate(90deg); pointer-events: auto; cursor: pointer; opacity: 0.28; z-index: 8; transition: opacity .15s; text-shadow: 0 1px 4px #000; }
+.lb-adv-arrow.up { top: -0.1rem; }
+.lb-adv-arrow.down { bottom: -0.1rem; }
+.lb-adv-arrow.can { opacity: 0.95; }
+.lb-adv-arrow.can:hover { text-shadow: 0 0 12px rgba(232, 163, 61, 0.7); }
+.lb-adv-bubble { position: absolute; right: calc(100% + 10px); top: 0; width: max-content; max-width: 15rem; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.55rem 0.7rem; font-size: 0.8rem; line-height: 1.4; color: var(--ink); text-align: left; white-space: normal; box-shadow: 0 10px 28px rgba(0,0,0,0.55); opacity: 0; transform: translateX(-6px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 40; }
 .lb-adv.pinned .lb-adv-bubble, .lb-adv:hover .lb-adv-bubble { opacity: 1; transform: none; }
 .lb-adv-bubble b { display: block; color: var(--flame); font-size: 0.82rem; margin-bottom: 0.05rem; }
 .lb-adv-bubble .cb-sub { display: block; color: var(--ink-dim); font-size: 0.7rem; font-variant: small-caps; letter-spacing: 0.04em; margin: 0 0 0.35rem; }
