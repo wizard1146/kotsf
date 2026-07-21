@@ -142,7 +142,7 @@ const runeIco = (s) => s.icon ? `<img class="rune-ico" src="assets/icons/icon_mi
 const P_ICON = { mana: 'mana', provisions: 'provisions', coin: 'coin', lore: 'lore', faith: 'faith', flamesRegard: 'flames_regard', fracture: 'fracture' };
 // clicking a pressure jumps to the screen that governs it (coin → Market, etc.);
 // pressures with no governing screen (lore) are shown but not clickable.
-const P_TAB = { mana: 'workings', provisions: 'fields', coin: 'market', faith: 'coven', flamesRegard: 'map', fracture: 'war' };
+const P_TAB = { mana: 'workings', provisions: 'fields', coin: 'market', lore: 'saga', faith: 'coven', flamesRegard: 'map', fracture: 'war' };
 // short labels for the cramped bottom bar
 const P_SHORT = { mana: 'Mana', provisions: 'Food', coin: 'Coin', lore: 'Lore', faith: 'Faith', flamesRegard: 'Regard', fracture: 'Fracture' };
 // The two cosmic/doom meters are VEILED by default — you feel their effects (chips)
@@ -601,7 +601,7 @@ function gameHTML(ctx) {
   const { state } = ctx;
   return `<div class="hearth-bar">
       <div class="hearth-id"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
-        <div><b>Runehold</b><small>${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></div>
+        <div><b>Runehold</b><small class="hearth-date">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></div>
       </div>
       ${runeMenuHTML(ctx)}
       <div class="hearth-menu${ctx.hearthMenuOpen ? ' open' : ''}">
@@ -609,8 +609,8 @@ function gameHTML(ctx) {
         <div class="hearth-pop">
           <button data-action="open" data-overlay="codex">Codex</button>
           <button data-action="open" data-overlay="options">Options</button>
-          <button data-action="save-manual">Save</button>
-          <button data-action="go-menu">Menu</button>
+          <button data-action="open" data-overlay="confirm-save">Save</button>
+          <button data-action="open" data-overlay="confirm-menu">Menu</button>
         </div>
       </div>
     </div>
@@ -783,7 +783,7 @@ function fullpage(kind, title, inner, headerExtra = '') {
         <h2>${esc(title)}</h2>
         ${headerExtra}
         <span class="esc-hint">Esc to close</span>
-        <button class="fullpage-close" data-action="close" aria-label="Close">&times;</button>
+        <button class="fullpage-close" data-action="close" aria-label="Close"><span></span><span></span><span></span></button>
       </header>
       ${inner}
     </div>
@@ -796,6 +796,18 @@ function overlayHTML(ctx) {
   // Options and Saves stay as compact centered modals.
   if (ctx.overlay === 'codex') return fullpage('codex', 'Codex', codexHTML(ctx), codexSearchHTML(ctx));
   if (ctx.overlay === 'options') return fullpage('options', 'Options', optionsHTML(ctx));
+  if (ctx.overlay === 'confirm-save') return modal('confirm', 'Save your progress?', `
+    <p class="confirm-warn">This writes your <b>manual bookmark</b>, replacing whatever was saved there before. Your continuous autosave is untouched.</p>
+    <div class="confirm-actions">
+      <button data-action="close">Cancel</button>
+      <button class="primary" data-action="confirm-save-yes">Save here</button>
+    </div>`);
+  if (ctx.overlay === 'confirm-menu') return modal('confirm', 'Return to the main menu?', `
+    <p class="confirm-warn">You'll leave this session for the title screen. Your progress is autosaved &mdash; choose <b>Continue</b> there to pick the saga back up.</p>
+    <div class="confirm-actions">
+      <button data-action="close">Stay</button>
+      <button class="primary" data-action="go-menu">Return to menu</button>
+    </div>`);
   if (ctx.overlay === 'confirm-new') return modal('confirm', 'Abandon the current saga?', `
     <p class="confirm-warn">Beginning a new coven will <b>overwrite your current campaign</b>. Once it is replaced, the old saga is gone for good &mdash; it cannot be recovered.</p>
     <div class="confirm-actions">

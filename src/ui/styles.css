@@ -62,10 +62,10 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   padding: 0.6rem 1rem; padding-top: max(0.6rem, env(safe-area-inset-top));
   border-bottom: 1px solid var(--line);
 }
-.hearth-id { display: flex; align-items: center; gap: 0.55rem; min-width: 13rem; }   /* reserve width so a longer date doesn't shove the rune tabs */
+.hearth-id { display: flex; align-items: center; gap: 0.55rem; min-width: 14rem; }   /* reserve width so a longer date doesn't shove the rune tabs */
 .hearth-id .rune { font-size: 1.5rem; color: var(--flame); text-shadow: 0 0 16px rgba(232, 163, 61, 0.35); }
 .hearth-id b { color: var(--flame); letter-spacing: 0.02em; }
-.hearth-id small { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 0.86rem; white-space: nowrap; }
+.hearth-date { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 1.06rem; white-space: nowrap; }
 .hearth-actions { margin-left: auto; display: flex; gap: 0.4rem; }
 /* in-game hamburger menu (replaces the Options / Save / Menu buttons) */
 .hearth-menu { position: relative; margin-left: 0.4rem; flex-shrink: 0; }
@@ -120,7 +120,7 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
   background: linear-gradient(to top, var(--panel) 0%, rgba(31, 26, 22, 0.55) 42%, transparent 100%); pointer-events: none; }
 /* the Circle as a held hand of cards — the hand is lifted out of flow so the
    footer itself stays slim while the cards lap up over its top edge. */
-.cb-hand { position: absolute; left: 1rem; bottom: 0.3rem; display: flex; align-items: flex-end; z-index: 6; transition: transform .3s cubic-bezier(.34,.1,.24,1); }
+.cb-hand { position: absolute; left: 1rem; bottom: 0.65rem; display: flex; align-items: flex-end; z-index: 6; transition: transform .3s cubic-bezier(.34,.1,.24,1); }
 /* tuck mode: the hand rests low (tops peek); tap a card to raise it, tap away to lower */
 .circle-bar.cb-tuck:not(.cb-open) .cb-hand { transform: translateY(64%); }
 .circle-bar.cb-tuck:not(.cb-open) .cb-card:hover, .circle-bar.cb-tuck:not(.cb-open) .cb-card:focus-visible {
@@ -557,12 +557,12 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
 }
 .menu-item.primary { color: var(--flame); border-color: var(--flame-deep); border-left: 2px solid var(--flame); background: linear-gradient(180deg, rgba(50, 37, 26, 0.75), rgba(28, 20, 14, 0.7)); }
 
-/* Landscape phones: nav bands fill the full height, split equally. */
-@media (orientation: landscape) and (max-height: 600px) {
-  .menu { gap: 0; }
-  .menu-nav { justify-content: stretch; gap: 0; padding-left: 0; }
-  .menu-item { flex: 1; min-height: 0; border-radius: 0; border-width: 0 0 1px 1px; }
-  .menu-item:last-child { border-bottom: 0; }
+/* Landscape phones / short windows: keep the discrete rounded buttons, just
+   compact them and centre the stack (no ugly full-height stretched bands). */
+@media (orientation: landscape) and (max-height: 640px) {
+  .menu { gap: 1.2rem; }
+  .menu-nav { justify-content: center; gap: 0.5rem; padding-left: 1rem; }
+  .menu-item { min-height: 0; padding: 0.62rem 1.1rem; font-size: 0.92rem; }
 }
 /* Portrait phones: stack brand over nav, no side split. */
 @media (orientation: portrait) and (max-width: 560px) {
@@ -629,8 +629,16 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
 .fullpage-head .esc-hint { margin-left: auto; color: var(--ink-dim); font-size: 0.92rem; font-variant: small-caps; letter-spacing: 0.1em; }
 /* codex search lives inline in the header, next to the title */
 .fullpage-head .panel-search { flex: 1; min-width: 0; max-width: 360px; padding: 0; border: 0; }
-.fullpage-close { font-size: 2.1rem; line-height: 1; padding: 0 0.45rem; color: var(--flame); background: none; border: 0; }
-.fullpage-close:hover:not(:disabled) { transform: scale(1.15); background: none; border: 0; }
+/* close ✕ built from the same three bars as the hamburger, frozen in its open (X)
+   state — same size / colour / top-right placement so it reads as the same control */
+.fullpage-close { display: inline-flex; flex-direction: column; justify-content: center; gap: 9px; width: 2.5rem; height: 2.6rem; padding: 0.4rem; background: none; border: 0; border-radius: 7px; cursor: pointer; flex: none; }
+.fullpage-close span { display: block; width: 100%; height: 1.5px; background: var(--flame); border-radius: 2px; transition: transform .25s ease, opacity .2s ease, background .15s; }
+.fullpage-close span:nth-child(1) { transform: translateY(10.5px) rotate(45deg); }
+.fullpage-close span:nth-child(2) { opacity: 0; transform: scaleX(0.3); }
+.fullpage-close span:nth-child(3) { transform: translateY(-10.5px) rotate(-45deg); }
+.fullpage-close:hover:not(:disabled) { background: none; }
+/* affirmative button in a confirm dialog */
+.confirm-actions .primary { border-color: var(--flame-deep); color: var(--flame); }
 /* shared panel layout: optional search bar, left nav column, scrolling main.
    Used by BOTH the Codex and the Options full-page panels (fastsugar-style). */
 .panel-search { flex-shrink: 0; padding: 0.8rem 1.25rem; border-bottom: 1px solid var(--line); }

@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v16';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v17';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -378,6 +378,7 @@ app.addEventListener('click', (e) => {
     // saves
     case 'restore': restore(el.dataset.slot); break;
     case 'save-manual': saveManual(el); break;
+    case 'confirm-save-yes': if (state) writeSlot(MANUAL_KEY, envelope()); overlay = null; draw(); break;
     case 'delete-manual': deleteManual(); break;
     // options
     case 'set-option': setOption(el.dataset.key, el.dataset.val); break;
