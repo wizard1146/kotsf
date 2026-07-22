@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v25';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v26';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -87,18 +87,8 @@ function applySettings() {
   r.dataset.textSize = settings.textSize;
   r.dataset.reduceMotion = settings.reduceMotion ? '1' : '0';
 }
-
-// Always landscape on mobile. Best-effort OS lock (Android / installed PWA pins to
-// one side); where it's unsupported (iOS, non-fullscreen) the CSS @media(orientation:
-// portrait) rule rotates the whole app 90° instead. Silent on failure — no per-side
-// detection, no toggles.
-function lockLandscape() {
-  try {
-    const p = (typeof screen !== 'undefined' && screen.orientation && screen.orientation.lock)
-      ? screen.orientation.lock('landscape') : null;
-    if (p && p.catch) p.catch(() => {});
-  } catch { /* unsupported — the CSS fallback handles it */ }
-}
+// Orientation is enforced by the manifest ("orientation":"landscape") on the
+// installed PWA — no JS rotation/lock here (it only fought the OS and janked).
 function setOption(key, val) {
   if (key === 'textSize' || key === 'layout') settings[key] = val;   // string-valued options
   else settings[key] = val === '1';
@@ -334,7 +324,7 @@ function updateRuneArrows() {
 function remeasureRails() { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') updateAdvArrows(); }
 window.addEventListener('resize', remeasureRails);
 // turning the device (portrait↔landscape) re-lays out via CSS; just re-measure rails
-window.addEventListener('orientationchange', () => { lockLandscape(); remeasureRails(); });
+window.addEventListener('orientationchange', remeasureRails);
 
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
@@ -428,7 +418,6 @@ window.addEventListener('keydown', (e) => {
   counsel = bundle.counsel || {};
   portraits = bundle.portraits || [];
   applySettings();
-  lockLandscape();
   screen = 'splash'; overlay = null;
   draw();
 })();
