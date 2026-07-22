@@ -4,7 +4,7 @@
 //
 // APP-LEVEL UI STATE LIVES HERE, NEVER IN THE ENGINE. `screen`/`overlay`/
 // `settings` are presentation concerns; the GameState model knows nothing of them.
-import { createInitialState, castMember, workingScore } from './engine/state.js';
+import { createInitialState, castMember, workingScore, chronicle } from './engine/state.js';
 import { meets } from './engine/conditions.js';
 import { pickScene } from './engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from './engine/loop.js';
@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v30';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v31';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -33,6 +33,7 @@ let screen = 'splash';         // 'splash' | 'menu' | 'create' | 'game'
 let creation = null;           // in-progress new-coven wizard: { step, choices:{stepId:optId} }
 let overlay = null;            // null | 'options' | 'codex' | 'saves'
 let gameView = 'scene';        // which stage screen is shown (scene | saga | coven | ...)
+let sagaPage = null;           // Saga screen: which year page (0 = The Founding; null = latest)
 let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/Menu)
 let pinnedCard = null;         // index of an advisor card tapped open (tap again to close)
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
@@ -151,12 +152,15 @@ function beginCreation() {
   overlay = null; screen = 'create';
   draw();
 }
-// Apply every chosen option's effects, snapshot the year, then into the first scene.
+// Apply each chosen option's effects, record the founding into the Saga (in step
+// order, under "The Founding"), snapshot the year, then into the first scene.
 function finishCreation() {
-  for (const [stepId, optId] of Object.entries(creation.choices)) {
-    const step = creationDefs.find((s) => s.id === stepId);
-    const opt = step && (step.options || []).find((o) => o.id === optId);
-    if (opt && opt.effects) applyEffects(state, opt.effects);
+  state.saga.push('[The Founding] The Ember passes to a new Archon, and Runehold\'s hearth-rune is kept alight.');
+  for (const step of creationDefs) {
+    const opt = (step.options || []).find((o) => o.id === creation.choices[step.id]);
+    if (!opt) continue;
+    if (opt.effects) applyEffects(state, opt.effects);
+    if (opt.saga) state.saga.push(`[The Founding] ${opt.saga}`);
   }
   creation = null;
   yearOpenPressures = { ...state.pressures };
@@ -205,7 +209,7 @@ function doAction(id) {
     applyEffects(state, (a[outcome] || {}).effects || []);
     if (a.school) applyEffects(state, [{ adjust_mastery: [a.school, outcome === 'win' ? 4 : 2] }]);
     const line = (a[outcome] || {}).text;
-    state.saga.push(`${caster ? caster.name : 'The coven'} cast ${a.label} — ${outcome === 'win' ? 'and it held' : 'and it faltered'}.${line ? ' ' + line : ''}`);
+    chronicle(state, `${caster ? caster.name : 'The coven'} cast ${a.label} — ${outcome === 'win' ? 'and it held' : 'and it faltered'}.${line ? ' ' + line : ''}`);
   } else {
     applyEffects(state, a.effects);
   }
@@ -264,7 +268,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -389,10 +393,18 @@ app.addEventListener('click', (e) => {
     // shell navigation
     case 'enter': goFullscreenLandscape(); screen = 'menu'; draw(); break;
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
-    case 'game-view': gameView = el.dataset.view; selectedMember = null; draw(); break;
+    case 'game-view': gameView = el.dataset.view; selectedMember = null; if (gameView === 'saga') sagaPage = null; draw(); break;
     case 'view-member': gameView = 'coven'; selectedMember = el.dataset.member; draw(); break;
     case 'close-member': selectedMember = null; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
+    case 'saga-page': {
+      const years = [...new Set(state.saga.map((l) => { const m = l.match(/Y(\d+)\]/); return m ? Number(m[1]) : 0; }))].sort((a, b) => a - b);
+      if (!years.length) break;
+      let cur = sagaPage; if (cur == null || !years.includes(cur)) cur = years[years.length - 1];
+      const i = years.indexOf(cur) + Number(el.dataset.dir);
+      if (i >= 0 && i < years.length) { sagaPage = years[i]; draw(); }
+      break;
+    }
     case 'adv-scroll': scrollAdvisors(Number(el.dataset.dir)); break;
     case 'toggle-hearth-menu': {   // toggle the class on the LIVE node so the ☰→✕ + popover animate (a full redraw would skip the transition)
       hearthMenuOpen = !hearthMenuOpen;

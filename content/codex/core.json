@@ -30,13 +30,13 @@
       "title": "The Seven Color Cults",
       "blurb": "Seven independent reputations. Acting for one often costs another.",
       "entries": [
-        { "term": "Red", "body": "the Gilded Reach — greedy aristocrats and the Stock Sanctuary. The mercantile and coin power of the Runiverse." },
-        { "term": "Blue", "body": "The Bastion — the largest libraries and the Forgotten Athenaeum. The lore and knowledge power." },
-        { "term": "Yellow", "body": "The chroniclers have not yet fixed this cult's character." },
-        { "term": "Brown", "body": "The chroniclers have not yet fixed this cult's character." },
-        { "term": "Green", "body": "The chroniclers have not yet fixed this cult's character." },
-        { "term": "Purple", "body": "The chroniclers have not yet fixed this cult's character." },
-        { "term": "White", "body": "The chroniclers have not yet fixed this cult's character." }
+        { "term": "Red", "body": "The Gilded Reach — aristocrats and coin-mages of the Red Wizard Capital, keepers of the Stock Sanctuary. The mercantile and political power of the Runiverse: court them for wealth, and expect to pay for everything." },
+        { "term": "Blue", "body": "The Bastion — keepers of the largest libraries and the Forgotten Athenaeum, where science and magic are one study. The lore and knowledge power, and the surest hand against the Forgetting — if you can meet their price in patience." },
+        { "term": "Yellow", "body": "The chronomancers of the Riviera, whose magic bends time itself — hourglasses, second chances, and debts that fall due out of order. Bright and mercurial; a Yellow favour may arrive before you ask for it, or long after it could have helped." },
+        { "term": "Brown", "body": "The practical cult of the northern delta, workers of plain Orange Magic. No towers and no airs — mud, craft, and things that simply work. Provincial and stubborn, they are the Runiverse's hands, and they remember who kept them fed." },
+        { "term": "Green", "body": "The wild cult of the Green Wizard City, deep in the equatorial jungle. Their magic is growth and rot and living things — rooted, patient, faintly feral. They judge a coven by what it takes from the land, not what it raises upon it." },
+        { "term": "Purple", "body": "The chaos-cult of the Purple Pavilion, on its far western island. Esoteric and unstable, they court the loud and forbidden edges of magic — brilliant allies whose gifts are real and never quite controllable." },
+        { "term": "White", "body": "The order-cult of the White Wizard Tower, keepers of clarity and law. Quiet, austere, and certain, they prize a still hand and a kept oath — and they watch the Sacred Flame more closely, and more warily, than any other colour." }
       ]
     },
     {

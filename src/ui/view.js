@@ -192,13 +192,40 @@ function placeholderScreen(title, flavor) {
   </section>`;
 }
 
-function sagaScreenHTML(state) {
-  const lines = state.saga.slice().reverse();
+// The Saga, paginated by section: The Founding (creation, year 0) then one page per
+// year, with ‹ › arrows. Entries carry a "[<time> Y<N>]" or "[The Founding]" stamp.
+function sagaScreenHTML(ctx) {
+  const state = ctx.state;
+  const groups = {};
+  for (const l of state.saga) {
+    const m = l.match(/Y(\d+)\]/);
+    (groups[m ? Number(m[1]) : 0] ||= []).push(l);
+  }
+  const years = Object.keys(groups).map(Number).sort((a, b) => a - b);
+  if (!years.length) {
+    return `<section class="screen saga-screen"><h2 class="screen-title">The Saga of Runehold</h2>
+      <p class="muted">No deeds yet recorded. The saga begins with your first season.</p></section>`;
+  }
+  let page = ctx.sagaPage;
+  if (page == null || !years.includes(page)) page = years[years.length - 1];
+  const idx = years.indexOf(page);
+  const label = page === 0 ? 'The Founding' : `Year ${page}`;
+  const items = groups[page].map((l) => {
+    const m = l.match(/^\[([^\]]*)\]\s*(.*)$/);
+    const body = m ? m[2] : l;
+    const when = page === 0 ? '' : `<span class="saga-when">${esc((m ? m[1] : '').replace(/\s*Y\d+$/, ''))}</span> `;
+    return `<li>${when}${esc(body)}</li>`;
+  }).join('');
   return `<section class="screen saga-screen">
-    <h2 class="screen-title">The Saga of Runehold</h2>
-    ${lines.length
-      ? `<ol class="saga-full">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ol>`
-      : `<p class="muted">No deeds yet recorded. The saga begins with your first season.</p>`}
+    <div class="saga-head">
+      <h2 class="screen-title">The Saga of Runehold</h2>
+      <div class="saga-pager">
+        <button class="saga-arrow" data-action="saga-page" data-dir="-1" ${idx > 0 ? '' : 'disabled'} aria-label="Earlier">&lsaquo;</button>
+        <span class="saga-page-label">${esc(label)}</span>
+        <button class="saga-arrow" data-action="saga-page" data-dir="1" ${idx < years.length - 1 ? '' : 'disabled'} aria-label="Later">&rsaquo;</button>
+      </div>
+    </div>
+    <ol class="saga-full">${items}</ol>
   </section>`;
 }
 
@@ -372,7 +399,7 @@ function recapHTML(ctx) {
 function stageHTML(ctx) {
   if (ctx.phase === 'recap') return recapHTML(ctx);   // year's end takes the stage
   const v = ctx.gameView;
-  if (v === 'saga') return sagaScreenHTML(ctx.state);
+  if (v === 'saga') return sagaScreenHTML(ctx);
   if (v === 'cults') return cultsScreenHTML(ctx);
   if (v === 'coven') return covenScreenHTML(ctx);
   if (v === 'workings') return workingsScreenHTML(ctx);
@@ -787,14 +814,16 @@ function modal(kind, title, body) {
   </div>`;
 }
 
-// Options ▸ Dev links to the design/authoring tools — shown only on local / LAN dev
-// hosts (and file://), never on the deployed build.
-const IS_DEV = typeof location !== 'undefined' && (
+// Options ▸ Dev links to the design/authoring tools. Normally shown only on local / LAN
+// dev hosts (and file://). TEMPORARY: DEV_ALWAYS forces it on in the live build too —
+// flip back to false (or delete it from the guard below) before going public.
+const DEV_ALWAYS = true; // TODO: set false at launch to hide Dev on the live build
+const IS_DEV = DEV_ALWAYS || (typeof location !== 'undefined' && (
   location.protocol === 'file:' ||
   /^(localhost|127\.0\.0\.1|\[?::1\]?)$/i.test(location.hostname) ||
   /\.local$/i.test(location.hostname) ||
   /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(location.hostname)
-);
+));
 const DEV_TOOLS = [
   ['Portrait gallery', 'design/portraits.html'],
   ['Icon gallery', 'design/icon-gallery.html'],
@@ -957,7 +986,7 @@ function overlayHTML(ctx) {
       <button data-action="close">No &mdash; keep playing</button>
       <button class="danger" data-action="confirm-new-yes">Yes &mdash; begin anew</button>
     </div>`);
-  const map = { saves: ['Load &amp; Save', savesHTML(ctx)] };
+  const map = { saves: ['Load & Save', savesHTML(ctx)] };   // modal() esc()s the title — pass literal &
   const m = map[ctx.overlay];
   return m ? modal(ctx.overlay, m[0], m[1]) : '';
 }

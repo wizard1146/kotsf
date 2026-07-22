@@ -12,6 +12,7 @@ Mechanics
  - we should lengthen the game play experience by splitting seasons into thirds - early Thaw, mid-Thaw, late Thaw, early Highsun, mid-Highsun, late Highsun etc
  - I don't have a lot of magic in a magic game - we need to have a think about this
  - we should create personality metrics and think about recruitment and progression of individual advisors
+ - expand the Circle/advisor roster to up to 7, and let the player assign each advisor a task/responsibility (a role system) — recruitment + role-assignment UI
 
 Lore
  - The Lore begins with "You are the Archon of Runehold, a fledgling coven of Wizards around a guttering hearth-rune. The world is forgetting itself; the Flame still burns beneath the Secret Tower; the seven Color Cults circle. Tend the flame, or be forgotten." but this is not evocative enough. To mirror real life events, we can change the stem to be something like - yes, Wizards are forgetting the world, forgetting their magic, but we need to encapsulate more of the setting, so - I propose that the Wardens of the Secret Tower left it and the Tower went Dark - this can be an epochal event maybe call it the "Shadowing" which was presaged by the emergence of the Forgotten Souls. We need to beef this concept up further so chat to me about this.

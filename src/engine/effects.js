@@ -1,6 +1,6 @@
 // effects.js — the ONLY place state mutates. Centralized for debuggability:
 // if the state is ever wrong, there is exactly one file to look in.
-import { pickIndex } from './state.js';
+import { pickIndex, chronicle } from './state.js';
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
@@ -33,9 +33,7 @@ function transformMember(state, spec) {
   const m = pool[pickIndex(state, pool.length)];
   state.circle = state.circle.filter((x) => x.id !== m.id);
   state.souls.push({ ...m, wasMember: true });
-  state.saga.push(
-    `${m.name} stepped into the Flame and did not return as ${m.name}. A Forgotten Soul now walks the Runiverse.`
-  );
+  chronicle(state, `${m.name} stepped into the Flame and did not return as ${m.name}. A Forgotten Soul now walks the Runiverse.`);
 }
 
 export function applyEffects(state, effects = []) {

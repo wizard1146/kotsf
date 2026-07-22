@@ -43,6 +43,12 @@ export const phaseName = (p) => PHASE_NAMES[(p || 0) % 3];
 // full time label, e.g. "Early Thaw" (phase defaults to 0 for pre-sub-season saves)
 export const timeName = (phase, season) => `${PHASE_NAMES[(phase || 0) % 3]} ${SEASON_NAMES[season % 4]}`;
 
+// Append a stamped line to the saga. The `[… Y<N>]` prefix is what the Saga screen
+// paginates on (year N); founding lines use a "[The Founding]" prefix instead.
+export function chronicle(state, text) {
+  state.saga.push(`[${timeName(state.phase, state.season)} Y${state.year}] ${text}`);
+}
+
 // Seeded, serializable RNG (mulberry32). Mutates state.rngState; returns [0,1).
 // Storing the integer state in the save makes runs reproducible — which is what
 // keeps permanent Flame-loss honest (no reload-until-she-survives).

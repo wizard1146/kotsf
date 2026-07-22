@@ -1,6 +1,6 @@
 // loop.js — the heartbeat. Composes the six verbs into a playable turn.
 // The harness (and later the UI) drives these; this file holds the rules of time.
-import { timeName } from './state.js';
+import { chronicle } from './state.js';
 import { resolveTest } from './resolver.js';
 import { applyEffects } from './effects.js';
 
@@ -33,9 +33,7 @@ export function applyChoice(state, scene, choice) {
   const outcome = choice.test ? resolveTest(state, choice.test) : 'win';
   const branch = choice[outcome] || choice.win;
   if (branch) {
-    if (branch.text) {
-      state.saga.push(`[${timeName(state.phase, state.season)} Y${state.year}] ${scene.title}: ${branch.text}`);
-    }
+    if (branch.text) chronicle(state, `${scene.title}: ${branch.text}`);
     applyEffects(state, branch.effects);
   }
   return outcome;
