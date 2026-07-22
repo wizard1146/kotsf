@@ -285,22 +285,63 @@ const warScreenHTML = (ctx) => actionScreenHTML(ctx, 'war', 'Magic vs Steel',
 
 // The Tula-style end-of-year recap: how the year moved the coven, who stands,
 // and the year's deeds — a pause and a page-turn before the next year.
-// One-time opening shown when a new coven begins (phase === 'intro'). Sets the
-// premise but hides the deeper lore — the Flame's true function, the other Embers,
-// who appointed you — for the player to discover through play + the Codex.
-function introHTML() {
-  const paras = [
-    'Once, the Sacred Flame burned in the Secret Tower, and the world was whole. Then its keepers vanished, the Tower went dark &mdash; and the world began, slowly, to forget.',
-    'You are the appointed Archon of Runehold &mdash; though who named you, and why, is itself half-forgotten. As the Tower&rsquo;s enemies gathered, the coven that kept it broke the Flame into <b>Embers</b> and scattered them beyond reach. One was carried here, to your hearth-rune: the coven&rsquo;s heart, and its last thread to the old power. Let it die, and Runehold dies with it.',
-    'Beyond your walls, the seven <b>Colour Cults</b> circle &mdash; each hoarding what magic remains, and no two of them allies for long. Win one to your side and you make an enemy of another.',
-    'Your Wizards will counsel you, and quarrel. Lead them through famine, feud, and the long dark &mdash; and, if the old stories are true, seek the other Embers before the dark finds them first.',
-  ].map((p) => `<p>${p}</p>`).join('');
-  return `<section class="screen intro-screen">
-    <img class="rune intro-mark" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
-    <h2 class="intro-title">Keeper of the Sacred Flame</h2>
-    <div class="intro-body">${paras}</div>
-    <p class="intro-tag">Keep the flame, or be forgotten.</p>
-    <button class="choice intro-begin" data-action="begin-saga">Begin the saga &rarr;</button>
+// a tailored one-line introduction for a rolled Circle member (coven step)
+function covenIntroLine(m) {
+  const cls = CLASS_LABEL[m.class] || m.class;
+  const school = CULT_NAMES[m.school] || cap(m.school);
+  const rank = { 'ring-leader': 'Your ring-leader', adept: 'Your second-in-command', apprentice: 'An apprentice' }[m.rank] || m.rank;
+  const top = [['Power', m.power], ['Wisdom', m.wisdom], ['Guile', m.guile], ['Courage', m.courage]].sort((a, b) => b[1] - a[1])[0][0];
+  const temper = m.boldness > 62 ? 'bold' : m.boldness < 38 ? 'cautious' : m.piety > 62 ? 'devout' : m.temper > 62 ? 'fiery' : 'steady';
+  return `${rank} — a ${temper} ${school} ${cls}, strongest in ${top}.`;
+}
+
+// The new-coven creation wizard (full screen, locks the rest of the UI). Steps come
+// from content/creation.json: prose · coven · value choices. Choice effects apply
+// only on Begin (see finishCreation), so Back never has to un-apply anything.
+function creationHTML(ctx) {
+  const steps = ctx.creationDefs || [];
+  const c = ctx.creation || { step: 0, choices: {} };
+  const step = steps[c.step];
+  if (!step) return '<section class="create"><p class="muted">…</p></section>';
+  const n = steps.length;
+  const last = c.step >= n - 1;
+  let body = '';
+  if (step.kind === 'prose') {
+    body = `<div class="create-prose">${(step.body || []).map((p) => `<p>${p}</p>`).join('')}</div>
+      <button class="choice create-next" data-action="create-next">Continue &rarr;</button>`;
+  } else if (step.kind === 'coven') {
+    const cards = ctx.state.circle.map((m) => {
+      const photo = portraitFor(m, ctx.portraits);
+      const img = photo
+        ? `<img class="member-photo" src="${esc(photo)}" alt="" loading="lazy">`
+        : `<img class="member-photo" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`;
+      return `<div class="create-member" style="--cult:${CULT_HEX[m.school] || '#777'}">
+        <span class="create-mimg">${img}</span>
+        <span class="create-mtext"><b>${esc(m.name)}</b><span>${esc(covenIntroLine(m))}</span></span>
+      </div>`;
+    }).join('');
+    body = `<p class="create-prompt">${step.body || ''}</p>
+      <div class="create-coven">${cards}</div>
+      <button class="choice create-next" data-action="create-next">Continue &rarr;</button>`;
+  } else {
+    const chosen = c.choices[step.id];
+    const opts = (step.options || []).map((o) =>
+      `<button class="create-opt${chosen === o.id ? ' on' : ''}" data-action="create-choose" data-step="${esc(step.id)}" data-opt="${esc(o.id)}">
+        <b>${esc(o.label)}</b><span>${o.desc || ''}</span>
+      </button>`).join('');
+    body = `<p class="create-prompt">${step.prompt || ''}</p><div class="create-opts">${opts}</div>`;
+  }
+  return `<section class="create">
+    <header class="create-head">
+      <span class="create-step">${c.step + 1} / ${n}</span>
+      <h2 class="create-title">${esc(step.title || '')}</h2>
+      <button class="create-quit" data-action="create-quit">Quit</button>
+    </header>
+    <div class="create-body">${body}</div>
+    <footer class="create-foot">
+      ${c.step > 0 ? '<button class="create-nav" data-action="create-back">&larr; Back</button>' : '<span></span>'}
+      ${step.kind === 'choice' && last ? '<span class="create-hint">Choosing begins the saga &rarr;</span>' : '<span></span>'}
+    </footer>
   </section>`;
 }
 
@@ -329,7 +370,6 @@ function recapHTML(ctx) {
 }
 
 function stageHTML(ctx) {
-  if (ctx.phase === 'intro') return introHTML(ctx);   // one-time opening on a new coven
   if (ctx.phase === 'recap') return recapHTML(ctx);   // year's end takes the stage
   const v = ctx.gameView;
   if (v === 'saga') return sagaScreenHTML(ctx.state);
@@ -926,6 +966,7 @@ function overlayHTML(ctx) {
 export function render(ctx) {
   const screen = ctx.screen === 'splash' ? splashHTML()
     : ctx.screen === 'menu' ? menuHTML(ctx)
+    : ctx.screen === 'create' ? creationHTML(ctx)
     : gameHTML(ctx);
   return screen + overlayHTML(ctx);
 }

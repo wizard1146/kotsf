@@ -42,6 +42,11 @@ export function buildBundle() {
       try { return readdirSync(join(ROOT, 'assets', 'portraits')).filter((f) => /\.(webp|png)$/i.test(f)); }
       catch { return []; }
     })(),
+    // new-coven creation wizard (welcome → coven → value selectors)
+    creation: (() => {
+      try { return JSON.parse(readFileSync(join(ROOT, 'content', 'creation.json'), 'utf8')).steps || []; }
+      catch { return []; }
+    })(),
   };
   writeFileSync(join(ROOT, 'content', 'bundle.json'), JSON.stringify(bundle, null, 2));
   return bundle;

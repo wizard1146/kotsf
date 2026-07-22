@@ -1,0 +1,80 @@
+{
+  "_note": "New-coven creation wizard. Steps run in order; kind='prose'|'coven'|'choice'. A choice's effects (same vocabulary as scenes) are applied only when you Begin the saga, so Back is safe. Flags (player_*, appointed_*, path_*, belief_*, warriors_*) let scenes key off the Archon's backstory.",
+  "steps": [
+    {
+      "id": "welcome",
+      "kind": "prose",
+      "title": "Keeper of the Sacred Flame",
+      "body": [
+        "Once the Sacred Flame burned whole in the Secret Tower, and the world was whole with it. Then its keepers vanished, the Tower went dark &mdash; and the world began, slowly, to forget.",
+        "As the Tower&rsquo;s enemies gathered, the coven that kept it broke the Flame into <b>Embers</b> and scattered them beyond reach. One was carried to <b>Runehold</b>, to your hearth-rune. You are its Archon now. Let the fire die, and Runehold dies with it.",
+        "Before the saga begins, a few things must be settled &mdash; who you are, and what you believe."
+      ]
+    },
+    {
+      "id": "coven",
+      "kind": "coven",
+      "title": "Your Circle",
+      "body": "These few keep the Ember with you. They will counsel you and quarrel among themselves; lead them well."
+    },
+    {
+      "id": "colour",
+      "kind": "choice",
+      "title": "Your Colour",
+      "prompt": "Every Wizard leans toward one of the seven schools. Which do you name your own?",
+      "options": [
+        { "id": "red", "label": "Red", "desc": "Coin, courts, and the Gilded Reach. Power bought and sold.", "effects": [{ "set_flag": "player_red" }, { "adjust_mastery": ["red", 12] }] },
+        { "id": "yellow", "label": "Yellow", "desc": "The bending of time and season. Patience made into power.", "effects": [{ "set_flag": "player_yellow" }, { "adjust_mastery": ["yellow", 12] }] },
+        { "id": "brown", "label": "Brown", "desc": "Earth, craft, and the practical working. Magic that feeds a hold.", "effects": [{ "set_flag": "player_brown" }, { "adjust_mastery": ["brown", 12] }] },
+        { "id": "green", "label": "Green", "desc": "Growing things and the wild. Nurture against the dark.", "effects": [{ "set_flag": "player_green" }, { "adjust_mastery": ["green", 12] }] },
+        { "id": "blue", "label": "Blue", "desc": "Lore and memory; the Bastion and its Athenaeum. Knowledge above all.", "effects": [{ "set_flag": "player_blue" }, { "adjust_mastery": ["blue", 12] }, { "add": ["lore", 4] }] },
+        { "id": "purple", "label": "Purple", "desc": "Chaos and the unmaking of certainty. Power without a leash.", "effects": [{ "set_flag": "player_purple" }, { "adjust_mastery": ["purple", 12] }] },
+        { "id": "white", "label": "White", "desc": "Order and clarity against the Forgetting. The wall that holds.", "effects": [{ "set_flag": "player_white" }, { "adjust_mastery": ["white", 12] }] }
+      ]
+    },
+    {
+      "id": "appointment",
+      "kind": "choice",
+      "title": "How You Came to Lead",
+      "prompt": "The seat of Archon was not empty. How did it become yours?",
+      "options": [
+        { "id": "named", "label": "The dying keeper named you", "desc": "The last Archon gave you the fire with their final breath. The coven honours the choice &mdash; and watches to see if it was wise.", "effects": [{ "set_flag": "appointed_named" }, { "add": ["faith", 5] }] },
+        { "id": "raised", "label": "The coven raised you", "desc": "They chose you from among themselves. Their faith in you is real &mdash; and yours to keep or lose.", "effects": [{ "set_flag": "appointed_raised" }, { "add": ["faith", 8] }] },
+        { "id": "usurper", "label": "You took it by force", "desc": "The old Archon is a Forgotten Soul now, and not by the Flame&rsquo;s choosing. The coven follows &mdash; warily.", "effects": [{ "set_flag": "appointed_usurper" }, { "add": ["faith", -6] }, { "add": ["flamesRegard", 5] }] }
+      ]
+    },
+    {
+      "id": "path",
+      "kind": "choice",
+      "title": "How You Came to Magic",
+      "prompt": "Every Wizard comes to the craft by some road. Which was yours?",
+      "options": [
+        { "id": "born", "label": "Born to it", "desc": "The runes were in your blood before you could speak them. Magic is as natural to you as breath.", "effects": [{ "set_flag": "path_born" }, { "add": ["mana", 6] }] },
+        { "id": "studied", "label": "Studied for it", "desc": "You earned every working through years of the Athenaeum&rsquo;s cold libraries. Nothing was given.", "effects": [{ "set_flag": "path_studied" }, { "add": ["lore", 8] }] },
+        { "id": "bargained", "label": "Bargained for it", "desc": "You reached the craft by a door better left shut, and paid a price you don&rsquo;t speak of.", "effects": [{ "set_flag": "path_bargained" }, { "add": ["mana", 8] }, { "add": ["fracture", 3] }] }
+      ]
+    },
+    {
+      "id": "belief",
+      "kind": "choice",
+      "title": "What Magic Is",
+      "prompt": "The wise argue over what magic truly is. What do you believe?",
+      "options": [
+        { "id": "memory", "label": "Memory", "desc": "Magic is the world remembering how it once worked &mdash; and it is being forgotten.", "effects": [{ "set_flag": "belief_memory" }, { "add": ["lore", 6] }] },
+        { "id": "gift", "label": "A gift", "desc": "Magic is given, from the Flame or something older, to those who are meant to carry it.", "effects": [{ "set_flag": "belief_gift" }, { "add": ["faith", 5] }] },
+        { "id": "tool", "label": "A tool", "desc": "Magic is a power like any other, to be wielded by whoever is strong enough to hold it.", "effects": [{ "set_flag": "belief_tool" }, { "add": ["mana", 6] }] }
+      ]
+    },
+    {
+      "id": "warriors",
+      "kind": "choice",
+      "title": "The Warriors",
+      "prompt": "The Warriors outnumber the Wizards and need no spells to kill. How do you regard them?",
+      "options": [
+        { "id": "allies", "label": "Necessary allies", "desc": "Steel guards what magic cannot. Treat with them, and Runehold stands the stronger.", "effects": [{ "set_flag": "warriors_allies" }, { "add": ["fracture", -4] }] },
+        { "id": "disdain", "label": "A lesser breed", "desc": "They cannot cast a single rune. Let them serve, and keep them at arm&rsquo;s length.", "effects": [{ "set_flag": "warriors_disdain" }, { "add": ["faith", 3] }] },
+        { "id": "enemies", "label": "Enemies in waiting", "desc": "They fear what they can&rsquo;t do, and fear becomes the knife. Better to strike first.", "effects": [{ "set_flag": "warriors_enemies" }, { "add": ["fracture", 4] }, { "add": ["mana", 4] }] }
+      ]
+    }
+  ]
+}

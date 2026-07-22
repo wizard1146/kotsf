@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v29';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v30';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -26,9 +26,11 @@ let codex = [];                // wiki/codex categories
 let actions = [];              // per-screen actions (Workings, Fields, …): requires + effects
 let counsel = {};              // screen id -> ambient advisor line pool (footer counsel off-scene)
 let portraits = [];            // member portrait filenames (assets/portraits/*.webp)
+let creationDefs = [];         // new-coven creation wizard steps (from bundle)
 
 // app-shell UI state
-let screen = 'splash';         // 'splash' | 'menu' | 'game'
+let screen = 'splash';         // 'splash' | 'menu' | 'create' | 'game'
+let creation = null;           // in-progress new-coven wizard: { step, choices:{stepId:optId} }
 let overlay = null;            // null | 'options' | 'codex' | 'saves'
 let gameView = 'scene';        // which stage screen is shown (scene | saga | coven | ...)
 let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/Menu)
@@ -138,12 +140,28 @@ function openYearRecap(year) {
   phase = 'recap'; current = null; gameView = 'scene';
 }
 
-function newRun(seed) {
-  state = createInitialState(seed ?? (Date.now() & 0xffffffff));
+// New coven → the creation wizard. Roll the Circle now (so it can be shown/tailored);
+// choice effects are applied only when the saga begins, so Back is safe.
+function beginCreation() {
+  goFullscreenLandscape();
+  state = createInitialState(Date.now() & 0xffffffff);
   end = null; lastOutcome = null; current = null; yearRecap = null;
-  casterId = null; selectedMember = null; cardsOpen = false;   // fresh coven — clear per-Circle UI selections
+  casterId = null; selectedMember = null; cardsOpen = false; gameView = 'scene';
+  creation = { step: 0, choices: {} };
+  overlay = null; screen = 'create';
+  draw();
+}
+// Apply every chosen option's effects, snapshot the year, then into the first scene.
+function finishCreation() {
+  for (const [stepId, optId] of Object.entries(creation.choices)) {
+    const step = creationDefs.find((s) => s.id === stepId);
+    const opt = step && (step.options || []).find((o) => o.id === optId);
+    if (opt && opt.effects) applyEffects(state, opt.effects);
+  }
+  creation = null;
   yearOpenPressures = { ...state.pressures };
-  phase = 'intro';   // one-time opening card before the first scene
+  screen = 'game'; phase = 'scene';
+  advanceToScene();
   draw();
 }
 
@@ -164,7 +182,7 @@ function proceed() {
 }
 
 // ---- shell navigation + saves ---------------------------------------------
-function startGame() { goFullscreenLandscape(); overlay = null; screen = 'game'; gameView = 'scene'; newRun(); }
+function startGame() { beginCreation(); }   // "New Coven" enters the creation wizard
 
 // New Coven overwrites the single continuous campaign — confirm first if one exists.
 function confirmNewCoven() {
@@ -246,14 +264,14 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
 }
 
 function persist() {
-  if (state && settings.autosave) writeSlot(AUTOSAVE_KEY, envelope());
+  if (state && settings.autosave && screen !== 'create') writeSlot(AUTOSAVE_KEY, envelope());   // don't autosave an un-started coven
 }
 
 function draw() {
@@ -357,7 +375,16 @@ app.addEventListener('click', (e) => {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
     case 'continue': proceed(); break;
-    case 'begin-saga': advanceToScene(); draw(); break;   // leave the intro card into the first scene
+    case 'create-next': if (creation) { creation.step = Math.min(creationDefs.length - 1, creation.step + 1); draw(); } break;
+    case 'create-back': if (creation && creation.step > 0) { creation.step -= 1; draw(); } break;
+    case 'create-choose': {
+      if (!creation) break;
+      creation.choices[el.dataset.step] = el.dataset.opt;
+      if (creation.step >= creationDefs.length - 1) finishCreation();
+      else { creation.step += 1; draw(); }
+      break;
+    }
+    case 'create-quit': state = null; creation = null; overlay = null; screen = 'menu'; draw(); break;
     case 'new-run': startGame(); break;
     // shell navigation
     case 'enter': goFullscreenLandscape(); screen = 'menu'; draw(); break;
@@ -434,6 +461,7 @@ window.addEventListener('keydown', (e) => {
   actions = bundle.actions || [];
   counsel = bundle.counsel || {};
   portraits = bundle.portraits || [];
+  creationDefs = bundle.creation || [];
   applySettings();
   screen = 'splash'; overlay = null;
   draw();
