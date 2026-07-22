@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v22';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v23';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -80,39 +80,24 @@ function metaOf(env) {
 // ---- settings -------------------------------------------------------------
 function loadSettings() {
   const s = readSlot(SETTINGS_KEY) || {};
-  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, lockLandscape: s.lockLandscape !== false, landscapeFlip: !!s.landscapeFlip, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false, tuckCards: s.tuckCards !== false, layout: s.layout === 'b' ? 'b' : 'a' };
+  return { textSize: s.textSize || 'm', reduceMotion: !!s.reduceMotion, autosave: s.autosave !== false, revealMeters: !!s.revealMeters, footerPortraits: s.footerPortraits !== false, tuckCards: s.tuckCards !== false, layout: s.layout === 'b' ? 'b' : 'a' };
 }
 function applySettings() {
   const r = document.documentElement;
   r.dataset.textSize = settings.textSize;
   r.dataset.reduceMotion = settings.reduceMotion ? '1' : '0';
-  applyOrientation();
 }
 
-// Force landscape by PINNING to a single side. Media queries can't tell the two
-// landscape sub-orientations apart (why it flipped upside-down on your side), so we
-// read the real physical orientation in JS and set data-rotate = the CSS rotation
-// (0/90/180/270) that lands the app on the chosen side. `landscapeFlip` picks the
-// other side. When the lock is off we never rotate (data-rotate="0").
-function physicalOrientation() {
-  const t = (typeof screen !== 'undefined' && screen.orientation && screen.orientation.type) || '';
-  if (t) return t;                                   // 'landscape-primary' etc. (most browsers)
-  const wo = typeof window.orientation === 'number' ? window.orientation : null;  // iOS Safari fallback
-  if (wo === 0) return 'portrait-primary';
-  if (wo === 180) return 'portrait-secondary';
-  if (wo === 90) return 'landscape-primary';
-  if (wo === -90 || wo === 270) return 'landscape-secondary';
-  return window.matchMedia('(orientation: landscape)').matches ? 'landscape-primary' : 'portrait-primary';
-}
-// rotation (deg) that maps each physical orientation onto our default landscape side
-const ORIENT_BASE = { 'landscape-primary': 0, 'landscape-secondary': 180, 'portrait-primary': 90, 'portrait-secondary': 270 };
-function applyOrientation() {
-  let rot = 0;
-  if (settings.lockLandscape) {
-    rot = ORIENT_BASE[physicalOrientation()] ?? 0;
-    if (settings.landscapeFlip) rot = (rot + 180) % 360;   // pin to the other landscape side
-  }
-  document.documentElement.dataset.rotate = String(rot);
+// Always landscape on mobile. Best-effort OS lock (Android / installed PWA pins to
+// one side); where it's unsupported (iOS, non-fullscreen) the CSS @media(orientation:
+// portrait) rule rotates the whole app 90° instead. Silent on failure — no per-side
+// detection, no toggles.
+function lockLandscape() {
+  try {
+    const p = (typeof screen !== 'undefined' && screen.orientation && screen.orientation.lock)
+      ? screen.orientation.lock('landscape') : null;
+    if (p && p.catch) p.catch(() => {});
+  } catch { /* unsupported — the CSS fallback handles it */ }
 }
 function setOption(key, val) {
   if (key === 'textSize' || key === 'layout') settings[key] = val;   // string-valued options
@@ -348,13 +333,8 @@ function updateRuneArrows() {
 // on any viewport change, re-measure both rails' scroll-arrow affordances
 function remeasureRails() { updateRuneArrows(); if (screen === 'game' && settings.layout === 'b') updateAdvArrows(); }
 window.addEventListener('resize', remeasureRails);
-// re-pin the landscape side whenever the device is physically turned
-function onOrientationChange() { applyOrientation(); remeasureRails(); }
-window.addEventListener('orientationchange', onOrientationChange);
-window.addEventListener('resize', applyOrientation);
-if (typeof screen !== 'undefined' && screen.orientation && screen.orientation.addEventListener) {
-  screen.orientation.addEventListener('change', onOrientationChange);
-}
+// turning the device (portrait↔landscape) re-lays out via CSS; just re-measure rails
+window.addEventListener('orientationchange', () => { lockLandscape(); remeasureRails(); });
 
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
@@ -448,6 +428,7 @@ window.addEventListener('keydown', (e) => {
   counsel = bundle.counsel || {};
   portraits = bundle.portraits || [];
   applySettings();
+  lockLandscape();
   screen = 'splash'; overlay = null;
   draw();
 })();

@@ -166,7 +166,7 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
   grid-template-rows: 2.6rem 1fr;
   grid-template-areas: "strip strip" "runes stage";
 }
-.lb-strip { grid-area: strip; display: flex; align-items: center; gap: 0.8rem; height: 2.6rem; padding: 0 0.4rem 0 0.8rem; border-bottom: 1px solid var(--line); background: var(--panel); position: relative; z-index: 25; }
+.lb-strip { grid-area: strip; display: flex; align-items: center; gap: 0.8rem; height: 2.6rem; padding: 0 0.4rem 0 0.8rem; border-bottom: 1px solid var(--line); background: var(--panel); position: relative; z-index: 50; }
 .lb-date { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; flex: none; }
 .lb-date b { color: var(--flame); letter-spacing: 0.02em; }
 .lb-strip .hearth-date { font-size: 0.9rem; }
@@ -180,7 +180,7 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 #app.screen-game.layout-b .stage { grid-area: stage; min-height: 0; max-width: none; margin: 0; padding: 1rem 3.9rem 1.2rem 1.2rem; }
 
 /* left rune rail */
-.lb-rune-rail { grid-area: runes; min-height: 0; display: flex; border-right: 1px solid var(--line); background: var(--panel); z-index: 15; }
+.lb-rune-rail { grid-area: runes; min-height: 0; display: flex; background: var(--panel); z-index: 15; }
 .runes-wrap.vertical { flex: 1; min-height: 0; flex-direction: column; align-items: center; gap: 0.1rem; padding: 0.3rem 0.15rem; }
 .runes-wrap.vertical .runes { flex: 1 1 0; min-height: 0; flex-direction: column; overflow-x: hidden; overflow-y: auto; align-items: center; }
 .runes-wrap.vertical .runes-arrow { display: flex; transform: rotate(90deg); padding: 0.1rem 0.3rem; }   /* always visible in the vertical rail */
@@ -191,7 +191,7 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 
 /* left advisor rail — a transparent see-through strip; portrait tiles hang off the
    left edge (peek ~60%) with a gentle fan, pop out on tap, and scroll with ▲▼. */
-.lb-advisors { grid-area: stage; align-self: stretch; justify-self: end; min-height: 0; position: relative; width: 5rem; z-index: 12; background: none; pointer-events: none; }
+.lb-advisors { grid-area: stage; align-self: stretch; justify-self: end; min-height: 0; position: relative; width: 5rem; z-index: 40; background: none; pointer-events: none; }
 /* native vertical scroller (touch + momentum); clips the peek sideways */
 .lb-adv-scroll { height: 100%; overflow-y: auto; overflow-x: clip; scrollbar-width: none; -webkit-overflow-scrolling: touch; pointer-events: auto; overscroll-behavior: contain; }
 .lb-adv-scroll::-webkit-scrollbar { display: none; }
@@ -768,31 +768,22 @@ button.danger:hover:not(:disabled) { border-color: var(--danger); background: #3
   .fullpage-head .panel-search { max-width: none; }
 }
 
-/* --- Force landscape, pinned to ONE side. JS reads the real device orientation
-       (all four) and sets data-rotate to the CSS rotation that lands the app on the
-       chosen landscape side — so it never flips upside-down when you turn onto your
-       other side. data-rotate="0" = no transform (already correct, or lock off).
-       90/270 = physical portrait (frame dims swapped); 180 = the opposite landscape.
-       Flip sides in Options → Display. --- */
-html[data-rotate="90"], html[data-rotate="180"], html[data-rotate="270"],
-html[data-rotate="90"] body, html[data-rotate="180"] body, html[data-rotate="270"] body { overflow: hidden; }
-html[data-rotate="90"] #app, html[data-rotate="180"] #app, html[data-rotate="270"] #app {
-  position: fixed; top: 0; left: 0; overflow: hidden; transform-origin: top left;
+/* --- Always landscape. On mobile we also try the Screen Orientation API lock
+       (screen.orientation.lock('landscape')) which pins Android to one side. This
+       CSS is the universal fallback: whenever the viewport is portrait, rotate the
+       whole app 90° into a landscape frame (one fixed direction), re-mapping the
+       viewport-height rules to the rotated frame. Landscape viewport → no change. --- */
+@media (orientation: portrait) {
+  html, body { overflow: hidden; }
+  #app {
+    position: fixed; top: 0; left: 0;
+    width: 100vh; width: 100dvh;      /* app width  = physical viewport height (long side) */
+    height: 100vw; height: 100dvw;    /* app height = physical viewport width  (short side) */
+    transform-origin: top left;
+    transform: rotate(90deg) translate(0, -100%);
+    overflow: hidden;
+  }
+  #app.screen-game { height: 100dvw; }
+  .splash, .menu { min-height: calc(100dvw - 4rem); }
+  .modal { max-height: 90dvw; }
 }
-/* physical landscape, wrong side → just spin 180° in place (dims stay normal) */
-html[data-rotate="180"] #app {
-  width: 100vw; width: 100dvw; height: 100vh; height: 100dvh;
-  transform-origin: center; transform: rotate(180deg);
-}
-/* physical portrait → rotate 90/270 into a landscape frame (dims swapped) */
-html[data-rotate="90"] #app, html[data-rotate="270"] #app {
-  width: 100vh; width: 100dvh;      /* app width  = physical viewport height (long side) */
-  height: 100vw; height: 100dvw;    /* app height = physical viewport width  (short side) */
-}
-html[data-rotate="90"] #app  { transform: rotate(90deg) translate(0, -100%); }
-html[data-rotate="270"] #app { transform: rotate(270deg) translate(-100%, 0); }
-/* re-map viewport-height sizing to the rotated frame's height (= physical width) */
-html[data-rotate="90"] #app.screen-game, html[data-rotate="270"] #app.screen-game { height: 100dvw; }
-html[data-rotate="90"] .splash, html[data-rotate="270"] .splash,
-html[data-rotate="90"] .menu, html[data-rotate="270"] .menu { min-height: calc(100dvw - 4rem); }
-html[data-rotate="90"] .modal, html[data-rotate="270"] .modal { max-height: 90dvw; }
