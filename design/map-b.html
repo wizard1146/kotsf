@@ -48,13 +48,14 @@
           <select id="method">
             <option value="noise">Noise field (marching squares)</option>
             <option value="metaballs">Metaballs</option>
-            <option value="cells">Cells (voronoi-ish)</option>
+            <option value="cells" selected>Cells (Voronoi)</option>
             <option value="fractal">Fractal (midpoint)</option>
             <option value="blob">Blob (radial — original)</option>
           </select>
         </div>
         <p class="algo-note" id="algo-note"></p>
         <div class="row"><span>Seed</span><input type="text" id="seed" value="runehold-01"></div>
+        <div class="row"><span>Sea level <small style="opacity:.7">(land → archipelago)</small></span><input type="range" id="sealevel" min="-0.1" max="0.2" step="0.01" value="0"><span class="val" id="sealevelv">0.00</span></div>
         <div class="row"><span>Fracture</span><input type="range" id="fracture" min="0" max="100" value="20"><span class="val" id="fracv">20</span></div>
         <div class="btnrow"><button class="btn" id="reroll">🎲 New world</button><button class="btn" id="prev">‹</button><button class="btn" id="next">›</button></div>
       </div>
@@ -95,6 +96,8 @@
 <script>
 const W = 140, H = 100;
 const HEX = { red:'#c0392b', yellow:'#d4ac0d', brown:'#8a5a1f', green:'#229954', blue:'#2471a3', purple:'#7d3c98', white:'#d5d8dc' };
+// province washes — desaturated to sit on parchment; White remapped to steel-grey so it's visible
+const WASH = { red:'#b8402f', yellow:'#c2a02c', brown:'#8f6326', green:'#4c7d3f', blue:'#356e9e', purple:'#7a4a92', white:'#8ea0ac' };
 const NAME = { red:'The Gilded Reach', yellow:"Chronomancer's Riviera", brown:'The Delta Holds', green:'Green Wizard City', blue:'The Bastion', purple:'Purple Pavilion', white:'White Wizard Tower' };
 const ALGO_NOTE = {
   noise: 'Value-noise heightmap × radial falloff, domain-warped, traced with marching squares. Bays, capes, offshore isles — the realistic default.',
@@ -193,7 +196,7 @@ function genFractal(rng){
     pts=np; }
   return { polys:[pts], center:{x:CX,y:CY}, curve:false };
 }
-function genField(rng, kind){
+function genField(rng, kind, sea=0){
   const fbm=makeFbm(rng);
   let centers=null;
   if(kind==='metaballs'){ centers=[]; const n=5+Math.floor(rng()*3); for(let i=0;i<n;i++) centers.push({x:CX+(rng()*2-1)*36,y:CY+(rng()*2-1)*26,s:13+rng()*12}); }
@@ -201,7 +204,7 @@ function genField(rng, kind){
     if(kind==='noise'){ const wx=x+(fbm(x*0.03+5,y*0.03)-0.5)*22, wy=y+(fbm(x*0.03,y*0.03+9)-0.5)*22; return fbm(wx*0.05,wy*0.05)*falloff(x,y,2.2); }
     let s=0; for(const c of centers){ const d2=(x-c.x)**2+(y-c.y)**2; s+=Math.exp(-d2/(2*c.s*c.s)); } return (s + (fbm(x*0.06,y*0.06)-0.5)*0.5) * (falloff(x,y,2.6)*0.6+0.4);
   };
-  const level = kind==='noise'?0.15 : 0.55;
+  const level = (kind==='noise'?0.15 : 0.55) + sea*(kind==='noise'?0.55:0.9);
   const cw=2.2, ch=2.2, cols=Math.ceil(W/cw)+1, rows=Math.ceil(H/ch)+1;
   let loops=marchingSquares((i,j)=>field(i*cw,j*ch),cols,rows,cw,ch,level);
   loops=loops.map(l=>chaikin(l,2)).filter(l=>Math.abs(polyArea(l))>22);
@@ -256,18 +259,27 @@ function fractalizeLoop(pts, rng, levels, amp, decay){ // midpoint displacement,
     p=np; }
   return p;
 }
-const softenCoast = (loop, rng) => chaikin(fractalizeLoop(resampleLoop(loop, 4), rng, 3, 2.4, 0.5), 1);
+// Soften a raw (angular) loop into a natural coast: fractal midpoint displacement for irregular
+// detail, then two Chaikin passes to round the sharp reversals so it flows like a real shoreline
+// instead of reading as electric zigzag.
+const softenCoast = (loop, rng, scale=1) => chaikin(fractalizeLoop(resampleLoop(loop, 3.5), rng, 3, 2.0*scale, 0.52), 2);
 // open-polyline variants (keep endpoints fixed) — for province borders, softened lightly
 function fractalizeOpen(pts, rng, levels, amp, decay){ let p=pts; for(let lvl=0;lvl<levels;lvl++){ const np=[], a2=amp*Math.pow(decay,lvl); for(let i=0;i<p.length-1;i++){ const a=p[i],b=p[i+1]; np.push(a); const nx=-(b.y-a.y),ny=(b.x-a.x),L=Math.hypot(nx,ny)||1,d=(rng()*2-1)*a2; np.push({x:(a.x+b.x)/2+nx/L*d,y:(a.y+b.y)/2+ny/L*d}); } np.push(p[p.length-1]); p=np; } return p; }
 function chaikinOpen(pts, iters){ let p=pts; for(let k=0;k<iters;k++){ if(p.length<3) break; const q=[p[0]]; for(let i=0;i<p.length-1;i++){ const a=p[i],b=p[i+1]; q.push({x:a.x*0.75+b.x*0.25,y:a.y*0.75+b.y*0.25},{x:a.x*0.25+b.x*0.75,y:a.y*0.25+b.y*0.75}); } q.push(p[p.length-1]); p=q; } return p; }
 // endpoints stay pinned to shared cell vertices, so adjacent borders stay connected; amp << coast
 const softenBorder = (seg, rng) => chaikinOpen(fractalizeOpen(seg, rng, 2, 0.9, 0.5), 1);
 
-function genVoronoi(rng){
+function genVoronoi(rng, sea=0){
   const fbm=makeFbm(rng), bb={x0:2,y0:2,x1:W-2,y1:H-2};
   let sites=[]; for(let i=0;i<66;i++) sites.push({x:bb.x0+rng()*(bb.x1-bb.x0), y:bb.y0+rng()*(bb.y1-bb.y0)});
   for(let it=0;it<2;it++) sites=sites.map(s=>polyCentroid(voronoiCell(s,sites,bb))); // Lloyd relaxation → even cells
-  const isLandAt=(x,y)=>(falloff(x,y,2.1)*0.98 + fbm(x*0.05,y*0.05)*0.5) > 0.6;
+  // raising `sea` weakens the central falloff and hands control to the noise, so one continent
+  // dissolves into peninsulas and then a scatter of noise-peak islands → an archipelago
+  const s = Math.max(0, sea);
+  const fw  = 0.92 - s*4.2;                    // central-land dominance ↓
+  const nw  = 0.45 + s*2.0;                    // noise (island-making) ↑
+  const lvl = sea>=0 ? 0.58 - sea*0.7 : 0.58 + sea*0.9; // threshold drops so noise peaks survive as isles
+  const isLandAt=(x,y)=>(falloff(x,y,2.1)*fw + fbm(x*0.06,y*0.06)*nw) > lvl;
   const cells=[];
   for(const s of sites){ const poly=voronoiCell(s,sites,bb); if(poly.length>=3) cells.push({site:s, poly, land:isLandAt(s.x,s.y)}); }
   const landCells=cells.filter(c=>c.land);
@@ -282,17 +294,19 @@ function genVoronoi(rng){
 }
 
 // ---------------- assemble a full world ----------------
-function generateWorld(method, seed) {
+function generateWorld(method, seed, sea=0) {
   const rng = mulberry32(hashSeed(seed + '|' + method));
-  const g = method==='blob' ? genBlob(rng) : method==='fractal' ? genFractal(rng) : method==='cells' ? genVoronoi(rng) : genField(rng, method);
+  const g = method==='blob' ? genBlob(rng) : method==='fractal' ? genFractal(rng) : method==='cells' ? genVoronoi(rng, sea) : genField(rng, method, sea);
   const island = makeBlob(19, 42 + rng()*16, 11, 1, 0.95, rng, 13, 0.32);
+  const islandLoop = softenCoast(island.points, rng, 0.6); // same organic coast treatment, gentler
   const landPolys = [...g.polys, island.points];
   const isLand = (x,y) => landPolys.some(poly => pointInPoly(x,y,poly));
 
   // land sample grid → robust "nearest land" placement so canon zones survive any coastline
   const samples=[]; for(let y=6;y<H-4;y+=2) for(let x=4;x<W-4;x+=2) if(isLand(x,y)) samples.push({x,y});
   const nearestLand=(tx,ty)=>{ let best=1e9,bp={x:CX,y:CY}; for(const s of samples){ const d=(s.x-tx)**2+(s.y-ty)**2; if(d<best){best=d;bp=s;} } return bp; };
-  const place=(deg,frac)=>{ const t=deg*Math.PI/180, tx=g.center.x+Math.cos(t)*frac*46, ty=g.center.y+Math.sin(t)*0.8*frac*46; return isLand(tx,ty)?{x:tx,y:ty}:nearestLand(tx,ty); };
+  const clampIn = p => ({ x:Math.max(11,Math.min(W-12,p.x)), y:Math.max(11,Math.min(H-12,p.y)) });
+  const place=(deg,frac)=>{ const t=deg*Math.PI/180, tx=g.center.x+Math.cos(t)*frac*46, ty=g.center.y+Math.sin(t)*0.8*frac*46; return clampIn(isLand(tx,ty)?{x:tx,y:ty}:nearestLand(tx,ty)); };
   const jit=(d,s)=>d+(rng()*2-1)*s;
 
   const seats = [
@@ -307,10 +321,17 @@ function generateWorld(method, seed) {
   const home = place(jit(150,40), 0.32);
   const tower = { x: 58 + rng()*64, y: 7 + rng()*6 };
 
-  const ma = place(jit(300,10), 0.5), mb = place(jit(150,10), 0.45);
-  const mountains=[]; for(let i=0;i<=11;i++){ const t=i/11,x=ma.x+(mb.x-ma.x)*t,y=ma.y+(mb.y-ma.y)*t,p={x:x+(rng()*4-2),y:y+(rng()*4-2),s:1.4+rng()*1.1}; if(isLand(p.x,p.y)) mountains.push(p); }
-  const forests=[]; for(let i=0;i<32;i++){ const p=place(jit(118,34), 0.36+rng()*0.44); if(isLand(p.x,p.y)) forests.push(p); }
-  const river = wavy(place(jit(285,8),0.4), place(jit(285,6),0.95), 10, 4, rng);
+  const clearOf = (x,y) => Math.hypot(x-home.x,y-home.y)>7 && seats.every(s=>Math.hypot(x-s.x,y-s.y)>5);
+  // mountain range: a gently bowed arc (not a ruler-straight line), size-varied, painter-sorted
+  const ma = place(jit(312,12), 0.55), mb = place(jit(58,12), 0.55);
+  const perp = { x:-(mb.y-ma.y), y:(mb.x-ma.x) }, plen = Math.hypot(perp.x,perp.y)||1, bow = (rng()*2-1)*9;
+  const mountains=[]; const mcount = 9+Math.floor(rng()*4);
+  for(let i=0;i<mcount;i++){ const t=i/(mcount-1), bend=Math.sin(t*Math.PI)*bow;
+    const x=ma.x+(mb.x-ma.x)*t+perp.x/plen*bend+(rng()*3-1.5), y=ma.y+(mb.y-ma.y)*t+perp.y/plen*bend+(rng()*3-1.5);
+    if(isLand(x,y) && clearOf(x,y)) mountains.push({x,y,s:1.3+rng()*1.6}); }
+  mountains.sort((a,b)=>a.y-b.y);
+  const forests=[]; for(let i=0;i<34;i++){ const p=place(jit(118,34), 0.36+rng()*0.44); if(isLand(p.x,p.y) && clearOf(p.x,p.y)) forests.push(p); }
+  const river = chaikinOpen(wavy(place(jit(285,8),0.42), place(jit(285,6),0.96), 16, 2.2, rng), 2);
   const roads = seats.map(s => [home, { x:s.x, y:s.y }]);
   const ashCorner = rng()<0.5 ? {x:6,y:4} : {x:W-6,y:4};
 
@@ -329,7 +350,7 @@ function generateWorld(method, seed) {
     const provinces=contSeats.map(s=>({ key:s.key, cells:g.voronoi.landCells.filter(c=>c.owner===s.key).map(c=>polyToPath(c.poly)) }));
     voronoi={ provBorders, provinces };
   }
-  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: island.points, seats, home, tower, mountains, forests, river, roads, ashCorner, voronoi };
+  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: islandLoop, seats, home, tower, mountains, forests, river, roads, ashCorner, voronoi };
 }
 
 // ---------------- glyphs + renderer (parchment) ----------------
@@ -341,6 +362,29 @@ function ashDefs(w, fr, color){ const c=w.ashCorner,r=34+fr*1.0; return `<radial
 function seatMarker(s, textColor, halo, serif){ const left=s.x>104,tx=left?-2.5:2.5,anchor=left?'end':'start'; return `<g transform="translate(${f(s.x)},${f(s.y)})"><circle r="1.6" fill="${HEX[s.key]}" stroke="${halo}" stroke-width=".4"/><text x="${tx}" y=".85" text-anchor="${anchor}" font-size="2.5"${serif?' font-family="Georgia,serif"':''} fill="${textColor}" style="paint-order:stroke" stroke="${halo}" stroke-width=".8" stroke-linejoin="round">${s.name}</text></g>`; }
 function homeMarker(w, halo, serif){ const s=w.home; return `<g transform="translate(${f(s.x)},${f(s.y)})"><path d="M0,-2.6 L2.2,0 L0,2.6 L-2.2,0 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".4"/><circle r=".8" fill="#fff2cf"/><text x="0" y="4.6" text-anchor="middle" font-size="2.8"${serif?' font-family="Georgia,serif"':''} fill="#b06a1c" style="paint-order:stroke" stroke="${halo}" stroke-width=".9" stroke-linejoin="round">Runehold</text></g>`; }
 function towerMarker(w, textColor, halo, serif){ const s=w.tower; return `<g transform="translate(${f(s.x)},${f(s.y)})" opacity=".9"><rect x="-1" y="-1" width="2" height="3.4" fill="${textColor}" stroke="${halo}" stroke-width=".3"/><path d="M-1.4,-1 L0,-3 L1.4,-1 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".3"/><text x="0" y="-3.8" text-anchor="middle" font-size="2.2"${serif?' font-family="Georgia,serif"':''} fill="${textColor}" opacity=".8" style="paint-order:stroke" stroke="${halo}" stroke-width=".7" stroke-linejoin="round">The Secret Tower</text></g>`; }
+
+// --- dots (fixed at the site) + separately laid-out labels (vertically de-cluttered) ---
+function seatDot(s, halo){ return `<circle cx="${f(s.x)}" cy="${f(s.y)}" r="1.6" fill="${HEX[s.key]}" stroke="${halo}" stroke-width=".4"/>`; }
+function homeDot(w, halo){ const s=w.home; return `<g transform="translate(${f(s.x)},${f(s.y)})"><path d="M0,-2.6 L2.2,0 L0,2.6 L-2.2,0 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".4"/><circle r=".8" fill="#fff2cf"/></g>`; }
+function towerDot(w, textColor, halo){ const s=w.tower; return `<g transform="translate(${f(s.x)},${f(s.y)})" opacity=".9"><rect x="-1" y="-1" width="2" height="3.4" fill="${textColor}" stroke="${halo}" stroke-width=".3"/><path d="M-1.4,-1 L0,-3 L1.4,-1 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".3"/></g>`; }
+function layoutLabels(w){
+  const E=[];
+  for(const s of w.seats) E.push({ text:s.name, x:s.x, ty:s.y+0.85, anchor:s.x>104?'end':'start', fs:2.5, home:false, op:1 });
+  E.push({ text:'Runehold', x:w.home.x, ty:w.home.y+4.6, anchor:'middle', fs:2.8, home:true, op:1 });
+  E.push({ text:'The Secret Tower', x:w.tower.x, ty:w.tower.y-3.8, anchor:'middle', fs:2.2, home:false, op:0.85 });
+  const box=e=>{ const wd=e.text.length*e.fs*0.5; const x0 = e.anchor==='start'?e.x+2.4 : e.anchor==='end'?e.x-2.4-wd : e.x-wd/2; return {x0,x1:x0+wd}; };
+  E.sort((a,b)=>a.ty-b.ty);
+  const placed=[];
+  for(const e of E){ let b=box(e),g=0;
+    while(g++<14 && placed.some(p=> !(b.x1<p.b.x0-1||b.x0>p.b.x1+1) && Math.abs(e.ty-p.ty)<3.0)){ e.ty+=3.2; b=box(e); }
+    e.b=b; placed.push(e); }
+  return E;
+}
+function labelsSVG(w, S){
+  const halo=S.land;
+  return layoutLabels(w).map(e=>{ const tx = e.anchor==='start'?e.x+2.4 : e.anchor==='end'?e.x-2.4 : e.x;
+    return `<text x="${f(tx)}" y="${f(e.ty)}" text-anchor="${e.anchor}" font-size="${e.fs}"${S.serif?' font-family="Georgia,serif"':''} fill="${e.home?'#b06a1c':S.ink}" opacity="${e.op}" style="paint-order:stroke" stroke="${halo}" stroke-width=".9" stroke-linejoin="round">${e.text}</text>`; }).join('');
+}
 
 function renderB(w, fr, S) {
   const dens=S.glyphDensity;
@@ -358,7 +402,7 @@ function renderB(w, fr, S) {
   let underTerrain, overClip='';
   if(isVor){
     // faceted province washes (cells clipped to the softened land) + interior political borders
-    underTerrain=w.voronoi.provinces.map(pr=>pr.cells.map(d=>`<path d="${d}" fill="${HEX[pr.key]}" opacity="${f(S.tintOpacity*0.6)}"/>`).join('')).join('');
+    underTerrain=w.voronoi.provinces.map(pr=>pr.cells.map(d=>`<path d="${d}" fill="${WASH[pr.key]}" opacity="${f(S.tintOpacity*0.6)}"/>`).join('')).join('');
     overClip=w.voronoi.provBorders.map(pl=>`<path d="${polyPath(pl)}" fill="none" stroke="${S.ink}" stroke-width=".2" opacity=".45" stroke-dasharray=".8 .8"/>`).join('');
   } else {
     underTerrain=tintRects(w.seats);
@@ -380,19 +424,18 @@ function renderB(w, fr, S) {
       ${overClip}
     </g>
     <rect width="${W}" height="${H}" fill="url(#ab)"/>
-    ${w.seats.map(s=>seatMarker(s,S.ink,S.land,S.serif)).join('')}
-    ${towerMarker(w,S.ink,S.land,S.serif)}
-    ${homeMarker(w,S.land,S.serif)}
+    ${w.seats.map(s=>seatDot(s,S.land)).join('')}${towerDot(w,S.ink,S.land)}${homeDot(w,S.land)}
+    ${labelsSVG(w,S)}
     ${compass}${frame}</svg>`;
 }
 
 // ---------------- wire up ----------------
 const $ = (id) => document.getElementById(id);
 function render() {
-  const method=$('method').value, seed=$('seed').value||'seed', fr=+$('fracture').value;
-  $('fracv').textContent=fr; $('algo-note').textContent=ALGO_NOTE[method];
-  $('map').innerHTML=renderB(generateWorld(method,seed),fr,STYLE);
-  $('json').value=JSON.stringify({ algorithm:method, ...STYLE });
+  const method=$('method').value, seed=$('seed').value||'seed', fr=+$('fracture').value, sea=+$('sealevel').value;
+  $('fracv').textContent=fr; $('sealevelv').textContent=sea.toFixed(2); $('algo-note').textContent=ALGO_NOTE[method];
+  $('map').innerHTML=renderB(generateWorld(method,seed,sea),fr,STYLE);
+  $('json').value=JSON.stringify({ algorithm:method, seaLevel:sea, ...STYLE });
 }
 function syncControls(){ document.querySelectorAll('[data-s]').forEach(el=>{ const k=el.dataset.s; if(el.type==='checkbox') el.checked=!!STYLE[k]; else el.value=STYLE[k]; const v=document.querySelector(`[data-v="${k}"]`); if(v) v.textContent=STYLE[k]; }); }
 document.querySelectorAll('[data-s]').forEach(el=>{ el.addEventListener('input',()=>{ const k=el.dataset.s; if(el.type==='checkbox')STYLE[k]=el.checked; else if(el.type==='range')STYLE[k]=parseFloat(el.value); else STYLE[k]=el.value; const v=document.querySelector(`[data-v="${k}"]`); if(v)v.textContent=STYLE[k]; render(); }); });
@@ -403,6 +446,7 @@ $('prev').addEventListener('click',()=>{ n=Math.max(1,n-1); setSeed(n); });
 $('next').addEventListener('click',()=>setSeed(++n));
 $('seed').addEventListener('input',render);
 $('fracture').addEventListener('input',render);
+$('sealevel').addEventListener('input',render);
 $('reset').addEventListener('click',()=>{ STYLE={...DEFAULTS}; syncControls(); render(); });
 $('copy').addEventListener('click',(e)=>{ navigator.clipboard.writeText(JSON.stringify({algorithm:$('method').value,...STYLE},null,2)).then(()=>{ e.target.textContent='Copied ✓'; setTimeout(()=>e.target.textContent='Copy style JSON',1400); }); });
 syncControls();

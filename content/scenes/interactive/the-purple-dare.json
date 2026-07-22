@@ -1,0 +1,129 @@
+{
+  "id": "the-purple-dare",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "purple"
+  ],
+  "title": "The Purple Pavilion's Dare",
+  "weight": 3,
+  "trigger": {
+    "gte": [
+      "mana",
+      30
+    ]
+  },
+  "intro": "Purple wizards arrive on a wind that smells of ozone and set up a revel of wild, unleashed workings on Runehold's green — and dare the coven to join them, or to send a champion to their working-contest. The chaos is catching. So is the Purple's regard, for those who dare.",
+  "advisors": [
+    {
+      "cast": {
+        "class": "chaos-mage"
+      },
+      "text": "The Purple respect one thing, Archon — nerve. Join them, contest them, but do not stand at the edge and disapprove. That, they never forgive."
+    },
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "Or send them off with their revel. Chaos courted is chaos let in, and the White will think the better of us for the door we keep shut."
+    }
+  ],
+  "choices": [
+    {
+      "id": "join",
+      "label": "Join the Purple revel of wild workings",
+      "win": {
+        "text": "The coven throws itself into the wild working and comes away crackling, laughing, a little singed — and firm friends of the Pavilion.",
+        "saga": "The coven joined the Purple's revel of wild workings, winning the Pavilion's friendship and a little raw mana besides.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "purple",
+              12
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              4
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contest",
+      "label": "Meet their champion in a working-contest",
+      "test": {
+        "stat": "mastery.purple",
+        "vs": 40
+      },
+      "win": {
+        "text": "Your champion out-chaoses their chaos, and the Pavilion roars its approval. Runehold has bragging rights and a doting Purple both.",
+        "saga": "Your champion beat the Purple's own at their working-contest, winning the Pavilion's loud and lasting regard.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "purple",
+              16
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              3
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "Your champion is out-matched and half-unmade in the trying. The Purple love a game try, but the wild backlash scars the hold.",
+        "saga": "Your champion lost the Purple's working-contest and took a wild backlash home, though the Pavilion warmed to the daring.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "purple",
+              6
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decline",
+      "label": "Send the revel on its way",
+      "win": {
+        "text": "You bar the green to them, politely. The Purple leave unimpressed — but word of your restraint reaches the White Tower, and it approves.",
+        "saga": "You refused the Purple's revel; the Pavilion cooled toward Runehold, but the orderly White warmed to your restraint.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "purple",
+              -5
+            ]
+          },
+          {
+            "adjust_cult": [
+              "white",
+              5
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

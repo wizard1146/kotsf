@@ -14,7 +14,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v35';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v36';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';

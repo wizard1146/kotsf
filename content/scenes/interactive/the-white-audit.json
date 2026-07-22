@@ -1,0 +1,117 @@
+{
+  "id": "the-white-audit",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "white"
+  ],
+  "title": "The White Tower's Audit",
+  "weight": 3,
+  "trigger": {
+    "gte": [
+      "fracture",
+      20
+    ]
+  },
+  "intro": "Inspectors of the White Wizard Tower arrive unasked, with instruments and a cool courtesy, to audit Runehold's wards against the Fracture. Order is their gift and their judgement; how you receive them will set the Tower's word on you for years.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "white"
+      },
+      "text": "Let them look, Archon. Our wards are sound, and the White Tower's blessing is worth more than a season's pride. Show them everything."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "high"
+        }
+      },
+      "text": "Or show them the gate. Runehold answers to the Flame, not to the Tower's clipboards. Let them audit their own walls."
+    }
+  ],
+  "choices": [
+    {
+      "id": "welcome",
+      "label": "Welcome the inspectors and open the wards to them",
+      "win": {
+        "text": "You open every ward to their instruments. They find them sound, tighten two, and leave a Tower's approval and a steadier hold behind.",
+        "saga": "You welcomed the White Tower's audit; they judged Runehold's wards sound, tightening them and warming the Tower to you.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "white",
+              12
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "impress",
+      "label": "Show them wards worthy of the Tower itself",
+      "test": {
+        "stat": "mastery.white",
+        "vs": 40
+      },
+      "win": {
+        "text": "Your order-craft startles even the Tower's own. They leave calling Runehold a model hold, and mean it.",
+        "saga": "Your order-craft so impressed the White Tower's inspectors that they named Runehold a model hold.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "white",
+              16
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              3
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "Your wards are honest but plain, and the inspectors note every fault in their cool hand. Sound enough — hardly a model.",
+        "saga": "The White Tower's inspectors found Runehold's wards plain but sound, warming to you only a little.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "white",
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "rebuff",
+      "label": "Rebuff the audit — Runehold answers to itself",
+      "win": {
+        "text": "You send the inspectors back to their Tower unsatisfied. Runehold keeps its pride and its privacy — and loses a powerful friend it never quite had.",
+        "saga": "You rebuffed the White Tower's audit; Runehold kept its independence and lost the Tower's regard for it.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "white",
+              -6
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              3
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

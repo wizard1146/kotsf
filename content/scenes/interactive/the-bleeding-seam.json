@@ -1,0 +1,101 @@
+{
+  "id": "the-bleeding-seam",
+  "type": "interactive",
+  "tags": [
+    "fracture",
+    "mana"
+  ],
+  "title": "The Bleeding Seam",
+  "weight": 4,
+  "trigger": {
+    "gte": [
+      "fracture",
+      30
+    ]
+  },
+  "intro": "A hairline seam of the Fracture has opened in the hillside, and it bleeds raw magic into the air like heat off a stone. There is mana here for the taking — but the Fracture is a wound, and working it invites it to open wider.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "white"
+      },
+      "text": "Behind heavy wards, we can drink from it and give little back, Archon. Careless, and we trade a full reserve for a torn hillside."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "Or we seal it and lose the mana. A wound fed is a wound that grows — I would not feed this one."
+    }
+  ],
+  "choices": [
+    {
+      "id": "tap-warded",
+      "label": "Tap the seam behind heavy wards",
+      "test": {
+        "stat": "mastery.white",
+        "vs": 42
+      },
+      "win": {
+        "text": "The wards hold, the seam gives up a rich draught of mana, and the Fracture barely widens for it. Cleanly done.",
+        "saga": "The coven tapped a bleeding Fracture-seam behind heavy wards, drawing rich mana while the Fracture barely stirred.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              18
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              2
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "You get the mana — the wards do not hold. The seam yawns wider as you draw, and the hillside groans with the Fracture's growing.",
+        "saga": "The coven drew mana from a Fracture-seam, but the wards failed and the wound gaped wider for it.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              18
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              10
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "seal",
+      "label": "Seal the seam instead",
+      "win": {
+        "text": "You close the seam with patient wardwork. A little bled-off mana settles in your reserves, and the hillside stills.",
+        "saga": "You sealed a bleeding Fracture-seam rather than work it, gathering only what had bled off and easing the wound.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              4
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -4
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "id": "reds-mana-crystals",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "mana"
+  ],
+  "title": "Red's Mana-Crystals",
+  "weight": 4,
+  "trigger": {
+    "lt": [
+      "mana",
+      45
+    ]
+  },
+  "intro": "A factor of the Gilded Reach comes to market with a locked case of mana-crystals — charged, tradeable, and priced to the last coin. There are certified stones with a Red seal, and cheaper unsealed ones for a buyer willing to trust his own eye.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "red"
+      },
+      "text": "Coin for power, Archon — the oldest trade there is. The sealed stones are true. The cheap ones are cheap for a reason."
+    },
+    {
+      "cast": {
+        "most": "guile"
+      },
+      "text": "I can tell a charged crystal from a dead one at ten paces. Let me pick through the unsealed lot — we could rob him blind."
+    }
+  ],
+  "choices": [
+    {
+      "id": "buy-certified",
+      "label": "Buy certified crystals from the Reach",
+      "requires": {
+        "gte": [
+          "coin",
+          16
+        ]
+      },
+      "win": {
+        "text": "The seal is good and the stones are full. Coin changes hands, and Runehold's reserves with it — a clean and costly bargain.",
+        "saga": "You bought Red's certified mana-crystals for a heavy purse, and filled the coven's reserves cleanly.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -16
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              14
+            ]
+          },
+          {
+            "adjust_cult": [
+              "red",
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "buy-cheap",
+      "label": "Buy the cheap unsealed lot on your own eye",
+      "requires": {
+        "gte": [
+          "coin",
+          8
+        ]
+      },
+      "test": {
+        "stat": "lore",
+        "vs": 45
+      },
+      "win": {
+        "text": "Your read is true — the unsealed lot is fuller than the factor knew, and you carry off a bargain that stings his ledger.",
+        "saga": "You judged Red's unsealed mana-crystals by your own lore and carried off a bargain of real charge.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              16
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "Half the lot is dead glass. You paid little, but you got little, and the factor's smile follows you out of the market.",
+        "saga": "You gambled on Red's cheap mana-crystals and got half a case of dead glass for your coin.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decline",
+      "label": "Buy nothing — the coven is no one's customer",
+      "win": {
+        "text": "You wave the case shut. Runehold will gather its own power, in its own time.",
+        "saga": "You turned away Red's mana-crystals, unwilling to buy what the coven could gather itself.",
+        "effects": []
+      }
+    }
+  ]
+}

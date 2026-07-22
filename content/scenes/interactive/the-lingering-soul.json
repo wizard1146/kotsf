@@ -1,0 +1,86 @@
+{
+  "id": "the-lingering-soul",
+  "type": "interactive",
+  "tags": [
+    "flame",
+    "mana"
+  ],
+  "title": "The Lingering Soul",
+  "weight": 3,
+  "once": true,
+  "trigger": {
+    "lt": [
+      "mana",
+      42
+    ]
+  },
+  "intro": "A Forgotten Soul lingers at the edge of Runehold's fields, dim and slow, trailing residual magic like smoke. It could be drawn on — the old, dark art of drinking the power a Soul still carries. Or it could be named, and released.",
+  "advisors": [
+    {
+      "cast": {
+        "class": "necromancer"
+      },
+      "text": "It is halfway gone already, Archon. What it carries is going to waste. Better in our reserves than drifting on the wind."
+    },
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "That was a Wizard once. Drink from it and the coven will not meet your eye for a season. Let it go with its name."
+    }
+  ],
+  "choices": [
+    {
+      "id": "draw",
+      "label": "Draw the residual magic from the Soul",
+      "win": {
+        "text": "You take what the Soul still holds. The reserves swell — and something goes quiet and cold in the coven that will not warm for a while.",
+        "saga": "You drank the residual magic from a lingering Forgotten Soul; the reserves swelled, and the coven's faith went cold.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              16
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -6
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "release",
+      "label": "Speak its name and let it go",
+      "win": {
+        "text": "You find the name still in it and speak it aloud. The Soul unravels gently, leaving a last thin gift of mana and a coven the prouder for the mercy.",
+        "saga": "You named a lingering Soul and released it; it left a parting gift of mana, and the coven took pride in the mercy.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              4
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              4
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

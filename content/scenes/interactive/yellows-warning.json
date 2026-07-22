@@ -1,0 +1,101 @@
+{
+  "id": "yellows-warning",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "yellow"
+  ],
+  "title": "Yellow's Warning",
+  "weight": 3,
+  "trigger": {
+    "gte": [
+      "fracture",
+      25
+    ]
+  },
+  "intro": "Word arrives from the Chronomancer's Riviera unbidden: their sightings show a hard turn coming for Runehold, and they have sent the warning freely — hoping, plainly, that a favour given is a favour returned.",
+  "advisors": [
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "They warned us for nothing, Archon. Honour it. A cult that does us a kindness should not find us ungrateful."
+    }
+  ],
+  "choices": [
+    {
+      "id": "heed",
+      "label": "Heed the warning and prepare",
+      "requires": {
+        "gte": [
+          "coin",
+          6
+        ]
+      },
+      "win": {
+        "text": "You spend to shore up against what they foresaw, and send the Riviera your thanks in coin. The trouble, when it comes, breaks softer.",
+        "saga": "You heeded Yellow's freely-given warning and repaid it, easing the coming trouble and binding the Riviera closer.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -6
+            ]
+          },
+          {
+            "adjust_cult": [
+              "yellow",
+              10
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "thank-only",
+      "label": "Take the warning, thank them, pay nothing",
+      "win": {
+        "text": "You act on the warning but send no gift. The Riviera notes both — that you listened, and that you gave nothing back.",
+        "saga": "You acted on Yellow's warning but sent no thanks, easing the trouble while leaving the Riviera cool.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "yellow",
+              2
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "dismiss",
+      "label": "Dismiss the chronomancers' fear",
+      "win": {
+        "text": "You set the warning aside as Yellow fretting. Perhaps it was. The Riviera will remember that you did not listen.",
+        "saga": "You dismissed Yellow's warning as idle fretting, souring Runehold's standing with the Riviera.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "yellow",
+              -5
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

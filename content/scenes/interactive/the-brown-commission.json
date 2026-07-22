@@ -1,0 +1,99 @@
+{
+  "id": "the-brown-commission",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "brown"
+  ],
+  "title": "The Brown Guild's Commission",
+  "weight": 4,
+  "trigger": {
+    "gte": [
+      "coin",
+      18
+    ]
+  },
+  "intro": "Master craft-wizards of the Brown delta send word: for a commission, they will come and reinforce Runehold's walls and works with earth-magic that outlasts the men who lay it. Practical magic, practically priced.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "brown"
+      },
+      "text": "The Brown build things that do not fall down, Archon. Coin spent on their craft is coin you spend once. And they remember a good client."
+    }
+  ],
+  "choices": [
+    {
+      "id": "commission",
+      "label": "Commission the Brown to reinforce the hold",
+      "requires": {
+        "gte": [
+          "coin",
+          12
+        ]
+      },
+      "win": {
+        "text": "Brown crews work a season and leave Runehold's stones half again as strong, and the guild half again as warm toward you.",
+        "saga": "You commissioned the Brown guild to reinforce Runehold; the hold stands stronger, and the delta counts you a client.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "brown",
+              12
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "apprentice-swap",
+      "label": "Trade an apprentice's season of labour for the craft",
+      "win": {
+        "text": "You send an apprentice to learn at the delta for a season in lieu of coin. They come home a passable earth-crafter, and the Brown pleased.",
+        "saga": "You traded an apprentice's season of delta labour for the Brown's craft, warming the guild and learning its earth-work.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "brown",
+              10
+            ]
+          },
+          {
+            "adjust_mastery": [
+              "brown",
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decline",
+      "label": "Decline the commission",
+      "win": {
+        "text": "You send the guild's word back unanswered. Runehold's walls will stand as they are — and the Brown will remember being turned down.",
+        "saga": "You declined the Brown guild's commission, cooling the delta's regard for Runehold.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "brown",
+              -2
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

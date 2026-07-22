@@ -1,0 +1,94 @@
+{
+  "id": "the-relic-battery",
+  "type": "interactive",
+  "tags": [
+    "lore",
+    "mana"
+  ],
+  "title": "The Relic Battery",
+  "weight": 3,
+  "once": true,
+  "trigger": {
+    "lt": [
+      "mana",
+      50
+    ]
+  },
+  "intro": "A trader leaves a strange thing in pawn: a pre-Burning relic of rune-etched brass, still faintly warm — a battery, the coven decides, built to store a great charge of mana. Getting the charge out without ruining the relic is a matter of the old craft.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "brown"
+      },
+      "text": "It is good work, Archon — old, practical, and full. Coax it right and it pours. Force it and we get a fistful and a cracked shell."
+    }
+  ],
+  "choices": [
+    {
+      "id": "unlock",
+      "label": "Unlock the relic's stored charge",
+      "requires": {
+        "gte": [
+          "mastery.brown",
+          25
+        ]
+      },
+      "test": {
+        "stat": "mastery.brown",
+        "vs": 40
+      },
+      "win": {
+        "text": "Your craft is equal to the old maker's. The relic gives up its whole charge in a clean, gorgeous flood, and survives to be charged again.",
+        "saga": "The coven's craft unlocked a pre-Burning mana-battery cleanly; it poured out its whole charge and survived whole.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              20
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The old bindings are subtler than they looked. The relic cracks as it discharges — a fair draught of mana, and a ruined, worthless shell.",
+        "saga": "The coven cracked a pre-Burning mana-battery drawing its charge; some mana came, and a priceless relic was ruined.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              8
+            ]
+          },
+          {
+            "add": [
+              "coin",
+              -4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "study-first",
+      "label": "Study it a season before touching it",
+      "win": {
+        "text": "You leave the charge alone and study the relic's making instead — a season's careful notes, and a little mana teased safely from its surface.",
+        "saga": "You studied a pre-Burning mana-battery for a season before daring its charge, gaining lore and a little mana.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              4
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              4
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

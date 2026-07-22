@@ -1,0 +1,100 @@
+{
+  "id": "the-rune-node",
+  "type": "interactive",
+  "tags": [
+    "lore",
+    "mana"
+  ],
+  "title": "The Rune-Node",
+  "weight": 4,
+  "once": true,
+  "trigger": {
+    "lt": [
+      "mana",
+      48
+    ]
+  },
+  "intro": "Diggers strike an old rune-node beneath the hold — a knot of bound magic older than Runehold, still holding its charge. Tapping it cleanly is a matter of order and precise wards; forced, it will give all at once, one way or another.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "white"
+      },
+      "text": "A node like this answers to order, Archon. With clean wards it will pour for us for a season. Without them, it will simply pour."
+    }
+  ],
+  "choices": [
+    {
+      "id": "read-safely",
+      "label": "Read its wards and tap it cleanly",
+      "requires": {
+        "gte": [
+          "mastery.white",
+          28
+        ]
+      },
+      "win": {
+        "text": "Your order-craft is equal to it. The node opens like a tap and gives its charge in a steady, safe stream.",
+        "saga": "The coven's order-craft opened an ancient rune-node cleanly, and it gave up its stored mana in a safe stream.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              16
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "force-it",
+      "label": "Force the node open",
+      "test": {
+        "stat": "mastery.blue",
+        "vs": 40
+      },
+      "win": {
+        "text": "You crack its bindings by main lore and catch most of the charge before it earths itself. Rough, but it worked.",
+        "saga": "You forced an old rune-node open by lore and caught most of its charge before it discharged.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              14
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              2
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The node lets go all at once and earths itself through the hold's stones — a jolt of mana, and a jagged new stress in the Fracture.",
+        "saga": "A forced rune-node discharged through Runehold's stones — some mana caught, and the Fracture stressed wider.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              6
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              6
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

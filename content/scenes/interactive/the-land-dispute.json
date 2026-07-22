@@ -1,0 +1,117 @@
+{
+  "id": "the-land-dispute",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "red"
+  ],
+  "title": "The River-Meadow Dispute",
+  "weight": 4,
+  "trigger": {
+    "gte": [
+      "coin",
+      12
+    ]
+  },
+  "intro": "A green river-meadow at Runehold's edge falls into contest: Red merchants want it for a trade-wharf, Green wardens for a water-meadow left wild. Both press their case with gifts and grievances, and both watch to see which colour you favour.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "red"
+      },
+      "text": "A wharf means coin, Archon — a road for Red gold straight to our gate. Meadows do not fill a granary in a hard year."
+    },
+    {
+      "cast": {
+        "school": "green"
+      },
+      "text": "That meadow feeds the whole valley's soil. Sell it to Red and you sell a hundred harvests for one season's silver."
+    }
+  ],
+  "choices": [
+    {
+      "id": "favour-red",
+      "label": "Favour Red's wharf — coin and trade",
+      "win": {
+        "text": "The wharf goes up and Red gold flows over it, and the Gilded Reach counts Runehold a partner — while the Green mark the wild meadow drowned in silver.",
+        "saga": "You gave the river-meadow to Red for a trade-wharf, gaining coin and the Reach's favour and the Green's resentment.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "red",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "green",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "coin",
+              8
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "favour-green",
+      "label": "Favour Green's water-meadow — the wild and the harvest",
+      "win": {
+        "text": "The meadow stays wild and the valley's soil thanks you for it, and the Green count Runehold a friend — while Red pockets its gold and its grudge.",
+        "saga": "You kept the river-meadow wild for the Green, gaining harvest and the jungle's favour and Red's cold ledger.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "green",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "red",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "split-fairly",
+      "label": "Divide the meadow and anger both a little",
+      "win": {
+        "text": "You give each half its half. Neither is happy — a wharf too small, a meadow too shrunk — but neither can call you a partisan.",
+        "saga": "You split the river-meadow between Red and Green; both grumbled at the half they got, but neither named you an enemy.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "red",
+              -3
+            ]
+          },
+          {
+            "adjust_cult": [
+              "green",
+              -3
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              2
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

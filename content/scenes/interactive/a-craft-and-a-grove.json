@@ -1,0 +1,133 @@
+{
+  "id": "a-craft-and-a-grove",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "brown"
+  ],
+  "title": "A Craft and a Grove",
+  "weight": 3,
+  "trigger": {
+    "gte": [
+      "provisions",
+      30
+    ]
+  },
+  "intro": "A stretch of Runehold's land falls into dispute: the Brown want it for a stone-quarry, the Green for a sacred grove. Both have sent gifts ahead of their asking, and both will remember which way you rule.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "brown"
+      },
+      "text": "The quarry means good stone and a guild in our debt, Archon. A grove means birdsong. Rule with your head."
+    },
+    {
+      "cast": {
+        "school": "green"
+      },
+      "text": "A grove is a living thing that gives for a hundred years; a quarry is a hole. The Green will not forget which you chose."
+    }
+  ],
+  "choices": [
+    {
+      "id": "grant-quarry",
+      "label": "Grant the land to the Brown for a quarry",
+      "win": {
+        "text": "The Brown break ground with a will, and good stone and Brown goodwill flow to Runehold — while the Green mourn a grove unplanted.",
+        "saga": "You gave the disputed land to the Brown for a quarry, gaining stone and the delta's favour and the Green's cold shoulder.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "brown",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "green",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "coin",
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "grant-grove",
+      "label": "Grant the land to the Green for a grove",
+      "win": {
+        "text": "The Green plant a grove that bears within the year, and their friendship blooms with it — while the Brown pack up their tools, unpaid and unpleased.",
+        "saga": "You gave the disputed land to the Green for a grove, gaining harvest and the jungle's favour and the Brown's resentment.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "green",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "brown",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "split",
+      "label": "Divide the land between them",
+      "test": {
+        "stat": "faith",
+        "vs": 45
+      },
+      "win": {
+        "text": "You draw a line both can live with, and your fairness wins a grudging nod from each. A quarry and a grove, and no enemy made.",
+        "saga": "You split the disputed land fairly between Brown and Green, and your even hand won a grudging warmth from both.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "brown",
+              5
+            ]
+          },
+          {
+            "adjust_cult": [
+              "green",
+              5
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "Your compromise pleases no one — each side sure the other got the better half, and both a little colder for it.",
+        "saga": "Your attempt to split the disputed land satisfied neither Brown nor Green, cooling both against Runehold.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "brown",
+              -4
+            ]
+          },
+          {
+            "adjust_cult": [
+              "green",
+              -4
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

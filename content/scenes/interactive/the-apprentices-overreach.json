@@ -1,0 +1,109 @@
+{
+  "id": "the-apprentices-overreach",
+  "type": "interactive",
+  "tags": [
+    "hearth",
+    "mana"
+  ],
+  "title": "The Apprentices' Overreach",
+  "weight": 3,
+  "trigger": {
+    "lt": [
+      "mana",
+      45
+    ]
+  },
+  "intro": "You find the apprentices attempting a mana-gathering rite well above their station — circle chalked, hands shaking, eyes bright with ambition. They could pull it off and fill the reserves. They could also pull the roof down on themselves.",
+  "advisors": [
+    {
+      "cast": {
+        "trait": {
+          "boldness": "high"
+        }
+      },
+      "text": "Let them reach, Archon. A coven that never lets its young overreach never learns anything worth knowing. Watch, and be ready."
+    },
+    {
+      "cast": {
+        "trait": {
+          "piety": "low"
+        }
+      },
+      "text": "That rite has hurt steadier hands than theirs. Stop them, drill them, and let them try it in five years when they will not die of it."
+    }
+  ],
+  "choices": [
+    {
+      "id": "let-them",
+      "label": "Let them try, and watch closely",
+      "test": {
+        "stat": "lore",
+        "vs": 45
+      },
+      "win": {
+        "text": "It holds. The rite comes off clean, the reserves fill, and the apprentices walk a foot taller for a month.",
+        "saga": "You let the apprentices attempt a rite above their station; it held, filling the reserves and their pride together.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              12
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              2
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The circle collapses in a backlash of raw magic. An apprentice is badly hurt, mana is spent for nothing, and the coven's nerve is shaken.",
+        "saga": "The apprentices' overreach collapsed in backlash; one was badly hurt, and the coven's mana and nerve went with it.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -5
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "stop-them",
+      "label": "Stop them and drill the basics",
+      "win": {
+        "text": "You break the circle and set them to fundamentals until their hands are steady. A little mana from the exercise, and a lesson well kept.",
+        "saga": "You stopped the apprentices' overreach and drilled them in fundamentals, gathering a little mana and a lasting lesson.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              2
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              2
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

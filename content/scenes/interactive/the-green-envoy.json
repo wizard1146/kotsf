@@ -1,0 +1,121 @@
+{
+  "id": "the-green-envoy",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "green"
+  ],
+  "title": "The Green Envoy",
+  "weight": 4,
+  "trigger": {
+    "lt": [
+      "provisions",
+      52
+    ]
+  },
+  "intro": "An envoy of the Green Wizard City arrives trailing the smell of green things growing, and offers Runehold a blessing on its fields — the old nurture-craft — in the name of friendship between hearth and jungle.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "green"
+      },
+      "text": "The Green do not offer their craft to just anyone, Archon. Take the blessing, and take the friendship it carries."
+    }
+  ],
+  "choices": [
+    {
+      "id": "accept",
+      "label": "Let the Green bless the fields",
+      "win": {
+        "text": "The envoy walks your furrows murmuring, and by Highsun the fields come up thick and green. The Green City counts Runehold a friend.",
+        "saga": "You let a Green envoy bless Runehold's fields; the harvest came up thick, and the Green City counted you a friend.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "green",
+              12
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              8
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "trade-craft",
+      "label": "Trade lore for their growing-craft",
+      "test": {
+        "stat": "mastery.green",
+        "vs": 35
+      },
+      "win": {
+        "text": "Your Green-craft is enough to learn the rite as they work it — a blessing this year, and the knowing for every year after.",
+        "saga": "You learned the Green growing-rite as their envoy worked it, warming the Green City and enriching your fields.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "green",
+              14
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              6
+            ]
+          },
+          {
+            "adjust_mastery": [
+              "green",
+              3
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The rite is past your coven's Green-craft to hold, but the envoy blesses the fields anyway, kindly enough.",
+        "saga": "You could not learn the Green rite, but their envoy blessed Runehold's fields regardless, warming the Green City.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "green",
+              6
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decline",
+      "label": "Decline — Runehold tends its own soil",
+      "win": {
+        "text": "You thank the envoy and send them home. The coven's pride in its own hands is worth a little coolness with the jungle.",
+        "saga": "You declined the Green's blessing to tend Runehold's own soil, holding the coven's pride over the jungle's goodwill.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "green",
+              2
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              2
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

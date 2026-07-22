@@ -1,0 +1,97 @@
+{
+  "id": "draw-from-the-ember",
+  "type": "interactive",
+  "tags": [
+    "flame",
+    "mana"
+  ],
+  "title": "Draw from the Ember",
+  "weight": 4,
+  "trigger": {
+    "lt": [
+      "mana",
+      40
+    ]
+  },
+  "intro": "The coven's mana runs low, and the hearth-rune burns bright and close. The Ember itself is power — you could draw on it directly. But to reach into the Sacred Flame for your own workings is to draw its Regard, and the Flame remembers who takes from it.",
+  "advisors": [
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "The Ember is not a well to be dipped, Archon. Draw on it and it will look back at us — and you know what its looking costs."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "high"
+        }
+      },
+      "text": "It is power, and we are starving for it. A keeper who will not use the fire is only a caretaker of ashes."
+    }
+  ],
+  "choices": [
+    {
+      "id": "draw-deep",
+      "label": "Draw power straight from the hearth-rune",
+      "win": {
+        "text": "You reach into the Ember and it gives — a flood of raw mana into every waiting rune. It gives, and it notices.",
+        "saga": "You drew mana straight from the Ember; it filled the coven's reserves, and the Flame's Regard turned toward you.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              16
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              7
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "draw-little",
+      "label": "Take only a careful ember's worth",
+      "win": {
+        "text": "You take a bare, careful measure — enough to matter, little enough that the Flame barely stirs.",
+        "saga": "You drew a careful measure of mana from the Ember, and the Flame barely stirred at it.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              6
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "refuse",
+      "label": "Leave the Ember be",
+      "win": {
+        "text": "You take your hand from the fire. The coven will make do — and the Flame's regard is not one hair the closer.",
+        "saga": "You refused to draw on the Ember for mere workings, and the coven took heart from your restraint.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              3
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

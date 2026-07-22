@@ -1,0 +1,121 @@
+{
+  "id": "the-chronomancers-bargain",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "yellow"
+  ],
+  "title": "The Chronomancer's Bargain",
+  "weight": 4,
+  "trigger": {
+    "gte": [
+      "lore",
+      30
+    ]
+  },
+  "intro": "A Yellow chronomancer rides in from the Riviera, robes stitched with turning glass, and offers to read the threads of Runehold's coming seasons — for a price, and a warmer word between your hearth and hers.",
+  "advisors": [
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "Time-sight is rare and rarely offered, Archon. What she sees could spare us a disaster — and the Yellow are worth having as friends."
+    }
+  ],
+  "choices": [
+    {
+      "id": "accept",
+      "label": "Accept the chronomancer's reading",
+      "requires": {
+        "gte": [
+          "coin",
+          8
+        ]
+      },
+      "win": {
+        "text": "She reads the year's threads over a long night and leaves you the wiser and the Yellow the fonder.",
+        "saga": "You paid a Yellow chronomancer to read Runehold's coming seasons, warming the coven's standing with the Riviera.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -8
+            ]
+          },
+          {
+            "adjust_cult": [
+              "yellow",
+              12
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "haggle",
+      "label": "Haggle for the reading",
+      "test": {
+        "stat": "lore",
+        "vs": 45
+      },
+      "win": {
+        "text": "You match her lore for lore until she laughs and reads for half her price — impressed, and a friend for it.",
+        "saga": "You out-argued a Yellow chronomancer for a cheaper reading, and won her respect and the Riviera's regard.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "yellow",
+              14
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              3
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "She runs rings around your bargaining and names her full price anyway. You pay it, a little smaller than you began.",
+        "saga": "A Yellow chronomancer out-haggled you; you paid her full price for the reading, warming Yellow but the poorer for it.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "yellow",
+              6
+            ]
+          },
+          {
+            "add": [
+              "coin",
+              -6
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "refuse",
+      "label": "Send the chronomancer on her way",
+      "win": {
+        "text": "You thank her and decline. She shrugs — time will tell, she says — and rides for the Riviera a shade cooler toward you.",
+        "saga": "You turned away a Yellow chronomancer's reading, cooling Runehold's standing with the Riviera.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "yellow",
+              -3
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,6 +1,139 @@
 {
   "scenes": [
     {
+      "id": "a-craft-and-a-grove",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "brown"
+      ],
+      "title": "A Craft and a Grove",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "provisions",
+          30
+        ]
+      },
+      "intro": "A stretch of Runehold's land falls into dispute: the Brown want it for a stone-quarry, the Green for a sacred grove. Both have sent gifts ahead of their asking, and both will remember which way you rule.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "brown"
+          },
+          "text": "The quarry means good stone and a guild in our debt, Archon. A grove means birdsong. Rule with your head."
+        },
+        {
+          "cast": {
+            "school": "green"
+          },
+          "text": "A grove is a living thing that gives for a hundred years; a quarry is a hole. The Green will not forget which you chose."
+        }
+      ],
+      "choices": [
+        {
+          "id": "grant-quarry",
+          "label": "Grant the land to the Brown for a quarry",
+          "win": {
+            "text": "The Brown break ground with a will, and good stone and Brown goodwill flow to Runehold — while the Green mourn a grove unplanted.",
+            "saga": "You gave the disputed land to the Brown for a quarry, gaining stone and the delta's favour and the Green's cold shoulder.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "brown",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "green",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "coin",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "grant-grove",
+          "label": "Grant the land to the Green for a grove",
+          "win": {
+            "text": "The Green plant a grove that bears within the year, and their friendship blooms with it — while the Brown pack up their tools, unpaid and unpleased.",
+            "saga": "You gave the disputed land to the Green for a grove, gaining harvest and the jungle's favour and the Brown's resentment.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "green",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "brown",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "split",
+          "label": "Divide the land between them",
+          "test": {
+            "stat": "faith",
+            "vs": 45
+          },
+          "win": {
+            "text": "You draw a line both can live with, and your fairness wins a grudging nod from each. A quarry and a grove, and no enemy made.",
+            "saga": "You split the disputed land fairly between Brown and Green, and your even hand won a grudging warmth from both.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "brown",
+                  5
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "green",
+                  5
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your compromise pleases no one — each side sure the other got the better half, and both a little colder for it.",
+            "saga": "Your attempt to split the disputed land satisfied neither Brown nor Green, cooling both against Runehold.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "brown",
+                  -4
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "green",
+                  -4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "a-dormant-ember-found",
       "type": "quest",
       "tags": [
@@ -565,6 +698,103 @@
       ]
     },
     {
+      "id": "draw-from-the-ember",
+      "type": "interactive",
+      "tags": [
+        "flame",
+        "mana"
+      ],
+      "title": "Draw from the Ember",
+      "weight": 4,
+      "trigger": {
+        "lt": [
+          "mana",
+          40
+        ]
+      },
+      "intro": "The coven's mana runs low, and the hearth-rune burns bright and close. The Ember itself is power — you could draw on it directly. But to reach into the Sacred Flame for your own workings is to draw its Regard, and the Flame remembers who takes from it.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "The Ember is not a well to be dipped, Archon. Draw on it and it will look back at us — and you know what its looking costs."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
+          "text": "It is power, and we are starving for it. A keeper who will not use the fire is only a caretaker of ashes."
+        }
+      ],
+      "choices": [
+        {
+          "id": "draw-deep",
+          "label": "Draw power straight from the hearth-rune",
+          "win": {
+            "text": "You reach into the Ember and it gives — a flood of raw mana into every waiting rune. It gives, and it notices.",
+            "saga": "You drew mana straight from the Ember; it filled the coven's reserves, and the Flame's Regard turned toward you.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  7
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "draw-little",
+          "label": "Take only a careful ember's worth",
+          "win": {
+            "text": "You take a bare, careful measure — enough to matter, little enough that the Flame barely stirs.",
+            "saga": "You drew a careful measure of mana from the Ember, and the Flame barely stirred at it.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "label": "Leave the Ember be",
+          "win": {
+            "text": "You take your hand from the fire. The coven will make do — and the Flame's regard is not one hair the closer.",
+            "saga": "You refused to draw on the Ember for mere workings, and the coven took heart from your restraint.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "markertropolis-envoy",
       "type": "interactive",
       "tags": [
@@ -749,6 +979,132 @@
       ]
     },
     {
+      "id": "reds-mana-crystals",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "mana"
+      ],
+      "title": "Red's Mana-Crystals",
+      "weight": 4,
+      "trigger": {
+        "lt": [
+          "mana",
+          45
+        ]
+      },
+      "intro": "A factor of the Gilded Reach comes to market with a locked case of mana-crystals — charged, tradeable, and priced to the last coin. There are certified stones with a Red seal, and cheaper unsealed ones for a buyer willing to trust his own eye.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "red"
+          },
+          "text": "Coin for power, Archon — the oldest trade there is. The sealed stones are true. The cheap ones are cheap for a reason."
+        },
+        {
+          "cast": {
+            "most": "guile"
+          },
+          "text": "I can tell a charged crystal from a dead one at ten paces. Let me pick through the unsealed lot — we could rob him blind."
+        }
+      ],
+      "choices": [
+        {
+          "id": "buy-certified",
+          "label": "Buy certified crystals from the Reach",
+          "requires": {
+            "gte": [
+              "coin",
+              16
+            ]
+          },
+          "win": {
+            "text": "The seal is good and the stones are full. Coin changes hands, and Runehold's reserves with it — a clean and costly bargain.",
+            "saga": "You bought Red's certified mana-crystals for a heavy purse, and filled the coven's reserves cleanly.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -16
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  14
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "buy-cheap",
+          "label": "Buy the cheap unsealed lot on your own eye",
+          "requires": {
+            "gte": [
+              "coin",
+              8
+            ]
+          },
+          "test": {
+            "stat": "lore",
+            "vs": 45
+          },
+          "win": {
+            "text": "Your read is true — the unsealed lot is fuller than the factor knew, and you carry off a bargain that stings his ledger.",
+            "saga": "You judged Red's unsealed mana-crystals by your own lore and carried off a bargain of real charge.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  16
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Half the lot is dead glass. You paid little, but you got little, and the factor's smile follows you out of the market.",
+            "saga": "You gambled on Red's cheap mana-crystals and got half a case of dead glass for your coin.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Buy nothing — the coven is no one's customer",
+          "win": {
+            "text": "You wave the case shut. Runehold will gather its own power, in its own time.",
+            "saga": "You turned away Red's mana-crystals, unwilling to buy what the coven could gather itself.",
+            "effects": []
+          }
+        }
+      ]
+    },
+    {
       "id": "steel-at-the-gate",
       "type": "quest",
       "tags": [
@@ -879,6 +1235,216 @@
               },
               {
                 "clear_flag": "warriors_enemies"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "storm-of-wild-magic",
+      "type": "interactive",
+      "tags": [
+        "fracture",
+        "mana"
+      ],
+      "title": "Storm of Wild Magic",
+      "weight": 4,
+      "trigger": {
+        "lt": [
+          "mana",
+          50
+        ]
+      },
+      "intro": "A storm rolls in that is not weather — a churning front of wild, uncolored magic, crackling off the hilltops. It could be harnessed for a great draught of mana, if the coven has the chaos-craft to ride it. If not, it will ride them.",
+      "advisors": [
+        {
+          "cast": {
+            "class": "chaos-mage"
+          },
+          "text": "This is my country, Archon. Wild magic answers those who do not flinch — give me leave and I will wring the storm dry."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "Or we ward the hold and let it pass. A storm like that has scattered stronger covens than ours across the hillside."
+        }
+      ],
+      "choices": [
+        {
+          "id": "harness",
+          "label": "Harness the storm",
+          "test": {
+            "stat": "mastery.purple",
+            "vs": 35
+          },
+          "win": {
+            "text": "The coven rides the wild front and bleeds it white — a tremendous draught of mana, and the storm spends itself harmlessly over the hills.",
+            "saga": "The coven harnessed a storm of wild magic and drew a great draught of mana as it broke over Runehold.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  20
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The storm will not be ridden. It lashes the hold as it passes — some mana clawed back, but the wards buckle and the Fracture gapes wider for it.",
+            "saga": "A storm of wild magic threw off the coven's grasp and lashed Runehold, widening the Fracture as it passed.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "shelter",
+          "label": "Ward the hold and let it pass",
+          "win": {
+            "text": "You raise the wards and wait it out. A little residual mana settles on the stones, and the hold is whole.",
+            "saga": "You warded Runehold against a wild-magic storm and let it pass, gathering only what settled after.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-apprentices-overreach",
+      "type": "interactive",
+      "tags": [
+        "hearth",
+        "mana"
+      ],
+      "title": "The Apprentices' Overreach",
+      "weight": 3,
+      "trigger": {
+        "lt": [
+          "mana",
+          45
+        ]
+      },
+      "intro": "You find the apprentices attempting a mana-gathering rite well above their station — circle chalked, hands shaking, eyes bright with ambition. They could pull it off and fill the reserves. They could also pull the roof down on themselves.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
+          "text": "Let them reach, Archon. A coven that never lets its young overreach never learns anything worth knowing. Watch, and be ready."
+        },
+        {
+          "cast": {
+            "trait": {
+              "piety": "low"
+            }
+          },
+          "text": "That rite has hurt steadier hands than theirs. Stop them, drill them, and let them try it in five years when they will not die of it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "let-them",
+          "label": "Let them try, and watch closely",
+          "test": {
+            "stat": "lore",
+            "vs": 45
+          },
+          "win": {
+            "text": "It holds. The rite comes off clean, the reserves fill, and the apprentices walk a foot taller for a month.",
+            "saga": "You let the apprentices attempt a rite above their station; it held, filling the reserves and their pride together.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The circle collapses in a backlash of raw magic. An apprentice is badly hurt, mana is spent for nothing, and the coven's nerve is shaken.",
+            "saga": "The apprentices' overreach collapsed in backlash; one was badly hurt, and the coven's mana and nerve went with it.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -5
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "stop-them",
+          "label": "Stop them and drill the basics",
+          "win": {
+            "text": "You break the circle and set them to fundamentals until their hands are steady. A little mana from the exercise, and a lesson well kept.",
+            "saga": "You stopped the apprentices' overreach and drilled them in fundamentals, gathering a little mana and a lasting lesson.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  2
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
               }
             ]
           }
@@ -1058,6 +1624,327 @@
               {
                 "add": [
                   "lore",
+                  -3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-bleeding-seam",
+      "type": "interactive",
+      "tags": [
+        "fracture",
+        "mana"
+      ],
+      "title": "The Bleeding Seam",
+      "weight": 4,
+      "trigger": {
+        "gte": [
+          "fracture",
+          30
+        ]
+      },
+      "intro": "A hairline seam of the Fracture has opened in the hillside, and it bleeds raw magic into the air like heat off a stone. There is mana here for the taking — but the Fracture is a wound, and working it invites it to open wider.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "white"
+          },
+          "text": "Behind heavy wards, we can drink from it and give little back, Archon. Careless, and we trade a full reserve for a torn hillside."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "Or we seal it and lose the mana. A wound fed is a wound that grows — I would not feed this one."
+        }
+      ],
+      "choices": [
+        {
+          "id": "tap-warded",
+          "label": "Tap the seam behind heavy wards",
+          "test": {
+            "stat": "mastery.white",
+            "vs": 42
+          },
+          "win": {
+            "text": "The wards hold, the seam gives up a rich draught of mana, and the Fracture barely widens for it. Cleanly done.",
+            "saga": "The coven tapped a bleeding Fracture-seam behind heavy wards, drawing rich mana while the Fracture barely stirred.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  18
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  2
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "You get the mana — the wards do not hold. The seam yawns wider as you draw, and the hillside groans with the Fracture's growing.",
+            "saga": "The coven drew mana from a Fracture-seam, but the wards failed and the wound gaped wider for it.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  18
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  10
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "seal",
+          "label": "Seal the seam instead",
+          "win": {
+            "text": "You close the seam with patient wardwork. A little bled-off mana settles in your reserves, and the hillside stills.",
+            "saga": "You sealed a bleeding Fracture-seam rather than work it, gathering only what had bled off and easing the wound.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-brown-commission",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "brown"
+      ],
+      "title": "The Brown Guild's Commission",
+      "weight": 4,
+      "trigger": {
+        "gte": [
+          "coin",
+          18
+        ]
+      },
+      "intro": "Master craft-wizards of the Brown delta send word: for a commission, they will come and reinforce Runehold's walls and works with earth-magic that outlasts the men who lay it. Practical magic, practically priced.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "brown"
+          },
+          "text": "The Brown build things that do not fall down, Archon. Coin spent on their craft is coin you spend once. And they remember a good client."
+        }
+      ],
+      "choices": [
+        {
+          "id": "commission",
+          "label": "Commission the Brown to reinforce the hold",
+          "requires": {
+            "gte": [
+              "coin",
+              12
+            ]
+          },
+          "win": {
+            "text": "Brown crews work a season and leave Runehold's stones half again as strong, and the guild half again as warm toward you.",
+            "saga": "You commissioned the Brown guild to reinforce Runehold; the hold stands stronger, and the delta counts you a client.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "brown",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "apprentice-swap",
+          "label": "Trade an apprentice's season of labour for the craft",
+          "win": {
+            "text": "You send an apprentice to learn at the delta for a season in lieu of coin. They come home a passable earth-crafter, and the Brown pleased.",
+            "saga": "You traded an apprentice's season of delta labour for the Brown's craft, warming the guild and learning its earth-work.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "brown",
+                  10
+                ]
+              },
+              {
+                "adjust_mastery": [
+                  "brown",
+                  3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Decline the commission",
+          "win": {
+            "text": "You send the guild's word back unanswered. Runehold's walls will stand as they are — and the Brown will remember being turned down.",
+            "saga": "You declined the Brown guild's commission, cooling the delta's regard for Runehold.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "brown",
+                  -2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-chronomancers-bargain",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "yellow"
+      ],
+      "title": "The Chronomancer's Bargain",
+      "weight": 4,
+      "trigger": {
+        "gte": [
+          "lore",
+          30
+        ]
+      },
+      "intro": "A Yellow chronomancer rides in from the Riviera, robes stitched with turning glass, and offers to read the threads of Runehold's coming seasons — for a price, and a warmer word between your hearth and hers.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "Time-sight is rare and rarely offered, Archon. What she sees could spare us a disaster — and the Yellow are worth having as friends."
+        }
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Accept the chronomancer's reading",
+          "requires": {
+            "gte": [
+              "coin",
+              8
+            ]
+          },
+          "win": {
+            "text": "She reads the year's threads over a long night and leaves you the wiser and the Yellow the fonder.",
+            "saga": "You paid a Yellow chronomancer to read Runehold's coming seasons, warming the coven's standing with the Riviera.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -8
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "yellow",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "haggle",
+          "label": "Haggle for the reading",
+          "test": {
+            "stat": "lore",
+            "vs": 45
+          },
+          "win": {
+            "text": "You match her lore for lore until she laughs and reads for half her price — impressed, and a friend for it.",
+            "saga": "You out-argued a Yellow chronomancer for a cheaper reading, and won her respect and the Riviera's regard.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "yellow",
+                  14
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  3
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "She runs rings around your bargaining and names her full price anyway. You pay it, a little smaller than you began.",
+            "saga": "A Yellow chronomancer out-haggled you; you paid her full price for the reading, warming Yellow but the poorer for it.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "yellow",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "coin",
+                  -6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "label": "Send the chronomancer on her way",
+          "win": {
+            "text": "You thank her and decline. She shrugs — time will tell, she says — and rides for the Riviera a shade cooler toward you.",
+            "saga": "You turned away a Yellow chronomancer's reading, cooling Runehold's standing with the Riviera.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "yellow",
                   -3
                 ]
               }
@@ -1321,6 +2208,77 @@
                 "add": [
                   "faith",
                   -8
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-deepfrost-alignment",
+      "type": "interactive",
+      "tags": [
+        "lore",
+        "mana"
+      ],
+      "title": "The Deepfrost Alignment",
+      "weight": 3,
+      "trigger": {
+        "lt": [
+          "mana",
+          55
+        ]
+      },
+      "intro": "The old charts come true: at Deepfrost's dark the far lights align as they do once in a long age, and for one night the world's magic runs close to the surface. A coven that knows to draw at the peak can gather more than a season's worth.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "yellow"
+          },
+          "text": "The alignment holds for one night only, Archon. Draw at the peak. A gift like this does not come again in most keepers' lives."
+        }
+      ],
+      "choices": [
+        {
+          "id": "draw-deep",
+          "label": "Draw deep at the alignment's peak",
+          "win": {
+            "text": "The coven gathers through the long dark and the reserves run over — a season's mana and more, poured out of one aligned night.",
+            "saga": "You drew deep at the Deepfrost alignment, and one aligned night gave Runehold more than a season's mana.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  20
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "draw-and-share",
+          "label": "Draw, and share the rite with a neighbour cult",
+          "win": {
+            "text": "You gather well, and send word of the peak to the Blue Bastion so their scholars might draw too. Less for your reserves — more for a friendship.",
+            "saga": "You drew at the Deepfrost alignment and shared the rite with Blue, trading a fuller reserve for a warmer friendship.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  14
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  2
                 ]
               }
             ]
@@ -1877,6 +2835,127 @@
       ]
     },
     {
+      "id": "the-green-envoy",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "green"
+      ],
+      "title": "The Green Envoy",
+      "weight": 4,
+      "trigger": {
+        "lt": [
+          "provisions",
+          52
+        ]
+      },
+      "intro": "An envoy of the Green Wizard City arrives trailing the smell of green things growing, and offers Runehold a blessing on its fields — the old nurture-craft — in the name of friendship between hearth and jungle.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "green"
+          },
+          "text": "The Green do not offer their craft to just anyone, Archon. Take the blessing, and take the friendship it carries."
+        }
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Let the Green bless the fields",
+          "win": {
+            "text": "The envoy walks your furrows murmuring, and by Highsun the fields come up thick and green. The Green City counts Runehold a friend.",
+            "saga": "You let a Green envoy bless Runehold's fields; the harvest came up thick, and the Green City counted you a friend.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "green",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  8
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "trade-craft",
+          "label": "Trade lore for their growing-craft",
+          "test": {
+            "stat": "mastery.green",
+            "vs": 35
+          },
+          "win": {
+            "text": "Your Green-craft is enough to learn the rite as they work it — a blessing this year, and the knowing for every year after.",
+            "saga": "You learned the Green growing-rite as their envoy worked it, warming the Green City and enriching your fields.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "green",
+                  14
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  6
+                ]
+              },
+              {
+                "adjust_mastery": [
+                  "green",
+                  3
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The rite is past your coven's Green-craft to hold, but the envoy blesses the fields anyway, kindly enough.",
+            "saga": "You could not learn the Green rite, but their envoy blessed Runehold's fields regardless, warming the Green City.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "green",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Decline — Runehold tends its own soil",
+          "win": {
+            "text": "You thank the envoy and send them home. The coven's pride in its own hands is worth a little coolness with the jungle.",
+            "saga": "You declined the Green's blessing to tend Runehold's own soil, holding the coven's pride over the jungle's goodwill.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "green",
+                  2
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-hungry-season",
       "type": "interactive",
       "tags": [
@@ -1989,6 +3068,123 @@
       ]
     },
     {
+      "id": "the-land-dispute",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "red"
+      ],
+      "title": "The River-Meadow Dispute",
+      "weight": 4,
+      "trigger": {
+        "gte": [
+          "coin",
+          12
+        ]
+      },
+      "intro": "A green river-meadow at Runehold's edge falls into contest: Red merchants want it for a trade-wharf, Green wardens for a water-meadow left wild. Both press their case with gifts and grievances, and both watch to see which colour you favour.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "red"
+          },
+          "text": "A wharf means coin, Archon — a road for Red gold straight to our gate. Meadows do not fill a granary in a hard year."
+        },
+        {
+          "cast": {
+            "school": "green"
+          },
+          "text": "That meadow feeds the whole valley's soil. Sell it to Red and you sell a hundred harvests for one season's silver."
+        }
+      ],
+      "choices": [
+        {
+          "id": "favour-red",
+          "label": "Favour Red's wharf — coin and trade",
+          "win": {
+            "text": "The wharf goes up and Red gold flows over it, and the Gilded Reach counts Runehold a partner — while the Green mark the wild meadow drowned in silver.",
+            "saga": "You gave the river-meadow to Red for a trade-wharf, gaining coin and the Reach's favour and the Green's resentment.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "red",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "green",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "coin",
+                  8
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "favour-green",
+          "label": "Favour Green's water-meadow — the wild and the harvest",
+          "win": {
+            "text": "The meadow stays wild and the valley's soil thanks you for it, and the Green count Runehold a friend — while Red pockets its gold and its grudge.",
+            "saga": "You kept the river-meadow wild for the Green, gaining harvest and the jungle's favour and Red's cold ledger.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "green",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "split-fairly",
+          "label": "Divide the meadow and anger both a little",
+          "win": {
+            "text": "You give each half its half. Neither is happy — a wharf too small, a meadow too shrunk — but neither can call you a partisan.",
+            "saga": "You split the river-meadow between Red and Green; both grumbled at the half they got, but neither named you an enemy.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "red",
+                  -3
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "green",
+                  -3
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-last-true-name",
       "type": "quest",
       "tags": [
@@ -2051,6 +3247,236 @@
               },
               {
                 "set_flag": "knows_flame_is_memory"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-ley-tide",
+      "type": "interactive",
+      "tags": [
+        "hearth",
+        "mana"
+      ],
+      "title": "The Ley-Tide",
+      "weight": 5,
+      "trigger": {
+        "lt": [
+          "mana",
+          50
+        ]
+      },
+      "intro": "As the season turns, a tide of ley-energy wells up beneath Runehold and the rune-stones begin to hum of their own accord. For a few days the gathering will be easy — magic all but pooling in the palm.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "The land is giving freely, Archon. Take what it offers now — a ley-tide does not wait on our convenience."
+        }
+      ],
+      "choices": [
+        {
+          "id": "gather-fast",
+          "label": "Gather all you can while it lasts",
+          "win": {
+            "text": "The coven works the rune-stones day and night, and the mana pools deep before the tide ebbs.",
+            "saga": "A ley-tide welled up beneath Runehold, and you gathered its mana deep before it ebbed.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  10
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "gather-careful",
+          "label": "Gather slowly, and chart the flows",
+          "win": {
+            "text": "You take less, but your scribes map the ley-lines as they run — a little power now, and a little knowing for later.",
+            "saga": "You gathered the ley-tide slowly and charted its flows — a little mana, and a little lore besides.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  7
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-lingering-soul",
+      "type": "interactive",
+      "tags": [
+        "flame",
+        "mana"
+      ],
+      "title": "The Lingering Soul",
+      "weight": 3,
+      "once": true,
+      "trigger": {
+        "lt": [
+          "mana",
+          42
+        ]
+      },
+      "intro": "A Forgotten Soul lingers at the edge of Runehold's fields, dim and slow, trailing residual magic like smoke. It could be drawn on — the old, dark art of drinking the power a Soul still carries. Or it could be named, and released.",
+      "advisors": [
+        {
+          "cast": {
+            "class": "necromancer"
+          },
+          "text": "It is halfway gone already, Archon. What it carries is going to waste. Better in our reserves than drifting on the wind."
+        },
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "That was a Wizard once. Drink from it and the coven will not meet your eye for a season. Let it go with its name."
+        }
+      ],
+      "choices": [
+        {
+          "id": "draw",
+          "label": "Draw the residual magic from the Soul",
+          "win": {
+            "text": "You take what the Soul still holds. The reserves swell — and something goes quiet and cold in the coven that will not warm for a while.",
+            "saga": "You drank the residual magic from a lingering Forgotten Soul; the reserves swelled, and the coven's faith went cold.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -6
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "release",
+          "label": "Speak its name and let it go",
+          "win": {
+            "text": "You find the name still in it and speak it aloud. The Soul unravels gently, leaving a last thin gift of mana and a coven the prouder for the mercy.",
+            "saga": "You named a lingering Soul and released it; it left a parting gift of mana, and the coven took pride in the mercy.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-meditative-season",
+      "type": "interactive",
+      "tags": [
+        "hearth",
+        "mana"
+      ],
+      "title": "The Meditative Season",
+      "weight": 3,
+      "trigger": {
+        "lt": [
+          "mana",
+          55
+        ]
+      },
+      "intro": "A quiet season lies ahead, with no crisis pressing. The Circle could give it over to deep meditation — a slow, disciplined gathering of mana and mastery — though a season spent in trance is a season not spent in the fields.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "Let us go deep, Archon. Power gathered in stillness is power that stays. The granary can bear one lean season for it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "deep",
+          "label": "Give the season to deep meditation",
+          "requires": {
+            "gte": [
+              "faith",
+              42
+            ]
+          },
+          "win": {
+            "text": "The Circle sinks into a season-long trance and rises with reserves brimming and their craft honed — though the fields lay half-tended.",
+            "saga": "The Circle gave a whole season to deep meditation, rising with brimming mana and sharpened craft, the fields left lean.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  12
+                ]
+              },
+              {
+                "adjust_mastery": [
+                  "blue",
+                  3
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  -5
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "light",
+          "label": "A little study between the season's work",
+          "win": {
+            "text": "The coven studies in the evenings and works by day. A modest gathering, and the granary untroubled.",
+            "saga": "The coven studied lightly between the season's work, gathering a modest measure of mana.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  6
+                ]
               }
             ]
           }
@@ -2159,6 +3585,229 @@
       ]
     },
     {
+      "id": "the-purple-dare",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "purple"
+      ],
+      "title": "The Purple Pavilion's Dare",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "mana",
+          30
+        ]
+      },
+      "intro": "Purple wizards arrive on a wind that smells of ozone and set up a revel of wild, unleashed workings on Runehold's green — and dare the coven to join them, or to send a champion to their working-contest. The chaos is catching. So is the Purple's regard, for those who dare.",
+      "advisors": [
+        {
+          "cast": {
+            "class": "chaos-mage"
+          },
+          "text": "The Purple respect one thing, Archon — nerve. Join them, contest them, but do not stand at the edge and disapprove. That, they never forgive."
+        },
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "Or send them off with their revel. Chaos courted is chaos let in, and the White will think the better of us for the door we keep shut."
+        }
+      ],
+      "choices": [
+        {
+          "id": "join",
+          "label": "Join the Purple revel of wild workings",
+          "win": {
+            "text": "The coven throws itself into the wild working and comes away crackling, laughing, a little singed — and firm friends of the Pavilion.",
+            "saga": "The coven joined the Purple's revel of wild workings, winning the Pavilion's friendship and a little raw mana besides.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "purple",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "contest",
+          "label": "Meet their champion in a working-contest",
+          "test": {
+            "stat": "mastery.purple",
+            "vs": 40
+          },
+          "win": {
+            "text": "Your champion out-chaoses their chaos, and the Pavilion roars its approval. Runehold has bragging rights and a doting Purple both.",
+            "saga": "Your champion beat the Purple's own at their working-contest, winning the Pavilion's loud and lasting regard.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "purple",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your champion is out-matched and half-unmade in the trying. The Purple love a game try, but the wild backlash scars the hold.",
+            "saga": "Your champion lost the Purple's working-contest and took a wild backlash home, though the Pavilion warmed to the daring.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "purple",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Send the revel on its way",
+          "win": {
+            "text": "You bar the green to them, politely. The Purple leave unimpressed — but word of your restraint reaches the White Tower, and it approves.",
+            "saga": "You refused the Purple's revel; the Pavilion cooled toward Runehold, but the orderly White warmed to your restraint.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "purple",
+                  -5
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "white",
+                  5
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-relic-battery",
+      "type": "interactive",
+      "tags": [
+        "lore",
+        "mana"
+      ],
+      "title": "The Relic Battery",
+      "weight": 3,
+      "once": true,
+      "trigger": {
+        "lt": [
+          "mana",
+          50
+        ]
+      },
+      "intro": "A trader leaves a strange thing in pawn: a pre-Burning relic of rune-etched brass, still faintly warm — a battery, the coven decides, built to store a great charge of mana. Getting the charge out without ruining the relic is a matter of the old craft.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "brown"
+          },
+          "text": "It is good work, Archon — old, practical, and full. Coax it right and it pours. Force it and we get a fistful and a cracked shell."
+        }
+      ],
+      "choices": [
+        {
+          "id": "unlock",
+          "label": "Unlock the relic's stored charge",
+          "requires": {
+            "gte": [
+              "mastery.brown",
+              25
+            ]
+          },
+          "test": {
+            "stat": "mastery.brown",
+            "vs": 40
+          },
+          "win": {
+            "text": "Your craft is equal to the old maker's. The relic gives up its whole charge in a clean, gorgeous flood, and survives to be charged again.",
+            "saga": "The coven's craft unlocked a pre-Burning mana-battery cleanly; it poured out its whole charge and survived whole.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  20
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The old bindings are subtler than they looked. The relic cracks as it discharges — a fair draught of mana, and a ruined, worthless shell.",
+            "saga": "The coven cracked a pre-Burning mana-battery drawing its charge; some mana came, and a priceless relic was ruined.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "coin",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "study-first",
+          "label": "Study it a season before touching it",
+          "win": {
+            "text": "You leave the charge alone and study the relic's making instead — a season's careful notes, and a little mana teased safely from its surface.",
+            "saga": "You studied a pre-Burning mana-battery for a season before daring its charge, gaining lore and a little mana.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-restless-wizard",
       "type": "quest",
       "tags": [
@@ -2225,6 +3874,139 @@
                 "add": [
                   "faith",
                   -2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-rite-disputed",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "purple"
+      ],
+      "title": "The Rite Disputed",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "lore",
+          34
+        ]
+      },
+      "intro": "A rite your coven recovered turns out to be claimed by two cults at once: the Purple say it is chaos-work and theirs by blood, the White that it is an ordering-rite and theirs by right. Both have sent for it, and neither will take a refusal warmly.",
+      "advisors": [
+        {
+          "cast": {
+            "class": "chaos-mage"
+          },
+          "text": "It is Purple to the bone, Archon — read how it bends. Give it to the Pavilion and make a friend who dances. Give it to the White and make one who audits."
+        },
+        {
+          "cast": {
+            "school": "white"
+          },
+          "text": "It is an ordering-rite dressed as chaos. The White Tower will owe us for its return. The Purple will forget the slight by next season, as they forget everything."
+        }
+      ],
+      "choices": [
+        {
+          "id": "give-purple",
+          "label": "Give the rite to the Purple Pavilion",
+          "win": {
+            "text": "The Purple carry the rite off in delight and count Runehold kin — while the White Tower files the loss in its long, cool memory.",
+            "saga": "You gave the disputed rite to the Purple Pavilion, winning its delight and the White Tower's quiet displeasure.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "purple",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "white",
+                  -8
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "give-white",
+          "label": "Give the rite to the White Tower",
+          "win": {
+            "text": "The White receive the rite with grave thanks and a debt acknowledged — while the Purple shrug, and remember, in their way.",
+            "saga": "You gave the disputed rite to the White Tower, earning its gratitude and a debt, and the Purple's careless grudge.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "white",
+                  12
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "purple",
+                  -8
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "keep-it",
+          "label": "Keep the rite for Runehold",
+          "test": {
+            "stat": "lore",
+            "vs": 45
+          },
+          "win": {
+            "text": "You make the case that a rite recovered is a rite kept, and make it so well that both cults grumble and grant it. Runehold keeps its find.",
+            "saga": "You argued Runehold's right to keep the disputed rite so ably that both Purple and White grumbled and let it lie.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  6
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "purple",
+                  -3
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "white",
+                  -3
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your claim convinces no one, and now both cults are sure Runehold is a hoarder. You keep the rite and lose the goodwill.",
+            "saga": "Your claim to keep the disputed rite convinced neither cult; Runehold kept its find and lost face with Purple and White both.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "purple",
+                  -6
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "white",
+                  -6
                 ]
               }
             ]
@@ -2370,6 +4152,106 @@
                 "add": [
                   "faith",
                   -6
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-rune-node",
+      "type": "interactive",
+      "tags": [
+        "lore",
+        "mana"
+      ],
+      "title": "The Rune-Node",
+      "weight": 4,
+      "once": true,
+      "trigger": {
+        "lt": [
+          "mana",
+          48
+        ]
+      },
+      "intro": "Diggers strike an old rune-node beneath the hold — a knot of bound magic older than Runehold, still holding its charge. Tapping it cleanly is a matter of order and precise wards; forced, it will give all at once, one way or another.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "white"
+          },
+          "text": "A node like this answers to order, Archon. With clean wards it will pour for us for a season. Without them, it will simply pour."
+        }
+      ],
+      "choices": [
+        {
+          "id": "read-safely",
+          "label": "Read its wards and tap it cleanly",
+          "requires": {
+            "gte": [
+              "mastery.white",
+              28
+            ]
+          },
+          "win": {
+            "text": "Your order-craft is equal to it. The node opens like a tap and gives its charge in a steady, safe stream.",
+            "saga": "The coven's order-craft opened an ancient rune-node cleanly, and it gave up its stored mana in a safe stream.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "force-it",
+          "label": "Force the node open",
+          "test": {
+            "stat": "mastery.blue",
+            "vs": 40
+          },
+          "win": {
+            "text": "You crack its bindings by main lore and catch most of the charge before it earths itself. Rough, but it worked.",
+            "saga": "You forced an old rune-node open by lore and caught most of its charge before it discharged.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  14
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The node lets go all at once and earths itself through the hold's stones — a jolt of mana, and a jagged new stress in the Fracture.",
+            "saga": "A forced rune-node discharged through Runehold's stones — some mana caught, and the Fracture stressed wider.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
                 ]
               }
             ]
@@ -2943,6 +4825,105 @@
       ]
     },
     {
+      "id": "the-wandering-mystic",
+      "type": "interactive",
+      "tags": [
+        "hearth",
+        "mana"
+      ],
+      "title": "The Wandering Mystic",
+      "weight": 4,
+      "trigger": {
+        "lt": [
+          "mana",
+          45
+        ]
+      },
+      "intro": "A hooded mystic comes to Runehold's gate — no cult's colour, no coven's mark — and offers to teach the coven an old rite for drawing mana out of still air. The rite, she warns, asks a steady and believing hand; a wavering one it punishes.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "Free knowledge from a stranger is rarely free, Archon — but if the rite is true, it is ours to keep. Weigh whether our discipline is equal to it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "learn-rite",
+          "label": "Learn the mystic's mana-rite",
+          "test": {
+            "stat": "faith",
+            "vs": 45
+          },
+          "win": {
+            "text": "The coven takes the rite to heart, and by the third night mana rises from empty air at a word. A gift worth the risk.",
+            "saga": "A wandering mystic taught the coven a rite to draw mana from still air, and your faith was steady enough to hold it.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  14
+                ]
+              },
+              {
+                "adjust_mastery": [
+                  "blue",
+                  2
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The rite asks more steadiness than the coven can muster, and it unravels in their hands — days wasted, and confidence with them.",
+            "saga": "The mystic's mana-rite unravelled in unsteady hands, and the coven lost days and heart to it.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -6
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "pay-mystic",
+          "label": "Pay her to gather for you instead",
+          "requires": {
+            "gte": [
+              "coin",
+              12
+            ]
+          },
+          "win": {
+            "text": "You pay the mystic's price and she works alone for a season, leaving your reserves fuller and asking nothing more.",
+            "saga": "You paid the wandering mystic to gather mana for a season rather than risk the rite yourselves.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -12
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  12
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-warrior-levy",
       "type": "interactive",
       "tags": [
@@ -3081,6 +5062,123 @@
       ]
     },
     {
+      "id": "the-white-audit",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "white"
+      ],
+      "title": "The White Tower's Audit",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "fracture",
+          20
+        ]
+      },
+      "intro": "Inspectors of the White Wizard Tower arrive unasked, with instruments and a cool courtesy, to audit Runehold's wards against the Fracture. Order is their gift and their judgement; how you receive them will set the Tower's word on you for years.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "white"
+          },
+          "text": "Let them look, Archon. Our wards are sound, and the White Tower's blessing is worth more than a season's pride. Show them everything."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
+          "text": "Or show them the gate. Runehold answers to the Flame, not to the Tower's clipboards. Let them audit their own walls."
+        }
+      ],
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Welcome the inspectors and open the wards to them",
+          "win": {
+            "text": "You open every ward to their instruments. They find them sound, tighten two, and leave a Tower's approval and a steadier hold behind.",
+            "saga": "You welcomed the White Tower's audit; they judged Runehold's wards sound, tightening them and warming the Tower to you.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "white",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "impress",
+          "label": "Show them wards worthy of the Tower itself",
+          "test": {
+            "stat": "mastery.white",
+            "vs": 40
+          },
+          "win": {
+            "text": "Your order-craft startles even the Tower's own. They leave calling Runehold a model hold, and mean it.",
+            "saga": "Your order-craft so impressed the White Tower's inspectors that they named Runehold a model hold.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "white",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your wards are honest but plain, and the inspectors note every fault in their cool hand. Sound enough — hardly a model.",
+            "saga": "The White Tower's inspectors found Runehold's wards plain but sound, warming to you only a little.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "white",
+                  4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "rebuff",
+          "label": "Rebuff the audit — Runehold answers to itself",
+          "win": {
+            "text": "You send the inspectors back to their Tower unsatisfied. Runehold keeps its pride and its privacy — and loses a powerful friend it never quite had.",
+            "saga": "You rebuffed the White Tower's audit; Runehold kept its independence and lost the Tower's regard for it.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "white",
+                  -6
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "word-of-a-living-hearth",
       "type": "quest",
       "tags": [
@@ -3145,6 +5243,107 @@
                 "add": [
                   "lore",
                   2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "yellows-warning",
+      "type": "interactive",
+      "tags": [
+        "cults",
+        "yellow"
+      ],
+      "title": "Yellow's Warning",
+      "weight": 3,
+      "trigger": {
+        "gte": [
+          "fracture",
+          25
+        ]
+      },
+      "intro": "Word arrives from the Chronomancer's Riviera unbidden: their sightings show a hard turn coming for Runehold, and they have sent the warning freely — hoping, plainly, that a favour given is a favour returned.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "They warned us for nothing, Archon. Honour it. A cult that does us a kindness should not find us ungrateful."
+        }
+      ],
+      "choices": [
+        {
+          "id": "heed",
+          "label": "Heed the warning and prepare",
+          "requires": {
+            "gte": [
+              "coin",
+              6
+            ]
+          },
+          "win": {
+            "text": "You spend to shore up against what they foresaw, and send the Riviera your thanks in coin. The trouble, when it comes, breaks softer.",
+            "saga": "You heeded Yellow's freely-given warning and repaid it, easing the coming trouble and binding the Riviera closer.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -6
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "yellow",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "thank-only",
+          "label": "Take the warning, thank them, pay nothing",
+          "win": {
+            "text": "You act on the warning but send no gift. The Riviera notes both — that you listened, and that you gave nothing back.",
+            "saga": "You acted on Yellow's warning but sent no thanks, easing the trouble while leaving the Riviera cool.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "yellow",
+                  2
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "dismiss",
+          "label": "Dismiss the chronomancers' fear",
+          "win": {
+            "text": "You set the warning aside as Yellow fretting. Perhaps it was. The Riviera will remember that you did not listen.",
+            "saga": "You dismissed Yellow's warning as idle fretting, souring Runehold's standing with the Riviera.",
+            "effects": [
+              {
+                "adjust_cult": [
+                  "yellow",
+                  -5
                 ]
               }
             ]

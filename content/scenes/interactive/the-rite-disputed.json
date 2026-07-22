@@ -1,0 +1,133 @@
+{
+  "id": "the-rite-disputed",
+  "type": "interactive",
+  "tags": [
+    "cults",
+    "purple"
+  ],
+  "title": "The Rite Disputed",
+  "weight": 3,
+  "trigger": {
+    "gte": [
+      "lore",
+      34
+    ]
+  },
+  "intro": "A rite your coven recovered turns out to be claimed by two cults at once: the Purple say it is chaos-work and theirs by blood, the White that it is an ordering-rite and theirs by right. Both have sent for it, and neither will take a refusal warmly.",
+  "advisors": [
+    {
+      "cast": {
+        "class": "chaos-mage"
+      },
+      "text": "It is Purple to the bone, Archon — read how it bends. Give it to the Pavilion and make a friend who dances. Give it to the White and make one who audits."
+    },
+    {
+      "cast": {
+        "school": "white"
+      },
+      "text": "It is an ordering-rite dressed as chaos. The White Tower will owe us for its return. The Purple will forget the slight by next season, as they forget everything."
+    }
+  ],
+  "choices": [
+    {
+      "id": "give-purple",
+      "label": "Give the rite to the Purple Pavilion",
+      "win": {
+        "text": "The Purple carry the rite off in delight and count Runehold kin — while the White Tower files the loss in its long, cool memory.",
+        "saga": "You gave the disputed rite to the Purple Pavilion, winning its delight and the White Tower's quiet displeasure.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "purple",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "white",
+              -8
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "give-white",
+      "label": "Give the rite to the White Tower",
+      "win": {
+        "text": "The White receive the rite with grave thanks and a debt acknowledged — while the Purple shrug, and remember, in their way.",
+        "saga": "You gave the disputed rite to the White Tower, earning its gratitude and a debt, and the Purple's careless grudge.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "white",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "purple",
+              -8
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "keep-it",
+      "label": "Keep the rite for Runehold",
+      "test": {
+        "stat": "lore",
+        "vs": 45
+      },
+      "win": {
+        "text": "You make the case that a rite recovered is a rite kept, and make it so well that both cults grumble and grant it. Runehold keeps its find.",
+        "saga": "You argued Runehold's right to keep the disputed rite so ably that both Purple and White grumbled and let it lie.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              6
+            ]
+          },
+          {
+            "adjust_cult": [
+              "purple",
+              -3
+            ]
+          },
+          {
+            "adjust_cult": [
+              "white",
+              -3
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "Your claim convinces no one, and now both cults are sure Runehold is a hoarder. You keep the rite and lose the goodwill.",
+        "saga": "Your claim to keep the disputed rite convinced neither cult; Runehold kept its find and lost face with Purple and White both.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              4
+            ]
+          },
+          {
+            "adjust_cult": [
+              "purple",
+              -6
+            ]
+          },
+          {
+            "adjust_cult": [
+              "white",
+              -6
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

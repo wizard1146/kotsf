@@ -1,0 +1,79 @@
+{
+  "id": "the-meditative-season",
+  "type": "interactive",
+  "tags": [
+    "hearth",
+    "mana"
+  ],
+  "title": "The Meditative Season",
+  "weight": 3,
+  "trigger": {
+    "lt": [
+      "mana",
+      55
+    ]
+  },
+  "intro": "A quiet season lies ahead, with no crisis pressing. The Circle could give it over to deep meditation — a slow, disciplined gathering of mana and mastery — though a season spent in trance is a season not spent in the fields.",
+  "advisors": [
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "Let us go deep, Archon. Power gathered in stillness is power that stays. The granary can bear one lean season for it."
+    }
+  ],
+  "choices": [
+    {
+      "id": "deep",
+      "label": "Give the season to deep meditation",
+      "requires": {
+        "gte": [
+          "faith",
+          42
+        ]
+      },
+      "win": {
+        "text": "The Circle sinks into a season-long trance and rises with reserves brimming and their craft honed — though the fields lay half-tended.",
+        "saga": "The Circle gave a whole season to deep meditation, rising with brimming mana and sharpened craft, the fields left lean.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              12
+            ]
+          },
+          {
+            "adjust_mastery": [
+              "blue",
+              3
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              -5
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "light",
+      "label": "A little study between the season's work",
+      "win": {
+        "text": "The coven studies in the evenings and works by day. A modest gathering, and the granary untroubled.",
+        "saga": "The coven studied lightly between the season's work, gathering a modest measure of mana.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              6
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

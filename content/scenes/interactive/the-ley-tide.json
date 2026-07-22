@@ -1,0 +1,65 @@
+{
+  "id": "the-ley-tide",
+  "type": "interactive",
+  "tags": [
+    "hearth",
+    "mana"
+  ],
+  "title": "The Ley-Tide",
+  "weight": 5,
+  "trigger": {
+    "lt": [
+      "mana",
+      50
+    ]
+  },
+  "intro": "As the season turns, a tide of ley-energy wells up beneath Runehold and the rune-stones begin to hum of their own accord. For a few days the gathering will be easy — magic all but pooling in the palm.",
+  "advisors": [
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "The land is giving freely, Archon. Take what it offers now — a ley-tide does not wait on our convenience."
+    }
+  ],
+  "choices": [
+    {
+      "id": "gather-fast",
+      "label": "Gather all you can while it lasts",
+      "win": {
+        "text": "The coven works the rune-stones day and night, and the mana pools deep before the tide ebbs.",
+        "saga": "A ley-tide welled up beneath Runehold, and you gathered its mana deep before it ebbed.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              10
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "gather-careful",
+      "label": "Gather slowly, and chart the flows",
+      "win": {
+        "text": "You take less, but your scribes map the ley-lines as they run — a little power now, and a little knowing for later.",
+        "saga": "You gathered the ley-tide slowly and charted its flows — a little mana, and a little lore besides.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              7
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              3
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

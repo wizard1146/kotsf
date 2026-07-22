@@ -1,0 +1,99 @@
+{
+  "id": "the-wandering-mystic",
+  "type": "interactive",
+  "tags": [
+    "hearth",
+    "mana"
+  ],
+  "title": "The Wandering Mystic",
+  "weight": 4,
+  "trigger": {
+    "lt": [
+      "mana",
+      45
+    ]
+  },
+  "intro": "A hooded mystic comes to Runehold's gate — no cult's colour, no coven's mark — and offers to teach the coven an old rite for drawing mana out of still air. The rite, she warns, asks a steady and believing hand; a wavering one it punishes.",
+  "advisors": [
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "Free knowledge from a stranger is rarely free, Archon — but if the rite is true, it is ours to keep. Weigh whether our discipline is equal to it."
+    }
+  ],
+  "choices": [
+    {
+      "id": "learn-rite",
+      "label": "Learn the mystic's mana-rite",
+      "test": {
+        "stat": "faith",
+        "vs": 45
+      },
+      "win": {
+        "text": "The coven takes the rite to heart, and by the third night mana rises from empty air at a word. A gift worth the risk.",
+        "saga": "A wandering mystic taught the coven a rite to draw mana from still air, and your faith was steady enough to hold it.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              14
+            ]
+          },
+          {
+            "adjust_mastery": [
+              "blue",
+              2
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The rite asks more steadiness than the coven can muster, and it unravels in their hands — days wasted, and confidence with them.",
+        "saga": "The mystic's mana-rite unravelled in unsteady hands, and the coven lost days and heart to it.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -6
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "pay-mystic",
+      "label": "Pay her to gather for you instead",
+      "requires": {
+        "gte": [
+          "coin",
+          12
+        ]
+      },
+      "win": {
+        "text": "You pay the mystic's price and she works alone for a season, leaving your reserves fuller and asking nothing more.",
+        "saga": "You paid the wandering mystic to gather mana for a season rather than risk the rite yourselves.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -12
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              12
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

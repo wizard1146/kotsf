@@ -1,0 +1,101 @@
+{
+  "id": "storm-of-wild-magic",
+  "type": "interactive",
+  "tags": [
+    "fracture",
+    "mana"
+  ],
+  "title": "Storm of Wild Magic",
+  "weight": 4,
+  "trigger": {
+    "lt": [
+      "mana",
+      50
+    ]
+  },
+  "intro": "A storm rolls in that is not weather — a churning front of wild, uncolored magic, crackling off the hilltops. It could be harnessed for a great draught of mana, if the coven has the chaos-craft to ride it. If not, it will ride them.",
+  "advisors": [
+    {
+      "cast": {
+        "class": "chaos-mage"
+      },
+      "text": "This is my country, Archon. Wild magic answers those who do not flinch — give me leave and I will wring the storm dry."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "Or we ward the hold and let it pass. A storm like that has scattered stronger covens than ours across the hillside."
+    }
+  ],
+  "choices": [
+    {
+      "id": "harness",
+      "label": "Harness the storm",
+      "test": {
+        "stat": "mastery.purple",
+        "vs": 35
+      },
+      "win": {
+        "text": "The coven rides the wild front and bleeds it white — a tremendous draught of mana, and the storm spends itself harmlessly over the hills.",
+        "saga": "The coven harnessed a storm of wild magic and drew a great draught of mana as it broke over Runehold.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              20
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The storm will not be ridden. It lashes the hold as it passes — some mana clawed back, but the wards buckle and the Fracture gapes wider for it.",
+        "saga": "A storm of wild magic threw off the coven's grasp and lashed Runehold, widening the Fracture as it passed.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              8
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              8
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              -4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "shelter",
+      "label": "Ward the hold and let it pass",
+      "win": {
+        "text": "You raise the wards and wait it out. A little residual mana settles on the stones, and the hold is whole.",
+        "saga": "You warded Runehold against a wild-magic storm and let it pass, gathering only what settled after.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              4
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -2
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

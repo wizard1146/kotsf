@@ -1,0 +1,71 @@
+{
+  "id": "the-deepfrost-alignment",
+  "type": "interactive",
+  "tags": [
+    "lore",
+    "mana"
+  ],
+  "title": "The Deepfrost Alignment",
+  "weight": 3,
+  "trigger": {
+    "lt": [
+      "mana",
+      55
+    ]
+  },
+  "intro": "The old charts come true: at Deepfrost's dark the far lights align as they do once in a long age, and for one night the world's magic runs close to the surface. A coven that knows to draw at the peak can gather more than a season's worth.",
+  "advisors": [
+    {
+      "cast": {
+        "school": "yellow"
+      },
+      "text": "The alignment holds for one night only, Archon. Draw at the peak. A gift like this does not come again in most keepers' lives."
+    }
+  ],
+  "choices": [
+    {
+      "id": "draw-deep",
+      "label": "Draw deep at the alignment's peak",
+      "win": {
+        "text": "The coven gathers through the long dark and the reserves run over — a season's mana and more, poured out of one aligned night.",
+        "saga": "You drew deep at the Deepfrost alignment, and one aligned night gave Runehold more than a season's mana.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              20
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "draw-and-share",
+      "label": "Draw, and share the rite with a neighbour cult",
+      "win": {
+        "text": "You gather well, and send word of the peak to the Blue Bastion so their scholars might draw too. Less for your reserves — more for a friendship.",
+        "saga": "You drew at the Deepfrost alignment and shared the rite with Blue, trading a fuller reserve for a warmer friendship.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              14
+            ]
+          },
+          {
+            "adjust_cult": [
+              "blue",
+              8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              2
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
