@@ -30,6 +30,8 @@
   td.none { color:#5c5348; }
   .rowlabel { text-align:left; color:var(--ink); text-transform:capitalize; }
   .coverage .hint { color:var(--dim); font-size:.75rem; margin:.4rem 0 0; }
+  tr.hidden-row td { border-top:2px dashed #4a3f36; }
+  .hidden-badge { font-size:.58rem; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); border:1px solid var(--line); border-radius:3px; padding:.02em .3em; margin-left:.4em; vertical-align:middle; }
 
   /* prompt generator */
   .gen { margin:0 0 1.8rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem 1.2rem; }
@@ -91,8 +93,9 @@
   <div id="out"><p class="sub">Loading…</p></div>
 
 <script>
-const SCHOOLS = ['red','yellow','brown','green','blue','purple','white'];
-const HEX = { red:'#c0392b', yellow:'#d4ac0d', brown:'#8a5a1f', green:'#229954', blue:'#2471a3', purple:'#7d3c98', white:'#d5d8dc' };
+const SCHOOLS = ['red','yellow','brown','green','blue','purple','white','black'];
+const HIDDEN = new Set(['black']); // hidden 8th cult — a real portrait slot, but not one of the seven public schools
+const HEX = { red:'#c0392b', yellow:'#d4ac0d', brown:'#8a5a1f', green:'#229954', blue:'#2471a3', purple:'#7d3c98', white:'#d5d8dc', black:'#2b2723' };
 const AGE = { a:'young', b:'middle', c:'old' };
 const PLACEHOLDER = '../assets/portraits/portrait_placeholder.svg';
 
@@ -101,7 +104,7 @@ const PLACEHOLDER = '../assets/portraits/portrait_placeholder.svg';
    the a/b/c tier lever sets seniority (age + dress + regalia + bearing). */
 
 // robe colour word (b/c robes) — hats use the plain school word (blue, red, …)
-const SCHOOL_ROBE = { red:'crimson', yellow:'gold', brown:'earth-brown', green:'moss-green', blue:'indigo-blue', purple:'violet', white:'bone-white' };
+const SCHOOL_ROBE = { red:'crimson', yellow:'gold', brown:'earth-brown', green:'moss-green', blue:'indigo-blue', purple:'violet', white:'bone-white', black:'charcoal-black' };
 // per-school accent light (the cult drives hat, robe trim, and magic light)
 const SCHOOL_LIGHT = {
   red:    'warm crimson firelight raking one side of the face',
@@ -111,6 +114,7 @@ const SCHOOL_LIGHT = {
   blue:   'cool blue arcane light from one side',
   purple: 'intense violet-magenta magic light on one side',
   white:  'cold pale light with a thread of violet at the edges',
+  black:  'deep shadow with a thin cold rim of violet-black glow on one side',
 };
 // the {TIER} lever — rise shows across face, wardrobe, regalia, and posture
 const TIER = {
@@ -254,7 +258,8 @@ function coverage(items) {
   head += '</tr>';
   let rows = '';
   for (const s of SCHOOLS) {
-    let r = `<tr><td class="rowlabel"><span class="school-hex" style="background:${HEX[s]}"></span>${s}</td>`;
+    const hidLabel = HIDDEN.has(s) ? '<span class="hidden-badge">hidden</span>' : '';
+    let r = `<tr class="${HIDDEN.has(s) ? 'hidden-row' : ''}"><td class="rowlabel"><span class="school-hex" style="background:${HEX[s]}"></span>${s}${hidLabel}</td>`;
     for (const g of genders) for (const a of ages) {
       const n = items.filter(p => p.school === s && p.gender === g && p.variant === a).length;
       r += `<td class="cell ${n ? 'have' : 'none'}" data-school="${s}" data-gender="${g}" data-age="${a}">${n || '·'}</td>`;
@@ -301,8 +306,11 @@ renderGen(); // generator works without the bundle; cells wire up once coverage 
   for (const s of order) {
     const h = document.createElement('div');
     const bad = !SCHOOLS.includes(s);
+    const hid = HIDDEN.has(s);
     h.className = 'group-h';
-    h.innerHTML = `<span class="school-hex" style="background:${HEX[s] || '#777'}"></span>${s}${bad ? ` <span class="warn">— not one of the seven schools; these never match a member</span>` : ''}`;
+    h.innerHTML = `<span class="school-hex" style="background:${HEX[s] || '#777'}"></span>${s}`
+      + (hid ? ` <span class="warn">— hidden 8th cult; a real portrait slot, kept out of the seven-school player UI</span>` : '')
+      + (bad ? ` <span class="warn">— not one of the schools; these never match a member</span>` : '');
     out.appendChild(h);
     const grid = document.createElement('div'); grid.className = 'grid';
     for (const p of bySchool[s].sort((a,b) => (a.gender+a.num+a.variant).localeCompare(b.gender+b.num+b.variant))) grid.appendChild(card(p));
