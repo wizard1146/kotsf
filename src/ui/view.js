@@ -450,10 +450,10 @@ function portraitFill(m, portraits) {
   return `<img class="member-photo is-placeholder" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`;
 }
 
-function memberCard(m, isLeader, portraits) {
+function memberCard(m, isLeader, portraits, roleLabel) {
   const tip = `${m.name} — ${CLASS_LABEL[m.class] || m.class} · ${CULT_NAMES[m.school]} · ${m.rank} · Pow ${m.power} Wis ${m.wisdom} Gui ${m.guile} Cou ${m.courage}`;
   return `<button class="pcard${isLeader ? ' leader' : ''}" data-action="view-member" data-member="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
-    <div class="pcard-img">${portraitFill(m, portraits)}</div>
+    <div class="pcard-img">${portraitFill(m, portraits)}${roleLabel ? `<span class="pcard-role">${esc(roleLabel)}</span>` : ''}</div>
     <div class="pcard-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</div>
     <div class="pcard-sub">${esc(CLASS_LABEL[m.class] || m.class)}</div>
   </button>`;
@@ -504,9 +504,22 @@ function advisorSheetHTML(ctx, m) {
           ${sheetStat('Boldness', m.boldness, tempWord('boldness', m.boldness))}${sheetStat('Piety', m.piety, tempWord('piety', m.piety))}${sheetStat('Temper', m.temper, tempWord('temper', m.temper))}
         </div>
         <p class="sheet-mastery">Practises the <b>${esc(school)}</b> school &mdash; the coven's ${cap(m.school)} Mastery stands at <b>${mastery}</b>.</p>
+        ${roleAssignHTML(ctx, m)}
       </div>
     </div>
   </section>`;
+}
+
+// Task assignment for a member — a row of role buttons; each grants a passive
+// per-season effect scaled by the named competence.
+function roleAssignHTML(ctx, m) {
+  const roles = ctx.rolesDefs || [];
+  if (!roles.length) return '';
+  const cur = (ctx.state.roles || {})[m.id] || '';
+  const btn = (id, label, title) => `<button class="sheet-role${cur === id ? ' on' : ''}" data-action="assign-role" data-member="${esc(m.id)}" data-role="${esc(id)}"${title ? ` title="${esc(title)}"` : ''}>${esc(label)}</button>`;
+  const opts = roles.map((r) => btn(r.id, r.label, `${r.desc} (scales with ${cap(r.stat)})`)).join('');
+  return `<h3 class="sheet-h">Task <small>one per Wizard; pays out each season</small></h3>
+    <div class="sheet-roles">${btn('', 'None')}${opts}</div>`;
 }
 function covenScreenHTML(ctx) {
   const { state } = ctx;
@@ -516,7 +529,8 @@ function covenScreenHTML(ctx) {
   const [fLabel, fCls] = faithBand(faith);
   const n = state.circle.length;
   const soulCount = state.souls.length;
-  const members = state.circle.map((m, i) => memberCard(m, i === 0, ctx.portraits)).join('');
+  const roleLabel = (m) => { const r = (ctx.rolesDefs || []).find((x) => x.id === (state.roles || {})[m.id]); return r ? r.label : ''; };
+  const members = state.circle.map((m, i) => memberCard(m, i === 0, ctx.portraits, roleLabel(m))).join('');
   const souls = soulCount
     ? `<h3 class="coven-subhead">Forgotten Souls <small>${soulCount}</small></h3>
        <div class="souls-roll">${state.souls.map((m) =>

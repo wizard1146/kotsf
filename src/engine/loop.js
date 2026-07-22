@@ -12,13 +12,26 @@ const DECAY = { lore: -3, mana: +3, provisions: -3, fracture: +1 };
 // A tick is now a *sub-season* (Early → Mid → Late). Events can fire at any third,
 // but the season economy is unchanged: decay + the per-season action refresh land
 // only when a full season turns over (every 3rd tick), so the yearly totals hold.
-export function advanceTime(state) {
+const clampP = (v) => Math.max(0, Math.min(100, v));
+
+// Assigned advisor tasks pay out once per season: dir × scaled(member's stat) on the
+// role's pressure. `roles` is the definitions list (from content/roles.json).
+function applyRoles(state, roles) {
+  if (!state.roles || !roles.length) return;
+  for (const m of state.circle) {
+    const def = roles.find((r) => r.id === state.roles[m.id]);
+    if (!def) continue;
+    const d = Math.max(1, Math.min(4, Math.round(((m[def.stat] || 0) - 20) / 18)));
+    state.pressures[def.pressure] = clampP(state.pressures[def.pressure] + def.dir * d);
+  }
+}
+
+export function advanceTime(state, roles = []) {
   state.turn += 1;
   state.phase = ((state.phase || 0) + 1) % 3;
   if (state.phase === 0) {                 // a full season has turned
-    for (const [k, d] of Object.entries(DECAY)) {
-      state.pressures[k] = Math.max(0, Math.min(100, state.pressures[k] + d));
-    }
+    for (const [k, d] of Object.entries(DECAY)) state.pressures[k] = clampP(state.pressures[k] + d);
+    applyRoles(state, roles);              // advisor tasks pay out
     state.actionsUsed = [];
     state.season = (state.season + 1) % 4;
     if (state.season === 0) {

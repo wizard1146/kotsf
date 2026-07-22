@@ -1,0 +1,28 @@
+{
+  "id": "steel-at-the-gate",
+  "type": "quest",
+  "tags": ["war"],
+  "title": "Steel at the Gate",
+  "weight": 6,
+  "trigger": { "all": [{ "flag": "warriors_enemies" }, { "gte": ["fracture", 40] }] },
+  "intro": "It came due at last. A war-band of the Warrior-Guild stands in Runehold's frost at first light — the same steel you drew on, years ago, come to collect. \"You struck first, Wizard,\" their leader says, plain as weather. \"We have long memories, and short patience left.\"",
+  "advisors": [
+    { "cast": { "most": "courage" }, "text": "We knew this day would come the moment you chose it, Archon. Muster the coven — better to answer steel standing than kneeling." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Or buy them off, if there is anything left to buy them with. A hold that fights the Warriors to the last is a hold that ends." }
+  ],
+  "choices": [
+    {
+      "id": "fight",
+      "label": "Meet them with rune and fire",
+      "test": { "stat": "mana", "vs": 55 },
+      "win": { "text": "Wards flare, the frost catches light, and the war-band breaks against Runehold's stones. Steel will think twice before it comes here again.", "effects": [{ "add": ["mana", -16] }, { "add": ["fracture", -10] }, { "add": ["faith", 8] }, { "clear_flag": "warriors_enemies" }] },
+      "lose": { "text": "Your fire is not enough. They come over the walls, and Runehold pays in blood and grain for the day you drew first.", "effects": [{ "add": ["mana", -16] }, { "add": ["provisions", -14] }, { "add": ["faith", -8] }, { "add": ["fracture", 6] }] }
+    },
+    {
+      "id": "buy",
+      "label": "Buy the old blood-debt off",
+      "requires": { "gte": ["coin", 20] },
+      "win": { "text": "It galls, and it costs, but coin closes the ledger. The war-band rides, and the grudge with them.", "effects": [{ "add": ["coin", -20] }, { "add": ["faith", -3] }, { "clear_flag": "warriors_enemies" }] }
+    }
+  ]
+}

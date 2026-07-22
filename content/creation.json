@@ -1,14 +1,14 @@
 {
-  "_note": "New-coven creation wizard. Steps run in order; kind='prose'|'coven'|'choice'. A choice's effects (same vocabulary as scenes) apply only when you Begin, so Back is safe. Each option's `saga` line is written into the Saga under 'The Founding'. Flags (player_*, appointed_*, deed_*, path_*, belief_*, warriors_*) let scenes key off the Archon's backstory. Some choices are abstract (colour, belief); others are concrete deeds (deed, path, warriors) — the KODP sprinkle.",
+  "_note": "New-coven creation wizard. Steps run in order; kind='prose'|'coven'|'choice'. A choice's effects (same vocabulary as scenes) apply only when you Begin, so Back is safe. Each option's `saga` line is written into the Saga under 'The Founding' (second person). Flags (player_*, appointed_*, deed_*, path_*, belief_*, warriors_*) let scenes key off the Archon's backstory. Some choices are abstract (colour, belief); others are concrete deeds (deed, path, warriors) — the KODP sprinkle. TODO: split into fixed + a random pool, and shuffle/subset answers per playthrough.",
   "steps": [
     {
       "id": "welcome",
       "kind": "prose",
       "title": "Keeper of the Sacred Flame",
       "body": [
-        "Once the Sacred Flame burned whole in the Secret Tower, and the world was whole with it. Then its keepers vanished, the Tower went dark &mdash; and the world began, slowly, to forget.",
-        "As the Tower&rsquo;s enemies gathered, the coven that kept it broke the Flame into <b>Embers</b> and scattered them beyond reach. One was carried to <b>Runehold</b>, to your hearth-rune. You are its Archon now. Let the fire die, and Runehold dies with it.",
-        "Before the saga begins, a few things must be settled &mdash; who you are, and what you have already done."
+        "There was an age when the Sacred Flame burned whole beneath the Secret Tower, and the world was whole with it. But the keepers of that fire went out from the Tower and did not return; the great door fell dark; and slowly, as frost creeps across a windowpane in the night, the world began to forget.",
+        "When the Tower&rsquo;s enemies gathered in that dark, those who had kept the fire would not let the whole of it be taken. They broke the Flame into <b>Embers</b>, and scattered to the far and hidden hearths of the world, each bearing a shard against the ruin. One such Ember came at last to <b>Runehold</b>, and burns there yet, in your hearth-rune. You are its keeper now, the appointed Archon &mdash; and should that fire fail, Runehold fails with it, and one more light goes out of the world.",
+        "Yet before the first season turns, let it be told who you are: your colour and your coming, and the hard things already done to keep this small fire alight."
       ]
     },
     {
@@ -23,13 +23,13 @@
       "title": "Your Colour",
       "prompt": "Every Wizard leans toward one of the seven schools. Which do you name your own?",
       "options": [
-        { "id": "red", "label": "Red", "desc": "Coin, courts, and the Gilded Reach. Power bought and sold.", "saga": "The new Archon claimed the Red for their own — the coin-magic of courts.", "effects": [{ "set_flag": "player_red" }, { "adjust_mastery": ["red", 12] }] },
-        { "id": "yellow", "label": "Yellow", "desc": "The bending of time and season. Patience made into power.", "saga": "The new Archon claimed the Yellow — the slow magic of time and season.", "effects": [{ "set_flag": "player_yellow" }, { "adjust_mastery": ["yellow", 12] }] },
-        { "id": "brown", "label": "Brown", "desc": "Earth, craft, and the practical working. Magic that feeds a hold.", "saga": "The new Archon claimed the Brown — plain, practical magic that feeds a hold.", "effects": [{ "set_flag": "player_brown" }, { "adjust_mastery": ["brown", 12] }] },
-        { "id": "green", "label": "Green", "desc": "Growing things and the wild. Nurture against the dark.", "saga": "The new Archon claimed the Green — the wild magic of growing things.", "effects": [{ "set_flag": "player_green" }, { "adjust_mastery": ["green", 12] }] },
-        { "id": "blue", "label": "Blue", "desc": "Lore and memory; the Bastion and its Athenaeum. Knowledge above all.", "saga": "The new Archon claimed the Blue — the lore-magic of the Bastion, and set memory above all.", "effects": [{ "set_flag": "player_blue" }, { "adjust_mastery": ["blue", 12] }, { "add": ["lore", 4] }] },
-        { "id": "purple", "label": "Purple", "desc": "Chaos and the unmaking of certainty. Power without a leash.", "saga": "The new Archon claimed the Purple — chaos-magic, power without a leash.", "effects": [{ "set_flag": "player_purple" }, { "adjust_mastery": ["purple", 12] }] },
-        { "id": "white", "label": "White", "desc": "Order and clarity against the Forgetting. The wall that holds.", "saga": "The new Archon claimed the White — the order-magic that holds against the Forgetting.", "effects": [{ "set_flag": "player_white" }, { "adjust_mastery": ["white", 12] }] }
+        { "id": "red", "label": "Red", "desc": "Coin, courts, and the Gilded Reach. Power bought and sold.", "saga": "You claimed the Red for your own — the coin-magic of courts.", "effects": [{ "set_flag": "player_red" }, { "adjust_mastery": ["red", 12] }] },
+        { "id": "yellow", "label": "Yellow", "desc": "The bending of time and season. Patience made into power.", "saga": "You claimed the Yellow — the slow magic of time and season.", "effects": [{ "set_flag": "player_yellow" }, { "adjust_mastery": ["yellow", 12] }] },
+        { "id": "brown", "label": "Brown", "desc": "Earth, craft, and the practical working. Magic that feeds a hold.", "saga": "You claimed the Brown — plain, practical magic that feeds a hold.", "effects": [{ "set_flag": "player_brown" }, { "adjust_mastery": ["brown", 12] }] },
+        { "id": "green", "label": "Green", "desc": "Growing things and the wild. Nurture against the dark.", "saga": "You claimed the Green — the wild magic of growing things.", "effects": [{ "set_flag": "player_green" }, { "adjust_mastery": ["green", 12] }] },
+        { "id": "blue", "label": "Blue", "desc": "Lore and memory; the Bastion and its Athenaeum. Knowledge above all.", "saga": "You claimed the Blue — the lore-magic of the Bastion, and set memory above all.", "effects": [{ "set_flag": "player_blue" }, { "adjust_mastery": ["blue", 12] }, { "add": ["lore", 4] }] },
+        { "id": "purple", "label": "Purple", "desc": "Chaos and the unmaking of certainty. Power without a leash.", "saga": "You claimed the Purple — chaos-magic, power without a leash.", "effects": [{ "set_flag": "player_purple" }, { "adjust_mastery": ["purple", 12] }] },
+        { "id": "white", "label": "White", "desc": "Order and clarity against the Forgetting. The wall that holds.", "saga": "You claimed the White — the order-magic that holds against the Forgetting.", "effects": [{ "set_flag": "player_white" }, { "adjust_mastery": ["white", 12] }] }
       ]
     },
     {
@@ -38,9 +38,9 @@
       "title": "How You Came to Lead",
       "prompt": "The seat of Archon was not empty. How did it become yours?",
       "options": [
-        { "id": "named", "label": "The dying keeper named you", "desc": "The last Archon gave you the fire with their final breath. The coven honours the choice — and watches to see if it was wise.", "saga": "They came to the seat by the dying keeper’s last word, and the coven honoured the choice.", "effects": [{ "set_flag": "appointed_named" }, { "add": ["faith", 5] }] },
-        { "id": "raised", "label": "The coven raised you", "desc": "They chose you from among themselves. Their faith in you is real — and yours to keep or lose.", "saga": "The coven raised them to the seat with open hands.", "effects": [{ "set_flag": "appointed_raised" }, { "add": ["faith", 8] }] },
-        { "id": "usurper", "label": "You took it by force", "desc": "The old Archon is a Forgotten Soul now, and not by the Flame’s choosing. The coven follows — warily.", "saga": "They took the seat by force; the old Archon is a Forgotten Soul, and not by the Flame’s will.", "effects": [{ "set_flag": "appointed_usurper" }, { "add": ["faith", -6] }, { "add": ["flamesRegard", 5] }] }
+        { "id": "named", "label": "The dying keeper named you", "desc": "The last Archon gave you the fire with their final breath. The coven honours the choice — and watches to see if it was wise.", "saga": "You came to the seat by the dying keeper's last word, and the coven honoured the choice.", "effects": [{ "set_flag": "appointed_named" }, { "add": ["faith", 5] }] },
+        { "id": "raised", "label": "The coven raised you", "desc": "They chose you from among themselves. Their faith in you is real — and yours to keep or lose.", "saga": "The coven raised you to the seat with open hands.", "effects": [{ "set_flag": "appointed_raised" }, { "add": ["faith", 8] }] },
+        { "id": "usurper", "label": "You took it by force", "desc": "The old Archon is a Forgotten Soul now, and not by the Flame's choosing. The coven follows — warily.", "saga": "You took the seat by force; the old Archon is a Forgotten Soul, and not by the Flame's will.", "effects": [{ "set_flag": "appointed_usurper" }, { "add": ["faith", -6] }, { "add": ["flamesRegard", 5] }] }
       ]
     },
     {
@@ -49,9 +49,9 @@
       "title": "The Winter the Ember Nearly Died",
       "prompt": "Last winter the hearth-rune guttered low, and something had to be given to keep it lit. What did you give?",
       "options": [
-        { "id": "archives", "label": "You burned the old archives", "desc": "You fed the coven’s oldest books to the fire — knowledge traded for warmth, and the fire held.", "saga": "In the winter the Ember guttered low, they burned the old archives to keep it lit — knowledge for warmth.", "effects": [{ "set_flag": "deed_burned_archives" }, { "add": ["lore", -8] }, { "add": ["faith", 4] }, { "add": ["flamesRegard", 4] }] },
-        { "id": "sold", "label": "You sold a Wizard's service to Red", "desc": "You pledged one of your own to the Gilded Reach for a year, and bought fuel enough with the coin.", "saga": "In the lean winter, they pledged a Wizard’s year of service to the Gilded Reach to buy the fire its fuel.", "effects": [{ "set_flag": "deed_sold_red" }, { "adjust_cult": ["red", 10] }, { "add": ["coin", 8] }] },
-        { "id": "cold", "label": "You let the eldest go cold", "desc": "You gave the fire what warmth there was, and let three of the old die of the frost. You keep their names.", "saga": "In the killing frost, they let three of the eldest go cold rather than let the Ember die — and have not forgotten their names.", "effects": [{ "set_flag": "deed_cold_dead" }, { "add": ["faith", -8] }, { "add": ["flamesRegard", 8] }] }
+        { "id": "archives", "label": "You burned the old archives", "desc": "You fed the coven's oldest books to the fire — knowledge traded for warmth, and the fire held.", "saga": "In the winter the Ember guttered low, you burned the old archives to keep it lit — knowledge for warmth.", "effects": [{ "set_flag": "deed_burned_archives" }, { "add": ["lore", -8] }, { "add": ["faith", 4] }, { "add": ["flamesRegard", 4] }] },
+        { "id": "sold", "label": "You sold a Wizard's service to Red", "desc": "You pledged one of your own to the Gilded Reach for a year, and bought fuel enough with the coin.", "saga": "In the lean winter, you pledged a Wizard's year of service to the Gilded Reach to buy the fire its fuel.", "effects": [{ "set_flag": "deed_sold_red" }, { "adjust_cult": ["red", 10] }, { "add": ["coin", 8] }] },
+        { "id": "cold", "label": "You let the eldest go cold", "desc": "You gave the fire what warmth there was, and let three of the old die of the frost. You keep their names.", "saga": "In the killing frost, you let three of the eldest go cold rather than let the Ember die — and you keep their names still.", "effects": [{ "set_flag": "deed_cold_dead" }, { "add": ["faith", -8] }, { "add": ["flamesRegard", 8] }] }
       ]
     },
     {
@@ -60,9 +60,9 @@
       "title": "Your First Working",
       "prompt": "Every Wizard remembers the first magic they ever worked. What was yours?",
       "options": [
-        { "id": "candle", "label": "A candle that would not go out", "desc": "A small, stubborn flame you lit as a child and could not put out for three days. You have kept fires ever since.", "saga": "Their first working was a candle-flame that would not go out — a small, stubborn light.", "effects": [{ "set_flag": "path_candle" }, { "add": ["mana", 6] }] },
-        { "id": "lock", "label": "A locked door, opened with a word", "desc": "A door barred against you swung wide at a word you didn’t know you knew. Nothing has been quite closed to you since.", "saga": "Their first working was a locked door opened with a single spoken word.", "effects": [{ "set_flag": "path_lock" }, { "add": ["lore", 5] }] },
-        { "id": "wound", "label": "A wound you closed by will", "desc": "You sealed a dying friend’s wound with nothing but your will — or you didn’t, and it has driven you ever since.", "saga": "Their first working was a wound closed by will alone — or one that never would close again.", "effects": [{ "set_flag": "path_wound" }, { "add": ["faith", 5] }] }
+        { "id": "candle", "label": "A candle that would not go out", "desc": "A small, stubborn flame you lit as a child and could not put out for three days. You have kept fires ever since.", "saga": "Your first working was a candle-flame that would not go out — a small, stubborn light.", "effects": [{ "set_flag": "path_candle" }, { "add": ["mana", 6] }] },
+        { "id": "lock", "label": "A locked door, opened with a word", "desc": "A door barred against you swung wide at a word you didn't know you knew. Nothing has been quite closed to you since.", "saga": "Your first working was a locked door opened with a single spoken word.", "effects": [{ "set_flag": "path_lock" }, { "add": ["lore", 5] }] },
+        { "id": "wound", "label": "A wound you closed by will", "desc": "You sealed a dying friend's wound with nothing but your will — or you didn't, and it has driven you ever since.", "saga": "Your first working was a wound closed by will alone — or one that never would close again.", "effects": [{ "set_flag": "path_wound" }, { "add": ["faith", 5] }] }
       ]
     },
     {
@@ -71,9 +71,9 @@
       "title": "What Magic Is",
       "prompt": "The wise argue over what magic truly is. What do you believe?",
       "options": [
-        { "id": "memory", "label": "Memory", "desc": "Magic is the world remembering how it once worked — and it is being forgotten.", "saga": "They hold that magic is the world’s own memory, and that it is going out.", "effects": [{ "set_flag": "belief_memory" }, { "add": ["lore", 6] }] },
-        { "id": "gift", "label": "A gift", "desc": "Magic is given, from the Flame or something older, to those who are meant to carry it.", "saga": "They hold that magic is a gift, given to those meant to carry it.", "effects": [{ "set_flag": "belief_gift" }, { "add": ["faith", 5] }] },
-        { "id": "tool", "label": "A tool", "desc": "Magic is a power like any other, to be wielded by whoever is strong enough to hold it.", "saga": "They hold that magic is a tool, for whoever is strong enough to wield it.", "effects": [{ "set_flag": "belief_tool" }, { "add": ["mana", 6] }] }
+        { "id": "memory", "label": "Memory", "desc": "Magic is the world remembering how it once worked — and it is being forgotten.", "saga": "You hold that magic is the world's own memory, and that it is going out.", "effects": [{ "set_flag": "belief_memory" }, { "add": ["lore", 6] }] },
+        { "id": "gift", "label": "A gift", "desc": "Magic is given, from the Flame or something older, to those who are meant to carry it.", "saga": "You hold that magic is a gift, given to those meant to carry it.", "effects": [{ "set_flag": "belief_gift" }, { "add": ["faith", 5] }] },
+        { "id": "tool", "label": "A tool", "desc": "Magic is a power like any other, to be wielded by whoever is strong enough to hold it.", "saga": "You hold that magic is a tool, for whoever is strong enough to wield it.", "effects": [{ "set_flag": "belief_tool" }, { "add": ["mana", 6] }] }
       ]
     },
     {
@@ -82,9 +82,9 @@
       "title": "Steel and Rune",
       "prompt": "The last time the Warriors and Runehold met over drawn steel, what did you do?",
       "options": [
-        { "id": "allies", "label": "You stood with them", "desc": "You fought shoulder to shoulder with the Warriors against a common threat, and the hold held. Steel remembers a debt.", "saga": "The last time steel and rune met at Runehold, they stood shoulder to shoulder with the Warriors, and the hold held.", "effects": [{ "set_flag": "warriors_allies" }, { "add": ["fracture", -4] }] },
-        { "id": "turned", "label": "You turned them away", "desc": "You met the Warriors at the gate with cold courtesy and no bloodshed, and sent them on their road. They will not forget the slight.", "saga": "The last time the Warriors came to Runehold’s gate, they were turned away with cold courtesy and no bloodshed.", "effects": [{ "set_flag": "warriors_disdain" }, { "add": ["faith", 3] }] },
-        { "id": "struck", "label": "You struck first", "desc": "You did not wait for the first blow. Steel has remembered Runehold ever since — and sharpens for it.", "saga": "The last time steel threatened Runehold, they struck first — and steel has remembered it since.", "effects": [{ "set_flag": "warriors_enemies" }, { "add": ["fracture", 4] }, { "add": ["mana", 4] }] }
+        { "id": "allies", "label": "You stood with them", "desc": "You fought shoulder to shoulder with the Warriors against a common threat, and the hold held. Steel remembers a debt.", "saga": "The last time steel and rune met at Runehold, you stood shoulder to shoulder with the Warriors, and the hold held.", "effects": [{ "set_flag": "warriors_allies" }, { "add": ["fracture", -4] }] },
+        { "id": "turned", "label": "You turned them away", "desc": "You met the Warriors at the gate with cold courtesy and no bloodshed, and sent them on their road. They will not forget the slight.", "saga": "The last time the Warriors came to Runehold's gate, you turned them away with cold courtesy and no bloodshed.", "effects": [{ "set_flag": "warriors_disdain" }, { "add": ["faith", 3] }] },
+        { "id": "struck", "label": "You struck first", "desc": "You did not wait for the first blow. Steel has remembered Runehold ever since — and sharpens for it.", "saga": "The last time steel threatened Runehold, you struck first — and steel has remembered it since.", "effects": [{ "set_flag": "warriors_enemies" }, { "add": ["fracture", 4] }, { "add": ["mana", 4] }] }
       ]
     }
   ]

@@ -27,12 +27,17 @@ export function createInitialState(seed = 1) {
     // holds. SEPARATE from cults[] (that is standing/reputation with the cult). Mastery
     // raises the odds on that school's workings; casting a working nudges it up.
     mastery: { red: 0, yellow: 0, brown: 0, green: 0, blue: 0, purple: 0, white: 0 },
+    roles: {},          // member.id -> role id (Steward, Warden, …) — passive per-season effects
+    nextMemberId: 4,    // running id counter for recruits (the opening ring is wz-0..3)
   };
   state.circle = rollCircle(state);
   // Opening mastery reflects who stands in the Circle: each Wizard lends practice to their school.
   for (const m of state.circle) state.mastery[m.school] += m.rank === 'ring-leader' ? 28 : m.rank === 'adept' ? 22 : 16;
   return state;
 }
+
+// The Circle may grow to this many through recruitment.
+export const MAX_CIRCLE = 7;
 
 const SEASON_NAMES = ['Thaw', 'Highsun', 'Emberfall', 'Deepfrost'];
 export const seasonName = (s) => SEASON_NAMES[s % 4];
@@ -111,6 +116,27 @@ export function rollCircle(state) {
       boldness: rollRange(state, 15, 85), piety: rollRange(state, 15, 85), temper: rollRange(state, 15, 85),
     };
   });
+}
+
+// Roll a single new Wizard for recruitment (an apprentice by default). Name is drawn
+// from those not already in the Circle or among the Souls; school/class are free.
+export function rollMember(state, rank = 'apprentice') {
+  const used = new Set([...state.circle, ...state.souls].map((m) => m.name));
+  const pool = NAMES.filter(([n]) => !used.has(n));
+  const [name, gender] = (pool.length ? pool : NAMES)[pickIndex(state, (pool.length ? pool : NAMES).length)];
+  const cls = CLASSES[pickIndex(state, CLASSES.length)];
+  const school = CULTS[pickIndex(state, CULTS.length)];
+  const bias = CLASS_BIAS[cls] || {};
+  const rankBase = { 'ring-leader': 56, adept: 50, apprentice: 38 }[rank] ?? 40;
+  const rankAge = { 'ring-leader': 54, adept: 38, apprentice: 22 }[rank] ?? 28;
+  const stat = (k) => clampStat(rankBase + (bias[k] || 0) + rollRange(state, -14, 14));
+  const id = `wz-${state.nextMemberId != null ? state.nextMemberId++ : state.circle.length}`;
+  return {
+    id, name, gender, school, class: cls, rank,
+    age: rankAge + rollRange(state, -6, 8),
+    power: stat('power'), wisdom: stat('wisdom'), guile: stat('guile'), courage: stat('courage'),
+    boldness: rollRange(state, 15, 85), piety: rollRange(state, 15, 85), temper: rollRange(state, 15, 85),
+  };
 }
 
 // ---- casting: pick which Circle member fills a scene role ("a shape, not a name") ----

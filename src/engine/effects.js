@@ -1,6 +1,6 @@
 // effects.js — the ONLY place state mutates. Centralized for debuggability:
 // if the state is ever wrong, there is exactly one file to look in.
-import { pickIndex, chronicle } from './state.js';
+import { pickIndex, chronicle, rollMember, MAX_CIRCLE } from './state.js';
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
@@ -36,6 +36,14 @@ function transformMember(state, spec) {
   chronicle(state, `${m.name} stepped into the Flame and did not return as ${m.name}. A Forgotten Soul now walks the Runiverse.`);
 }
 
+// A new Wizard joins the Circle (up to MAX_CIRCLE). Rolled fresh, seeded.
+function recruitMember(state) {
+  if (state.circle.length >= MAX_CIRCLE) return;
+  const m = rollMember(state, 'apprentice');
+  state.circle.push(m);
+  chronicle(state, `${m.name}, a ${m.school} ${m.class}, is welcomed into the Circle.`);
+}
+
 export function applyEffects(state, effects = []) {
   for (const e of effects) {
     if (e.add) addPath(state, e.add[0], e.add[1]);
@@ -46,6 +54,7 @@ export function applyEffects(state, effects = []) {
     else if (e.clear_flag) delete state.flags[e.clear_flag];
     else if (e.unlock) state.followups.push(e.unlock);
     else if (e.transform_member) transformMember(state, e.transform_member);
+    else if (e.recruit_member) recruitMember(state);
   }
   return state;
 }

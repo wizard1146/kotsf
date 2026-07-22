@@ -1,0 +1,11 @@
+{
+  "_note": "Advisor tasks. Assign a role to a Circle member (Coven → tap a Wizard → Task). Each season it grants dir × scaled(member's `stat`) to `pressure` — a competent Steward feeds the coven, a strong Warden holds the Fracture, etc. One role per member; a member can hold none.",
+  "roles": [
+    { "id": "steward",       "label": "Steward",       "desc": "Oversees the granary and stores.",            "stat": "wisdom",  "pressure": "provisions", "dir": 1 },
+    { "id": "warden",        "label": "Warden",        "desc": "Walks the rune-wards against the Fracture.",  "stat": "power",   "pressure": "fracture",   "dir": -1 },
+    { "id": "loremaster",    "label": "Loremaster",    "desc": "Deepens the runes against the Forgetting.",   "stat": "wisdom",  "pressure": "lore",       "dir": 1 },
+    { "id": "quartermaster", "label": "Quartermaster", "desc": "Works the market roads for coin.",            "stat": "guile",   "pressure": "coin",       "dir": 1 },
+    { "id": "chaplain",      "label": "Chaplain",      "desc": "Keeps the coven's heart through the dark.",   "stat": "courage", "pressure": "faith",      "dir": 1 },
+    { "id": "conjurer",      "label": "Conjurer",      "desc": "Tends the coven's flow of mana.",             "stat": "power",   "pressure": "mana",       "dir": 1 }
+  ]
+}

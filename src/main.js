@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v31';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v32';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -27,6 +27,7 @@ let actions = [];              // per-screen actions (Workings, Fields, …): re
 let counsel = {};              // screen id -> ambient advisor line pool (footer counsel off-scene)
 let portraits = [];            // member portrait filenames (assets/portraits/*.webp)
 let creationDefs = [];         // new-coven creation wizard steps (from bundle)
+let rolesDefs = [];            // advisor task/role definitions (from bundle)
 
 // app-shell UI state
 let screen = 'splash';         // 'splash' | 'menu' | 'create' | 'game'
@@ -122,7 +123,7 @@ function setOption(key, val) {
 function advanceToScene() {
   for (let i = 0; i < 16; i++) {
     const prevYear = state.year;
-    advanceTime(state);
+    advanceTime(state, rolesDefs);
     end = checkEnd(state);
     if (end) { phase = 'end'; current = null; return; }
     if (state.year !== prevYear) { openYearRecap(prevYear); return; }  // pause at year's end
@@ -268,7 +269,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -363,6 +364,10 @@ function remeasureRails() { updateRuneArrows(); if (screen === 'game' && setting
 window.addEventListener('resize', remeasureRails);
 // turning the device (portrait↔landscape) re-lays out via CSS; just re-measure rails
 window.addEventListener('orientationchange', remeasureRails);
+// leaving the app (to another app) drops fullscreen + the orientation lock; try to
+// re-take them when we come back to the foreground (best-effort — some browsers need
+// a fresh tap, which the next in-game touch provides).
+document.addEventListener('visibilitychange', () => { if (!document.hidden && screen === 'game') goFullscreenLandscape(); });
 
 app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
@@ -395,6 +400,13 @@ app.addEventListener('click', (e) => {
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
     case 'game-view': gameView = el.dataset.view; selectedMember = null; if (gameView === 'saga') sagaPage = null; draw(); break;
     case 'view-member': gameView = 'coven'; selectedMember = el.dataset.member; draw(); break;
+    case 'assign-role': {
+      if (!state.roles) state.roles = {};
+      const r = el.dataset.role;
+      if (r) state.roles[el.dataset.member] = r; else delete state.roles[el.dataset.member];
+      draw();
+      break;
+    }
     case 'close-member': selectedMember = null; draw(); break;
     case 'runes-scroll': scrollRunes(Number(el.dataset.dir)); break;
     case 'saga-page': {
@@ -474,6 +486,7 @@ window.addEventListener('keydown', (e) => {
   counsel = bundle.counsel || {};
   portraits = bundle.portraits || [];
   creationDefs = bundle.creation || [];
+  rolesDefs = bundle.roles || [];
   applySettings();
   screen = 'splash'; overlay = null;
   draw();

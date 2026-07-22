@@ -1,0 +1,27 @@
+{
+  "id": "the-old-archons-kin",
+  "type": "quest",
+  "tags": ["war", "coven"],
+  "title": "The Old Archon's Kin",
+  "weight": 5,
+  "trigger": { "flag": "appointed_usurper" },
+  "intro": "A Warrior comes to Runehold alone and unarmed, and asks for you by the name of the one you took the seat from. She is the old Archon's sister, and she has brought steel-kin to the treeline behind her. \"You made my brother a Forgotten Soul for a chair by a fire,\" she says. \"Give me a reason not to make you one.\"",
+  "advisors": [
+    { "cast": { "trait": { "boldness": "low" } }, "text": "This was always going to come for us, Archon. What we did in the taking, we answer for now. Speak carefully." },
+    { "cast": { "class": "charmer" }, "text": "Grief can be turned, if you are honest with it. Offer her a truth, or a place, before you offer her a fight." }
+  ],
+  "choices": [
+    {
+      "id": "atone",
+      "label": "Offer her a place in the Circle, and the truth",
+      "test": { "stat": "faith", "vs": 50 },
+      "win": { "text": "You tell her plainly what you did and why, and offer her brother's seat at the Circle rather than his grave. It is not forgiveness — but she stays, and the steel goes home.", "effects": [{ "add": ["faith", 8] }, { "recruit_member": true }, { "clear_flag": "appointed_usurper" }] },
+      "lose": { "text": "The words ring hollow even as you say them. She spits at the hearth-rune and rides, and the treeline empties — for now. The debt is not paid.", "effects": [{ "add": ["faith", -5] }, { "add": ["fracture", 6] }] }
+    },
+    {
+      "id": "defy",
+      "label": "Tell her the seat was taken and will be kept",
+      "win": { "text": "You give her no ground. She nods, almost respecting it, and promises to return with more than words. Runehold has an enemy with a name now.", "effects": [{ "add": ["fracture", 8] }, { "add": ["flamesRegard", 4] }, { "set_flag": "kin_feud" }] }
+    }
+  ]
+}

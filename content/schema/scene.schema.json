@@ -89,7 +89,8 @@
         "set_flag": { "type": "string" },
         "clear_flag": { "type": "string" },
         "unlock": { "type": "string" },
-        "transform_member": { "type": "string" }
+        "transform_member": { "type": "string" },
+        "recruit_member": { "type": "boolean" }
       }
     }
   }

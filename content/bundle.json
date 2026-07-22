@@ -190,6 +190,114 @@
       ]
     },
     {
+      "id": "a-wandering-wizard",
+      "type": "interactive",
+      "tags": [
+        "coven"
+      ],
+      "title": "A Wandering Wizard",
+      "weight": 4,
+      "trigger": {
+        "gte": [
+          "faith",
+          55
+        ]
+      },
+      "intro": "A Wizard comes to Runehold's gate out of the ash — road-worn, wary, and looking for a hearth that still burns. \"I can work,\" they say, showing a palm scarred with old runes. \"I ask only a place by the fire.\"",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
+          "text": "Another pair of hands and another voice at the Circle, Archon. We are too few as it is."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "Or another mouth to feed, and a stranger who knows where our Ember sleeps. Weigh them before you open the door."
+        }
+      ],
+      "choices": [
+        {
+          "id": "welcome",
+          "label": "Welcome them into the Circle",
+          "win": {
+            "text": "You give the wanderer a place by the fire, and in the giving Runehold grows by one. Let us hope they were worth the bread.",
+            "effects": [
+              {
+                "recruit_member": true
+              },
+              {
+                "add": [
+                  "provisions",
+                  -4
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "test",
+          "label": "Test their craft before you decide",
+          "test": {
+            "stat": "lore",
+            "vs": 45
+          },
+          "win": {
+            "text": "You set them a hard working, and they meet it. A true Wizard — and now one of yours.",
+            "effects": [
+              {
+                "recruit_member": true
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "The working slips their grasp; whatever they were, they are not what Runehold needs. You send them on with bread and no place at the fire.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  -2
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "turn-away",
+          "label": "Turn them away — the fire is small enough",
+          "win": {
+            "text": "You send the wanderer back to the road. The coven stays as it is: few, and known.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "a-warrior-at-the-gate",
       "type": "interactive",
       "tags": [
@@ -473,6 +581,140 @@
                   "faith",
                   3
                 ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "steel-at-the-gate",
+      "type": "quest",
+      "tags": [
+        "war"
+      ],
+      "title": "Steel at the Gate",
+      "weight": 6,
+      "trigger": {
+        "all": [
+          {
+            "flag": "warriors_enemies"
+          },
+          {
+            "gte": [
+              "fracture",
+              40
+            ]
+          }
+        ]
+      },
+      "intro": "It came due at last. A war-band of the Warrior-Guild stands in Runehold's frost at first light — the same steel you drew on, years ago, come to collect. \"You struck first, Wizard,\" their leader says, plain as weather. \"We have long memories, and short patience left.\"",
+      "advisors": [
+        {
+          "cast": {
+            "most": "courage"
+          },
+          "text": "We knew this day would come the moment you chose it, Archon. Muster the coven — better to answer steel standing than kneeling."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "Or buy them off, if there is anything left to buy them with. A hold that fights the Warriors to the last is a hold that ends."
+        }
+      ],
+      "choices": [
+        {
+          "id": "fight",
+          "label": "Meet them with rune and fire",
+          "test": {
+            "stat": "mana",
+            "vs": 55
+          },
+          "win": {
+            "text": "Wards flare, the frost catches light, and the war-band breaks against Runehold's stones. Steel will think twice before it comes here again.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -16
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  8
+                ]
+              },
+              {
+                "clear_flag": "warriors_enemies"
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your fire is not enough. They come over the walls, and Runehold pays in blood and grain for the day you drew first.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -16
+                ]
+              },
+              {
+                "add": [
+                  "provisions",
+                  -14
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "buy",
+          "label": "Buy the old blood-debt off",
+          "requires": {
+            "gte": [
+              "coin",
+              20
+            ]
+          },
+          "win": {
+            "text": "It galls, and it costs, but coin closes the ledger. The war-band rides, and the grudge with them.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -20
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -3
+                ]
+              },
+              {
+                "clear_flag": "warriors_enemies"
               }
             ]
           }
@@ -1358,6 +1600,94 @@
       ]
     },
     {
+      "id": "the-forgetting-warband",
+      "type": "interactive",
+      "tags": [
+        "war"
+      ],
+      "title": "The Warband That Forgot",
+      "weight": 3,
+      "trigger": {
+        "lt": [
+          "lore",
+          32
+        ]
+      },
+      "intro": "A Warrior-Guild patrol straggles to Runehold's gate, and something is wrong with them. They have forgotten the drill — how a shield-wall locks, which hand holds the spear. The Forgetting, it seems, does not spare steel. Their sergeant asks, ashamed, if the Wizards can put the knowing back into their heads.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "So it takes the Warriors too, Archon. If even the drill can be forgotten, no craft is safe — magic or steel. Help them, and they will not forget who did."
+        },
+        {
+          "cast": {
+            "trait": {
+              "piety": "low"
+            }
+          },
+          "text": "Let steel learn how it feels. Why spend our lore teaching men to kill us better?"
+        }
+      ],
+      "choices": [
+        {
+          "id": "help",
+          "label": "Work a rune of remembering for them",
+          "requires": {
+            "gte": [
+              "mana",
+              10
+            ]
+          },
+          "win": {
+            "text": "You set the drill back into their hands with a working, and the shield-wall locks true again. The Guild will remember the debt — and the omen.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -10
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "label": "Send them off with their forgetting",
+          "win": {
+            "text": "You turn the patrol away, half-armed and half-remembering. Word spreads that Runehold would not help — and that the Forgetting has begun to eat the Warriors too.",
+            "effects": [
+              {
+                "add": [
+                  "fracture",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-hungry-season",
       "type": "interactive",
       "tags": [
@@ -1528,6 +1858,104 @@
               },
               {
                 "set_flag": "knows_flame_is_memory"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-old-archons-kin",
+      "type": "quest",
+      "tags": [
+        "war",
+        "coven"
+      ],
+      "title": "The Old Archon's Kin",
+      "weight": 5,
+      "trigger": {
+        "flag": "appointed_usurper"
+      },
+      "intro": "A Warrior comes to Runehold alone and unarmed, and asks for you by the name of the one you took the seat from. She is the old Archon's sister, and she has brought steel-kin to the treeline behind her. \"You made my brother a Forgotten Soul for a chair by a fire,\" she says. \"Give me a reason not to make you one.\"",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "This was always going to come for us, Archon. What we did in the taking, we answer for now. Speak carefully."
+        },
+        {
+          "cast": {
+            "class": "charmer"
+          },
+          "text": "Grief can be turned, if you are honest with it. Offer her a truth, or a place, before you offer her a fight."
+        }
+      ],
+      "choices": [
+        {
+          "id": "atone",
+          "label": "Offer her a place in the Circle, and the truth",
+          "test": {
+            "stat": "faith",
+            "vs": 50
+          },
+          "win": {
+            "text": "You tell her plainly what you did and why, and offer her brother's seat at the Circle rather than his grave. It is not forgiveness — but she stays, and the steel goes home.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  8
+                ]
+              },
+              {
+                "recruit_member": true
+              },
+              {
+                "clear_flag": "appointed_usurper"
+              }
+            ]
+          },
+          "lose": {
+            "text": "The words ring hollow even as you say them. She spits at the hearth-rune and rides, and the treeline empties — for now. The debt is not paid.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -5
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "defy",
+          "label": "Tell her the seat was taken and will be kept",
+          "win": {
+            "text": "You give her no ground. She nods, almost respecting it, and promises to return with more than words. Runehold has an enemy with a name now.",
+            "effects": [
+              {
+                "add": [
+                  "fracture",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              },
+              {
+                "set_flag": "kin_feud"
               }
             ]
           }
@@ -2086,6 +2514,140 @@
                 "add": [
                   "flamesRegard",
                   -8
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-warrior-levy",
+      "type": "interactive",
+      "tags": [
+        "war"
+      ],
+      "title": "The Warrior-Guild's Levy",
+      "weight": 5,
+      "intro": "Riders of the Warrior-Guild draw up before Runehold's gate, banners stiff in the cold. Their captain does not dismount. \"The roads are ours to keep, and keeping costs,\" she calls. \"Grain, or coin, or the loan of a Wizard's fire for the season. Choose.\"",
+      "advisors": [
+        {
+          "cast": {
+            "school": "white"
+          },
+          "if": {
+            "flag": "warriors_allies"
+          },
+          "text": "They stood with us once, Archon. Give freely, and for once the debt runs the other way."
+        },
+        {
+          "cast": {
+            "class": "necromancer"
+          },
+          "if": {
+            "flag": "warriors_enemies"
+          },
+          "text": "They remember the day you struck first, and they have come to make you pay for it in grain. Give nothing you don't have to."
+        },
+        {
+          "cast": {
+            "most": "guile"
+          },
+          "text": "Every road out of this costs. Coin we can spare; grain we cannot; a Wizard's fire, never lightly."
+        }
+      ],
+      "choices": [
+        {
+          "id": "grain",
+          "label": "Pay in grain",
+          "win": {
+            "text": "The wagons roll out heavy, and the riders let Runehold's roads alone another season.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  -12
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "coin",
+          "label": "Pay in coin",
+          "requires": {
+            "gte": [
+              "coin",
+              14
+            ]
+          },
+          "win": {
+            "text": "Coin changes hands, and the captain touches her helm in something like courtesy before she rides.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  -14
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse the levy",
+          "test": {
+            "stat": "faith",
+            "vs": 50
+          },
+          "win": {
+            "text": "You meet the captain's eye and hold it, and something in your bearing makes the price not worth the taking. She rides — this time.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  4
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "Your refusal lands as insult. The riders take what they came for and a little more, and the roads grow meaner toward Runehold.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -3
                 ]
               }
             ]
@@ -3240,9 +3802,9 @@
       "kind": "prose",
       "title": "Keeper of the Sacred Flame",
       "body": [
-        "Once the Sacred Flame burned whole in the Secret Tower, and the world was whole with it. Then its keepers vanished, the Tower went dark &mdash; and the world began, slowly, to forget.",
-        "As the Tower&rsquo;s enemies gathered, the coven that kept it broke the Flame into <b>Embers</b> and scattered them beyond reach. One was carried to <b>Runehold</b>, to your hearth-rune. You are its Archon now. Let the fire die, and Runehold dies with it.",
-        "Before the saga begins, a few things must be settled &mdash; who you are, and what you have already done."
+        "There was an age when the Sacred Flame burned whole beneath the Secret Tower, and the world was whole with it. But the keepers of that fire went out from the Tower and did not return; the great door fell dark; and slowly, as frost creeps across a windowpane in the night, the world began to forget.",
+        "When the Tower&rsquo;s enemies gathered in that dark, those who had kept the fire would not let the whole of it be taken. They broke the Flame into <b>Embers</b>, and scattered to the far and hidden hearths of the world, each bearing a shard against the ruin. One such Ember came at last to <b>Runehold</b>, and burns there yet, in your hearth-rune. You are its keeper now, the appointed Archon &mdash; and should that fire fail, Runehold fails with it, and one more light goes out of the world.",
+        "Yet before the first season turns, let it be told who you are: your colour and your coming, and the hard things already done to keep this small fire alight."
       ]
     },
     {
@@ -3261,7 +3823,7 @@
           "id": "red",
           "label": "Red",
           "desc": "Coin, courts, and the Gilded Reach. Power bought and sold.",
-          "saga": "The new Archon claimed the Red for their own — the coin-magic of courts.",
+          "saga": "You claimed the Red for your own — the coin-magic of courts.",
           "effects": [
             {
               "set_flag": "player_red"
@@ -3278,7 +3840,7 @@
           "id": "yellow",
           "label": "Yellow",
           "desc": "The bending of time and season. Patience made into power.",
-          "saga": "The new Archon claimed the Yellow — the slow magic of time and season.",
+          "saga": "You claimed the Yellow — the slow magic of time and season.",
           "effects": [
             {
               "set_flag": "player_yellow"
@@ -3295,7 +3857,7 @@
           "id": "brown",
           "label": "Brown",
           "desc": "Earth, craft, and the practical working. Magic that feeds a hold.",
-          "saga": "The new Archon claimed the Brown — plain, practical magic that feeds a hold.",
+          "saga": "You claimed the Brown — plain, practical magic that feeds a hold.",
           "effects": [
             {
               "set_flag": "player_brown"
@@ -3312,7 +3874,7 @@
           "id": "green",
           "label": "Green",
           "desc": "Growing things and the wild. Nurture against the dark.",
-          "saga": "The new Archon claimed the Green — the wild magic of growing things.",
+          "saga": "You claimed the Green — the wild magic of growing things.",
           "effects": [
             {
               "set_flag": "player_green"
@@ -3329,7 +3891,7 @@
           "id": "blue",
           "label": "Blue",
           "desc": "Lore and memory; the Bastion and its Athenaeum. Knowledge above all.",
-          "saga": "The new Archon claimed the Blue — the lore-magic of the Bastion, and set memory above all.",
+          "saga": "You claimed the Blue — the lore-magic of the Bastion, and set memory above all.",
           "effects": [
             {
               "set_flag": "player_blue"
@@ -3352,7 +3914,7 @@
           "id": "purple",
           "label": "Purple",
           "desc": "Chaos and the unmaking of certainty. Power without a leash.",
-          "saga": "The new Archon claimed the Purple — chaos-magic, power without a leash.",
+          "saga": "You claimed the Purple — chaos-magic, power without a leash.",
           "effects": [
             {
               "set_flag": "player_purple"
@@ -3369,7 +3931,7 @@
           "id": "white",
           "label": "White",
           "desc": "Order and clarity against the Forgetting. The wall that holds.",
-          "saga": "The new Archon claimed the White — the order-magic that holds against the Forgetting.",
+          "saga": "You claimed the White — the order-magic that holds against the Forgetting.",
           "effects": [
             {
               "set_flag": "player_white"
@@ -3394,7 +3956,7 @@
           "id": "named",
           "label": "The dying keeper named you",
           "desc": "The last Archon gave you the fire with their final breath. The coven honours the choice — and watches to see if it was wise.",
-          "saga": "They came to the seat by the dying keeper’s last word, and the coven honoured the choice.",
+          "saga": "You came to the seat by the dying keeper's last word, and the coven honoured the choice.",
           "effects": [
             {
               "set_flag": "appointed_named"
@@ -3411,7 +3973,7 @@
           "id": "raised",
           "label": "The coven raised you",
           "desc": "They chose you from among themselves. Their faith in you is real — and yours to keep or lose.",
-          "saga": "The coven raised them to the seat with open hands.",
+          "saga": "The coven raised you to the seat with open hands.",
           "effects": [
             {
               "set_flag": "appointed_raised"
@@ -3427,8 +3989,8 @@
         {
           "id": "usurper",
           "label": "You took it by force",
-          "desc": "The old Archon is a Forgotten Soul now, and not by the Flame’s choosing. The coven follows — warily.",
-          "saga": "They took the seat by force; the old Archon is a Forgotten Soul, and not by the Flame’s will.",
+          "desc": "The old Archon is a Forgotten Soul now, and not by the Flame's choosing. The coven follows — warily.",
+          "saga": "You took the seat by force; the old Archon is a Forgotten Soul, and not by the Flame's will.",
           "effects": [
             {
               "set_flag": "appointed_usurper"
@@ -3458,8 +4020,8 @@
         {
           "id": "archives",
           "label": "You burned the old archives",
-          "desc": "You fed the coven’s oldest books to the fire — knowledge traded for warmth, and the fire held.",
-          "saga": "In the winter the Ember guttered low, they burned the old archives to keep it lit — knowledge for warmth.",
+          "desc": "You fed the coven's oldest books to the fire — knowledge traded for warmth, and the fire held.",
+          "saga": "In the winter the Ember guttered low, you burned the old archives to keep it lit — knowledge for warmth.",
           "effects": [
             {
               "set_flag": "deed_burned_archives"
@@ -3488,7 +4050,7 @@
           "id": "sold",
           "label": "You sold a Wizard's service to Red",
           "desc": "You pledged one of your own to the Gilded Reach for a year, and bought fuel enough with the coin.",
-          "saga": "In the lean winter, they pledged a Wizard’s year of service to the Gilded Reach to buy the fire its fuel.",
+          "saga": "In the lean winter, you pledged a Wizard's year of service to the Gilded Reach to buy the fire its fuel.",
           "effects": [
             {
               "set_flag": "deed_sold_red"
@@ -3511,7 +4073,7 @@
           "id": "cold",
           "label": "You let the eldest go cold",
           "desc": "You gave the fire what warmth there was, and let three of the old die of the frost. You keep their names.",
-          "saga": "In the killing frost, they let three of the eldest go cold rather than let the Ember die — and have not forgotten their names.",
+          "saga": "In the killing frost, you let three of the eldest go cold rather than let the Ember die — and you keep their names still.",
           "effects": [
             {
               "set_flag": "deed_cold_dead"
@@ -3542,7 +4104,7 @@
           "id": "candle",
           "label": "A candle that would not go out",
           "desc": "A small, stubborn flame you lit as a child and could not put out for three days. You have kept fires ever since.",
-          "saga": "Their first working was a candle-flame that would not go out — a small, stubborn light.",
+          "saga": "Your first working was a candle-flame that would not go out — a small, stubborn light.",
           "effects": [
             {
               "set_flag": "path_candle"
@@ -3558,8 +4120,8 @@
         {
           "id": "lock",
           "label": "A locked door, opened with a word",
-          "desc": "A door barred against you swung wide at a word you didn’t know you knew. Nothing has been quite closed to you since.",
-          "saga": "Their first working was a locked door opened with a single spoken word.",
+          "desc": "A door barred against you swung wide at a word you didn't know you knew. Nothing has been quite closed to you since.",
+          "saga": "Your first working was a locked door opened with a single spoken word.",
           "effects": [
             {
               "set_flag": "path_lock"
@@ -3575,8 +4137,8 @@
         {
           "id": "wound",
           "label": "A wound you closed by will",
-          "desc": "You sealed a dying friend’s wound with nothing but your will — or you didn’t, and it has driven you ever since.",
-          "saga": "Their first working was a wound closed by will alone — or one that never would close again.",
+          "desc": "You sealed a dying friend's wound with nothing but your will — or you didn't, and it has driven you ever since.",
+          "saga": "Your first working was a wound closed by will alone — or one that never would close again.",
           "effects": [
             {
               "set_flag": "path_wound"
@@ -3601,7 +4163,7 @@
           "id": "memory",
           "label": "Memory",
           "desc": "Magic is the world remembering how it once worked — and it is being forgotten.",
-          "saga": "They hold that magic is the world’s own memory, and that it is going out.",
+          "saga": "You hold that magic is the world's own memory, and that it is going out.",
           "effects": [
             {
               "set_flag": "belief_memory"
@@ -3618,7 +4180,7 @@
           "id": "gift",
           "label": "A gift",
           "desc": "Magic is given, from the Flame or something older, to those who are meant to carry it.",
-          "saga": "They hold that magic is a gift, given to those meant to carry it.",
+          "saga": "You hold that magic is a gift, given to those meant to carry it.",
           "effects": [
             {
               "set_flag": "belief_gift"
@@ -3635,7 +4197,7 @@
           "id": "tool",
           "label": "A tool",
           "desc": "Magic is a power like any other, to be wielded by whoever is strong enough to hold it.",
-          "saga": "They hold that magic is a tool, for whoever is strong enough to wield it.",
+          "saga": "You hold that magic is a tool, for whoever is strong enough to wield it.",
           "effects": [
             {
               "set_flag": "belief_tool"
@@ -3660,7 +4222,7 @@
           "id": "allies",
           "label": "You stood with them",
           "desc": "You fought shoulder to shoulder with the Warriors against a common threat, and the hold held. Steel remembers a debt.",
-          "saga": "The last time steel and rune met at Runehold, they stood shoulder to shoulder with the Warriors, and the hold held.",
+          "saga": "The last time steel and rune met at Runehold, you stood shoulder to shoulder with the Warriors, and the hold held.",
           "effects": [
             {
               "set_flag": "warriors_allies"
@@ -3677,7 +4239,7 @@
           "id": "turned",
           "label": "You turned them away",
           "desc": "You met the Warriors at the gate with cold courtesy and no bloodshed, and sent them on their road. They will not forget the slight.",
-          "saga": "The last time the Warriors came to Runehold’s gate, they were turned away with cold courtesy and no bloodshed.",
+          "saga": "The last time the Warriors came to Runehold's gate, you turned them away with cold courtesy and no bloodshed.",
           "effects": [
             {
               "set_flag": "warriors_disdain"
@@ -3694,7 +4256,7 @@
           "id": "struck",
           "label": "You struck first",
           "desc": "You did not wait for the first blow. Steel has remembered Runehold ever since — and sharpens for it.",
-          "saga": "The last time steel threatened Runehold, they struck first — and steel has remembered it since.",
+          "saga": "The last time steel threatened Runehold, you struck first — and steel has remembered it since.",
           "effects": [
             {
               "set_flag": "warriors_enemies"
@@ -3714,6 +4276,56 @@
           ]
         }
       ]
+    }
+  ],
+  "roles": [
+    {
+      "id": "steward",
+      "label": "Steward",
+      "desc": "Oversees the granary and stores.",
+      "stat": "wisdom",
+      "pressure": "provisions",
+      "dir": 1
+    },
+    {
+      "id": "warden",
+      "label": "Warden",
+      "desc": "Walks the rune-wards against the Fracture.",
+      "stat": "power",
+      "pressure": "fracture",
+      "dir": -1
+    },
+    {
+      "id": "loremaster",
+      "label": "Loremaster",
+      "desc": "Deepens the runes against the Forgetting.",
+      "stat": "wisdom",
+      "pressure": "lore",
+      "dir": 1
+    },
+    {
+      "id": "quartermaster",
+      "label": "Quartermaster",
+      "desc": "Works the market roads for coin.",
+      "stat": "guile",
+      "pressure": "coin",
+      "dir": 1
+    },
+    {
+      "id": "chaplain",
+      "label": "Chaplain",
+      "desc": "Keeps the coven's heart through the dark.",
+      "stat": "courage",
+      "pressure": "faith",
+      "dir": 1
+    },
+    {
+      "id": "conjurer",
+      "label": "Conjurer",
+      "desc": "Tends the coven's flow of mana.",
+      "stat": "power",
+      "pressure": "mana",
+      "dir": 1
     }
   ]
 }

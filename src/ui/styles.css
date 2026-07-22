@@ -342,6 +342,13 @@ button.cb-res:active { transform: translateY(0); }
 .sheet-temp-word { color: var(--flame); font-variant: small-caps; letter-spacing: 0.03em; }
 .sheet-stat .bar-temp .bar-fill { background: color-mix(in srgb, var(--cult) 65%, #8a7d6a); }
 .sheet-mastery { margin: 1.2rem 0 0; padding-top: 0.9rem; border-top: 1px solid var(--line); color: var(--ink-dim); font-size: 0.9rem; }
+/* task/role assignment on the advisor sheet */
+.sheet-roles { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.sheet-role { background: linear-gradient(180deg, rgba(32, 25, 20, 0.6), rgba(18, 14, 11, 0.55)); border: 1px solid var(--line); color: var(--ink-dim); border-radius: 7px; padding: 0.4rem 0.8rem; font-size: 0.85rem; cursor: pointer; transition: color .15s, border-color .15s, background .15s; }
+.sheet-role:hover { color: var(--ink); border-color: var(--flame-deep); }
+.sheet-role.on { color: var(--flame); border-color: var(--flame-deep); background: #2a2018; }
+/* role badge on the Coven roster card portrait */
+.pcard-role { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.15rem 0.3rem; font-size: 0.6rem; font-variant: small-caps; letter-spacing: 0.05em; text-align: center; color: var(--flame); background: linear-gradient(to top, rgba(10, 8, 6, 0.92), transparent); }
 @media (max-width: 720px) {
   .sheet-layout { flex-direction: column; align-items: stretch; gap: 1rem; }
   .sheet-portrait-col { flex-basis: auto; max-width: 150px; }

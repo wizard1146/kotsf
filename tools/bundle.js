@@ -47,6 +47,11 @@ export function buildBundle() {
       try { return JSON.parse(readFileSync(join(ROOT, 'content', 'creation.json'), 'utf8')).steps || []; }
       catch { return []; }
     })(),
+    // advisor tasks/roles (assignable per Circle member; passive per-season effects)
+    roles: (() => {
+      try { return JSON.parse(readFileSync(join(ROOT, 'content', 'roles.json'), 'utf8')).roles || []; }
+      catch { return []; }
+    })(),
   };
   writeFileSync(join(ROOT, 'content', 'bundle.json'), JSON.stringify(bundle, null, 2));
   return bundle;
