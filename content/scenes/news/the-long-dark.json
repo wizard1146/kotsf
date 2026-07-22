@@ -1,19 +1,45 @@
 {
   "id": "the-long-dark",
   "type": "news",
-  "tags": ["fracture"],
+  "tags": [
+    "fracture"
+  ],
   "title": "The Long Dark",
   "weight": 3,
-  "trigger": { "gte": ["fracture", 50] },
+  "trigger": {
+    "gte": [
+      "fracture",
+      50
+    ]
+  },
   "intro": "The sun comes up wrong three mornings running — dim, and a finger's width south of where it should be. Across the Runiverse, holds light their hearths early and speak in low voices.",
   "choices": [
     {
       "id": "steady-them",
       "label": "Walk among the coven and steady them",
-      "requires": { "gte": ["mana", 4] },
+      "requires": {
+        "gte": [
+          "mana",
+          4
+        ]
+      },
       "win": {
         "text": "You make the rounds, hearth to hearth, until the muttering settles into resolve.",
-        "effects": [{ "add": ["faith", 5] }, { "add": ["mana", -4] }]
+        "saga": "The sun rose wrong and dim three mornings running, and you walked the coven hearth to hearth until the muttering settled into resolve.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              5
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              -4
+            ]
+          }
+        ]
       }
     },
     {
@@ -21,7 +47,15 @@
       "label": "Record the omen and let it pass",
       "win": {
         "text": "You set it down in the saga. The dark does not lift, but it does not deepen.",
-        "effects": [{ "add": ["fracture", 2] }]
+        "saga": "The sun rose wrong three mornings running, and you set the omen in the saga and let it pass — the dark did not lift, nor deepen.",
+        "effects": [
+          {
+            "add": [
+              "fracture",
+              2
+            ]
+          }
+        ]
       }
     }
   ]

@@ -4,7 +4,7 @@
 //
 // APP-LEVEL UI STATE LIVES HERE, NEVER IN THE ENGINE. `screen`/`overlay`/
 // `settings` are presentation concerns; the GameState model knows nothing of them.
-import { createInitialState, castMember, workingScore, chronicle } from './engine/state.js';
+import { createInitialState, castMember, workingScore, chronicle, shuffle } from './engine/state.js';
 import { meets } from './engine/conditions.js';
 import { pickScene } from './engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from './engine/loop.js';
@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v32';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v33';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -39,6 +39,7 @@ let hearthMenuOpen = false;    // the in-game hamburger dropdown (Options/Save/M
 let pinnedCard = null;         // index of an advisor card tapped open (tap again to close)
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
 let selectedMember = null;     // Coven screen: advisor whose full sheet is open (null → roster)
+let pendingRole = null;        // { member, role, from }: a task reassignment awaiting confirmation
 let cardsOpen = false;         // card bar raised (tuck mode): tap the tucked hand to lift it
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
@@ -109,6 +110,10 @@ async function goFullscreenLandscape() {
   } catch { /* orientation lock unsupported — carry on */ }
 }
 
+// The full-screen wizard/menu screens scroll the window; snap to the top after
+// a step change so the new question starts from its title, not mid-scroll.
+function scrollTop() { try { window.scrollTo(0, 0); } catch { /* non-DOM env */ } }
+
 function setOption(key, val) {
   if (key === 'textSize' || key === 'layout') settings[key] = val;   // string-valued options
   else settings[key] = val === '1';
@@ -149,15 +154,34 @@ function beginCreation() {
   state = createInitialState(Date.now() & 0xffffffff);
   end = null; lastOutcome = null; current = null; yearRecap = null;
   casterId = null; selectedMember = null; cardsOpen = false; gameView = 'scene';
-  creation = { step: 0, choices: {} };
+  creation = { step: 0, choices: {}, plan: buildCreationPlan() };
   overlay = null; screen = 'create';
   draw();
+}
+// Assemble this playthrough's wizard: the fixed steps, with two questions drawn at
+// random from the pool inserted right after 'deed', and each choice narrowed to a
+// random `pick` of its options — so answers and questions vary game to game. Uses
+// the campaign's seeded RNG (a fresh Date.now seed per coven), keeping it reproducible.
+function buildCreationPlan() {
+  const steps = creationDefs.steps || [];
+  const pool = creationDefs.pool || [];
+  const drawn = shuffle(state, pool.slice()).slice(0, 2);
+  const narrow = (s) => {
+    if (s.kind !== 'choice' || !s.pick || !s.options || s.options.length <= s.pick) return s;
+    return { ...s, options: shuffle(state, s.options.slice()).slice(0, s.pick) };
+  };
+  const plan = [];
+  for (const s of steps) {
+    plan.push(narrow(s));
+    if (s.id === 'deed') for (const p of drawn) plan.push(narrow(p));
+  }
+  return plan;
 }
 // Apply each chosen option's effects, record the founding into the Saga (in step
 // order, under "The Founding"), snapshot the year, then into the first scene.
 function finishCreation() {
   state.saga.push('[The Founding] The Ember passes to a new Archon, and Runehold\'s hearth-rune is kept alight.');
-  for (const step of creationDefs) {
+  for (const step of (creation.plan || [])) {
     const opt = (step.options || []).find((o) => o.id === creation.choices[step.id]);
     if (!opt) continue;
     if (opt.effects) applyEffects(state, opt.effects);
@@ -269,7 +293,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, pendingRole, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -384,13 +408,13 @@ app.addEventListener('click', (e) => {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
     case 'continue': proceed(); break;
-    case 'create-next': if (creation) { creation.step = Math.min(creationDefs.length - 1, creation.step + 1); draw(); } break;
-    case 'create-back': if (creation && creation.step > 0) { creation.step -= 1; draw(); } break;
+    case 'create-next': if (creation) { creation.step = Math.min(creation.plan.length - 1, creation.step + 1); draw(); scrollTop(); } break;
+    case 'create-back': if (creation && creation.step > 0) { creation.step -= 1; draw(); scrollTop(); } break;
     case 'create-choose': {
       if (!creation) break;
       creation.choices[el.dataset.step] = el.dataset.opt;
-      if (creation.step >= creationDefs.length - 1) finishCreation();
-      else { creation.step += 1; draw(); }
+      if (creation.step >= creation.plan.length - 1) finishCreation();
+      else { creation.step += 1; draw(); scrollTop(); }
       break;
     }
     case 'create-quit': state = null; creation = null; overlay = null; screen = 'menu'; draw(); break;
@@ -403,8 +427,17 @@ app.addEventListener('click', (e) => {
     case 'assign-role': {
       if (!state.roles) state.roles = {};
       const r = el.dataset.role;
-      if (r) state.roles[el.dataset.member] = r; else delete state.roles[el.dataset.member];
-      draw();
+      const mId = el.dataset.member;
+      if (!r) { delete state.roles[mId]; draw(); break; }        // clearing never conflicts
+      // A task has one owner: if someone else holds it, confirm the hand-off first.
+      const holder = Object.keys(state.roles).find((id) => id !== mId && state.roles[id] === r);
+      if (holder) { pendingRole = { member: mId, role: r, from: holder }; overlay = 'confirm-role'; draw(); break; }
+      state.roles[mId] = r; draw();
+      break;
+    }
+    case 'confirm-role-yes': {
+      if (pendingRole) { if (!state.roles) state.roles = {}; delete state.roles[pendingRole.from]; state.roles[pendingRole.member] = pendingRole.role; }
+      pendingRole = null; overlay = null; draw();
       break;
     }
     case 'close-member': selectedMember = null; draw(); break;
@@ -441,7 +474,7 @@ app.addEventListener('click', (e) => {
     case 'start-game': confirmNewCoven(); break;
     case 'confirm-new-yes': startGame(); break;
     case 'open': overlay = el.dataset.overlay; if (overlay === 'codex') codexQuery = ''; draw(); break;
-    case 'close': overlay = null; draw(); break;
+    case 'close': overlay = null; pendingRole = null; draw(); break;
     case 'codex-tab': codexTab = el.dataset.tab; codexQuery = ''; draw(); break;
     case 'codex-goto':
       codexTab = el.dataset.tab; codexQuery = '';
@@ -485,7 +518,7 @@ window.addEventListener('keydown', (e) => {
   actions = bundle.actions || [];
   counsel = bundle.counsel || {};
   portraits = bundle.portraits || [];
-  creationDefs = bundle.creation || [];
+  creationDefs = bundle.creation || { steps: [], pool: [] };
   rolesDefs = bundle.roles || [];
   applySettings();
   screen = 'splash'; overlay = null;

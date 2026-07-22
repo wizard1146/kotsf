@@ -39,6 +39,7 @@
           "label": "Mark the road — the other Embers must be found",
           "win": {
             "text": "You set the wanderer's words to memory and to map. It is only a rumour, but the coven has a purpose now beyond survival: somewhere the Flame still burns in pieces, and the pieces can be sought.",
+            "saga": "A half-frozen wanderer swore another Ember still burns north and east, and you set his rumour to map — the shards of the Flame can be sought.",
             "effects": [
               {
                 "add": [
@@ -66,6 +67,7 @@
           "label": "Tend your own fire; the north can keep its ghosts",
           "win": {
             "text": "You give the wanderer broth and a corner by the hearth, and let his rumour cool. Runehold has trouble enough of its own.",
+            "saga": "A wanderer brought word of another burning Ember in the north, and you let the rumour cool, tending your own fire instead.",
             "effects": [
               {
                 "add": [
@@ -123,6 +125,7 @@
           "label": "Take the herd for meat and hide",
           "win": {
             "text": "The meadow runs red and the granary fills. The coven eats; something old in the high passes takes note.",
+            "saga": "A masterless herd of Elysian ponies strayed into the meadow, and you took them for meat and hide — the granary filled, and something in the high passes took note.",
             "effects": [
               {
                 "add": [
@@ -154,6 +157,7 @@
           },
           "win": {
             "text": "Patient hands and quiet runes win them over. Runehold has mounts now, and a little wonder it had forgotten.",
+            "saga": "A herd of Elysian ponies strayed down from the passes, and you gentled them to Runehold — mounts now, and a little forgotten wonder.",
             "effects": [
               {
                 "add": [
@@ -177,6 +181,7 @@
           },
           "lose": {
             "text": "The herd will not be held. By morning they are gone over the ridge, and you are left with trampled fields.",
+            "saga": "You tried to keep a strayed herd of Elysian ponies, but they broke away over the ridge by morning and left your fields trampled.",
             "effects": [
               {
                 "add": [
@@ -228,6 +233,7 @@
           "label": "Welcome them into the Circle",
           "win": {
             "text": "You give the wanderer a place by the fire, and in the giving Runehold grows by one. Let us hope they were worth the bread.",
+            "saga": "A rune-scarred Wizard came out of the ash asking for a hearth, and you welcomed them into the Circle — Runehold grew by one.",
             "effects": [
               {
                 "recruit_member": true
@@ -256,6 +262,7 @@
           },
           "win": {
             "text": "You set them a hard working, and they meet it. A true Wizard — and now one of yours.",
+            "saga": "A wandering Wizard sought a place at the fire; you set them a hard working, they met it, and you took them into the Circle.",
             "effects": [
               {
                 "recruit_member": true
@@ -270,6 +277,7 @@
           },
           "lose": {
             "text": "The working slips their grasp; whatever they were, they are not what Runehold needs. You send them on with bread and no place at the fire.",
+            "saga": "A wandering Wizard sought a place at the fire, but the working slipped their grasp, and you sent them on with bread and no place.",
             "effects": [
               {
                 "add": [
@@ -285,6 +293,7 @@
           "label": "Turn them away — the fire is small enough",
           "win": {
             "text": "You send the wanderer back to the road. The coven stays as it is: few, and known.",
+            "saga": "A wandering Wizard asked for a place at the fire, and you turned them back to the road — the Circle stayed few, and known.",
             "effects": [
               {
                 "add": [
@@ -336,6 +345,7 @@
           "label": "Swear a pact of mutual defense",
           "win": {
             "text": "You clasp the captain's forearm. Warriors walk your walls that night, and for the first time in a season the watch sleeps.",
+            "saga": "A Warrior captain camped at your fields, and you swore a pact of mutual defence — Warriors walked your walls, and the watch slept at last.",
             "effects": [
               {
                 "add": [
@@ -369,6 +379,7 @@
           },
           "win": {
             "text": "Coin changes hands; the war-band patrols a season and asks no loyalty. A clean bargain, while it lasts.",
+            "saga": "A Warrior war-band offered to guard your borders, and you paid them in coin, owing nothing — a clean bargain while it lasted.",
             "effects": [
               {
                 "add": [
@@ -390,6 +401,7 @@
           "label": "Turn them away — Wizards keep their own walls",
           "win": {
             "text": "You thank the captain and decline. The coven approves; the dark beyond the fields does not.",
+            "saga": "A Warrior captain offered her sword for your borders, and you declined — the coven approved; the dark beyond the fields did not.",
             "effects": [
               {
                 "add": [
@@ -445,6 +457,7 @@
           },
           "win": {
             "text": "The ledger closes with a soft clap. You are, for now, a friend of the Stock Sanctuary.",
+            "saga": "A Red envoy of the Gilded Reach came with a ledger and an offer, and you paid tribute — a friend of the Stock Sanctuary, for now.",
             "effects": [
               {
                 "add": [
@@ -466,6 +479,7 @@
           "label": "Refuse — Runehold is no one's debtor",
           "win": {
             "text": "The envoy's smile thins as he goes. Word will travel.",
+            "saga": "A Red envoy of the Gilded Reach pressed an offer on you, and you refused to become his debtor — his smile thinned, and word travelled.",
             "effects": [
               {
                 "adjust_cult": [
@@ -521,6 +535,7 @@
           },
           "win": {
             "text": "The gift is received with a counting-house smile. The feud cools to mere commerce.",
+            "saga": "The Gilded Reach sought to mend an old feud, and you sent a generous tribute — the quarrel cooled to mere commerce.",
             "effects": [
               {
                 "add": [
@@ -542,6 +557,7 @@
           "label": "Offer Red factors trade rights in Runehold",
           "win": {
             "text": "Red stalls rise in your market square. Coin trickles in, and so does Red influence you cannot quite see.",
+            "saga": "To mend the breach with Red, you granted its factors trade rights in Runehold — coin trickled in, and Red influence with it.",
             "effects": [
               {
                 "adjust_cult": [
@@ -569,6 +585,7 @@
           "label": "Let the feud stand",
           "win": {
             "text": "You burn the letter. The coven likes a leader who holds a grudge — until the price of one comes due.",
+            "saga": "Red offered to mend your old feud, and you burned the letter and let it stand — a grudge the coven admired, until its price came due.",
             "effects": [
               {
                 "adjust_cult": [
@@ -635,6 +652,7 @@
           },
           "win": {
             "text": "Wards flare, the frost catches light, and the war-band breaks against Runehold's stones. Steel will think twice before it comes here again.",
+            "saga": "The Warrior-Guild came to collect the blood-debt of the day you struck first, and you met them with rune and fire — the war-band broke on Runehold's stones.",
             "effects": [
               {
                 "add": [
@@ -661,6 +679,7 @@
           },
           "lose": {
             "text": "Your fire is not enough. They come over the walls, and Runehold pays in blood and grain for the day you drew first.",
+            "saga": "The Warrior-Guild came for the old blood-debt, and your fire was not enough — they came over the walls, and Runehold paid in blood and grain.",
             "effects": [
               {
                 "add": [
@@ -700,6 +719,7 @@
           },
           "win": {
             "text": "It galls, and it costs, but coin closes the ledger. The war-band rides, and the grudge with them.",
+            "saga": "The Warrior-Guild came to collect the old blood-debt, and you bought it off with coin — the war-band rode, and the grudge with them.",
             "effects": [
               {
                 "add": [
@@ -775,6 +795,7 @@
           },
           "win": {
             "text": "The reader unlocks the book and lets your scribes copy through the night. Runehold remembers a little more of itself.",
+            "saga": "A Blue reader of the Forgotten Athenaeum offered a locked book of what Runehold had forgotten, and you paid the tithe — your scribes copied it through the night.",
             "effects": [
               {
                 "add": [
@@ -818,6 +839,7 @@
           },
           "win": {
             "text": "You trade craft for craft. The reader leaves impressed, and Runehold keeps its coin and its pride.",
+            "saga": "A Blue reader offered a locked book for coin and deference; you traded a working of your own instead, and kept your coin and your pride.",
             "effects": [
               {
                 "add": [
@@ -847,6 +869,7 @@
           },
           "lose": {
             "text": "Your working falters under the reader's polite gaze. The book goes home unopened, and word of the fumble travels.",
+            "saga": "You tried to trade a working for the Athenaeum's locked book, but your craft faltered under the reader's gaze, and the book went home unopened.",
             "effects": [
               {
                 "add": [
@@ -874,6 +897,7 @@
           "label": "Send the reader away — Runehold bows to no library",
           "win": {
             "text": "The reader bows, unbowed, and goes. The coven stands a little prouder over an emptier shelf.",
+            "saga": "A Blue reader of the Athenaeum offered forgotten lore for a debt of deference, and you sent him away unbowed — prouder over an emptier shelf.",
             "effects": [
               {
                 "adjust_cult": [
@@ -936,6 +960,7 @@
           },
           "win": {
             "text": "The pages tell of the slow going-out: workings that took twice the mana, then ten times, then none at all — until the last keeper could not remember the word for fire. A grim gift, but a gift. You understand the Forgetting a little better now, and how near it always is.",
+            "saga": "You reached a hold the wanderer named and found its Ember long dead; from its one scorched book you learned how the Forgetting takes a hearth, word by word.",
             "effects": [
               {
                 "add": [
@@ -959,6 +984,7 @@
           },
           "lose": {
             "text": "The book crumbles to flakes before you can read it deeply. You carry away only the cold, and the knowledge that another Ember is gone for good.",
+            "saga": "You reached a dead Ember's ruined hearth, but its last book crumbled before you could read it — you carried away only the cold.",
             "effects": [
               {
                 "add": [
@@ -987,6 +1013,7 @@
           },
           "win": {
             "text": "You touch a shaving of your own hearth-rune to the dead ash — and for one impossible breath, it glows. It does not last. But you have proven the Flame remembers itself across its shards, and that is worth more than the mana it cost.",
+            "saga": "At a dead hold's cold hearth you touched your own Flame to the ash, and for one breath it glowed — proof the Flame remembers itself across its shards.",
             "effects": [
               {
                 "add": [
@@ -1013,6 +1040,7 @@
           },
           "lose": {
             "text": "The cold ash drinks your Flame and gives nothing back. Worse — something in the dead hearth stirs at the offering, and does not settle when you leave.",
+            "saga": "At a dead hold's cold hearth your Flame woke nothing — but something in the dead ash stirred at the offering, and did not settle.",
             "effects": [
               {
                 "add": [
@@ -1071,6 +1099,7 @@
           "label": "Declare for memory and caution",
           "win": {
             "text": "You name Runehold a house of remembrance. The careful are heartened; the bold go quiet, and a little cold.",
+            "saga": "With the Circle split between caution and daring, you named Runehold a house of memory — the careful were heartened, the bold went cold.",
             "effects": [
               {
                 "add": [
@@ -1098,6 +1127,7 @@
           "label": "Declare for the Flame and daring",
           "win": {
             "text": "You name Runehold a house of the Flame. The devout blaze up; the cautious bite their tongues and watch.",
+            "saga": "With the Circle split, you named Runehold a house of the Flame — the devout blazed up, the cautious bit their tongues and watched.",
             "effects": [
               {
                 "add": [
@@ -1129,6 +1159,7 @@
           },
           "win": {
             "text": "You speak for an hour and somehow both camps leave believing they won. It will not hold forever. It holds tonight.",
+            "saga": "With the Circle split between memory and Flame, you refused to choose and held both camps together — for tonight, at least.",
             "effects": [
               {
                 "add": [
@@ -1140,6 +1171,7 @@
           },
           "lose": {
             "text": "Your careful words satisfy no one. Both camps decide you are weak, and say so.",
+            "saga": "You tried to hold the divided Circle together without choosing, and satisfied no one — both camps judged you weak, and said so.",
             "effects": [
               {
                 "add": [
@@ -1191,6 +1223,7 @@
           "label": "Sell the relic to the Gilded Reach",
           "win": {
             "text": "Red coin floods in; the copper coil disappears into a Stock Sanctuary vault, and Blue does not forget the slight.",
+            "saga": "Your diggers unearthed a humming pre-Burning reliquary, and you sold it to the Gilded Reach — Red coin flooded in, and Blue did not forget the slight.",
             "effects": [
               {
                 "add": [
@@ -1218,6 +1251,7 @@
           "label": "Entrust the relic to the Athenaeum",
           "win": {
             "text": "Blue scholars weep over the coil and share their findings freely. Red marks the lost sale in a ledger somewhere.",
+            "saga": "Your diggers unearthed a humming pre-Burning reliquary, and you entrusted it to the Athenaeum — Blue shared its findings freely; Red marked the lost sale.",
             "effects": [
               {
                 "add": [
@@ -1255,6 +1289,7 @@
           },
           "win": {
             "text": "Your own scribes coax the coil's secret loose. Both cults leave empty-handed and faintly insulted.",
+            "saga": "Your diggers unearthed a humming pre-Burning reliquary, and you kept it to study — your scribes coaxed its secret loose, and both cults left insulted.",
             "effects": [
               {
                 "add": [
@@ -1290,6 +1325,7 @@
           },
           "lose": {
             "text": "The coil stays silent for you, and now both cults know you hoarded it for nothing.",
+            "saga": "You kept the unearthed reliquary to study yourselves, but it stayed silent for you — and both cults learned you had hoarded it for nothing.",
             "effects": [
               {
                 "add": [
@@ -1353,6 +1389,7 @@
           "label": "Set the apprentices to copy and study the tome",
           "win": {
             "text": "You have the tome copied twice against loss, and its lesson read aloud in the hall: great workings die not from too little power but from too little memory. The coven is wiser, and a little more afraid.",
+            "saga": "You had Maelor's drowned-city tome copied and its lesson read aloud — that great workings die not from too little power but too little memory.",
             "effects": [
               {
                 "add": [
@@ -1377,6 +1414,7 @@
           "label": "Shelve it — the coven needs hope, not omens",
           "win": {
             "text": "You lock Maelor's drowned city away where the apprentices won't brood on it. Some mornings a keeper needs to believe the reaching still works.",
+            "saga": "You locked away Maelor's tome of the drowned city he could not raise, sparing the apprentices its omen — some mornings a keeper must believe the reaching still works.",
             "effects": [
               {
                 "add": [
@@ -1430,6 +1468,7 @@
           },
           "win": {
             "text": "Apprentices chant through the night; the rune deepens and holds.",
+            "saga": "A master-rune in the hall's keystone had begun to blur, and you poured mana into it through the night until it deepened and held.",
             "effects": [
               {
                 "add": [
@@ -1457,6 +1496,7 @@
           "label": "Let it fade — we have more pressing needs",
           "win": {
             "text": "By morning the keystone is smooth and silent, and no one alive recalls what it said.",
+            "saga": "You let the blurring master-rune in the hall's keystone fade — by morning the stone was smooth, and no one alive recalled what it said.",
             "effects": [
               {
                 "add": [
@@ -1540,6 +1580,7 @@
           },
           "win": {
             "text": "She returns wreathed in old knowledge, eyes bright and strange. The lost runes are lost no longer.",
+            "saga": "With the coven forgetting faster than it could learn, you sent an apprentice into the Sacred Flame — she returned wreathed in old knowledge, the lost runes with her.",
             "effects": [
               {
                 "add": [
@@ -1560,6 +1601,7 @@
           },
           "lose": {
             "text": "What returns is not her. The Circle does not speak for three days.",
+            "saga": "You sent an apprentice into the Sacred Flame for the lost runes, and what returned was not her — the Circle did not speak for three days.",
             "effects": [
               {
                 "add": [
@@ -1578,6 +1620,7 @@
           "label": "Seal the door. Some things should stay forgotten.",
           "win": {
             "text": "You wall the stair with rune and stone. The light goes out beneath your hand.",
+            "saga": "The Sacred Flame breathed behind a door at the foot of the stair, and you walled it up with rune and stone — some things should stay forgotten.",
             "effects": [
               {
                 "add": [
@@ -1642,6 +1685,7 @@
           },
           "win": {
             "text": "You set the drill back into their hands with a working, and the shield-wall locks true again. The Guild will remember the debt — and the omen.",
+            "saga": "A Warrior patrol came to your gate with the drill forgotten from their heads, and you worked a rune of remembering — the shield-wall locked true, and the Guild remembered the debt.",
             "effects": [
               {
                 "add": [
@@ -1669,6 +1713,7 @@
           "label": "Send them off with their forgetting",
           "win": {
             "text": "You turn the patrol away, half-armed and half-remembering. Word spreads that Runehold would not help — and that the Forgetting has begun to eat the Warriors too.",
+            "saga": "A Warrior patrol came with the drill forgotten from their heads, and you sent them off unhelped — word spread that the Forgetting eats steel too, and that Runehold would not help.",
             "effects": [
               {
                 "add": [
@@ -1728,6 +1773,7 @@
           },
           "win": {
             "text": "The raid succeeds; wagons roll into Runehold heavy with grain.",
+            "saga": "With the stores thin before harvest, you raided a Warrior caravan for grain — the wagons rolled into Runehold heavy.",
             "effects": [
               {
                 "add": [
@@ -1745,6 +1791,7 @@
           },
           "lose": {
             "text": "The Warriors were ready for you. You return with wounded and little else.",
+            "saga": "With the stores thin before harvest, you raided a Warrior caravan — but they were ready, and you returned with wounded and little else.",
             "effects": [
               {
                 "add": [
@@ -1778,6 +1825,7 @@
           },
           "win": {
             "text": "A fair price, fairly paid. The stores fill, and no blood is owed.",
+            "saga": "With the stores thin before harvest, you traded coin for grain — the stores filled, and no blood was owed.",
             "effects": [
               {
                 "add": [
@@ -1843,6 +1891,7 @@
           "label": "Set it down in plain words: the Flame is the world's memory",
           "win": {
             "text": "You write the truth into the coven's book at last, and the whole shape of your saga changes. Runehold is not merely a hold to keep alive — it is a keeper of memory, and the Embers are the road back from the long forgetting.",
+            "saga": "Your eldest reader named the truth at last — the Flame was the world's memory of magic — and you set it in the coven's book: Runehold is a keeper of memory, and the Embers the road back.",
             "effects": [
               {
                 "add": [
@@ -1903,6 +1952,7 @@
           },
           "win": {
             "text": "You tell her plainly what you did and why, and offer her brother's seat at the Circle rather than his grave. It is not forgiveness — but she stays, and the steel goes home.",
+            "saga": "The old Archon's sister came with steel-kin for the seat you took by force; you offered her the truth and a place in the Circle, and the steel went home.",
             "effects": [
               {
                 "add": [
@@ -1920,6 +1970,7 @@
           },
           "lose": {
             "text": "The words ring hollow even as you say them. She spits at the hearth-rune and rides, and the treeline empties — for now. The debt is not paid.",
+            "saga": "The old Archon's sister came for the seat you took by force; your words of atonement rang hollow, and she rode off with the debt unpaid.",
             "effects": [
               {
                 "add": [
@@ -1941,6 +1992,7 @@
           "label": "Tell her the seat was taken and will be kept",
           "win": {
             "text": "You give her no ground. She nods, almost respecting it, and promises to return with more than words. Runehold has an enemy with a name now.",
+            "saga": "The old Archon's sister came for the seat you took by force, and you gave her no ground — she promised to return with more than words, an enemy with a name.",
             "effects": [
               {
                 "add": [
@@ -2002,6 +2054,7 @@
           },
           "win": {
             "text": "You clasp hands over both hearth-runes, and for a moment the two Embers lean toward each other like they remember being one Flame. An accord is sworn: not a gathering yet, but the first thread of one.",
+            "saga": "You met another living Ember behind a stone door, and swore an accord between the two hearths — the first thread of a gathering.",
             "effects": [
               {
                 "add": [
@@ -2028,6 +2081,7 @@
           },
           "lose": {
             "text": "The words come out too grasping, and the other Archon's door closes in your face. You have not made an enemy — but you have not made a friend, and the road home is long.",
+            "saga": "You sought an accord with a rival hearth's Circle, but grasped too openly, and its Archon's door closed in your face.",
             "effects": [
               {
                 "add": [
@@ -2047,6 +2101,7 @@
           },
           "win": {
             "text": "It is quick, and it is ugly. You leave with two Embers where you came with one — and with the certain knowledge that every other hearth will now bar its door to Runehold, and sharpen something for you.",
+            "saga": "You took a rival hold's Ember by force of magic — two Embers where you came with one, and every other hearth now barred against Runehold.",
             "effects": [
               {
                 "add": [
@@ -2079,6 +2134,7 @@
           },
           "lose": {
             "text": "Their Circle was ready, and yours was not. You are driven off with nothing, and word will run ahead of you: Runehold reaches for other holds' fires. That name will cost you.",
+            "saga": "You reached for a rival hold's Ember by force, but their Circle was ready and yours was not — driven off, with word running ahead that Runehold reaches for others' fires.",
             "effects": [
               {
                 "add": [
@@ -2138,6 +2194,7 @@
           },
           "win": {
             "text": "You bind the stair with deeper wards. The scratching stops — for now.",
+            "saga": "Something scratched behind the sealed door at the foot of the stair, and you bound it with deeper wards — the scratching stopped, for now.",
             "effects": [
               {
                 "add": [
@@ -2165,6 +2222,7 @@
           "label": "Press your ear to the stone and listen",
           "win": {
             "text": "For a single heartbeat, a voice you knew. Then nothing. The Flame's Regard stirs in your chest.",
+            "saga": "You pressed your ear to the sealed stair and heard, for a heartbeat, a voice you knew — and the Flame's Regard stirred in your chest.",
             "effects": [
               {
                 "add": [
@@ -2222,6 +2280,7 @@
           "label": "Record the Story in the coven's own book",
           "win": {
             "text": "Serevane's walking fortress joins your slow-growing library of the ways magic has failed. A grim shelf — and the truest map you own of the road the whole world is walking.",
+            "saga": "You traded grain for the Story of Serevane, whose walking fortress forgot how a wall holds a roof and fell — and set it in the coven's book of magic's failures.",
             "effects": [
               {
                 "add": [
@@ -2250,6 +2309,7 @@
           },
           "win": {
             "text": "A grim tale sells as well as a glad one. You pass Serevane's fall along the market roads and pocket the difference.",
+            "saga": "You took the Story of Serevane's fallen walking fortress and traded it onward for coin — a grim tale sells as well as a glad one.",
             "effects": [
               {
                 "add": [
@@ -2267,6 +2327,7 @@
           },
           "lose": {
             "text": "No one wants to buy an omen this season. The Story stays with you, heavier for having tried to sell it.",
+            "saga": "You tried to sell on the Story of Serevane's fallen fortress, but no one wanted an omen that season, and it stayed with you, heavier.",
             "effects": [
               {
                 "add": [
@@ -2323,6 +2384,7 @@
           },
           "win": {
             "text": "Apprentices chant until their voices fail; the seam knits shut and the light goes out. The hill is whole, and so are you — barely.",
+            "saga": "At Deepfrost the Fracture split the hillside above Runehold, and you poured mana and lore into sealing the seam until the light went out.",
             "effects": [
               {
                 "add": [
@@ -2360,6 +2422,7 @@
           },
           "win": {
             "text": "You return wide-eyed with a fragment of the world's first memory — and the seam, satisfied, closes behind you.",
+            "saga": "When the Fracture split the hill above Runehold, you descended into the seam and returned with a fragment of the world's first memory, the crack closing behind you.",
             "effects": [
               {
                 "add": [
@@ -2389,6 +2452,7 @@
           },
           "lose": {
             "text": "What you find down there finds you back. You climb out changed, and the seam stays open, breathing.",
+            "saga": "You descended into the Fracture's seam above Runehold and what you found found you back — you climbed out changed, and the seam stayed open, breathing.",
             "effects": [
               {
                 "add": [
@@ -2459,6 +2523,7 @@
           },
           "win": {
             "text": "It sits among you and, in a voice like settling embers, gives up a rune the living had lost. By dawn it is gone, but the knowledge stays.",
+            "saga": "A Forgotten Soul waited at the edge of the firelight, and you welcomed it in — it gave up a lost rune in a voice like settling embers, and was gone by dawn.",
             "effects": [
               {
                 "add": [
@@ -2482,6 +2547,7 @@
           },
           "lose": {
             "text": "Whatever sat at your fire that night left something wrong behind it. The coven sleeps badly for a long while.",
+            "saga": "You welcomed a Forgotten Soul to the fire, and it left something wrong behind it — the coven slept badly for a long while.",
             "effects": [
               {
                 "add": [
@@ -2503,6 +2569,7 @@
           "label": "Turn the Soul away into the dark",
           "win": {
             "text": "You bar the gate. It stands a long moment, then walks back into the ash. The coven breathes easier; you do not.",
+            "saga": "A Forgotten Soul waited at the edge of the firelight to be known, and you barred the gate — it walked back into the ash, and you did not breathe easier.",
             "effects": [
               {
                 "add": [
@@ -2562,6 +2629,7 @@
           "label": "Pay in grain",
           "win": {
             "text": "The wagons roll out heavy, and the riders let Runehold's roads alone another season.",
+            "saga": "The Warrior-Guild's captain demanded a levy for keeping the roads, and you paid in grain — the riders let Runehold's roads alone another season.",
             "effects": [
               {
                 "add": [
@@ -2589,6 +2657,7 @@
           },
           "win": {
             "text": "Coin changes hands, and the captain touches her helm in something like courtesy before she rides.",
+            "saga": "The Warrior-Guild demanded a levy for the roads, and you paid in coin — the captain touched her helm in something like courtesy.",
             "effects": [
               {
                 "add": [
@@ -2614,6 +2683,7 @@
           },
           "win": {
             "text": "You meet the captain's eye and hold it, and something in your bearing makes the price not worth the taking. She rides — this time.",
+            "saga": "The Warrior-Guild demanded a levy for the roads, and you refused — something in your bearing made the price not worth the taking, this time.",
             "effects": [
               {
                 "add": [
@@ -2631,6 +2701,7 @@
           },
           "lose": {
             "text": "Your refusal lands as insult. The riders take what they came for and a little more, and the roads grow meaner toward Runehold.",
+            "saga": "You refused the Warrior-Guild's levy, and it landed as insult — the riders took what they came for and more, and the roads grew meaner toward Runehold.",
             "effects": [
               {
                 "add": [
@@ -2676,6 +2747,7 @@
           "label": "Record it in the saga and move on",
           "win": {
             "text": "You note the omen. The coven mutters and watches the horizon.",
+            "saga": "Grey ash drifted from the east for three days, and you recorded the omen — the coven muttered and watched the horizon.",
             "effects": [
               {
                 "add": [
@@ -2715,6 +2787,7 @@
           },
           "win": {
             "text": "You make the rounds, hearth to hearth, until the muttering settles into resolve.",
+            "saga": "The sun rose wrong and dim three mornings running, and you walked the coven hearth to hearth until the muttering settled into resolve.",
             "effects": [
               {
                 "add": [
@@ -2736,6 +2809,7 @@
           "label": "Record the omen and let it pass",
           "win": {
             "text": "You set it down in the saga. The dark does not lift, but it does not deepen.",
+            "saga": "The sun rose wrong three mornings running, and you set the omen in the saga and let it pass — the dark did not lift, nor deepen.",
             "effects": [
               {
                 "add": [
@@ -3796,488 +3870,766 @@
     "portrait_yellow_female_003a.webp",
     "portraits_green_female_001b.webp"
   ],
-  "creation": [
-    {
-      "id": "welcome",
-      "kind": "prose",
-      "title": "Keeper of the Sacred Flame",
-      "body": [
-        "There was an age when the Sacred Flame burned whole beneath the Secret Tower, and the world was whole with it. But the keepers of that fire went out from the Tower and did not return; the great door fell dark; and slowly, as frost creeps across a windowpane in the night, the world began to forget.",
-        "When the Tower&rsquo;s enemies gathered in that dark, those who had kept the fire would not let the whole of it be taken. They broke the Flame into <b>Embers</b>, and scattered to the far and hidden hearths of the world, each bearing a shard against the ruin. One such Ember came at last to <b>Runehold</b>, and burns there yet, in your hearth-rune. You are its keeper now, the appointed Archon &mdash; and should that fire fail, Runehold fails with it, and one more light goes out of the world.",
-        "Yet before the first season turns, let it be told who you are: your colour and your coming, and the hard things already done to keep this small fire alight."
-      ]
-    },
-    {
-      "id": "coven",
-      "kind": "coven",
-      "title": "Your Circle",
-      "body": "These few keep the Ember with you. They will counsel you and quarrel among themselves; lead them well."
-    },
-    {
-      "id": "colour",
-      "kind": "choice",
-      "title": "Your Colour",
-      "prompt": "Every Wizard leans toward one of the seven schools. Which do you name your own?",
-      "options": [
-        {
-          "id": "red",
-          "label": "Red",
-          "desc": "Coin, courts, and the Gilded Reach. Power bought and sold.",
-          "saga": "You claimed the Red for your own — the coin-magic of courts.",
-          "effects": [
-            {
-              "set_flag": "player_red"
-            },
-            {
-              "adjust_mastery": [
-                "red",
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "id": "yellow",
-          "label": "Yellow",
-          "desc": "The bending of time and season. Patience made into power.",
-          "saga": "You claimed the Yellow — the slow magic of time and season.",
-          "effects": [
-            {
-              "set_flag": "player_yellow"
-            },
-            {
-              "adjust_mastery": [
-                "yellow",
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "id": "brown",
-          "label": "Brown",
-          "desc": "Earth, craft, and the practical working. Magic that feeds a hold.",
-          "saga": "You claimed the Brown — plain, practical magic that feeds a hold.",
-          "effects": [
-            {
-              "set_flag": "player_brown"
-            },
-            {
-              "adjust_mastery": [
-                "brown",
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "id": "green",
-          "label": "Green",
-          "desc": "Growing things and the wild. Nurture against the dark.",
-          "saga": "You claimed the Green — the wild magic of growing things.",
-          "effects": [
-            {
-              "set_flag": "player_green"
-            },
-            {
-              "adjust_mastery": [
-                "green",
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "id": "blue",
-          "label": "Blue",
-          "desc": "Lore and memory; the Bastion and its Athenaeum. Knowledge above all.",
-          "saga": "You claimed the Blue — the lore-magic of the Bastion, and set memory above all.",
-          "effects": [
-            {
-              "set_flag": "player_blue"
-            },
-            {
-              "adjust_mastery": [
-                "blue",
-                12
-              ]
-            },
-            {
-              "add": [
-                "lore",
-                4
-              ]
-            }
-          ]
-        },
-        {
-          "id": "purple",
-          "label": "Purple",
-          "desc": "Chaos and the unmaking of certainty. Power without a leash.",
-          "saga": "You claimed the Purple — chaos-magic, power without a leash.",
-          "effects": [
-            {
-              "set_flag": "player_purple"
-            },
-            {
-              "adjust_mastery": [
-                "purple",
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "id": "white",
-          "label": "White",
-          "desc": "Order and clarity against the Forgetting. The wall that holds.",
-          "saga": "You claimed the White — the order-magic that holds against the Forgetting.",
-          "effects": [
-            {
-              "set_flag": "player_white"
-            },
-            {
-              "adjust_mastery": [
-                "white",
-                12
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "appointment",
-      "kind": "choice",
-      "title": "How You Came to Lead",
-      "prompt": "The seat of Archon was not empty. How did it become yours?",
-      "options": [
-        {
-          "id": "named",
-          "label": "The dying keeper named you",
-          "desc": "The last Archon gave you the fire with their final breath. The coven honours the choice — and watches to see if it was wise.",
-          "saga": "You came to the seat by the dying keeper's last word, and the coven honoured the choice.",
-          "effects": [
-            {
-              "set_flag": "appointed_named"
-            },
-            {
-              "add": [
-                "faith",
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "id": "raised",
-          "label": "The coven raised you",
-          "desc": "They chose you from among themselves. Their faith in you is real — and yours to keep or lose.",
-          "saga": "The coven raised you to the seat with open hands.",
-          "effects": [
-            {
-              "set_flag": "appointed_raised"
-            },
-            {
-              "add": [
-                "faith",
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "id": "usurper",
-          "label": "You took it by force",
-          "desc": "The old Archon is a Forgotten Soul now, and not by the Flame's choosing. The coven follows — warily.",
-          "saga": "You took the seat by force; the old Archon is a Forgotten Soul, and not by the Flame's will.",
-          "effects": [
-            {
-              "set_flag": "appointed_usurper"
-            },
-            {
-              "add": [
-                "faith",
-                -6
-              ]
-            },
-            {
-              "add": [
-                "flamesRegard",
-                5
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "deed",
-      "kind": "choice",
-      "title": "The Winter the Ember Nearly Died",
-      "prompt": "Last winter the hearth-rune guttered low, and something had to be given to keep it lit. What did you give?",
-      "options": [
-        {
-          "id": "archives",
-          "label": "You burned the old archives",
-          "desc": "You fed the coven's oldest books to the fire — knowledge traded for warmth, and the fire held.",
-          "saga": "In the winter the Ember guttered low, you burned the old archives to keep it lit — knowledge for warmth.",
-          "effects": [
-            {
-              "set_flag": "deed_burned_archives"
-            },
-            {
-              "add": [
-                "lore",
-                -8
-              ]
-            },
-            {
-              "add": [
-                "faith",
-                4
-              ]
-            },
-            {
-              "add": [
-                "flamesRegard",
-                4
-              ]
-            }
-          ]
-        },
-        {
-          "id": "sold",
-          "label": "You sold a Wizard's service to Red",
-          "desc": "You pledged one of your own to the Gilded Reach for a year, and bought fuel enough with the coin.",
-          "saga": "In the lean winter, you pledged a Wizard's year of service to the Gilded Reach to buy the fire its fuel.",
-          "effects": [
-            {
-              "set_flag": "deed_sold_red"
-            },
-            {
-              "adjust_cult": [
-                "red",
-                10
-              ]
-            },
-            {
-              "add": [
-                "coin",
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "id": "cold",
-          "label": "You let the eldest go cold",
-          "desc": "You gave the fire what warmth there was, and let three of the old die of the frost. You keep their names.",
-          "saga": "In the killing frost, you let three of the eldest go cold rather than let the Ember die — and you keep their names still.",
-          "effects": [
-            {
-              "set_flag": "deed_cold_dead"
-            },
-            {
-              "add": [
-                "faith",
-                -8
-              ]
-            },
-            {
-              "add": [
-                "flamesRegard",
-                8
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "path",
-      "kind": "choice",
-      "title": "Your First Working",
-      "prompt": "Every Wizard remembers the first magic they ever worked. What was yours?",
-      "options": [
-        {
-          "id": "candle",
-          "label": "A candle that would not go out",
-          "desc": "A small, stubborn flame you lit as a child and could not put out for three days. You have kept fires ever since.",
-          "saga": "Your first working was a candle-flame that would not go out — a small, stubborn light.",
-          "effects": [
-            {
-              "set_flag": "path_candle"
-            },
-            {
-              "add": [
-                "mana",
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lock",
-          "label": "A locked door, opened with a word",
-          "desc": "A door barred against you swung wide at a word you didn't know you knew. Nothing has been quite closed to you since.",
-          "saga": "Your first working was a locked door opened with a single spoken word.",
-          "effects": [
-            {
-              "set_flag": "path_lock"
-            },
-            {
-              "add": [
-                "lore",
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "id": "wound",
-          "label": "A wound you closed by will",
-          "desc": "You sealed a dying friend's wound with nothing but your will — or you didn't, and it has driven you ever since.",
-          "saga": "Your first working was a wound closed by will alone — or one that never would close again.",
-          "effects": [
-            {
-              "set_flag": "path_wound"
-            },
-            {
-              "add": [
-                "faith",
-                5
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "belief",
-      "kind": "choice",
-      "title": "What Magic Is",
-      "prompt": "The wise argue over what magic truly is. What do you believe?",
-      "options": [
-        {
-          "id": "memory",
-          "label": "Memory",
-          "desc": "Magic is the world remembering how it once worked — and it is being forgotten.",
-          "saga": "You hold that magic is the world's own memory, and that it is going out.",
-          "effects": [
-            {
-              "set_flag": "belief_memory"
-            },
-            {
-              "add": [
-                "lore",
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "id": "gift",
-          "label": "A gift",
-          "desc": "Magic is given, from the Flame or something older, to those who are meant to carry it.",
-          "saga": "You hold that magic is a gift, given to those meant to carry it.",
-          "effects": [
-            {
-              "set_flag": "belief_gift"
-            },
-            {
-              "add": [
-                "faith",
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "id": "tool",
-          "label": "A tool",
-          "desc": "Magic is a power like any other, to be wielded by whoever is strong enough to hold it.",
-          "saga": "You hold that magic is a tool, for whoever is strong enough to wield it.",
-          "effects": [
-            {
-              "set_flag": "belief_tool"
-            },
-            {
-              "add": [
-                "mana",
-                6
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "warriors",
-      "kind": "choice",
-      "title": "Steel and Rune",
-      "prompt": "The last time the Warriors and Runehold met over drawn steel, what did you do?",
-      "options": [
-        {
-          "id": "allies",
-          "label": "You stood with them",
-          "desc": "You fought shoulder to shoulder with the Warriors against a common threat, and the hold held. Steel remembers a debt.",
-          "saga": "The last time steel and rune met at Runehold, you stood shoulder to shoulder with the Warriors, and the hold held.",
-          "effects": [
-            {
-              "set_flag": "warriors_allies"
-            },
-            {
-              "add": [
-                "fracture",
-                -4
-              ]
-            }
-          ]
-        },
-        {
-          "id": "turned",
-          "label": "You turned them away",
-          "desc": "You met the Warriors at the gate with cold courtesy and no bloodshed, and sent them on their road. They will not forget the slight.",
-          "saga": "The last time the Warriors came to Runehold's gate, you turned them away with cold courtesy and no bloodshed.",
-          "effects": [
-            {
-              "set_flag": "warriors_disdain"
-            },
-            {
-              "add": [
-                "faith",
-                3
-              ]
-            }
-          ]
-        },
-        {
-          "id": "struck",
-          "label": "You struck first",
-          "desc": "You did not wait for the first blow. Steel has remembered Runehold ever since — and sharpens for it.",
-          "saga": "The last time steel threatened Runehold, you struck first — and steel has remembered it since.",
-          "effects": [
-            {
-              "set_flag": "warriors_enemies"
-            },
-            {
-              "add": [
-                "fracture",
-                4
-              ]
-            },
-            {
-              "add": [
-                "mana",
-                4
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
+  "creation": {
+    "steps": [
+      {
+        "id": "welcome",
+        "kind": "prose",
+        "title": "Keeper of the Sacred Flame",
+        "body": [
+          "There was an age when the Sacred Flame burned whole beneath the Secret Tower, and the world was whole with it. But the keepers of that fire went out from the Tower and did not return; the great door fell dark; and slowly, as frost creeps across a windowpane in the night, the world began to forget.",
+          "When the Tower&rsquo;s enemies gathered in that dark, those who had kept the fire would not let the whole of it be taken. They broke the Flame into <b>Embers</b>, and scattered to the far and hidden hearths of the world, each bearing a shard against the ruin. One such Ember came at last to <b>Runehold</b>, and burns there yet, in your hearth-rune. You are its keeper now, the appointed Archon &mdash; and should that fire fail, Runehold fails with it, and one more light goes out of the world.",
+          "Yet before the first season turns, let it be told who you are: your colour and your coming, and the hard things already done to keep this small fire alight."
+        ]
+      },
+      {
+        "id": "coven",
+        "kind": "coven",
+        "title": "Your Circle",
+        "body": "These few keep the Ember with you. They will counsel you and quarrel among themselves; lead them well."
+      },
+      {
+        "id": "colour",
+        "kind": "choice",
+        "title": "Your Colour",
+        "prompt": "Every Wizard leans toward one of the seven schools. Which do you name your own?",
+        "options": [
+          {
+            "id": "red",
+            "label": "Red",
+            "desc": "Coin, courts, and the Gilded Reach. Power bought and sold.",
+            "saga": "You claimed the Red for your own — the coin-magic of courts.",
+            "effects": [
+              {
+                "set_flag": "player_red"
+              },
+              {
+                "adjust_mastery": [
+                  "red",
+                  12
+                ]
+              }
+            ]
+          },
+          {
+            "id": "yellow",
+            "label": "Yellow",
+            "desc": "The bending of time and season. Patience made into power.",
+            "saga": "You claimed the Yellow — the slow magic of time and season.",
+            "effects": [
+              {
+                "set_flag": "player_yellow"
+              },
+              {
+                "adjust_mastery": [
+                  "yellow",
+                  12
+                ]
+              }
+            ]
+          },
+          {
+            "id": "brown",
+            "label": "Brown",
+            "desc": "Earth, craft, and the practical working. Magic that feeds a hold.",
+            "saga": "You claimed the Brown — plain, practical magic that feeds a hold.",
+            "effects": [
+              {
+                "set_flag": "player_brown"
+              },
+              {
+                "adjust_mastery": [
+                  "brown",
+                  12
+                ]
+              }
+            ]
+          },
+          {
+            "id": "green",
+            "label": "Green",
+            "desc": "Growing things and the wild. Nurture against the dark.",
+            "saga": "You claimed the Green — the wild magic of growing things.",
+            "effects": [
+              {
+                "set_flag": "player_green"
+              },
+              {
+                "adjust_mastery": [
+                  "green",
+                  12
+                ]
+              }
+            ]
+          },
+          {
+            "id": "blue",
+            "label": "Blue",
+            "desc": "Lore and memory; the Bastion and its Athenaeum. Knowledge above all.",
+            "saga": "You claimed the Blue — the lore-magic of the Bastion, and set memory above all.",
+            "effects": [
+              {
+                "set_flag": "player_blue"
+              },
+              {
+                "adjust_mastery": [
+                  "blue",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "purple",
+            "label": "Purple",
+            "desc": "Chaos and the unmaking of certainty. Power without a leash.",
+            "saga": "You claimed the Purple — chaos-magic, power without a leash.",
+            "effects": [
+              {
+                "set_flag": "player_purple"
+              },
+              {
+                "adjust_mastery": [
+                  "purple",
+                  12
+                ]
+              }
+            ]
+          },
+          {
+            "id": "white",
+            "label": "White",
+            "desc": "Order and clarity against the Forgetting. The wall that holds.",
+            "saga": "You claimed the White — the order-magic that holds against the Forgetting.",
+            "effects": [
+              {
+                "set_flag": "player_white"
+              },
+              {
+                "adjust_mastery": [
+                  "white",
+                  12
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "appointment",
+        "kind": "choice",
+        "title": "How You Came to Lead",
+        "prompt": "The seat of Archon was not empty. How did it become yours?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "named",
+            "label": "The dying keeper named you",
+            "desc": "The last Archon gave you the fire with their final breath. The coven honours the choice — and watches to see if it was wise.",
+            "saga": "You came to the seat by the dying keeper's last word, and the coven honoured the choice.",
+            "effects": [
+              {
+                "set_flag": "appointed_named"
+              },
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "id": "raised",
+            "label": "The coven raised you",
+            "desc": "They chose you from among themselves. Their faith in you is real — and yours to keep or lose.",
+            "saga": "The coven raised you to the seat with open hands.",
+            "effects": [
+              {
+                "set_flag": "appointed_raised"
+              },
+              {
+                "add": [
+                  "faith",
+                  8
+                ]
+              }
+            ]
+          },
+          {
+            "id": "usurper",
+            "label": "You took it by force",
+            "desc": "The old Archon is a Forgotten Soul now, and not by the Flame's choosing. The coven follows — warily.",
+            "saga": "You took the seat by force; the old Archon is a Forgotten Soul, and not by the Flame's will.",
+            "effects": [
+              {
+                "set_flag": "appointed_usurper"
+              },
+              {
+                "add": [
+                  "faith",
+                  -6
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "id": "alone",
+            "label": "You are the last of the old Circle",
+            "desc": "The others became Souls one by one, and the seat fell to you because no one else was left to take it. You lead by attrition, and you carry all their names.",
+            "saga": "You came to the seat because you were the last of the old Circle left standing, and you carry all their names.",
+            "effects": [
+              {
+                "set_flag": "appointed_alone"
+              },
+              {
+                "add": [
+                  "lore",
+                  5
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -2
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "deed",
+        "kind": "choice",
+        "title": "The Winter the Ember Nearly Died",
+        "prompt": "Last winter the hearth-rune guttered low, and something had to be given to keep it lit. What did you give?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "archives",
+            "label": "You burned the old archives",
+            "desc": "You fed the coven's oldest books to the fire — knowledge traded for warmth, and the fire held.",
+            "saga": "In the winter the Ember guttered low, you burned the old archives to keep it lit — knowledge for warmth.",
+            "effects": [
+              {
+                "set_flag": "deed_burned_archives"
+              },
+              {
+                "add": [
+                  "lore",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sold",
+            "label": "You sold a Wizard's service to Red",
+            "desc": "You pledged one of your own to the Gilded Reach for a year, and bought fuel enough with the coin.",
+            "saga": "In the lean winter, you pledged a Wizard's year of service to the Gilded Reach to buy the fire its fuel.",
+            "effects": [
+              {
+                "set_flag": "deed_sold_red"
+              },
+              {
+                "adjust_cult": [
+                  "red",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "coin",
+                  8
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cold",
+            "label": "You let the eldest go cold",
+            "desc": "You gave the fire what warmth there was, and let three of the old die of the frost. You keep their names.",
+            "saga": "In the killing frost, you let three of the eldest go cold rather than let the Ember die — and you keep their names still.",
+            "effects": [
+              {
+                "set_flag": "deed_cold_dead"
+              },
+              {
+                "add": [
+                  "faith",
+                  -8
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  8
+                ]
+              }
+            ]
+          },
+          {
+            "id": "gave",
+            "label": "You gave a willing Wizard to the Flame",
+            "desc": "One of your own walked into the Ember of their own will, and it flared bright and hungry on what they carried. The coven does not speak of it.",
+            "saga": "In the dying of the light, a Wizard of your own walked willingly into the Ember, and it flared bright on what they carried.",
+            "effects": [
+              {
+                "set_flag": "deed_gave_wizard"
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -6
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "warriors",
+        "kind": "choice",
+        "title": "Steel and Rune",
+        "prompt": "The Warrior-Guild and Runehold are old neighbours. When steel and rune last had cause to meet, what did you do?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "allies",
+            "label": "You stood with them",
+            "desc": "You fought shoulder to shoulder with the Warriors against a common threat, and the hold held. Steel remembers a debt.",
+            "saga": "The last time steel and rune met at Runehold, you stood shoulder to shoulder with the Warriors, and the hold held.",
+            "effects": [
+              {
+                "set_flag": "warriors_allies"
+              },
+              {
+                "add": [
+                  "fracture",
+                  -4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "turned",
+            "label": "You turned them away",
+            "desc": "You met the Warriors at the gate with cold courtesy and no bloodshed, and sent them on their road. They will not forget the slight.",
+            "saga": "The last time the Warriors came to Runehold's gate, you turned them away with cold courtesy and no bloodshed.",
+            "effects": [
+              {
+                "set_flag": "warriors_disdain"
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          },
+          {
+            "id": "struck",
+            "label": "You struck first",
+            "desc": "You did not wait for the first blow. Steel has remembered Runehold ever since — and sharpens for it.",
+            "saga": "The last time steel threatened Runehold, you struck first — and steel has remembered it since.",
+            "effects": [
+              {
+                "set_flag": "warriors_enemies"
+              },
+              {
+                "add": [
+                  "fracture",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "never",
+            "label": "You have never faced them",
+            "desc": "In your time, rune and steel have never crossed at Runehold. There is no debt between you, and no grudge — only a wary, watching peace.",
+            "saga": "In your keeping, steel and rune have never crossed at Runehold — only a wary, watching peace.",
+            "effects": [
+              {
+                "set_flag": "warriors_none"
+              },
+              {
+                "add": [
+                  "faith",
+                  1
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "pool": [
+      {
+        "id": "path",
+        "kind": "choice",
+        "title": "Your First Working",
+        "prompt": "Every Wizard remembers the first magic they ever worked. What was yours?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "candle",
+            "label": "A candle that would not go out",
+            "desc": "A small, stubborn flame you lit as a child and could not put out for three days. You have kept fires ever since.",
+            "saga": "Your first working was a candle-flame that would not go out — a small, stubborn light.",
+            "effects": [
+              {
+                "set_flag": "path_candle"
+              },
+              {
+                "add": [
+                  "mana",
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lock",
+            "label": "A locked door, opened with a word",
+            "desc": "A door barred against you swung wide at a word you didn't know you knew. Nothing has been quite closed to you since.",
+            "saga": "Your first working was a locked door opened with a single spoken word.",
+            "effects": [
+              {
+                "set_flag": "path_lock"
+              },
+              {
+                "add": [
+                  "lore",
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "id": "wound",
+            "label": "A wound you closed by will",
+            "desc": "You sealed a dying friend's wound with nothing but your will — or you didn't, and it has driven you ever since.",
+            "saga": "Your first working was a wound closed by will alone — or one that never would close again.",
+            "effects": [
+              {
+                "set_flag": "path_wound"
+              },
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "id": "storm",
+            "label": "A storm you could not call back",
+            "desc": "You reached for the sky in a child's temper and it answered — too well. Someone paid for the rain you raised, and you have been careful with power since.",
+            "saga": "Your first working was a storm you called in temper and could not call back, and someone paid for the rain.",
+            "effects": [
+              {
+                "set_flag": "path_storm"
+              },
+              {
+                "add": [
+                  "mana",
+                  8
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  3
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "belief",
+        "kind": "choice",
+        "title": "What Magic Is",
+        "prompt": "The wise argue over what magic truly is. What do you believe?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "memory",
+            "label": "Memory",
+            "desc": "Magic is the world remembering how it once worked — and it is being forgotten.",
+            "saga": "You hold that magic is the world's own memory, and that it is going out.",
+            "effects": [
+              {
+                "set_flag": "belief_memory"
+              },
+              {
+                "add": [
+                  "lore",
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "id": "gift",
+            "label": "A gift",
+            "desc": "Magic is given, from the Flame or something older, to those who are meant to carry it.",
+            "saga": "You hold that magic is a gift, given to those meant to carry it.",
+            "effects": [
+              {
+                "set_flag": "belief_gift"
+              },
+              {
+                "add": [
+                  "faith",
+                  5
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tool",
+            "label": "A tool",
+            "desc": "Magic is a power like any other, to be wielded by whoever is strong enough to hold it.",
+            "saga": "You hold that magic is a tool, for whoever is strong enough to wield it.",
+            "effects": [
+              {
+                "set_flag": "belief_tool"
+              },
+              {
+                "add": [
+                  "mana",
+                  6
+                ]
+              }
+            ]
+          },
+          {
+            "id": "debt",
+            "label": "A debt",
+            "desc": "Every working is borrowed, and the world keeps the ledger. The Forgetting, you suspect, is the debt coming due.",
+            "saga": "You hold that magic is a debt borrowed against the world — and that the Forgetting is the ledger coming due.",
+            "effects": [
+              {
+                "set_flag": "belief_debt"
+              },
+              {
+                "add": [
+                  "lore",
+                  3
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  3
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fear",
+        "kind": "choice",
+        "title": "Your Deepest Fear",
+        "prompt": "Every keeper carries a dread they do not speak aloud. What is yours?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "flame",
+            "label": "That the Flame will take you",
+            "desc": "You have felt the Ember's hunger turn toward you in the dark. You fear the day it stops asking.",
+            "saga": "In the dark you fear most that the Flame will one day take you, and stop asking first.",
+            "effects": [
+              {
+                "set_flag": "fear_flame"
+              },
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          },
+          {
+            "id": "faith",
+            "label": "That the coven will lose faith",
+            "desc": "A hold is held by belief before it is held by walls. You fear the morning the Circle stops believing in you.",
+            "saga": "You fear most the morning the Circle stops believing — for a hold is held by faith before walls.",
+            "effects": [
+              {
+                "set_flag": "fear_faith"
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          },
+          {
+            "id": "forgotten",
+            "label": "That you will be forgotten",
+            "desc": "Not death — erasure. That your name and works will slip from the world as if you had never kept the fire at all.",
+            "saga": "You fear not death but erasure — that your name will slip from the world as if you had never kept the fire.",
+            "effects": [
+              {
+                "set_flag": "fear_forgotten"
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "fracture",
+            "label": "That the Fracture will swallow the hold",
+            "desc": "You have watched other hearths crack from within, cult against cult, and go dark. You fear Runehold is only slower.",
+            "saga": "You fear the Fracture more than any foe — that Runehold will crack from within, as other hearths have, and go dark.",
+            "effects": [
+              {
+                "set_flag": "fear_fracture"
+              },
+              {
+                "add": [
+                  "fracture",
+                  -3
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "mark",
+        "kind": "choice",
+        "title": "A Mark You Bear",
+        "prompt": "The keeping of a fire leaves its sign. What mark do you carry?",
+        "pick": 3,
+        "options": [
+          {
+            "id": "burn",
+            "label": "A burn from the Ember",
+            "desc": "A hand's-breadth of scar where the Flame once touched you and did not let go easily. It aches when the fire is low.",
+            "saga": "You bear a burn from the Ember where it touched you once and did not let go — it aches when the fire runs low.",
+            "effects": [
+              {
+                "set_flag": "mark_burn"
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "runes",
+            "label": "Runes that will not fade",
+            "desc": "Sigils you worked into your own skin in a hard season, still faintly warm. They have never once cooled.",
+            "saga": "You bear runes worked into your own skin in a hard season that have never once cooled.",
+            "effects": [
+              {
+                "set_flag": "mark_runes"
+              },
+              {
+                "add": [
+                  "mana",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "eye",
+            "label": "An eye that sees the Forgetting",
+            "desc": "One eye clouded pale, and through it you can see the Forgetting coming — a greyness on a thing, a day before it is lost.",
+            "saga": "You bear one pale eye that sees the Forgetting coming — a greyness on a thing, a day before it is lost.",
+            "effects": [
+              {
+                "set_flag": "mark_eye"
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              }
+            ]
+          },
+          {
+            "id": "name",
+            "label": "A name you can no longer remember",
+            "desc": "There is a name the Forgetting has already taken from you. You suspect, in the small hours, that it was your own.",
+            "saga": "You bear a name the Forgetting has already taken — and fear, in the small hours, that it was your own.",
+            "effects": [
+              {
+                "set_flag": "mark_name"
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -2
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "roles": [
     {
       "id": "steward",

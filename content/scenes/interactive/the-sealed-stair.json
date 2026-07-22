@@ -1,23 +1,59 @@
 {
   "id": "the-sealed-stair",
   "type": "interactive",
-  "tags": ["flame"],
+  "tags": [
+    "flame"
+  ],
   "title": "The Sealed Stair",
   "weight": 1,
   "once": true,
-  "trigger": { "flag": "__never" },
+  "trigger": {
+    "flag": "__never"
+  },
   "intro": "Something scratches behind the sealed door, patient and unhurried. The mortar is cold to the touch, and getting colder.",
   "advisors": [
-    { "cast": { "trait": { "boldness": "low" } }, "text": "It remembers that we shut it out. Walls have a way of becoming doors again." }
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "It remembers that we shut it out. Walls have a way of becoming doors again."
+    }
   ],
   "choices": [
     {
       "id": "reinforce",
       "label": "Reinforce the seal with deeper runes",
-      "requires": { "gte": ["mana", 10] },
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
       "win": {
         "text": "You bind the stair with deeper wards. The scratching stops — for now.",
-        "effects": [{ "add": ["mana", -10] }, { "add": ["fracture", -4] }, { "add": ["lore", -3] }]
+        "saga": "Something scratched behind the sealed door at the foot of the stair, and you bound it with deeper wards — the scratching stopped, for now.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -4
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              -3
+            ]
+          }
+        ]
       }
     },
     {
@@ -25,7 +61,21 @@
       "label": "Press your ear to the stone and listen",
       "win": {
         "text": "For a single heartbeat, a voice you knew. Then nothing. The Flame's Regard stirs in your chest.",
-        "effects": [{ "add": ["flamesRegard", 8] }, { "add": ["faith", -4] }]
+        "saga": "You pressed your ear to the sealed stair and heard, for a heartbeat, a voice you knew — and the Flame's Regard stirred in your chest.",
+        "effects": [
+          {
+            "add": [
+              "flamesRegard",
+              8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -4
+            ]
+          }
+        ]
       }
     }
   ]

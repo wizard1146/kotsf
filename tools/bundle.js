@@ -42,10 +42,10 @@ export function buildBundle() {
       try { return readdirSync(join(ROOT, 'assets', 'portraits')).filter((f) => /\.(webp|png)$/i.test(f)); }
       catch { return []; }
     })(),
-    // new-coven creation wizard (welcome → coven → value selectors)
+    // new-coven creation wizard: { steps: fixed, pool: random-draw questions }
     creation: (() => {
-      try { return JSON.parse(readFileSync(join(ROOT, 'content', 'creation.json'), 'utf8')).steps || []; }
-      catch { return []; }
+      try { const c = JSON.parse(readFileSync(join(ROOT, 'content', 'creation.json'), 'utf8')); return { steps: c.steps || [], pool: c.pool || [] }; }
+      catch { return { steps: [], pool: [] }; }
     })(),
     // advisor tasks/roles (assignable per Circle member; passive per-season effects)
     roles: (() => {

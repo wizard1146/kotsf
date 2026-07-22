@@ -1,27 +1,85 @@
 {
   "id": "the-wanderer-in-the-ash",
   "type": "interactive",
-  "tags": ["flame"],
+  "tags": [
+    "flame"
+  ],
   "title": "The Wanderer in the Ash",
   "weight": 5,
-  "trigger": { "gte": ["flamesRegard", 35] },
+  "trigger": {
+    "gte": [
+      "flamesRegard",
+      35
+    ]
+  },
   "intro": "A figure walks out of the ash-haze at dusk and stops at the edge of the firelight. A Forgotten Soul — robes you almost recognize, a face the Flame has rewritten. It does not speak. It waits to be known.",
   "advisors": [
-    { "cast": { "trait": { "piety": "high" } }, "text": "It came to us. The Flame sends nothing by accident. Let it in." },
-    { "cast": { "trait": { "boldness": "low" } }, "text": "I have seen what wears a familiar face and means us harm. Keep the gate shut, Archon." }
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "It came to us. The Flame sends nothing by accident. Let it in."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "I have seen what wears a familiar face and means us harm. Keep the gate shut, Archon."
+    }
   ],
   "choices": [
     {
       "id": "welcome-it",
       "label": "Welcome the Soul to the fire",
-      "test": { "stat": "flamesRegard", "vs": 45 },
+      "test": {
+        "stat": "flamesRegard",
+        "vs": 45
+      },
       "win": {
         "text": "It sits among you and, in a voice like settling embers, gives up a rune the living had lost. By dawn it is gone, but the knowledge stays.",
-        "effects": [{ "add": ["lore", 16] }, { "add": ["flamesRegard", 8] }, { "add": ["faith", -4] }]
+        "saga": "A Forgotten Soul waited at the edge of the firelight, and you welcomed it in — it gave up a lost rune in a voice like settling embers, and was gone by dawn.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              16
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -4
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "Whatever sat at your fire that night left something wrong behind it. The coven sleeps badly for a long while.",
-        "effects": [{ "add": ["faith", -10] }, { "add": ["fracture", 6] }]
+        "saga": "You welcomed a Forgotten Soul to the fire, and it left something wrong behind it — the coven slept badly for a long while.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              6
+            ]
+          }
+        ]
       }
     },
     {
@@ -29,7 +87,21 @@
       "label": "Turn the Soul away into the dark",
       "win": {
         "text": "You bar the gate. It stands a long moment, then walks back into the ash. The coven breathes easier; you do not.",
-        "effects": [{ "add": ["faith", 5] }, { "add": ["flamesRegard", -8] }]
+        "saga": "A Forgotten Soul waited at the edge of the firelight to be known, and you barred the gate — it walked back into the ash, and you did not breathe easier.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              5
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              -8
+            ]
+          }
+        ]
       }
     }
   ]

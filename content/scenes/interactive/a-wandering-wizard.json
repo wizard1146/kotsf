@@ -1,32 +1,112 @@
 {
   "id": "a-wandering-wizard",
   "type": "interactive",
-  "tags": ["coven"],
+  "tags": [
+    "coven"
+  ],
   "title": "A Wandering Wizard",
   "weight": 4,
-  "trigger": { "gte": ["faith", 55] },
+  "trigger": {
+    "gte": [
+      "faith",
+      55
+    ]
+  },
   "intro": "A Wizard comes to Runehold's gate out of the ash — road-worn, wary, and looking for a hearth that still burns. \"I can work,\" they say, showing a palm scarred with old runes. \"I ask only a place by the fire.\"",
   "advisors": [
-    { "cast": { "trait": { "boldness": "high" } }, "text": "Another pair of hands and another voice at the Circle, Archon. We are too few as it is." },
-    { "cast": { "trait": { "boldness": "low" } }, "text": "Or another mouth to feed, and a stranger who knows where our Ember sleeps. Weigh them before you open the door." }
+    {
+      "cast": {
+        "trait": {
+          "boldness": "high"
+        }
+      },
+      "text": "Another pair of hands and another voice at the Circle, Archon. We are too few as it is."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "Or another mouth to feed, and a stranger who knows where our Ember sleeps. Weigh them before you open the door."
+    }
   ],
   "choices": [
     {
       "id": "welcome",
       "label": "Welcome them into the Circle",
-      "win": { "text": "You give the wanderer a place by the fire, and in the giving Runehold grows by one. Let us hope they were worth the bread.", "effects": [{ "recruit_member": true }, { "add": ["provisions", -4] }, { "add": ["faith", 2] }] }
+      "win": {
+        "text": "You give the wanderer a place by the fire, and in the giving Runehold grows by one. Let us hope they were worth the bread.",
+        "saga": "A rune-scarred Wizard came out of the ash asking for a hearth, and you welcomed them into the Circle — Runehold grew by one.",
+        "effects": [
+          {
+            "recruit_member": true
+          },
+          {
+            "add": [
+              "provisions",
+              -4
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              2
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "test",
       "label": "Test their craft before you decide",
-      "test": { "stat": "lore", "vs": 45 },
-      "win": { "text": "You set them a hard working, and they meet it. A true Wizard — and now one of yours.", "effects": [{ "recruit_member": true }, { "add": ["lore", 4] }] },
-      "lose": { "text": "The working slips their grasp; whatever they were, they are not what Runehold needs. You send them on with bread and no place at the fire.", "effects": [{ "add": ["provisions", -2] }] }
+      "test": {
+        "stat": "lore",
+        "vs": 45
+      },
+      "win": {
+        "text": "You set them a hard working, and they meet it. A true Wizard — and now one of yours.",
+        "saga": "A wandering Wizard sought a place at the fire; you set them a hard working, they met it, and you took them into the Circle.",
+        "effects": [
+          {
+            "recruit_member": true
+          },
+          {
+            "add": [
+              "lore",
+              4
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "The working slips their grasp; whatever they were, they are not what Runehold needs. You send them on with bread and no place at the fire.",
+        "saga": "A wandering Wizard sought a place at the fire, but the working slipped their grasp, and you sent them on with bread and no place.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              -2
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "turn-away",
       "label": "Turn them away — the fire is small enough",
-      "win": { "text": "You send the wanderer back to the road. The coven stays as it is: few, and known.", "effects": [{ "add": ["faith", -3] }] }
+      "win": {
+        "text": "You send the wanderer back to the road. The coven stays as it is: few, and known.",
+        "saga": "A wandering Wizard asked for a place at the fire, and you turned them back to the road — the Circle stayed few, and known.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              -3
+            ]
+          }
+        ]
+      }
     }
   ]
 }

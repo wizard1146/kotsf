@@ -1,15 +1,35 @@
 {
   "id": "the-tower-that-forgot",
   "type": "interactive",
-  "tags": ["tomes", "lore"],
+  "tags": [
+    "tomes",
+    "lore"
+  ],
   "title": "The Tower That Forgot",
   "weight": 4,
   "once": true,
-  "trigger": { "gte": ["lore", 30] },
+  "trigger": {
+    "gte": [
+      "lore",
+      30
+    ]
+  },
   "intro": "A trader from the Bastion swaps you a Story for a sack of grain: the tale of the White wizard Serevane, who bound a fortress to walk on stone legs and carry her people out of the Fracture's path. It walked for a year and a day. Then, one still morning, it forgot how a wall holds up a roof — and came down all at once, with everyone she had meant to save still inside.",
   "advisors": [
-    { "cast": { "school": "white" }, "text": "Order is the first thing the Forgetting takes, Archon. Serevane's fortress did not break — it lost the memory of being whole. As may we all." },
-    { "cast": { "trait": { "temper": "low" } }, "text": "One story, told for grain. It may be true; it may be a Bastion's bad dream dressed as history. Weigh it — don't kneel to it." }
+    {
+      "cast": {
+        "school": "white"
+      },
+      "text": "Order is the first thing the Forgetting takes, Archon. Serevane's fortress did not break — it lost the memory of being whole. As may we all."
+    },
+    {
+      "cast": {
+        "trait": {
+          "temper": "low"
+        }
+      },
+      "text": "One story, told for grain. It may be true; it may be a Bastion's bad dream dressed as history. Weigh it — don't kneel to it."
+    }
   ],
   "choices": [
     {
@@ -17,20 +37,62 @@
       "label": "Record the Story in the coven's own book",
       "win": {
         "text": "Serevane's walking fortress joins your slow-growing library of the ways magic has failed. A grim shelf — and the truest map you own of the road the whole world is walking.",
-        "effects": [{ "add": ["lore", 9] }, { "adjust_cult": ["blue", 4] }, { "set_flag": "read_a_failure_tale" }]
+        "saga": "You traded grain for the Story of Serevane, whose walking fortress forgot how a wall holds a roof and fell — and set it in the coven's book of magic's failures.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              9
+            ]
+          },
+          {
+            "adjust_cult": [
+              "blue",
+              4
+            ]
+          },
+          {
+            "set_flag": "read_a_failure_tale"
+          }
+        ]
       }
     },
     {
       "id": "haggle",
       "label": "Trade the Story onward for coin",
-      "test": { "stat": "coin", "vs": 30 },
+      "test": {
+        "stat": "coin",
+        "vs": 30
+      },
       "win": {
         "text": "A grim tale sells as well as a glad one. You pass Serevane's fall along the market roads and pocket the difference.",
-        "effects": [{ "add": ["coin", 10] }, { "add": ["lore", 2] }]
+        "saga": "You took the Story of Serevane's fallen walking fortress and traded it onward for coin — a grim tale sells as well as a glad one.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              10
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              2
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "No one wants to buy an omen this season. The Story stays with you, heavier for having tried to sell it.",
-        "effects": [{ "add": ["lore", 4] }]
+        "saga": "You tried to sell on the Story of Serevane's fallen fortress, but no one wanted an omen that season, and it stayed with you, heavier.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              4
+            ]
+          }
+        ]
       }
     }
   ]

@@ -1,10 +1,17 @@
 {
   "id": "ash-on-the-wind",
   "type": "news",
-  "tags": ["fracture"],
+  "tags": [
+    "fracture"
+  ],
   "title": "Ash on the Wind",
   "weight": 3,
-  "trigger": { "gte": ["fracture", 15] },
+  "trigger": {
+    "gte": [
+      "fracture",
+      15
+    ]
+  },
   "intro": "Grey ash drifts in from the east for three days running. The old ones say the Fracture is breathing again.",
   "choices": [
     {
@@ -12,7 +19,15 @@
       "label": "Record it in the saga and move on",
       "win": {
         "text": "You note the omen. The coven mutters and watches the horizon.",
-        "effects": [{ "add": ["fracture", 2] }]
+        "saga": "Grey ash drifted from the east for three days, and you recorded the omen — the coven muttered and watched the horizon.",
+        "effects": [
+          {
+            "add": [
+              "fracture",
+              2
+            ]
+          }
+        ]
       }
     }
   ]

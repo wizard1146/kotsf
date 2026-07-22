@@ -1,36 +1,111 @@
 {
   "id": "the-hungry-season",
   "type": "interactive",
-  "tags": ["famine"],
+  "tags": [
+    "famine"
+  ],
   "title": "The Hungry Season",
   "weight": 12,
-  "trigger": { "lt": ["provisions", 45] },
+  "trigger": {
+    "lt": [
+      "provisions",
+      45
+    ]
+  },
   "intro": "The stores run thin before the Highsun harvest. The coven looks to you with hollow eyes.",
   "advisors": [
-    { "cast": { "trait": { "boldness": "low" } }, "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep." },
-    { "cast": { "most": "wisdom" }, "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both." }
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "The Warriors of the eastern road carry full wagons. We are Wizards — let us not starve like sheep."
+    },
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "Raiding the Warrior's Guild is how feuds begin. Buy grain. We can afford pride or we can afford winter, not both."
+    }
   ],
   "choices": [
     {
       "id": "raid",
       "label": "Raid a Warrior caravan for grain",
-      "test": { "stat": "faith", "vs": 50 },
+      "test": {
+        "stat": "faith",
+        "vs": 50
+      },
       "win": {
         "text": "The raid succeeds; wagons roll into Runehold heavy with grain.",
-        "effects": [{ "add": ["provisions", 22] }, { "add": ["fracture", 6] }]
+        "saga": "With the stores thin before harvest, you raided a Warrior caravan for grain — the wagons rolled into Runehold heavy.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              22
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              6
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "The Warriors were ready for you. You return with wounded and little else.",
-        "effects": [{ "add": ["faith", -10] }, { "add": ["fracture", 10] }, { "add": ["provisions", -4] }]
+        "saga": "With the stores thin before harvest, you raided a Warrior caravan — but they were ready, and you returned with wounded and little else.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              10
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              -4
+            ]
+          }
+        ]
       }
     },
     {
       "id": "trade",
       "label": "Trade coin for grain",
-      "requires": { "gte": ["coin", 10] },
+      "requires": {
+        "gte": [
+          "coin",
+          10
+        ]
+      },
       "win": {
         "text": "A fair price, fairly paid. The stores fill, and no blood is owed.",
-        "effects": [{ "add": ["coin", -10] }, { "add": ["provisions", 18] }]
+        "saga": "With the stores thin before harvest, you traded coin for grain — the stores filled, and no blood was owed.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              18
+            ]
+          }
+        ]
       }
     }
   ]

@@ -1,22 +1,55 @@
 {
   "id": "markertropolis-envoy",
   "type": "interactive",
-  "tags": ["cults"],
+  "tags": [
+    "cults"
+  ],
   "title": "The Envoy from the Gilded Reach",
   "weight": 8,
-  "trigger": { "lt": ["coin", 50] },
+  "trigger": {
+    "lt": [
+      "coin",
+      50
+    ]
+  },
   "intro": "A Red Wizard in counting-house silks arrives from the Gilded Reach — smiling, with a ledger under one arm and an offer on his lips.",
   "advisors": [
-    { "cast": { "trait": { "boldness": "low" } }, "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor." }
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "The Red cult never smiles for free. But coin buys grain, and grain is no metaphor."
+    }
   ],
   "choices": [
     {
       "id": "pay-tribute",
       "label": "Pay tribute to secure Red favour",
-      "requires": { "gte": ["coin", 10] },
+      "requires": {
+        "gte": [
+          "coin",
+          10
+        ]
+      },
       "win": {
         "text": "The ledger closes with a soft clap. You are, for now, a friend of the Stock Sanctuary.",
-        "effects": [{ "add": ["coin", -10] }, { "adjust_cult": ["red", 12] }]
+        "saga": "A Red envoy of the Gilded Reach came with a ledger and an offer, and you paid tribute — a friend of the Stock Sanctuary, for now.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -10
+            ]
+          },
+          {
+            "adjust_cult": [
+              "red",
+              12
+            ]
+          }
+        ]
       }
     },
     {
@@ -24,7 +57,21 @@
       "label": "Refuse — Runehold is no one's debtor",
       "win": {
         "text": "The envoy's smile thins as he goes. Word will travel.",
-        "effects": [{ "adjust_cult": ["red", -10] }, { "add": ["faith", 4] }]
+        "saga": "A Red envoy of the Gilded Reach pressed an offer on you, and you refused to become his debtor — his smile thinned, and word travelled.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "red",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              4
+            ]
+          }
+        ]
       }
     }
   ]

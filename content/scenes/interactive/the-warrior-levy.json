@@ -1,33 +1,138 @@
 {
   "id": "the-warrior-levy",
   "type": "interactive",
-  "tags": ["war"],
+  "tags": [
+    "war"
+  ],
   "title": "The Warrior-Guild's Levy",
   "weight": 5,
   "intro": "Riders of the Warrior-Guild draw up before Runehold's gate, banners stiff in the cold. Their captain does not dismount. \"The roads are ours to keep, and keeping costs,\" she calls. \"Grain, or coin, or the loan of a Wizard's fire for the season. Choose.\"",
   "advisors": [
-    { "cast": { "school": "white" }, "if": { "flag": "warriors_allies" }, "text": "They stood with us once, Archon. Give freely, and for once the debt runs the other way." },
-    { "cast": { "class": "necromancer" }, "if": { "flag": "warriors_enemies" }, "text": "They remember the day you struck first, and they have come to make you pay for it in grain. Give nothing you don't have to." },
-    { "cast": { "most": "guile" }, "text": "Every road out of this costs. Coin we can spare; grain we cannot; a Wizard's fire, never lightly." }
+    {
+      "cast": {
+        "school": "white"
+      },
+      "if": {
+        "flag": "warriors_allies"
+      },
+      "text": "They stood with us once, Archon. Give freely, and for once the debt runs the other way."
+    },
+    {
+      "cast": {
+        "class": "necromancer"
+      },
+      "if": {
+        "flag": "warriors_enemies"
+      },
+      "text": "They remember the day you struck first, and they have come to make you pay for it in grain. Give nothing you don't have to."
+    },
+    {
+      "cast": {
+        "most": "guile"
+      },
+      "text": "Every road out of this costs. Coin we can spare; grain we cannot; a Wizard's fire, never lightly."
+    }
   ],
   "choices": [
     {
       "id": "grain",
       "label": "Pay in grain",
-      "win": { "text": "The wagons roll out heavy, and the riders let Runehold's roads alone another season.", "effects": [{ "add": ["provisions", -12] }, { "add": ["fracture", -4] }] }
+      "win": {
+        "text": "The wagons roll out heavy, and the riders let Runehold's roads alone another season.",
+        "saga": "The Warrior-Guild's captain demanded a levy for keeping the roads, and you paid in grain — the riders let Runehold's roads alone another season.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              -12
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -4
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "coin",
       "label": "Pay in coin",
-      "requires": { "gte": ["coin", 14] },
-      "win": { "text": "Coin changes hands, and the captain touches her helm in something like courtesy before she rides.", "effects": [{ "add": ["coin", -14] }, { "add": ["fracture", -4] }] }
+      "requires": {
+        "gte": [
+          "coin",
+          14
+        ]
+      },
+      "win": {
+        "text": "Coin changes hands, and the captain touches her helm in something like courtesy before she rides.",
+        "saga": "The Warrior-Guild demanded a levy for the roads, and you paid in coin — the captain touched her helm in something like courtesy.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -14
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -4
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "refuse",
       "label": "Refuse the levy",
-      "test": { "stat": "faith", "vs": 50 },
-      "win": { "text": "You meet the captain's eye and hold it, and something in your bearing makes the price not worth the taking. She rides — this time.", "effects": [{ "add": ["faith", 5] }, { "add": ["fracture", 4] }] },
-      "lose": { "text": "Your refusal lands as insult. The riders take what they came for and a little more, and the roads grow meaner toward Runehold.", "effects": [{ "add": ["provisions", -8] }, { "add": ["fracture", 8] }, { "add": ["faith", -3] }] }
+      "test": {
+        "stat": "faith",
+        "vs": 50
+      },
+      "win": {
+        "text": "You meet the captain's eye and hold it, and something in your bearing makes the price not worth the taking. She rides — this time.",
+        "saga": "The Warrior-Guild demanded a levy for the roads, and you refused — something in your bearing made the price not worth the taking, this time.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              5
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              4
+            ]
+          }
+        ]
+      },
+      "lose": {
+        "text": "Your refusal lands as insult. The riders take what they came for and a little more, and the roads grow meaner toward Runehold.",
+        "saga": "You refused the Warrior-Guild's levy, and it landed as insult — the riders took what they came for and more, and the roads grew meaner toward Runehold.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -3
+            ]
+          }
+        ]
+      }
     }
   ]
 }

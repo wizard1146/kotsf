@@ -1,14 +1,35 @@
 {
   "id": "a-warrior-at-the-gate",
   "type": "interactive",
-  "tags": ["fracture"],
+  "tags": [
+    "fracture"
+  ],
   "title": "A Warrior at the Gate",
   "weight": 8,
-  "trigger": { "gte": ["fracture", 22] },
+  "trigger": {
+    "gte": [
+      "fracture",
+      22
+    ]
+  },
   "intro": "A Warrior war-band makes camp at the edge of Runehold's fields. Their captain — sword on her back, a hawk on her glove — sends word: she will guard your borders against the things the Fracture spits out. For a price, or for a pact.",
   "advisors": [
-    { "cast": { "trait": { "boldness": "low" } }, "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come." },
-    { "cast": { "trait": { "piety": "high" } }, "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter." }
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "Steel we cannot cast, but steel does not forget how to kill. Make the pact. Pride is cheap when the Imps come."
+    },
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "They cannot touch the Flame, and so they fear what we are. Bind ourselves to them and the coven will mutter."
+    }
   ],
   "choices": [
     {
@@ -16,16 +37,55 @@
       "label": "Swear a pact of mutual defense",
       "win": {
         "text": "You clasp the captain's forearm. Warriors walk your walls that night, and for the first time in a season the watch sleeps.",
-        "effects": [{ "add": ["fracture", -8] }, { "add": ["provisions", -6] }, { "add": ["faith", -5] }]
+        "saga": "A Warrior captain camped at your fields, and you swore a pact of mutual defence — Warriors walked your walls, and the watch slept at last.",
+        "effects": [
+          {
+            "add": [
+              "fracture",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "provisions",
+              -6
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -5
+            ]
+          }
+        ]
       }
     },
     {
       "id": "pay-coin",
       "label": "Pay them in coin, owe them nothing",
-      "requires": { "gte": ["coin", 14] },
+      "requires": {
+        "gte": [
+          "coin",
+          14
+        ]
+      },
       "win": {
         "text": "Coin changes hands; the war-band patrols a season and asks no loyalty. A clean bargain, while it lasts.",
-        "effects": [{ "add": ["coin", -14] }, { "add": ["fracture", -5] }]
+        "saga": "A Warrior war-band offered to guard your borders, and you paid them in coin, owing nothing — a clean bargain while it lasted.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -14
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -5
+            ]
+          }
+        ]
       }
     },
     {
@@ -33,7 +93,21 @@
       "label": "Turn them away — Wizards keep their own walls",
       "win": {
         "text": "You thank the captain and decline. The coven approves; the dark beyond the fields does not.",
-        "effects": [{ "add": ["faith", 4] }, { "add": ["fracture", 4] }]
+        "saga": "A Warrior captain offered her sword for your borders, and you declined — the coven approved; the dark beyond the fields did not.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              4
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              4
+            ]
+          }
+        ]
       }
     }
   ]

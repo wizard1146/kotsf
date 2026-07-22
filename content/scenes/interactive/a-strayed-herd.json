@@ -1,14 +1,35 @@
 {
   "id": "a-strayed-herd",
   "type": "interactive",
-  "tags": ["famine"],
+  "tags": [
+    "famine"
+  ],
   "title": "A Strayed Herd",
   "weight": 5,
-  "trigger": { "lt": ["provisions", 50] },
+  "trigger": {
+    "lt": [
+      "provisions",
+      50
+    ]
+  },
   "intro": "A herd of Elysian ponies — manes like banked coals, eyes too knowing — drifts down from the high passes and lingers in Runehold's lower meadow. They are no one's, for now.",
   "advisors": [
-    { "cast": { "trait": { "boldness": "low" } }, "text": "Meat and hides through Deepfrost, Archon. The meadow will not feed us; they might." },
-    { "cast": { "trait": { "boldness": "high" } }, "text": "Ride them! Tame one and you have a friend out of the Elysian Fields. Eat one and you have a sad winter dinner." }
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "Meat and hides through Deepfrost, Archon. The meadow will not feed us; they might."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "high"
+        }
+      },
+      "text": "Ride them! Tame one and you have a friend out of the Elysian Fields. Eat one and you have a sad winter dinner."
+    }
   ],
   "choices": [
     {
@@ -16,20 +37,71 @@
       "label": "Take the herd for meat and hide",
       "win": {
         "text": "The meadow runs red and the granary fills. The coven eats; something old in the high passes takes note.",
-        "effects": [{ "add": ["provisions", 18] }, { "add": ["faith", -4] }, { "add": ["flamesRegard", -4] }]
+        "saga": "A masterless herd of Elysian ponies strayed into the meadow, and you took them for meat and hide — the granary filled, and something in the high passes took note.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              18
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -4
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              -4
+            ]
+          }
+        ]
       }
     },
     {
       "id": "tame",
       "label": "Try to gentle and keep the herd",
-      "test": { "stat": "faith", "vs": 45 },
+      "test": {
+        "stat": "faith",
+        "vs": 45
+      },
       "win": {
         "text": "Patient hands and quiet runes win them over. Runehold has mounts now, and a little wonder it had forgotten.",
-        "effects": [{ "add": ["provisions", 6] }, { "add": ["faith", 8] }, { "add": ["flamesRegard", 4] }]
+        "saga": "A herd of Elysian ponies strayed down from the passes, and you gentled them to Runehold — mounts now, and a little forgotten wonder.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              6
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              8
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              4
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "The herd will not be held. By morning they are gone over the ridge, and you are left with trampled fields.",
-        "effects": [{ "add": ["provisions", -4] }]
+        "saga": "You tried to keep a strayed herd of Elysian ponies, but they broke away over the ridge by morning and left your fields trampled.",
+        "effects": [
+          {
+            "add": [
+              "provisions",
+              -4
+            ]
+          }
+        ]
       }
     }
   ]

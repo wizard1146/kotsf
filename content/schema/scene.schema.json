@@ -75,6 +75,7 @@
       "additionalProperties": false,
       "properties": {
         "text": { "type": "string" },
+        "saga": { "type": "string" },
         "effects": { "type": "array", "items": { "$ref": "#/$defs/effect" } }
       }
     },

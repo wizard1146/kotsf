@@ -89,7 +89,7 @@ const clampStat = (v) => Math.max(5, Math.min(95, Math.round(v)));
 const rollRange = (state, lo, hi) => lo + pickIndex(state, hi - lo + 1);
 
 // Roll the opening ring of four: a leader, a second (the default caster), two apprentices.
-const shuffle = (state, arr) => { for (let i = arr.length - 1; i > 0; i--) { const j = pickIndex(state, i + 1); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+export const shuffle = (state, arr) => { for (let i = arr.length - 1; i > 0; i--) { const j = pickIndex(state, i + 1); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
 
 // Age band → portrait variant letter (a/b/c = young/middle/old). Members carry a
 // real `age` that ticks up each year, so their portrait can age with them.

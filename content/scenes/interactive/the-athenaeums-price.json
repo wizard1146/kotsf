@@ -1,37 +1,152 @@
 {
   "id": "the-athenaeums-price",
   "type": "interactive",
-  "tags": ["lore", "cults"],
+  "tags": [
+    "lore",
+    "cults"
+  ],
   "title": "The Athenaeum's Price",
   "weight": 8,
-  "trigger": { "all": [{ "lt": ["lore", 55] }, { "lt": ["cult.blue", 60] }] },
+  "trigger": {
+    "all": [
+      {
+        "lt": [
+          "lore",
+          55
+        ]
+      },
+      {
+        "lt": [
+          "cult.blue",
+          60
+        ]
+      }
+    ]
+  },
   "intro": "A grey-robed reader of the Forgotten Athenaeum comes north with a locked book and a proposal: Blue will share what Runehold has forgotten — for a tithe of coin, and a debt of deference.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them." },
-    { "cast": { "trait": { "boldness": "low" } }, "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours." }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "I trained under their lamps. The Athenaeum's word is good and their books are better. Pay them."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "Deference to Blue today is deference to Blue forever. Memory we can earn ourselves — slower, but ours."
+    }
   ],
   "choices": [
     {
       "id": "pay-the-tithe",
       "label": "Pay the tithe and take the book",
-      "requires": { "gte": ["coin", 12] },
+      "requires": {
+        "gte": [
+          "coin",
+          12
+        ]
+      },
       "win": {
         "text": "The reader unlocks the book and lets your scribes copy through the night. Runehold remembers a little more of itself.",
-        "effects": [{ "add": ["coin", -12] }, { "add": ["lore", 16] }, { "adjust_cult": ["blue", 12] }, { "adjust_cult": ["red", -4] }]
+        "saga": "A Blue reader of the Forgotten Athenaeum offered a locked book of what Runehold had forgotten, and you paid the tithe — your scribes copied it through the night.",
+        "effects": [
+          {
+            "add": [
+              "coin",
+              -12
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              16
+            ]
+          },
+          {
+            "adjust_cult": [
+              "blue",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "red",
+              -4
+            ]
+          }
+        ]
       }
     },
     {
       "id": "trade-our-own",
       "label": "Offer a working of your own in exchange",
-      "requires": { "gte": ["mana", 14] },
-      "test": { "stat": "lore", "vs": 45 },
+      "requires": {
+        "gte": [
+          "mana",
+          14
+        ]
+      },
+      "test": {
+        "stat": "lore",
+        "vs": 45
+      },
       "win": {
         "text": "You trade craft for craft. The reader leaves impressed, and Runehold keeps its coin and its pride.",
-        "effects": [{ "add": ["mana", -14] }, { "add": ["lore", 12] }, { "adjust_cult": ["blue", 8] }, { "add": ["faith", 3] }]
+        "saga": "A Blue reader offered a locked book for coin and deference; you traded a working of your own instead, and kept your coin and your pride.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -14
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              12
+            ]
+          },
+          {
+            "adjust_cult": [
+              "blue",
+              8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              3
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "Your working falters under the reader's polite gaze. The book goes home unopened, and word of the fumble travels.",
-        "effects": [{ "add": ["mana", -14] }, { "adjust_cult": ["blue", -6] }, { "add": ["faith", -4] }]
+        "saga": "You tried to trade a working for the Athenaeum's locked book, but your craft faltered under the reader's gaze, and the book went home unopened.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -14
+            ]
+          },
+          {
+            "adjust_cult": [
+              "blue",
+              -6
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -4
+            ]
+          }
+        ]
       }
     },
     {
@@ -39,7 +154,27 @@
       "label": "Send the reader away — Runehold bows to no library",
       "win": {
         "text": "The reader bows, unbowed, and goes. The coven stands a little prouder over an emptier shelf.",
-        "effects": [{ "adjust_cult": ["blue", -8] }, { "add": ["faith", 5] }, { "add": ["lore", -3] }]
+        "saga": "A Blue reader of the Athenaeum offered forgotten lore for a debt of deference, and you sent him away unbowed — prouder over an emptier shelf.",
+        "effects": [
+          {
+            "adjust_cult": [
+              "blue",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              5
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              -3
+            ]
+          }
+        ]
       }
     }
   ]

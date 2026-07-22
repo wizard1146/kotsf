@@ -326,8 +326,8 @@ function covenIntroLine(m) {
 // from content/creation.json: prose · coven · value choices. Choice effects apply
 // only on Begin (see finishCreation), so Back never has to un-apply anything.
 function creationHTML(ctx) {
-  const steps = ctx.creationDefs || [];
-  const c = ctx.creation || { step: 0, choices: {} };
+  const c = ctx.creation || { step: 0, choices: {}, plan: [] };
+  const steps = c.plan || [];
   const step = steps[c.step];
   if (!step) return '<section class="create"><p class="muted">…</p></section>';
   const n = steps.length;
@@ -709,8 +709,8 @@ function pressureMetersHTML(ctx) {
   const { state } = ctx;
   return P_ORDER.filter((k) => showMeter(ctx, k)).map((k) => {
     const tab = P_TAB[k];
-    const cls = `cb-res ${k === 'fracture' ? 'danger' : ''}`;
-    const inner = `<img class="cb-ico" src="assets/icons/icon_min_${P_ICON[k]}.png" alt="${P_SHORT[k]}"><span class="cb-val">${state.pressures[k]}</span>`;
+    const cls = `cb-res cb-res--${k} ${k === 'fracture' ? 'danger' : ''}`;
+    const inner = `<span class="cb-ico" role="img" aria-label="${P_SHORT[k]}"></span><span class="cb-val">${state.pressures[k]}</span>`;
     return tab
       ? `<button class="${cls}" data-action="game-view" data-view="${tab}" title="${P_SHORT[k]}">${inner}</button>`
       : `<span class="${cls}" title="${P_SHORT[k]}">${inner}</span>`;
@@ -1000,6 +1000,17 @@ function overlayHTML(ctx) {
       <button data-action="close">No &mdash; keep playing</button>
       <button class="danger" data-action="confirm-new-yes">Yes &mdash; begin anew</button>
     </div>`);
+  if (ctx.overlay === 'confirm-role' && ctx.pendingRole) {
+    const pr = ctx.pendingRole;
+    const nameOf = (id) => ctx.state.circle.find((m) => m.id === id)?.name || 'a Wizard';
+    const roleLabel = (ctx.rolesDefs || []).find((r) => r.id === pr.role)?.label || 'that task';
+    return modal('confirm', 'Reassign the task?', `
+      <p class="confirm-warn"><b>${esc(roleLabel)}</b> is already held by <b>${esc(nameOf(pr.from))}</b>. Giving it to <b>${esc(nameOf(pr.member))}</b> will relieve ${esc(nameOf(pr.from))} of it &mdash; a task has only one keeper.</p>
+      <div class="confirm-actions">
+        <button data-action="close">Cancel</button>
+        <button class="primary" data-action="confirm-role-yes">Reassign it</button>
+      </div>`);
+  }
   const map = { saves: ['Load & Save', savesHTML(ctx)] };   // modal() esc()s the title — pass literal &
   const m = map[ctx.overlay];
   return m ? modal(ctx.overlay, m[0], m[1]) : '';

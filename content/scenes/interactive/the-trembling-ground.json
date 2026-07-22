@@ -1,37 +1,139 @@
 {
   "id": "the-trembling-ground",
   "type": "interactive",
-  "tags": ["fracture", "lore"],
+  "tags": [
+    "fracture",
+    "lore"
+  ],
   "title": "The Trembling Ground",
   "weight": 9,
-  "trigger": { "gte": ["fracture", 40] },
+  "trigger": {
+    "gte": [
+      "fracture",
+      40
+    ]
+  },
   "intro": "At Deepfrost the ground shudders and a seam of cold light splits the hillside above Runehold — the Fracture, surfacing. Through the crack, something the colour of nothing turns over in its sleep.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "The old wards can close it, but the working will cost us. Better cost than catastrophe." },
-    { "cast": { "trait": { "boldness": "high" } }, "text": "Or we go down and look. Whatever sleeps there knows things the Flame itself forgot." }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "The old wards can close it, but the working will cost us. Better cost than catastrophe."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "high"
+        }
+      },
+      "text": "Or we go down and look. Whatever sleeps there knows things the Flame itself forgot."
+    }
   ],
   "choices": [
     {
       "id": "seal-the-seam",
       "label": "Pour mana and lore into sealing the seam",
-      "requires": { "gte": ["mana", 16] },
+      "requires": {
+        "gte": [
+          "mana",
+          16
+        ]
+      },
       "win": {
         "text": "Apprentices chant until their voices fail; the seam knits shut and the light goes out. The hill is whole, and so are you — barely.",
-        "effects": [{ "add": ["mana", -16] }, { "add": ["lore", -5] }, { "add": ["fracture", -14] }]
+        "saga": "At Deepfrost the Fracture split the hillside above Runehold, and you poured mana and lore into sealing the seam until the light went out.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -16
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              -5
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -14
+            ]
+          }
+        ]
       }
     },
     {
       "id": "descend",
       "label": "Descend into the seam to learn what sleeps there",
-      "requires": { "gte": ["mana", 10] },
-      "test": { "stat": "lore", "vs": 55 },
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
+      "test": {
+        "stat": "lore",
+        "vs": 55
+      },
       "win": {
         "text": "You return wide-eyed with a fragment of the world's first memory — and the seam, satisfied, closes behind you.",
-        "effects": [{ "add": ["mana", -10] }, { "add": ["lore", 22] }, { "add": ["flamesRegard", 6] }, { "add": ["fracture", -6] }]
+        "saga": "When the Fracture split the hill above Runehold, you descended into the seam and returned with a fragment of the world's first memory, the crack closing behind you.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              22
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              6
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -6
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "What you find down there finds you back. You climb out changed, and the seam stays open, breathing.",
-        "effects": [{ "add": ["mana", -10] }, { "add": ["faith", -8] }, { "add": ["fracture", 8] }, { "transform_member": "random_apprentice_to_soul" }]
+        "saga": "You descended into the Fracture's seam above Runehold and what you found found you back — you climbed out changed, and the seam stayed open, breathing.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -8
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              8
+            ]
+          },
+          {
+            "transform_member": "random_apprentice_to_soul"
+          }
+        ]
       }
     }
   ]

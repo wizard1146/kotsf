@@ -1,41 +1,139 @@
 {
   "id": "the-cold-hearth",
   "type": "quest",
-  "tags": ["embers", "lore"],
+  "tags": [
+    "embers",
+    "lore"
+  ],
   "title": "The Cold Hearth",
   "weight": 6,
   "once": true,
-  "trigger": { "flag": "ember_hunt" },
+  "trigger": {
+    "flag": "ember_hunt"
+  },
   "intro": "The hold the wanderer named is a ruin, and its hearth is grey ash gone hard as stone. You are too late by a lifetime: this Ember guttered out long ago, and the little hold that kept it went out with it. Only char-marks on the walls remember there was ever a fire here — that, and a single scorched book the cold spared.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "Read the book before the wind takes it. A hearth that died has more to teach us than one that lived — this is how our own fire ends, if we let it." },
-    { "cast": { "school": "blue" }, "text": "The Athenaeum would give a great deal for what's on these pages. And so, Archon, should we." }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "Read the book before the wind takes it. A hearth that died has more to teach us than one that lived — this is how our own fire ends, if we let it."
+    },
+    {
+      "cast": {
+        "school": "blue"
+      },
+      "text": "The Athenaeum would give a great deal for what's on these pages. And so, Archon, should we."
+    }
   ],
   "choices": [
     {
       "id": "study",
       "label": "Take the scorched book and study the dead hearth",
-      "test": { "stat": "lore", "vs": 40 },
+      "test": {
+        "stat": "lore",
+        "vs": 40
+      },
       "win": {
         "text": "The pages tell of the slow going-out: workings that took twice the mana, then ten times, then none at all — until the last keeper could not remember the word for fire. A grim gift, but a gift. You understand the Forgetting a little better now, and how near it always is.",
-        "effects": [{ "add": ["lore", 12] }, { "add": ["faith", -3] }, { "set_flag": "read_a_failure_tale" }, { "unlock": "the-rival-hearth" }]
+        "saga": "You reached a hold the wanderer named and found its Ember long dead; from its one scorched book you learned how the Forgetting takes a hearth, word by word.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              12
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -3
+            ]
+          },
+          {
+            "set_flag": "read_a_failure_tale"
+          },
+          {
+            "unlock": "the-rival-hearth"
+          }
+        ]
       },
       "lose": {
         "text": "The book crumbles to flakes before you can read it deeply. You carry away only the cold, and the knowledge that another Ember is gone for good.",
-        "effects": [{ "add": ["lore", 3] }, { "add": ["faith", -4] }, { "unlock": "the-rival-hearth" }]
+        "saga": "You reached a dead Ember's ruined hearth, but its last book crumbled before you could read it — you carried away only the cold.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              3
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -4
+            ]
+          },
+          {
+            "unlock": "the-rival-hearth"
+          }
+        ]
       }
     },
     {
       "id": "rekindle",
       "label": "Wake an ember from the cold ash with your own Flame",
-      "test": { "stat": "mana", "vs": 55 },
+      "test": {
+        "stat": "mana",
+        "vs": 55
+      },
       "win": {
         "text": "You touch a shaving of your own hearth-rune to the dead ash — and for one impossible breath, it glows. It does not last. But you have proven the Flame remembers itself across its shards, and that is worth more than the mana it cost.",
-        "effects": [{ "add": ["mana", -14] }, { "add": ["flamesRegard", 10] }, { "add": ["lore", 4] }, { "unlock": "the-rival-hearth" }]
+        "saga": "At a dead hold's cold hearth you touched your own Flame to the ash, and for one breath it glowed — proof the Flame remembers itself across its shards.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -14
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              10
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              4
+            ]
+          },
+          {
+            "unlock": "the-rival-hearth"
+          }
+        ]
       },
       "lose": {
         "text": "The cold ash drinks your Flame and gives nothing back. Worse — something in the dead hearth stirs at the offering, and does not settle when you leave.",
-        "effects": [{ "add": ["mana", -14] }, { "add": ["fracture", 6] }, { "unlock": "the-rival-hearth" }]
+        "saga": "At a dead hold's cold hearth your Flame woke nothing — but something in the dead ash stirred at the offering, and did not settle.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -14
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              6
+            ]
+          },
+          {
+            "unlock": "the-rival-hearth"
+          }
+        ]
       }
     }
   ]

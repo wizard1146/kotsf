@@ -1,26 +1,90 @@
 {
   "id": "the-forgetting-warband",
   "type": "interactive",
-  "tags": ["war"],
+  "tags": [
+    "war"
+  ],
   "title": "The Warband That Forgot",
   "weight": 3,
-  "trigger": { "lt": ["lore", 32] },
+  "trigger": {
+    "lt": [
+      "lore",
+      32
+    ]
+  },
   "intro": "A Warrior-Guild patrol straggles to Runehold's gate, and something is wrong with them. They have forgotten the drill — how a shield-wall locks, which hand holds the spear. The Forgetting, it seems, does not spare steel. Their sergeant asks, ashamed, if the Wizards can put the knowing back into their heads.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "So it takes the Warriors too, Archon. If even the drill can be forgotten, no craft is safe — magic or steel. Help them, and they will not forget who did." },
-    { "cast": { "trait": { "piety": "low" } }, "text": "Let steel learn how it feels. Why spend our lore teaching men to kill us better?" }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "So it takes the Warriors too, Archon. If even the drill can be forgotten, no craft is safe — magic or steel. Help them, and they will not forget who did."
+    },
+    {
+      "cast": {
+        "trait": {
+          "piety": "low"
+        }
+      },
+      "text": "Let steel learn how it feels. Why spend our lore teaching men to kill us better?"
+    }
   ],
   "choices": [
     {
       "id": "help",
       "label": "Work a rune of remembering for them",
-      "requires": { "gte": ["mana", 10] },
-      "win": { "text": "You set the drill back into their hands with a working, and the shield-wall locks true again. The Guild will remember the debt — and the omen.", "effects": [{ "add": ["mana", -10] }, { "add": ["lore", 4] }, { "add": ["fracture", -4] }] }
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
+      "win": {
+        "text": "You set the drill back into their hands with a working, and the shield-wall locks true again. The Guild will remember the debt — and the omen.",
+        "saga": "A Warrior patrol came to your gate with the drill forgotten from their heads, and you worked a rune of remembering — the shield-wall locked true, and the Guild remembered the debt.",
+        "effects": [
+          {
+            "add": [
+              "mana",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              4
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              -4
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "refuse",
       "label": "Send them off with their forgetting",
-      "win": { "text": "You turn the patrol away, half-armed and half-remembering. Word spreads that Runehold would not help — and that the Forgetting has begun to eat the Warriors too.", "effects": [{ "add": ["fracture", 4] }, { "add": ["faith", -2] }] }
+      "win": {
+        "text": "You turn the patrol away, half-armed and half-remembering. Word spreads that Runehold would not help — and that the Forgetting has begun to eat the Warriors too.",
+        "saga": "A Warrior patrol came with the drill forgotten from their heads, and you sent them off unhelped — word spread that the Forgetting eats steel too, and that Runehold would not help.",
+        "effects": [
+          {
+            "add": [
+              "fracture",
+              4
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -2
+            ]
+          }
+        ]
+      }
     }
   ]
 }

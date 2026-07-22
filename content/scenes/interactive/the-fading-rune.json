@@ -1,22 +1,59 @@
 {
   "id": "the-fading-rune",
   "type": "interactive",
-  "tags": ["lore"],
+  "tags": [
+    "lore"
+  ],
   "title": "The Fading Rune",
   "weight": 10,
-  "trigger": { "lt": ["lore", 50] },
+  "trigger": {
+    "lt": [
+      "lore",
+      50
+    ]
+  },
   "intro": "A master-rune carved into the hall's keystone has begun to blur. Left alone, its working will be gone by the next thaw.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can." }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "Memory is the only wealth the cataclysm cannot burn. Pour mana into the archive while we still can."
+    }
   ],
   "choices": [
     {
       "id": "preserve",
       "label": "Pour mana into the archive",
-      "requires": { "gte": ["mana", 15] },
+      "requires": {
+        "gte": [
+          "mana",
+          15
+        ]
+      },
       "win": {
         "text": "Apprentices chant through the night; the rune deepens and holds.",
-        "effects": [{ "add": ["lore", 15] }, { "add": ["mana", -15] }, { "add": ["faith", 2] }]
+        "saga": "A master-rune in the hall's keystone had begun to blur, and you poured mana into it through the night until it deepened and held.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              15
+            ]
+          },
+          {
+            "add": [
+              "mana",
+              -15
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              2
+            ]
+          }
+        ]
       }
     },
     {
@@ -24,7 +61,27 @@
       "label": "Let it fade — we have more pressing needs",
       "win": {
         "text": "By morning the keystone is smooth and silent, and no one alive recalls what it said.",
-        "effects": [{ "add": ["lore", -10] }, { "add": ["faith", -3] }, { "add": ["fracture", 2] }]
+        "saga": "You let the blurring master-rune in the hall's keystone fade — by morning the stone was smooth, and no one alive recalled what it said.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              -10
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              -3
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              2
+            ]
+          }
+        ]
       }
     }
   ]

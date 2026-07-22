@@ -46,7 +46,11 @@ export function applyChoice(state, scene, choice) {
   const outcome = choice.test ? resolveTest(state, choice.test) : 'win';
   const branch = choice[outcome] || choice.win;
   if (branch) {
-    if (branch.text) chronicle(state, `${scene.title}: ${branch.text}`);
+    // Prefer a self-contained `saga` synopsis (names its own specifics, so it reads
+    // on the Saga page without the scene's intro for context); else fall back to the
+    // outcome text under the scene title.
+    if (branch.saga) chronicle(state, branch.saga);
+    else if (branch.text) chronicle(state, `${scene.title}: ${branch.text}`);
     applyEffects(state, branch.effects);
   }
   return outcome;

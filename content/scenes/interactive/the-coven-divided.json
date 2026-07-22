@@ -1,14 +1,33 @@
 {
   "id": "the-coven-divided",
   "type": "interactive",
-  "tags": ["hearth"],
+  "tags": [
+    "hearth"
+  ],
   "title": "The Coven Divided",
   "weight": 8,
-  "trigger": { "lt": ["faith", 40] },
+  "trigger": {
+    "lt": [
+      "faith",
+      40
+    ]
+  },
   "intro": "The Circle quarrels openly now. Two camps have formed at the hearth, and both look to you to name which Runehold will be: a coven of careful memory, or a coven that dares the Flame.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "Tell them we are keepers of memory first. Caution has kept us alive this long." },
-    { "cast": { "trait": { "piety": "high" } }, "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices." }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "Tell them we are keepers of memory first. Caution has kept us alive this long."
+    },
+    {
+      "cast": {
+        "trait": {
+          "piety": "high"
+        }
+      },
+      "text": "Tell them we are children of the Flame. A coven that fears its own god deserves no apprentices."
+    }
   ],
   "choices": [
     {
@@ -16,7 +35,27 @@
       "label": "Declare for memory and caution",
       "win": {
         "text": "You name Runehold a house of remembrance. The careful are heartened; the bold go quiet, and a little cold.",
-        "effects": [{ "add": ["faith", 10] }, { "add": ["lore", 5] }, { "add": ["flamesRegard", -8] }]
+        "saga": "With the Circle split between caution and daring, you named Runehold a house of memory — the careful were heartened, the bold went cold.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              10
+            ]
+          },
+          {
+            "add": [
+              "lore",
+              5
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              -8
+            ]
+          }
+        ]
       }
     },
     {
@@ -24,20 +63,59 @@
       "label": "Declare for the Flame and daring",
       "win": {
         "text": "You name Runehold a house of the Flame. The devout blaze up; the cautious bite their tongues and watch.",
-        "effects": [{ "add": ["faith", 10] }, { "add": ["flamesRegard", 10] }, { "add": ["fracture", 4] }]
+        "saga": "With the Circle split, you named Runehold a house of the Flame — the devout blazed up, the cautious bit their tongues and watched.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              10
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              10
+            ]
+          },
+          {
+            "add": [
+              "fracture",
+              4
+            ]
+          }
+        ]
       }
     },
     {
       "id": "hold-both",
       "label": "Refuse to choose — hold the Circle together",
-      "test": { "stat": "faith", "vs": 50 },
+      "test": {
+        "stat": "faith",
+        "vs": 50
+      },
       "win": {
         "text": "You speak for an hour and somehow both camps leave believing they won. It will not hold forever. It holds tonight.",
-        "effects": [{ "add": ["faith", 8] }]
+        "saga": "With the Circle split between memory and Flame, you refused to choose and held both camps together — for tonight, at least.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              8
+            ]
+          }
+        ]
       },
       "lose": {
         "text": "Your careful words satisfy no one. Both camps decide you are weak, and say so.",
-        "effects": [{ "add": ["faith", -8] }]
+        "saga": "You tried to hold the divided Circle together without choosing, and satisfied no one — both camps judged you weak, and said so.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              -8
+            ]
+          }
+        ]
       }
     }
   ]

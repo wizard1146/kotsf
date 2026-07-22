@@ -1,30 +1,95 @@
 {
   "id": "the-flickering-door",
   "type": "interactive",
-  "tags": ["flame"],
+  "tags": [
+    "flame"
+  ],
   "title": "The Flickering Door",
   "art": "art/scenes/secret-tower-basement.png",
   "weight": 6,
   "once": true,
-  "trigger": { "all": [{ "lt": ["lore", 45] }, { "gte": ["flamesRegard", 20] }] },
+  "trigger": {
+    "all": [
+      {
+        "lt": [
+          "lore",
+          45
+        ]
+      },
+      {
+        "gte": [
+          "flamesRegard",
+          20
+        ]
+      }
+    ]
+  },
   "intro": "A door breathes light at the foot of the stair. Behind it, the Sacred Flame waits — and the coven is forgetting faster than it can learn.",
   "advisors": [
-    { "cast": { "most": "wisdom" }, "text": "We forget faster than we learn. The Flame remembers everything. Use it." },
-    { "cast": { "trait": { "boldness": "low" } }, "text": "And what walks back out wearing our faces? I have buried Souls before, Archon." }
+    {
+      "cast": {
+        "most": "wisdom"
+      },
+      "text": "We forget faster than we learn. The Flame remembers everything. Use it."
+    },
+    {
+      "cast": {
+        "trait": {
+          "boldness": "low"
+        }
+      },
+      "text": "And what walks back out wearing our faces? I have buried Souls before, Archon."
+    }
   ],
   "choices": [
     {
       "id": "step-into-flame",
       "label": "Send an apprentice into the Flame",
-      "requires": { "gte": ["mana", 10] },
-      "test": { "stat": "flamesRegard", "vs": 50 },
+      "requires": {
+        "gte": [
+          "mana",
+          10
+        ]
+      },
+      "test": {
+        "stat": "flamesRegard",
+        "vs": 50
+      },
       "win": {
         "text": "She returns wreathed in old knowledge, eyes bright and strange. The lost runes are lost no longer.",
-        "effects": [{ "add": ["lore", 25] }, { "add": ["flamesRegard", 10] }, { "set_flag": "first_soul_blessing" }]
+        "saga": "With the coven forgetting faster than it could learn, you sent an apprentice into the Sacred Flame — she returned wreathed in old knowledge, the lost runes with her.",
+        "effects": [
+          {
+            "add": [
+              "lore",
+              25
+            ]
+          },
+          {
+            "add": [
+              "flamesRegard",
+              10
+            ]
+          },
+          {
+            "set_flag": "first_soul_blessing"
+          }
+        ]
       },
       "lose": {
         "text": "What returns is not her. The Circle does not speak for three days.",
-        "effects": [{ "add": ["faith", -15] }, { "transform_member": "random_apprentice_to_soul" }]
+        "saga": "You sent an apprentice into the Sacred Flame for the lost runes, and what returned was not her — the Circle did not speak for three days.",
+        "effects": [
+          {
+            "add": [
+              "faith",
+              -15
+            ]
+          },
+          {
+            "transform_member": "random_apprentice_to_soul"
+          }
+        ]
       }
     },
     {
@@ -32,7 +97,24 @@
       "label": "Seal the door. Some things should stay forgotten.",
       "win": {
         "text": "You wall the stair with rune and stone. The light goes out beneath your hand.",
-        "effects": [{ "add": ["flamesRegard", -5] }, { "add": ["faith", 5] }, { "unlock": "the-sealed-stair" }]
+        "saga": "The Sacred Flame breathed behind a door at the foot of the stair, and you walled it up with rune and stone — some things should stay forgotten.",
+        "effects": [
+          {
+            "add": [
+              "flamesRegard",
+              -5
+            ]
+          },
+          {
+            "add": [
+              "faith",
+              5
+            ]
+          },
+          {
+            "unlock": "the-sealed-stair"
+          }
+        ]
       }
     }
   ]
