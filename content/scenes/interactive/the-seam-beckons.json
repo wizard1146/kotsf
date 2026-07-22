@@ -1,0 +1,25 @@
+{
+  "id": "the-seam-beckons",
+  "type": "quest",
+  "tags": ["fracture", "lore"],
+  "title": "The Seam Beckons",
+  "weight": 4,
+  "trigger": { "all": [{ "no_expedition": true }, { "gte": ["fracture", 30] }] },
+  "intro": "A shepherd stumbles in from the high ground raving about cold light: a Fracture-seam has opened in the hills, wide and deep and quiet, and it does not close. Your readers grow still when they hear where. Down in a seam like that, the oldest of them says, may lie fragments of the world's first memory — how magic was done before the Flame broke. To go down is to risk two Wizards to a thing that eats minds. To leave it is to leave the deepest well of lore in the world unread.",
+  "advisors": [
+    { "cast": { "most": "wisdom" }, "text": "We will not find its like again, Archon. A living Fracture-seam is a wound in the world that remembers what the world has forgotten. Send our steadiest minds down, carefully, and we may read the road home from the Forgetting itself." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Or seal it and be glad of the walls. A seam that eats memory does not care how clever the mind we send it. Some wells are meant to stay unread." }
+  ],
+  "choices": [
+    {
+      "id": "send",
+      "label": "Send a party down into the seam",
+      "win": { "text": "You choose two of the Circle steady enough to look into the deep and come back knowing their own names, and send them to the seam in the hills. What they read there, if they read at all, may change everything.", "saga": "You sent a party down into a living Fracture-seam to read the fragments of the world's first memory.", "effects": [{ "expedition_offer": { "tmpl": "the-deep-fracture-descent" } }] }
+    },
+    {
+      "id": "decline",
+      "label": "Leave the seam unread",
+      "win": { "text": "You give the order to ward the hills and leave the seam alone. Whatever the deep remembers, it can keep — Runehold cannot spend two minds on the chance of reading it.", "saga": "You left the Fracture-seam in the hills unread, warding it rather than risk two Wizards to the deep.", "effects": [{ "add": ["faith", 2] }] }
+    }
+  ]
+}

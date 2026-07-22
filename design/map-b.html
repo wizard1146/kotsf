@@ -77,6 +77,7 @@
         <div class="row"><span>Wave opacity</span><input type="range" data-s="waveOpacity" min="0" max="1" step="0.05"><span class="val" data-v="waveOpacity"></span></div>
         <div class="row"><span>Region tint</span><input type="range" data-s="tintOpacity" min="0" max="0.6" step="0.02"><span class="val" data-v="tintOpacity"></span></div>
         <div class="row"><span>Glyph density</span><input type="range" data-s="glyphDensity" min="0" max="1" step="0.05"><span class="val" data-v="glyphDensity"></span></div>
+        <div class="row"><span>Coast smoothing (Chaikin)</span><input type="range" data-s="chaikin" min="0" max="4" step="1"><span class="val" data-v="chaikin"></span></div>
       </div>
 
       <div class="card">
@@ -106,7 +107,7 @@ const f = (n) => (+n).toFixed(2);
 
 const DEFAULTS = {
   sea:'#cdba8c', land:'#e6d4a6', ink:'#5c4a2e', mtnFill:'#8a7350', forestFill:'#6d7b3a', river:'#5b83a0', roadColor:'#7a6039', ashColor:'#2a2012',
-  coastW:0.2, waveOpacity:0.55, tintOpacity:0.30, glyphDensity:1,
+  coastW:0.2, waveOpacity:0.55, tintOpacity:0.30, glyphDensity:1, chaikin:0,
   roads:true, compass:true, frame:true, serif:true,
 };
 let STYLE = { ...DEFAULTS };
@@ -226,6 +227,42 @@ function polyCentroid(poly){
   let a=0,cx=0,cy=0; for(let i=0,j=poly.length-1;i<poly.length;j=i++){ const cr=poly[j].x*poly[i].y-poly[i].x*poly[j].y; a+=cr; cx+=(poly[j].x+poly[i].x)*cr; cy+=(poly[j].y+poly[i].y)*cr; }
   a*=0.5; return Math.abs(a)<1e-6 ? {x:poly[0].x,y:poly[0].y} : {x:cx/(6*a),y:cy/(6*a)};
 }
+// ---- coast softening: turn hard cell-edge boundaries into an organic fractal coast ----
+function chainSegments(segs){ // segs: [[a,b],...] → ordered closed point loops
+  const key=p=>Math.round(p.x*4)+','+Math.round(p.y*4);
+  const map=new Map(); segs.forEach((s,i)=>{ for(const e of [0,1]){ const k=key(s[e]); (map.get(k)||map.set(k,[]).get(k)).push([i,e]); } });
+  const used=new Array(segs.length).fill(false), loops=[];
+  for(let i=0;i<segs.length;i++){ if(used[i])continue;
+    const loop=[segs[i][0]]; let nxt=segs[i][1]; used[i]=true; loop.push(nxt); let g=0;
+    while(g++<segs.length+5){ const cand=(map.get(key(nxt))||[]).find(([si])=>!used[si]); if(!cand)break; const [si,se]=cand; used[si]=true; nxt=segs[si][se^1]; if(key(nxt)===key(loop[0]))break; loop.push(nxt); }
+    if(loop.length>2) loops.push(loop);
+  }
+  return loops;
+}
+function resampleLoop(pts, step){ // even arc-length resample so displacement is uniform
+  const n=pts.length, cum=[0]; let total=0;
+  for(let i=0;i<n;i++){ const a=pts[i],b=pts[(i+1)%n]; total+=Math.hypot(b.x-a.x,b.y-a.y); cum.push(total); }
+  if(total < step*3) return pts.slice();
+  const m=Math.max(12, Math.round(total/step)), out=[]; let seg=0;
+  for(let k=0;k<m;k++){ const d=k/m*total; while(seg<n-1 && cum[seg+1]<d) seg++; const a=pts[seg],b=pts[(seg+1)%n],L=(cum[seg+1]-cum[seg])||1,t=(d-cum[seg])/L; out.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t}); }
+  return out;
+}
+function fractalizeLoop(pts, rng, levels, amp, decay){ // midpoint displacement, same idea as the fractal method
+  let p=pts;
+  for(let lvl=0;lvl<levels;lvl++){ const np=[], a2=amp*Math.pow(decay,lvl);
+    for(let i=0;i<p.length;i++){ const a=p[i],b=p[(i+1)%p.length]; np.push(a);
+      const nx=-(b.y-a.y),ny=(b.x-a.x),L=Math.hypot(nx,ny)||1,d=(rng()*2-1)*a2;
+      np.push({x:(a.x+b.x)/2+nx/L*d, y:(a.y+b.y)/2+ny/L*d}); }
+    p=np; }
+  return p;
+}
+const softenCoast = (loop, rng) => chaikin(fractalizeLoop(resampleLoop(loop, 4), rng, 3, 2.4, 0.5), 1);
+// open-polyline variants (keep endpoints fixed) — for province borders, softened lightly
+function fractalizeOpen(pts, rng, levels, amp, decay){ let p=pts; for(let lvl=0;lvl<levels;lvl++){ const np=[], a2=amp*Math.pow(decay,lvl); for(let i=0;i<p.length-1;i++){ const a=p[i],b=p[i+1]; np.push(a); const nx=-(b.y-a.y),ny=(b.x-a.x),L=Math.hypot(nx,ny)||1,d=(rng()*2-1)*a2; np.push({x:(a.x+b.x)/2+nx/L*d,y:(a.y+b.y)/2+ny/L*d}); } np.push(p[p.length-1]); p=np; } return p; }
+function chaikinOpen(pts, iters){ let p=pts; for(let k=0;k<iters;k++){ if(p.length<3) break; const q=[p[0]]; for(let i=0;i<p.length-1;i++){ const a=p[i],b=p[i+1]; q.push({x:a.x*0.75+b.x*0.25,y:a.y*0.75+b.y*0.25},{x:a.x*0.25+b.x*0.75,y:a.y*0.25+b.y*0.75}); } q.push(p[p.length-1]); p=q; } return p; }
+// endpoints stay pinned to shared cell vertices, so adjacent borders stay connected; amp << coast
+const softenBorder = (seg, rng) => chaikinOpen(fractalizeOpen(seg, rng, 2, 0.9, 0.5), 1);
+
 function genVoronoi(rng){
   const fbm=makeFbm(rng), bb={x0:2,y0:2,x1:W-2,y1:H-2};
   let sites=[]; for(let i=0;i<66;i++) sites.push({x:bb.x0+rng()*(bb.x1-bb.x0), y:bb.y0+rng()*(bb.y1-bb.y0)});
@@ -234,7 +271,14 @@ function genVoronoi(rng){
   const cells=[];
   for(const s of sites){ const poly=voronoiCell(s,sites,bb); if(poly.length>=3) cells.push({site:s, poly, land:isLandAt(s.x,s.y)}); }
   const landCells=cells.filter(c=>c.land);
-  return { polys:landCells.map(c=>c.poly), center:{x:CX,y:CY}, curve:false, voronoi:{landCells} };
+  // coast = land-cell edges bordering water (used once) → chained loops → fractal-softened outline
+  const ek=(a,b)=>{ const p=Math.round(a.x*8)+','+Math.round(a.y*8), q=Math.round(b.x*8)+','+Math.round(b.y*8); return p<q?p+'|'+q:q+'|'+p; };
+  const em=new Map();
+  landCells.forEach(c=>{ const P=c.poly; for(let i=0;i<P.length;i++){ const a=P[i],b=P[(i+1)%P.length],k=ek(a,b); (em.get(k)||em.set(k,[]).get(k)).push([a,b]); } });
+  const bnd=[]; for(const list of em.values()) if(list.length===1) bnd.push(list[0]);
+  let coast=chainSegments(bnd).map(l=>softenCoast(l,rng)).filter(l=>Math.abs(polyArea(l))>25);
+  if(!coast.length) coast=[landCells[0]?.poly || makeBlob(CX,CY,38,1,0.8,rng,20,0.2).points];
+  return { polys:coast, center:{x:CX,y:CY}, curve:false, voronoi:{landCells} };
 }
 
 // ---------------- assemble a full world ----------------
@@ -270,9 +314,7 @@ function generateWorld(method, seed) {
   const roads = seats.map(s => [home, { x:s.x, y:s.y }]);
   const ashCorner = rng()<0.5 ? {x:6,y:4} : {x:W-6,y:4};
 
-  const landPaths = g.polys.map(p => toPath(p, g.curve));
-  const islandPath = toPath(island.points, true);
-
+  // coast kept as point-loops so a live Chaikin knob can smooth them at render time
   // Voronoi: assign each land cell to its nearest continental cult → provinces, then classify
   // every cell edge as coast (borders water) or province border (land cells, different owners).
   let voronoi = null;
@@ -282,12 +324,12 @@ function generateWorld(method, seed) {
     const ekey=(a,b)=>{ const p=Math.round(a.x*8)+','+Math.round(a.y*8), q=Math.round(b.x*8)+','+Math.round(b.y*8); return p<q?p+'|'+q:q+'|'+p; };
     const em=new Map();
     g.voronoi.landCells.forEach((c,ci)=>{ const p=c.poly; for(let i=0;i<p.length;i++){ const a=p[i],b=p[(i+1)%p.length],k=ekey(a,b); (em.get(k)||em.set(k,[]).get(k)).push({ci,a,b}); } });
-    const coastEdges=[], provEdges=[];
-    for (const list of em.values()) { if (list.length===1) coastEdges.push(list[0]); else if (list.length===2 && g.voronoi.landCells[list[0].ci].owner!==g.voronoi.landCells[list[1].ci].owner) provEdges.push(list[0]); }
+    const provBorders=[];
+    for (const list of em.values()) { if (list.length===2 && g.voronoi.landCells[list[0].ci].owner!==g.voronoi.landCells[list[1].ci].owner) provBorders.push(softenBorder([list[0].a, list[0].b], rng)); }
     const provinces=contSeats.map(s=>({ key:s.key, cells:g.voronoi.landCells.filter(c=>c.owner===s.key).map(c=>polyToPath(c.poly)) }));
-    voronoi={ coastEdges, provEdges, provinces };
+    voronoi={ provBorders, provinces };
   }
-  return { method, landPaths, islandPath, seats, home, tower, mountains, forests, river, roads, ashCorner, voronoi };
+  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: island.points, seats, home, tower, mountains, forests, river, roads, ashCorner, voronoi };
 }
 
 // ---------------- glyphs + renderer (parchment) ----------------
@@ -305,16 +347,19 @@ function renderB(w, fr, S) {
   const forests=w.forests.slice(0,Math.round(w.forests.length*dens));
   const mountains=w.mountains.slice(0,Math.max(2,Math.round(w.mountains.length*dens)));
   const isVor=!!w.voronoi;
-  // land fill: no per-cell stroke for Voronoi (coast is drawn from cell edges); island always outlined
-  const mainFill=w.landPaths.map(d=>`<path d="${d}" fill="${S.land}" stroke="${isVor?'none':S.ink}" stroke-width="${S.coastW}" stroke-linejoin="round"/>`).join('');
-  const islandFill=`<path d="${w.islandPath}" fill="${S.land}" stroke="${S.ink}" stroke-width="${(S.coastW*0.85).toFixed(2)}"/>`;
-  const clip=w.landPaths.map(d=>`<path d="${d}"/>`).join('')+`<path d="${w.islandPath}"/>`;
+  // coast = softened land outline (organic), + optional live Chaikin smoothing passes on top
+  const ck=Math.max(0,Math.round(S.chaikin||0));
+  const landPaths=w.landLoops.map(p=>toPath(ck?chaikin(p,ck):p, w.landCurve));
+  const islandPath=toPath(ck?chaikin(w.islandPts,ck):w.islandPts, true);
+  const mainFill=landPaths.map(d=>`<path d="${d}" fill="${S.land}" stroke="${S.ink}" stroke-width="${S.coastW}" stroke-linejoin="round"/>`).join('');
+  const islandFill=`<path d="${islandPath}" fill="${S.land}" stroke="${S.ink}" stroke-width="${(S.coastW*0.85).toFixed(2)}"/>`;
+  const clip=landPaths.map(d=>`<path d="${d}"/>`).join('')+`<path d="${islandPath}"/>`;
   const roads=S.roads?w.roads.map(([a,b])=>`<line x1="${f(a.x)}" y1="${f(a.y)}" x2="${f(b.x)}" y2="${f(b.y)}" stroke="${S.roadColor}" stroke-width=".4" stroke-dasharray="1 1.4" opacity=".7"/>`).join(''):'';
   let underTerrain, overClip='';
   if(isVor){
+    // faceted province washes (cells clipped to the softened land) + interior political borders
     underTerrain=w.voronoi.provinces.map(pr=>pr.cells.map(d=>`<path d="${d}" fill="${HEX[pr.key]}" opacity="${f(S.tintOpacity*0.6)}"/>`).join('')).join('');
-    overClip=w.voronoi.provEdges.map(e=>`<line x1="${f(e.a.x)}" y1="${f(e.a.y)}" x2="${f(e.b.x)}" y2="${f(e.b.y)}" stroke="${S.ink}" stroke-width=".2" opacity=".45" stroke-dasharray=".8 .8"/>`).join('')
-      + w.voronoi.coastEdges.map(e=>`<line x1="${f(e.a.x)}" y1="${f(e.a.y)}" x2="${f(e.b.x)}" y2="${f(e.b.y)}" stroke="${S.ink}" stroke-width="${S.coastW}" stroke-linecap="round"/>`).join('');
+    overClip=w.voronoi.provBorders.map(pl=>`<path d="${polyPath(pl)}" fill="none" stroke="${S.ink}" stroke-width=".2" opacity=".45" stroke-dasharray=".8 .8"/>`).join('');
   } else {
     underTerrain=tintRects(w.seats);
   }
@@ -332,8 +377,8 @@ function renderB(w, fr, S) {
       <path d="${polyPath(w.river)}" fill="none" stroke="${S.river}" stroke-width=".7" stroke-linecap="round"/>
       ${forestsSVG(forests,S.forestFill,S.ink)}
       ${mountainsSVG(mountains,S.mtnFill,S.ink)}
+      ${overClip}
     </g>
-    ${overClip}
     <rect width="${W}" height="${H}" fill="url(#ab)"/>
     ${w.seats.map(s=>seatMarker(s,S.ink,S.land,S.serif)).join('')}
     ${towerMarker(w,S.ink,S.land,S.serif)}

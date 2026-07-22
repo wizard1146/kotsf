@@ -1,0 +1,25 @@
+{
+  "id": "word-of-a-living-hearth",
+  "type": "quest",
+  "tags": ["embers"],
+  "title": "Word of a Living Hearth",
+  "weight": 4,
+  "trigger": { "all": [{ "no_expedition": true }, { "gte": ["flamesRegard", 30] }] },
+  "intro": "A trader with frightened eyes brings you more than goods: word of another living hearth, a hold to the south that keeps its own Ember behind a stone door and a wary Circle. \"They know your fire burns too,\" he murmurs. \"They wonder if you'll come as a friend — or as the one who takes their fire for your own.\" It is a season's road, there and back, and it would strip two Wizards from the Circle while they walk it.",
+  "advisors": [
+    { "cast": { "trait": { "piety": "high" } }, "text": "This is how the Flame comes home, Archon — hearth by hearth, thread by thread. Send an embassy, and send it in good faith. Two shards tended together burn nearer to whole." },
+    { "cast": { "class": "necromancer" }, "text": "Or send an embassy that keeps its options open. If they will treat, treat. If they are weak, we now know where a second Ember sleeps, and who guards it." }
+  ],
+  "choices": [
+    {
+      "id": "send",
+      "label": "Send a pilgrimage to the rival hearth",
+      "win": { "text": "You choose who will carry Runehold's name south, and set them on the long road to a stranger's fire. Whether they come home with an ally or an Ember, only the season will tell.", "saga": "You sent a pilgrimage south to the rival hearth that keeps its own living Ember.", "effects": [{ "expedition_offer": { "tmpl": "the-rival-hearth-pilgrimage" } }] }
+    },
+    {
+      "id": "decline",
+      "label": "Leave the other hearth to its own fire",
+      "win": { "text": "You send the trader on with a full belly and no answer. Let the southern hold keep its fire and its secrets; Runehold has road enough to walk without adding another.", "saga": "You let word of the rival living hearth pass, leaving the southern hold to its own fire.", "effects": [{ "add": ["lore", 2] }] }
+    }
+  ]
+}

@@ -24,16 +24,34 @@ const party = (state, exp) => (exp.party || []).map((id) => state.circle.find((m
 const names = (ms) => (ms.length <= 1 ? (ms[0]?.name || 'the party')
   : ms.slice(0, -1).map((m) => m.name).join(', ') + ' and ' + ms[ms.length - 1].name);
 
+// Record that a quest is on offer, so the controller can raise the party-picker
+// before it actually launches. Size comes from the template (player picks WHO).
+export function offerExpedition(state, spec) {
+  const tmpl = TEMPLATES[spec?.tmpl];
+  if (!tmpl || !(tmpl.stages || []).length) return;
+  state._pendingExpedition = { tmpl: tmpl.id, size: spec.party ?? tmpl.party ?? 1 };
+}
+// Which members are eligible to be sent (not already away). The ring-leader is
+// offered too — the player may spend anyone; the picker just enforces the count.
+export function eligibleParty(state) {
+  return state.circle.filter((m) => !m.away);
+}
+
 // ---- launch ---------------------------------------------------------------
-// Pick a party and send them. The ring-leader always stays home (someone must
-// keep the hearth), and away members can't be sent again.
+// Send a party. If `spec.partyIds` is given (the player chose), send exactly those;
+// otherwise auto-pick by the template's selector. Away members can't be sent.
 export function startExpedition(state, spec) {
   const tmpl = TEMPLATES[spec?.tmpl];
   if (!tmpl || !(tmpl.stages || []).length) return;
   const size = spec.party ?? tmpl.party ?? 1;
-  const avail = state.circle.filter((m) => !m.away && m.rank !== 'ring-leader');
-  if (!avail.length) { chronicle(state, `The road calls, but no Wizard can be spared for ${tmpl.title}.`); return; }
-  const chosen = pickParty(state, avail, tmpl.partyPick, size);
+  let chosen;
+  if (spec.partyIds && spec.partyIds.length) {
+    chosen = spec.partyIds.map((id) => state.circle.find((m) => m.id === id)).filter((m) => m && !m.away);
+  } else {
+    const avail = state.circle.filter((m) => !m.away && m.rank !== 'ring-leader');
+    if (!avail.length) { chronicle(state, `The road calls, but no Wizard can be spared for ${tmpl.title}.`); return; }
+    chosen = pickParty(state, avail, tmpl.partyPick, size);
+  }
   if (!chosen.length) return;
   if (state.nextExpeditionId == null) state.nextExpeditionId = 0;
   const id = `exp-${state.nextExpeditionId++}`;

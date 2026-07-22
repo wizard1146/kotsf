@@ -1,0 +1,105 @@
+{
+  "id": "the-deep-fracture-descent",
+  "title": "The Descent into the Fracture",
+  "party": 2,
+  "partyPick": "most:courage",
+  "stages": [
+    {
+      "id": "the-descent",
+      "away": 3,
+      "scene": {
+        "title": "Into the Seam",
+        "intro": "{party} send word from the lip of the Fracture-seam: they have found a way down, a throat of cold light that goes deeper than any lamp can follow. The air below tastes of a season that never happened. They ask how to go — carefully, roped and slow, or fast, before the seam notices them?",
+        "advisors": [
+          { "cast": { "most": "wisdom" }, "text": "Slow, Archon. A place that eats memory is not a place to hurry through — every handhold they forget on the way down is one they need on the way up." },
+          { "cast": { "trait": { "boldness": "high" } }, "text": "Fast. The seam is asleep and the deep is far. Tell them to be down and back before the thing the colour of nothing rolls over and opens an eye." }
+        ],
+        "choices": [
+          {
+            "id": "careful",
+            "label": "Word: descend slow and roped",
+            "win": { "text": "{party} go down a handspan at a time, marking the way behind them against the forgetting. It is slow, and it is sane, and by the season's turn they are deep and still themselves.", "saga": "{party} descended into the Fracture-seam slow and roped, marking every step against the forgetting.", "effects": [{ "expedition_advance": true }] }
+          },
+          {
+            "id": "fast",
+            "label": "Word: descend fast, before the seam wakes",
+            "win": { "text": "{party} go down quick and reckless, and reach the deep with their nerve intact and half their marks forgotten behind them. Faster — but the way back is a rumour now.", "saga": "{party} plunged fast into the Fracture-seam, reaching the deep quickly but leaving the way home half-forgotten behind them.", "effects": [{ "add": ["fracture", 3] }, { "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-first-fragments",
+      "away": 3,
+      "scene": {
+        "title": "The First Fragments",
+        "intro": "Word comes back changed, the runner's hand shaking on the page. In the deep of the seam {party} have found fragments — shards of the world's first memory, the way things knew how to be before the Forgetting. It could be read, if a mind is strong enough to hold it. It could also unmake the mind that tries.",
+        "advisors": [
+          { "cast": { "most": "wisdom" }, "text": "This is why we sent them, Archon. Tell them to read — carefully, and only what they can carry. A single true page of the first memory is worth a year of lamp-oil scholarship." },
+          { "cast": { "trait": { "piety": "low" } }, "text": "Or tell them to touch nothing. A mind is a small cup to pour the world's first memory into. It spills, and what spills does not come back." }
+        ],
+        "choices": [
+          {
+            "id": "read",
+            "label": "Word: read the fragments, carefully",
+            "test": { "stat": "lore", "vs": 52 },
+            "win": { "text": "{party} read slow, and hold. Page by page the deep gives up a little of how the world once knew itself, and they copy it down with steady hands. The coven will be wiser for this, and older about the eyes.", "saga": "In the deep of the Fracture, {party} read fragments of the world's first memory and held their minds — a page of how things once knew how to be.", "effects": [{ "add": ["lore", 10] }, { "add": ["flamesRegard", 3] }, { "expedition_advance": true }] },
+            "lose": { "text": "The fragments are too much, too fast. Something in the reading comes loose in {party}, and the seam around them begins, very gently, to come apart. They stop reading. They may have stopped too late.", "saga": "{party} reached into the Fracture's first memory and could not hold it; the reading came loose in them, and the seam began to unmake.", "effects": [{ "add": ["fracture", 4] }, { "expedition_goto": "the-unmaking" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-heart-of-the-seam",
+      "away": 4,
+      "scene": {
+        "title": "The Heart of the Seam",
+        "intro": "At the very heart of the seam, {party} find it: not a fragment but the whole of a memory, turning slow in the cold light — the world remembering, all at once, how magic was done before the Flame broke. They could take a shard of it and climb for daylight. Or they could reach for the whole, here, where it is anchored, and risk everything on one impossible grasp.",
+        "advisors": [
+          { "cast": { "most": "guile" }, "text": "A shard and a safe climb, Archon. What they can carry out alive is worth infinitely more than what they die reaching for." },
+          { "cast": { "trait": { "boldness": "high" } }, "text": "The whole memory, once, here, where it is anchored — we may never stand in such a place again. If they can hold it, the road back from the Forgetting opens under our feet." }
+        ],
+        "choices": [
+          {
+            "id": "shard",
+            "label": "Word: take a shard and climb for daylight",
+            "win": { "text": "{party} break off what a mind can carry and begin the long climb up, the shard of first memory burning steady and cold against the chest. They come home wiser and whole, and that is no small thing to carry out of the Fracture.", "saga": "{party} took a shard of the world's first memory from the heart of the seam and climbed home wiser and whole.", "effects": [{ "add": ["lore", 12] }, { "add": ["mana", 8] }, { "add": ["flamesRegard", 4] }, { "expedition_end": "return" }] }
+          },
+          {
+            "id": "whole",
+            "label": "Word: reach for the whole memory, here where it is anchored",
+            "test": { "stat": "mana", "vs": 65 },
+            "win": { "text": "{party} reach into the whole of it, and for one impossible breath they hold the world's first memory entire — how magic was done, how it was meant to be, all of it. They cannot keep it. But they carry out enough, and something in them has seen the shape of the road home from the long forgetting.", "saga": "{party} reached for the whole of the world's first memory in the Fracture's heart and held it, one impossible breath — and carried out a glimpse of the road back from the Forgetting.", "effects": [{ "add": ["lore", 18] }, { "add": ["flamesRegard", 10] }, { "add": ["mana", 6] }, { "set_flag": "glimpsed_first_memory" }, { "expedition_end": "return" }] },
+            "lose": { "text": "The whole memory gives more than any mind can hold, and it takes {party} in exchange for the reaching. The seam folds shut over them, satisfied, and the cold light goes out. They are the Fracture's now.", "saga": "{party} reached for the whole of the world's first memory and it took them; the Fracture's heart closed over them and kept them.", "effects": [{ "add": ["fracture", 10] }, { "expedition_end": "lost" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-unmaking",
+      "away": 2,
+      "scene": {
+        "title": "The Unmaking",
+        "intro": "The seam is coming apart around {party}, slow and patient, the cold light beginning to forget the shape of the walls that hold it up. They send word by a runner who can no longer quite remember his own name: cut losses and climb now, or press deeper for the memory while there is still a deeper to reach?",
+        "advisors": [
+          { "cast": { "trait": { "boldness": "low" } }, "text": "Out, Archon. Now. A hold can survive an empty-handed party. It cannot survive learning what the bottom of an unmaking seam looks like." },
+          { "cast": { "most": "courage" }, "text": "They are already this deep and already this changed. Tell them to press on — if there is a memory to be had at the bottom of this, it is worth what the climb will cost." }
+        ],
+        "choices": [
+          {
+            "id": "cut-losses",
+            "label": "Word: cut losses and climb out now",
+            "win": { "text": "{party} abandon the reading and climb for the light, the seam unmaking the way behind them as fast as they can leave it. They reach the lip with nothing but their lives and the cold — but their lives are enough.", "saga": "{party} fled the unmaking Fracture-seam empty-handed, climbing out just ahead of the light forgetting the walls.", "effects": [{ "add": ["fracture", 4] }, { "add": ["faith", -2] }, { "expedition_end": "return" }] }
+          },
+          {
+            "id": "press",
+            "label": "Word: press deeper before the seam is gone",
+            "test": { "stat": "courage", "vs": 55 },
+            "win": { "text": "{party} go down into the unmaking rather than out of it, and against every sense they wrest a shard of the first memory from the collapsing deep before they turn and run for the light. They come home changed, and carrying something worth the change.", "saga": "{party} pressed into the unmaking Fracture-seam and tore a shard of the first memory from the collapsing deep before fleeing for the light.", "effects": [{ "add": ["lore", 12] }, { "add": ["fracture", 5] }, { "add": ["flamesRegard", 4] }, { "expedition_end": "return" }] },
+            "lose": { "text": "There is no shard, and there is no more up. The unmaking reaches {party} before they reach the light, and the seam closes over the place where they were as though it had forgotten they were ever there.", "saga": "{party} pressed deeper into the unmaking seam and it closed over them, forgetting they had ever been there.", "effects": [{ "add": ["fracture", 8] }, { "expedition_end": "lost" }] }
+          }
+        ]
+      }
+    }
+  ]
+}

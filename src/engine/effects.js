@@ -1,7 +1,7 @@
 // effects.js — the ONLY place state mutates. Centralized for debuggability:
 // if the state is ever wrong, there is exactly one file to look in.
 import { pickIndex, chronicle, rollMember, MAX_CIRCLE } from './state.js';
-import { startExpedition, advanceExpedition, endExpedition } from './expeditions.js';
+import { startExpedition, advanceExpedition, endExpedition, offerExpedition } from './expeditions.js';
 
 const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, v));
 
@@ -56,6 +56,7 @@ export function applyEffects(state, effects = []) {
     else if (e.unlock) state.followups.push(e.unlock);
     else if (e.transform_member) transformMember(state, e.transform_member);
     else if (e.recruit_member) recruitMember(state);
+    else if (e.expedition_offer) offerExpedition(state, e.expedition_offer);
     else if (e.expedition_start) startExpedition(state, e.expedition_start);
     else if (e.expedition_advance) advanceExpedition(state, null);
     else if (e.expedition_goto) advanceExpedition(state, e.expedition_goto);

@@ -11,7 +11,7 @@ import { createInitialState, pickIndex, seasonName } from '../src/engine/state.j
 import { meets } from '../src/engine/conditions.js';
 import { pickScene } from '../src/engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from '../src/engine/loop.js';
-import { registerExpeditions, dueExpedition, expeditionScene, nameReturningSoul } from '../src/engine/expeditions.js';
+import { registerExpeditions, dueExpedition, expeditionScene, nameReturningSoul, startExpedition } from '../src/engine/expeditions.js';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SCENES_DIR = join(__dir, '..', 'content', 'scenes');
@@ -69,6 +69,7 @@ while (state.turn < maxTurns && !end) {
   const choice = choices[pickIndex(state, choices.length)];
   const outcome = applyChoice(state, scene, choice);
   console.log(`T${String(state.turn).padStart(2)} ${seasonName(state.season).padEnd(9)} Y${state.year} | ${scene.title} -> "${choice.label}" [${outcome}]`);
+  if (state._pendingExpedition) { startExpedition(state, { tmpl: state._pendingExpedition.tmpl }); delete state._pendingExpedition; }   // no picker in the harness — auto-pick
   end = checkEnd(state);
 }
 

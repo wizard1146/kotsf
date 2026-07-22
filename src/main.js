@@ -9,12 +9,12 @@ import { meets } from './engine/conditions.js';
 import { pickScene } from './engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from './engine/loop.js';
 import { applyEffects } from './engine/effects.js';
-import { registerExpeditions, dueExpedition, expeditionScene, nameReturningSoul } from './engine/expeditions.js';
+import { registerExpeditions, dueExpedition, expeditionScene, nameReturningSoul, startExpedition, eligibleParty } from './engine/expeditions.js';
 import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v34';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v35';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -42,6 +42,7 @@ let pinnedCard = null;         // index of an advisor card tapped open (tap agai
 let casterId = null;           // Workings screen: chosen caster (null → default second-in-command)
 let selectedMember = null;     // Coven screen: advisor whose full sheet is open (null → roster)
 let pendingRole = null;        // { member, role, from }: a task reassignment awaiting confirmation
+let partyPicker = null;        // { tmpl, size, picked:[ids] }: choosing who goes on an offered expedition
 let cardsOpen = false;         // card bar raised (tuck mode): tap the tucked hand to lift it
 let codexTab = null;           // active codex category id (view falls back to first)
 let codexQuery = '';           // codex search text
@@ -238,6 +239,35 @@ function nameSoul(guess) {
 
 function proceed() {
   if (end) { phase = 'end'; draw(); return; }
+  // A quest was accepted this scene → raise the party-picker before time moves on.
+  if (state && state._pendingExpedition) {
+    partyPicker = { tmpl: state._pendingExpedition.tmpl, size: state._pendingExpedition.size, picked: [] };
+    delete state._pendingExpedition;
+    draw();
+    return;
+  }
+  advanceToScene();
+  draw();
+}
+
+// ---- the expedition party picker ------------------------------------------
+function togglePartyPick(id) {
+  if (!partyPicker) return;
+  const i = partyPicker.picked.indexOf(id);
+  if (i >= 0) partyPicker.picked.splice(i, 1);
+  else if (partyPicker.picked.length < partyPicker.size) partyPicker.picked.push(id);
+  draw();
+}
+function confirmParty() {
+  if (!partyPicker || partyPicker.picked.length !== partyPicker.size) return;
+  startExpedition(state, { tmpl: partyPicker.tmpl, partyIds: partyPicker.picked });
+  partyPicker = null;
+  advanceToScene();
+  draw();
+}
+function cancelParty() {           // changed your mind — no one goes
+  if (state) chronicle(state, 'You weighed the road and, in the end, sent no one.');
+  partyPicker = null;
   advanceToScene();
   draw();
 }
@@ -325,7 +355,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, expeditionDefs, pendingRole, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, expeditionDefs, pendingRole, partyPicker, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -440,6 +470,9 @@ app.addEventListener('click', (e) => {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
     case 'name-soul': nameSoul(el.dataset.name); break;
+    case 'pick-member': togglePartyPick(el.dataset.member); break;
+    case 'confirm-party': confirmParty(); break;
+    case 'cancel-party': cancelParty(); break;
     case 'continue': proceed(); break;
     case 'create-next': if (creation) { creation.step = Math.min(creation.plan.length - 1, creation.step + 1); draw(); scrollTop(); } break;
     case 'create-back': if (creation && creation.step > 0) { creation.step -= 1; draw(); scrollTop(); } break;

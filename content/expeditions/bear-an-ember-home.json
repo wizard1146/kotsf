@@ -1,0 +1,104 @@
+{
+  "id": "bear-an-ember-home",
+  "title": "Bearing the Ember Home",
+  "party": 2,
+  "partyPick": "most:courage",
+  "stages": [
+    {
+      "id": "the-finding",
+      "away": 3,
+      "scene": {
+        "title": "The Ember in the Ruin",
+        "intro": "{party} send word from the dead hold far to the east: they have found it, the dormant Ember the rumours promised, banked low in a hearth-rune the cold spared. It is theirs to carry home — but a sleeping Ember is a quiet burden, and a woken one a bright and hunted beacon. Wake it now for the strength of the road, or bear it cold and unseen?",
+        "advisors": [
+          { "cast": { "trait": { "piety": "high" } }, "text": "Wake it, Archon. A living Ember warms the ones who carry it and answers when they call — and it deserves to come home awake, not smuggled like stolen bread." },
+          { "cast": { "most": "guile" }, "text": "Cold, and hidden. A lit Ember on an open road is a torch held over one's own head. Let them carry it dark and let no one on that road know what they hold." }
+        ],
+        "choices": [
+          {
+            "id": "wake",
+            "label": "Word: wake the Ember for the road",
+            "win": { "text": "{party} coax the dormant Ember awake, and it flares small and glad against the cold. It lends them warmth and a little of its old strength — and it shines, now, for any eye on the long road east that knows to look.", "saga": "{party} woke the dormant Ember in the eastern ruin; it warmed them for the road, and shone for every eye that knew to look.", "effects": [{ "add": ["flamesRegard", 4] }, { "add": ["fracture", 2] }, { "expedition_advance": true }] }
+          },
+          {
+            "id": "cold",
+            "label": "Word: bear it cold and unseen",
+            "win": { "text": "{party} wrap the sleeping Ember in ash-cloth and shoulder it like any other burden. It gives them nothing on the road — no warmth, no strength — but it draws no eyes either, and on this road that may be the greater gift.", "saga": "{party} bore the dormant Ember home cold and hidden, wrapped in ash-cloth and drawing no eyes on the eastern road.", "effects": [{ "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-hunted-road",
+      "away": 3,
+      "scene": {
+        "title": "The Hunted Road",
+        "intro": "Word comes back tense and short: the road home is not empty. Someone knows what {party} carry — raiders, or a cult's outriders, shadowing them through the ash and closing slow. The Ember will not carry itself past them. It must be slipped past in the dark, or fought clear.",
+        "advisors": [
+          { "cast": { "most": "guile" }, "text": "Slip them, Archon. Tell our people to go by night and by the bad ground, and let the hunters chase a rumour while the Ember goes home the quiet way." },
+          { "cast": { "most": "power" }, "text": "Or break them. A hunter taught once that Runehold's fire bites back is a hunter who tells the others to leave our roads alone. Have them fight it clear." }
+        ],
+        "choices": [
+          {
+            "id": "evade",
+            "label": "Word: slip past the hunters in the dark",
+            "test": { "stat": "guile", "vs": 50 },
+            "win": { "text": "{party} go to ground by day and move by the bad ground at night, and the hunters chase shadows and old campfires while the Ember slips through their fingers. By the time they understand, Runehold's borders are close.", "saga": "{party} slipped the hunters on the eastern road by night and bad ground, and carried the Ember clear while their pursuers chased shadows.", "effects": [{ "add": ["lore", 3] }, { "expedition_advance": true }] },
+            "lose": { "text": "A moon too bright, a footprint left too plain — the hunters cut the trail and close in fast. There is no more slipping now; the road ahead is teeth, and {party} must come through them or not at all.", "saga": "{party} were run down on the eastern road while bearing the Ember home, the hunters closing in for a fight.", "effects": [{ "expedition_goto": "the-ambush" }] }
+          },
+          {
+            "id": "fight-clear",
+            "label": "Word: fight the hunters clear of the road",
+            "test": { "stat": "power", "vs": 52 },
+            "win": { "text": "{party} turn on their hunters in a narrow place and light the ash with a working, and the survivors run for softer country. Runehold's fire has bitten, and word of it will run the roads ahead of them. The Ember comes on.", "saga": "{party} turned on the hunters shadowing the Ember and broke them with rune and fire, and carried it on toward home.", "effects": [{ "add": ["mana", -8] }, { "add": ["fracture", -3] }, { "expedition_advance": true }] },
+            "lose": { "text": "The hunters were more, and readier, than {party} judged. The fight goes badly in the ash, and it is all they can do to hold onto the Ember and their lives and stagger on toward home, bloodied.", "saga": "{party} fought the hunters for the Ember and were bloodied for it, staggering on toward home with the fire barely held.", "effects": [{ "add": ["mana", -8] }, { "add": ["provisions", -6] }, { "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-homecoming",
+      "away": 3,
+      "scene": {
+        "title": "The Ember Comes Home",
+        "intro": "The watch on Runehold's wall calls it down first: {party} on the eastern road at dusk, footsore and ash-grey — and cradled between them, wrapped and whole, another Ember for the hearth. One more shard of the Sacred Flame come home out of the ruin of the world.",
+        "advisors": [
+          { "cast": { "trait": { "piety": "high" } }, "text": "Ring the hearth-bell, Archon. Every Ember that comes home is a candle lit against the long dark — and this one our own hands carried out of the ruin." }
+        ],
+        "choices": [
+          {
+            "id": "kindle",
+            "label": "Bring the Ember to Runehold's hearth",
+            "win": { "text": "{party} lay the recovered Ember beside Runehold's own, and for a moment the two fires lean together and remember. The hold is warmer, brighter, and one shard nearer whole than it was. The Circle keeps the day in the Saga.", "saga": "{party} bore a recovered Ember home to Runehold's hearth — one more shard of the Sacred Flame carried out of the ruin and set beside your own.", "effects": [{ "add": ["flamesRegard", 10] }, { "add": ["lore", 6] }, { "add": ["faith", 5] }, { "set_flag": "ember_borne" }, { "expedition_end": "return" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-ambush",
+      "away": 3,
+      "scene": {
+        "title": "The Ambush",
+        "intro": "The hunters have {party} cornered in a dry gully with the Ember between them, and there is no slipping and no more road. It comes to a hard, simple thing: give up the fire and buy the party's lives, or fight through and gamble everything — the Ember, and the ones who carry it — on coming out the far side.",
+        "advisors": [
+          { "cast": { "trait": { "boldness": "low" } }, "text": "Give them the fire, Archon. An Ember can be sought again. The Wizards who carry it cannot be rolled fresh from the ash. Buy them back." },
+          { "cast": { "most": "courage" }, "text": "Fight through. If we give up an Ember on a raider's say-so, we will give up the next on the next road, and the one after. Better to bleed for it now than be bled for it forever." }
+        ],
+        "choices": [
+          {
+            "id": "surrender-ember",
+            "label": "Give up the Ember to save the party",
+            "win": { "text": "{party} set the Ember down in the dust and step back from it, and the hunters take their prize and let them live. The party comes home whole and empty-handed, and the fire they carried so far burns now in some other, hungrier hold.", "saga": "{party} gave up the recovered Ember to raiders to save their own lives, and came home whole but empty-handed.", "effects": [{ "add": ["faith", -4] }, { "add": ["flamesRegard", -3] }, { "expedition_end": "return" }] }
+          },
+          {
+            "id": "fight-through",
+            "label": "Fight through and keep the Ember",
+            "test": { "stat": "courage", "vs": 55 },
+            "win": { "text": "{party} put their backs to the Ember and their fire in the hunters' faces, and by the end of it the gully is quiet and the road ahead is open. Bloodied, lessened, but unbroken — and the Ember is still theirs to carry home.", "saga": "{party} fought through the ambush in the dry gully and kept the Ember, bloodied but unbroken, and carried it on toward home.", "effects": [{ "add": ["mana", -10] }, { "add": ["provisions", -6] }, { "expedition_goto": "the-homecoming" }] },
+            "lose": { "text": "The gully was a good place to die, and the hunters knew it. {party} fall over the Ember they would not give up, and the raiders take it from their hands. Runehold will not see them, or the fire, again.", "saga": "{party} fought to keep the Ember in the ambush and fell over it; the raiders took both the fire and their lives.", "effects": [{ "add": ["fracture", 4] }, { "expedition_end": "lost" }] }
+          }
+        ]
+      }
+    }
+  ]
+}

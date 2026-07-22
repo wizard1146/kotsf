@@ -14,7 +14,7 @@
     {
       "id": "send",
       "label": "Send a party to the nameless pyramid",
-      "win": { "text": "You mark the road and choose who goes. Two of the Circle shoulder packs and set out into the ash; it will be seasons before you know what they found.", "saga": "You sent a party of the Circle into the ash-flats to open the nameless pyramid marked on a pedlar's old map.", "effects": [{ "expedition_start": { "tmpl": "the-nameless-pyramid" } }] }
+      "win": { "text": "You mark the road and choose who goes. Two of the Circle shoulder packs and set out into the ash; it will be seasons before you know what they found.", "saga": "You sent a party of the Circle into the ash-flats to open the nameless pyramid marked on a pedlar's old map.", "effects": [{ "expedition_offer": { "tmpl": "the-nameless-pyramid" } }] }
     },
     {
       "id": "decline",

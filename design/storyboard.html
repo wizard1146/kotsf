@@ -67,6 +67,23 @@
   .chip.unlock{color:var(--flame);border-color:var(--flame-deep);cursor:pointer}
   .chip.cult{color:#fff}
   .empty{color:var(--ink-dim);font-style:italic;padding:2rem;text-align:center}
+  .chip.exp{color:var(--flame);border-color:var(--flame-deep)}
+  .chip.exp.goto{cursor:pointer}
+  .chip.exp.end{color:#c9a0e0;border-color:#5b3a70}
+  /* expeditions section */
+  .exp-sect{margin:0 0 2rem}
+  .exp-sect>h2{font-family:var(--display);font-size:1.3rem;margin:0 0 .3rem;color:var(--flame)}
+  .exp-sect>p{color:var(--ink-dim);font-size:.82rem;margin:0 0 1rem}
+  .exp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.1rem;align-items:start}
+  .exp-tmpl{background:var(--panel);border:1px solid var(--flame-deep);border-radius:12px;padding:.9rem 1rem}
+  .exp-tmpl>h3{font-family:var(--display);color:var(--flame);margin:0;font-size:1.15rem}
+  .exp-meta{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);margin:.2rem 0 .6rem}
+  .exp-stage{border-top:1px dashed var(--line);padding:.55rem 0 .2rem;scroll-margin-top:5rem}
+  .exp-stage.flash{outline:2px solid var(--flame);border-radius:6px}
+  .exp-stage .st-id{font-family:var(--mono);font-size:.64rem;color:#c8b89a}
+  .exp-stage .st-kind{font-family:var(--mono);font-size:.6rem;color:#c9a0e0;border:1px solid #5b3a70;border-radius:20px;padding:.03rem .4rem;margin-left:.35rem}
+  .exp-stage h4{margin:.15rem 0 .1rem;font-size:.98rem;color:var(--ink)}
+  .exp-stage .intro{margin:.25rem 0}
 </style>
 </head>
 <body>
@@ -83,6 +100,7 @@
 </header>
 <main>
   <div class="coverage" id="coverage"></div>
+  <div id="expeditions"></div>
   <div class="grid" id="grid"></div>
   <p class="empty" id="empty" style="display:none">No scenes match.</p>
 </main>
@@ -119,7 +137,13 @@ function effChips(effects){ return (effects||[]).map(e=>{
   if(e.set_flag)return `<span class="chip flag">⚑ ${e.set_flag}</span>`;
   if(e.clear_flag)return `<span class="chip flag">⚑✕ ${e.clear_flag}</span>`;
   if(e.transform_member)return `<span class="chip soul">Soul lost</span>`;
+  if(e.recruit_member)return `<span class="chip up">+ recruit</span>`;
   if(e.set)return `<span class="chip flag">set ${e.set[0]}=${e.set[1]}</span>`;
+  if(e.expedition_offer)return `<span class="chip exp">▷ offer ${e.expedition_offer.tmpl||e.expedition_offer}</span>`;
+  if(e.expedition_start)return `<span class="chip exp">▶ start ${e.expedition_start.tmpl||e.expedition_start}</span>`;
+  if(e.expedition_advance)return `<span class="chip exp">→ next stage</span>`;
+  if(e.expedition_goto)return `<span class="chip exp goto" data-gostage="${e.expedition_goto}">⟶ ${e.expedition_goto}</span>`;
+  if(e.expedition_end)return `<span class="chip exp end">⇤ end · ${e.expedition_end}</span>`;
   return `<span class="chip">${esc(JSON.stringify(e))}</span>`;
 }).join(''); }
 
@@ -154,6 +178,46 @@ function card(s){
     ${choices}</div>`;
 }
 function flameOrCult(a){ return 'var(--flame)'; }
+
+// ---- expeditions: multi-stage quests, shown as template cards with their beats ----
+let EXPEDITIONS=[];
+function expBranch(b,tag){ if(!b) return '';
+  return `<div class="br"><span class="brn">${tag}</span> <span class="txt">${esc(b.text||'')}</span>
+    ${b.saga?`<div class="saga"><span class="sglabel">Saga</span>${esc(b.saga)}</div>`:`<div class="saga missing"><span class="sglabel">Saga</span>none</div>`}
+    <div class="chips">${effChips(b.effects)}</div></div>`; }
+function castLabel(c){ if(!c) return 'voice'; if(typeof c==='string') return c; if(c.most) return 'most '+c.most; if(c.class) return c.class; if(c.school) return c.school; if(c.trait){const[a,h]=Object.entries(c.trait)[0]; return a+' '+h;} return 'voice'; }
+function expStage(t,st){
+  const sc=st.scene||{};
+  const adv=(sc.advisors||[]).map(a=>`<div class="adv"><b>${esc(castLabel(a.cast))}</b>${a.if?` <span class="req">[${cond(a.if)}]</span>`:''} — ${esc(a.text)}</div>`).join('');
+  const choices=(sc.choices||[]).map(ch=>{
+    const test=ch.test?`<span class="test">contest: ${PL[ch.test.stat]||ch.test.stat} vs ${ch.test.vs}</span>`:'';
+    const reqs=ch.requires?`<span class="req">needs ${cond(ch.requires)}</span> `:'';
+    const branches=ch.test?(expBranch(ch.win,'win')+expBranch(ch.lose,'lose')):expBranch(ch.win||ch,'→');
+    return `<div class="choice"><div class="lbl">${esc(ch.label||'(auto)')}</div>${reqs}${test}${branches}</div>`;
+  }).join('');
+  return `<div class="exp-stage" id="expst-${t.id}-${st.id}">
+    <div><span class="st-id">stage ${st.id} · away ${st.away??3} tick(s)</span>${st.kind?`<span class="st-kind">${st.kind}</span>`:''}</div>
+    <h4>${esc(sc.title||st.id)}</h4>
+    ${sc.intro?`<div class="intro">${esc(sc.intro)}</div>`:''}
+    ${adv?`<div class="advisors">${adv}</div>`:''}
+    ${choices||'<div class="intro" style="color:var(--ink-dim)">(no choices — dynamic beat)</div>'}
+  </div>`;
+}
+function expTemplate(t){
+  return `<div class="exp-tmpl" id="exptmpl-${t.id}">
+    <h3>${esc(t.title||t.id)}</h3>
+    <div class="exp-meta">${t.id} · party ${t.party||1}${t.partyPick?` · pick ${t.partyPick}`:''} · ${(t.stages||[]).length} stage(s)</div>
+    ${(t.stages||[]).map(st=>expStage(t,st)).join('')}
+  </div>`;
+}
+function renderExpeditions(){
+  const el=document.getElementById('expeditions');
+  if(!EXPEDITIONS.length){ el.innerHTML=''; return; }
+  el.innerHTML=`<section class="exp-sect"><h2>Expeditions <span style="font-family:var(--mono);font-size:.7rem;color:var(--ink-dim)">${EXPEDITIONS.length}</span></h2>
+    <p>Long-running quests (not in the scene pool). A party leaves circulation; each stage's beat surfaces when its countdown ends. Launch scenes carry an <span class="chip exp">▷ offer</span> effect.</p>
+    <div class="exp-cards">${EXPEDITIONS.map(expTemplate).join('')}</div></section>`;
+  el.querySelectorAll('.chip.exp.goto').forEach(c=>c.onclick=()=>{ const tmpl=c.closest('.exp-tmpl'); const t=tmpl&&tmpl.querySelector('#expst-'+tmpl.id.replace('exptmpl-','')+'-'+c.dataset.gostage); if(t){ t.scrollIntoView({block:'center',behavior:'smooth'}); t.classList.add('flash'); setTimeout(()=>t.classList.remove('flash'),1200);} });
+}
 
 function coverage(){
   const el=document.getElementById('coverage');
@@ -198,10 +262,11 @@ document.getElementById('q').oninput=e=>{ state.q=e.target.value.trim().toLowerC
   try{
     const bundle=await (await fetch('../content/bundle.json')).json();
     SCENES=(bundle.scenes||[]).slice().sort((a,b)=>(a.type||'').localeCompare(b.type||'')||(a.title||'').localeCompare(b.title||''));
+    EXPEDITIONS=(bundle.expeditions||[]).slice().sort((a,b)=>(a.title||'').localeCompare(b.title||''));
     for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) for(const e of (ch[b]?.effects)||[]) if(e.unlock){ TARGETS.add(e.unlock); OPENERS.add(s.id); }
     const chains=OPENERS.size;
     document.getElementById('note').textContent=`${chains} scene(s) open follow-ups · ${TARGETS.size} follow-up(s)`;
-    coverage(); render();
+    coverage(); renderExpeditions(); render();
   }catch(err){ document.getElementById('grid').innerHTML=`<p class="empty">Couldn't load <code>content/bundle.json</code> — run <code>npm run dev</code> (it builds the bundle) and open this via the server, not file://.<br><br>${esc(err.message)}</p>`; }
 })();
 </script>

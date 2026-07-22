@@ -1,6 +1,78 @@
 {
   "scenes": [
     {
+      "id": "a-dormant-ember-found",
+      "type": "quest",
+      "tags": [
+        "embers"
+      ],
+      "title": "A Dormant Ember Found",
+      "weight": 4,
+      "trigger": {
+        "all": [
+          {
+            "no_expedition": true
+          },
+          {
+            "gte": [
+              "lore",
+              36
+            ]
+          }
+        ]
+      },
+      "intro": "A dying wanderer spends his last strength on a gift: the location of a dead hold far to the east, and the thing still banked in its cold hearth. \"Not out — sleeping,\" he rasps. \"An Ember, dormant, waiting for hands to carry it somewhere it can burn again.\" It is a long road through hard country to fetch it home, and country like that is full of others who would want a sleeping fire for themselves.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "Every Ember we bring home is a candle against the long dark, Archon. If one sleeps out there waiting for hands, let them be our hands. Send a party to bear it home."
+        },
+        {
+          "cast": {
+            "most": "guile"
+          },
+          "text": "Send them, but send them careful. A sleeping Ember on an open road is a prize half the ruin would kill for. Whoever goes must be as good at not being seen as at fighting."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send",
+          "label": "Send a party to bear the Ember home",
+          "win": {
+            "text": "You choose two hardy enough for the long east road and send them to fetch a sleeping fire out of a dead man's map. If they carry it home, Runehold is one shard nearer whole.",
+            "saga": "You sent a party east to recover a dormant Ember from a dead hold and bear it home to Runehold.",
+            "effects": [
+              {
+                "expedition_offer": {
+                  "tmpl": "bear-an-ember-home"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Let the sleeping Ember lie",
+          "win": {
+            "text": "You mark the dead man's map and set it aside. The east road is long and hungry, and a fire that has slept this long can sleep a while longer — until Runehold can spare the hands to fetch it safely.",
+            "saga": "You let a rumoured dormant Ember lie in its dead hold rather than spend a party on the long east road.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "a-map-in-the-ash",
       "type": "quest",
       "tags": [
@@ -47,7 +119,7 @@
             "saga": "You sent a party of the Circle into the ash-flats to open the nameless pyramid marked on a pedlar's old map.",
             "effects": [
               {
-                "expedition_start": {
+                "expedition_offer": {
                   "tmpl": "the-nameless-pyramid"
                 }
               }
@@ -2135,7 +2207,7 @@
             "saga": "You gave one of the Circle leave to walk the long road alone after a thread of forgotten lore.",
             "effects": [
               {
-                "expedition_start": {
+                "expedition_offer": {
                   "tmpl": "the-long-road"
                 }
               }
@@ -2388,6 +2460,79 @@
       ]
     },
     {
+      "id": "the-seam-beckons",
+      "type": "quest",
+      "tags": [
+        "fracture",
+        "lore"
+      ],
+      "title": "The Seam Beckons",
+      "weight": 4,
+      "trigger": {
+        "all": [
+          {
+            "no_expedition": true
+          },
+          {
+            "gte": [
+              "fracture",
+              30
+            ]
+          }
+        ]
+      },
+      "intro": "A shepherd stumbles in from the high ground raving about cold light: a Fracture-seam has opened in the hills, wide and deep and quiet, and it does not close. Your readers grow still when they hear where. Down in a seam like that, the oldest of them says, may lie fragments of the world's first memory — how magic was done before the Flame broke. To go down is to risk two Wizards to a thing that eats minds. To leave it is to leave the deepest well of lore in the world unread.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "We will not find its like again, Archon. A living Fracture-seam is a wound in the world that remembers what the world has forgotten. Send our steadiest minds down, carefully, and we may read the road home from the Forgetting itself."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "Or seal it and be glad of the walls. A seam that eats memory does not care how clever the mind we send it. Some wells are meant to stay unread."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send",
+          "label": "Send a party down into the seam",
+          "win": {
+            "text": "You choose two of the Circle steady enough to look into the deep and come back knowing their own names, and send them to the seam in the hills. What they read there, if they read at all, may change everything.",
+            "saga": "You sent a party down into a living Fracture-seam to read the fragments of the world's first memory.",
+            "effects": [
+              {
+                "expedition_offer": {
+                  "tmpl": "the-deep-fracture-descent"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Leave the seam unread",
+          "win": {
+            "text": "You give the order to ward the hills and leave the seam alone. Whatever the deep remembers, it can keep — Runehold cannot spend two minds on the chance of reading it.",
+            "saga": "You left the Fracture-seam in the hills unread, warding it rather than risk two Wizards to the deep.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-tourney-is-called",
       "type": "quest",
       "tags": [
@@ -2432,7 +2577,7 @@
             "saga": "You sent a champion of the Circle south to fight in the champion's tourney for Runehold's name.",
             "effects": [
               {
-                "expedition_start": {
+                "expedition_offer": {
                   "tmpl": "the-champions-tourney"
                 }
               }
@@ -2936,6 +3081,78 @@
       ]
     },
     {
+      "id": "word-of-a-living-hearth",
+      "type": "quest",
+      "tags": [
+        "embers"
+      ],
+      "title": "Word of a Living Hearth",
+      "weight": 4,
+      "trigger": {
+        "all": [
+          {
+            "no_expedition": true
+          },
+          {
+            "gte": [
+              "flamesRegard",
+              30
+            ]
+          }
+        ]
+      },
+      "intro": "A trader with frightened eyes brings you more than goods: word of another living hearth, a hold to the south that keeps its own Ember behind a stone door and a wary Circle. \"They know your fire burns too,\" he murmurs. \"They wonder if you'll come as a friend — or as the one who takes their fire for your own.\" It is a season's road, there and back, and it would strip two Wizards from the Circle while they walk it.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "This is how the Flame comes home, Archon — hearth by hearth, thread by thread. Send an embassy, and send it in good faith. Two shards tended together burn nearer to whole."
+        },
+        {
+          "cast": {
+            "class": "necromancer"
+          },
+          "text": "Or send an embassy that keeps its options open. If they will treat, treat. If they are weak, we now know where a second Ember sleeps, and who guards it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send",
+          "label": "Send a pilgrimage to the rival hearth",
+          "win": {
+            "text": "You choose who will carry Runehold's name south, and set them on the long road to a stranger's fire. Whether they come home with an ally or an Ember, only the season will tell.",
+            "saga": "You sent a pilgrimage south to the rival hearth that keeps its own living Ember.",
+            "effects": [
+              {
+                "expedition_offer": {
+                  "tmpl": "the-rival-hearth-pilgrimage"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Leave the other hearth to its own fire",
+          "win": {
+            "text": "You send the trader on with a full belly and no answer. Let the southern hold keep its fire and its secrets; Runehold has road enough to walk without adding another.",
+            "saga": "You let word of the rival living hearth pass, leaving the southern hold to its own fire.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "ash-on-the-wind",
       "type": "news",
       "tags": [
@@ -3208,6 +3425,14 @@
         {
           "term": "Runehold",
           "body": "Your coven seat, and one of the scattered hearths — a few dozen souls keeping an EMBER of the Sacred Flame alive in a guttering hearth-rune. It is the coven's heart and its last thread to the old power: let it die and Runehold dies with it. Grow it from a hearth to a power, or dwindle into a Forgotten hold."
+        },
+        {
+          "term": "Expeditions",
+          "body": "Some undertakings cannot be done from the hearth. When you send a party out — to open a tomb, fight at the lists, or follow a thread of lore into the ash — those Wizards LEAVE the Circle for several seasons. While away they cannot cast, counsel, or hold a task, though they keep their place on the roster. The party sends word each season as the quest unfolds, and your choices steer it; then they come home — richer for it, changed by it, or not at all. Choose who goes with care: a strong hand on the road is a strong hand you do without at home."
+        },
+        {
+          "term": "The Returning Soul",
+          "body": "The far road takes as surely as it gives. A Wizard gone long may return wearing their own face but with the Flame's hand upon them — a Forgotten Soul where a Wizard set out. And a returning Soul is not always the one who left: sometimes it is one of your own, long lost or given to the Flame, come back in a borrowed shape. When such a one waits at the firelight to be known, you must NAME it. Name it true and you grant it a kind of peace; name it wrong, and the Circle will wonder what else you have forgotten."
         }
       ]
     }
@@ -4891,6 +5116,333 @@
   ],
   "expeditions": [
     {
+      "id": "bear-an-ember-home",
+      "title": "Bearing the Ember Home",
+      "party": 2,
+      "partyPick": "most:courage",
+      "stages": [
+        {
+          "id": "the-finding",
+          "away": 3,
+          "scene": {
+            "title": "The Ember in the Ruin",
+            "intro": "{party} send word from the dead hold far to the east: they have found it, the dormant Ember the rumours promised, banked low in a hearth-rune the cold spared. It is theirs to carry home — but a sleeping Ember is a quiet burden, and a woken one a bright and hunted beacon. Wake it now for the strength of the road, or bear it cold and unseen?",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "Wake it, Archon. A living Ember warms the ones who carry it and answers when they call — and it deserves to come home awake, not smuggled like stolen bread."
+              },
+              {
+                "cast": {
+                  "most": "guile"
+                },
+                "text": "Cold, and hidden. A lit Ember on an open road is a torch held over one's own head. Let them carry it dark and let no one on that road know what they hold."
+              }
+            ],
+            "choices": [
+              {
+                "id": "wake",
+                "label": "Word: wake the Ember for the road",
+                "win": {
+                  "text": "{party} coax the dormant Ember awake, and it flares small and glad against the cold. It lends them warmth and a little of its old strength — and it shines, now, for any eye on the long road east that knows to look.",
+                  "saga": "{party} woke the dormant Ember in the eastern ruin; it warmed them for the road, and shone for every eye that knew to look.",
+                  "effects": [
+                    {
+                      "add": [
+                        "flamesRegard",
+                        4
+                      ]
+                    },
+                    {
+                      "add": [
+                        "fracture",
+                        2
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "cold",
+                "label": "Word: bear it cold and unseen",
+                "win": {
+                  "text": "{party} wrap the sleeping Ember in ash-cloth and shoulder it like any other burden. It gives them nothing on the road — no warmth, no strength — but it draws no eyes either, and on this road that may be the greater gift.",
+                  "saga": "{party} bore the dormant Ember home cold and hidden, wrapped in ash-cloth and drawing no eyes on the eastern road.",
+                  "effects": [
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-hunted-road",
+          "away": 3,
+          "scene": {
+            "title": "The Hunted Road",
+            "intro": "Word comes back tense and short: the road home is not empty. Someone knows what {party} carry — raiders, or a cult's outriders, shadowing them through the ash and closing slow. The Ember will not carry itself past them. It must be slipped past in the dark, or fought clear.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "guile"
+                },
+                "text": "Slip them, Archon. Tell our people to go by night and by the bad ground, and let the hunters chase a rumour while the Ember goes home the quiet way."
+              },
+              {
+                "cast": {
+                  "most": "power"
+                },
+                "text": "Or break them. A hunter taught once that Runehold's fire bites back is a hunter who tells the others to leave our roads alone. Have them fight it clear."
+              }
+            ],
+            "choices": [
+              {
+                "id": "evade",
+                "label": "Word: slip past the hunters in the dark",
+                "test": {
+                  "stat": "guile",
+                  "vs": 50
+                },
+                "win": {
+                  "text": "{party} go to ground by day and move by the bad ground at night, and the hunters chase shadows and old campfires while the Ember slips through their fingers. By the time they understand, Runehold's borders are close.",
+                  "saga": "{party} slipped the hunters on the eastern road by night and bad ground, and carried the Ember clear while their pursuers chased shadows.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "A moon too bright, a footprint left too plain — the hunters cut the trail and close in fast. There is no more slipping now; the road ahead is teeth, and {party} must come through them or not at all.",
+                  "saga": "{party} were run down on the eastern road while bearing the Ember home, the hunters closing in for a fight.",
+                  "effects": [
+                    {
+                      "expedition_goto": "the-ambush"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "fight-clear",
+                "label": "Word: fight the hunters clear of the road",
+                "test": {
+                  "stat": "power",
+                  "vs": 52
+                },
+                "win": {
+                  "text": "{party} turn on their hunters in a narrow place and light the ash with a working, and the survivors run for softer country. Runehold's fire has bitten, and word of it will run the roads ahead of them. The Ember comes on.",
+                  "saga": "{party} turned on the hunters shadowing the Ember and broke them with rune and fire, and carried it on toward home.",
+                  "effects": [
+                    {
+                      "add": [
+                        "mana",
+                        -8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "fracture",
+                        -3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The hunters were more, and readier, than {party} judged. The fight goes badly in the ash, and it is all they can do to hold onto the Ember and their lives and stagger on toward home, bloodied.",
+                  "saga": "{party} fought the hunters for the Ember and were bloodied for it, staggering on toward home with the fire barely held.",
+                  "effects": [
+                    {
+                      "add": [
+                        "mana",
+                        -8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "provisions",
+                        -6
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-homecoming",
+          "away": 3,
+          "scene": {
+            "title": "The Ember Comes Home",
+            "intro": "The watch on Runehold's wall calls it down first: {party} on the eastern road at dusk, footsore and ash-grey — and cradled between them, wrapped and whole, another Ember for the hearth. One more shard of the Sacred Flame come home out of the ruin of the world.",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "Ring the hearth-bell, Archon. Every Ember that comes home is a candle lit against the long dark — and this one our own hands carried out of the ruin."
+              }
+            ],
+            "choices": [
+              {
+                "id": "kindle",
+                "label": "Bring the Ember to Runehold's hearth",
+                "win": {
+                  "text": "{party} lay the recovered Ember beside Runehold's own, and for a moment the two fires lean together and remember. The hold is warmer, brighter, and one shard nearer whole than it was. The Circle keeps the day in the Saga.",
+                  "saga": "{party} bore a recovered Ember home to Runehold's hearth — one more shard of the Sacred Flame carried out of the ruin and set beside your own.",
+                  "effects": [
+                    {
+                      "add": [
+                        "flamesRegard",
+                        10
+                      ]
+                    },
+                    {
+                      "add": [
+                        "lore",
+                        6
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        5
+                      ]
+                    },
+                    {
+                      "set_flag": "ember_borne"
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-ambush",
+          "away": 3,
+          "scene": {
+            "title": "The Ambush",
+            "intro": "The hunters have {party} cornered in a dry gully with the Ember between them, and there is no slipping and no more road. It comes to a hard, simple thing: give up the fire and buy the party's lives, or fight through and gamble everything — the Ember, and the ones who carry it — on coming out the far side.",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "low"
+                  }
+                },
+                "text": "Give them the fire, Archon. An Ember can be sought again. The Wizards who carry it cannot be rolled fresh from the ash. Buy them back."
+              },
+              {
+                "cast": {
+                  "most": "courage"
+                },
+                "text": "Fight through. If we give up an Ember on a raider's say-so, we will give up the next on the next road, and the one after. Better to bleed for it now than be bled for it forever."
+              }
+            ],
+            "choices": [
+              {
+                "id": "surrender-ember",
+                "label": "Give up the Ember to save the party",
+                "win": {
+                  "text": "{party} set the Ember down in the dust and step back from it, and the hunters take their prize and let them live. The party comes home whole and empty-handed, and the fire they carried so far burns now in some other, hungrier hold.",
+                  "saga": "{party} gave up the recovered Ember to raiders to save their own lives, and came home whole but empty-handed.",
+                  "effects": [
+                    {
+                      "add": [
+                        "faith",
+                        -4
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        -3
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "fight-through",
+                "label": "Fight through and keep the Ember",
+                "test": {
+                  "stat": "courage",
+                  "vs": 55
+                },
+                "win": {
+                  "text": "{party} put their backs to the Ember and their fire in the hunters' faces, and by the end of it the gully is quiet and the road ahead is open. Bloodied, lessened, but unbroken — and the Ember is still theirs to carry home.",
+                  "saga": "{party} fought through the ambush in the dry gully and kept the Ember, bloodied but unbroken, and carried it on toward home.",
+                  "effects": [
+                    {
+                      "add": [
+                        "mana",
+                        -10
+                      ]
+                    },
+                    {
+                      "add": [
+                        "provisions",
+                        -6
+                      ]
+                    },
+                    {
+                      "expedition_goto": "the-homecoming"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The gully was a good place to die, and the hunters knew it. {party} fall over the Ember they would not give up, and the raiders take it from their hands. Runehold will not see them, or the fire, again.",
+                  "saga": "{party} fought to keep the Ember in the ambush and fell over it; the raiders took both the fire and their lives.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        4
+                      ]
+                    },
+                    {
+                      "expedition_end": "lost"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-champions-tourney",
       "title": "The Champion's Tourney",
       "party": 1,
@@ -5113,6 +5665,353 @@
                     },
                     {
                       "expedition_end": "return"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-deep-fracture-descent",
+      "title": "The Descent into the Fracture",
+      "party": 2,
+      "partyPick": "most:courage",
+      "stages": [
+        {
+          "id": "the-descent",
+          "away": 3,
+          "scene": {
+            "title": "Into the Seam",
+            "intro": "{party} send word from the lip of the Fracture-seam: they have found a way down, a throat of cold light that goes deeper than any lamp can follow. The air below tastes of a season that never happened. They ask how to go — carefully, roped and slow, or fast, before the seam notices them?",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "wisdom"
+                },
+                "text": "Slow, Archon. A place that eats memory is not a place to hurry through — every handhold they forget on the way down is one they need on the way up."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "high"
+                  }
+                },
+                "text": "Fast. The seam is asleep and the deep is far. Tell them to be down and back before the thing the colour of nothing rolls over and opens an eye."
+              }
+            ],
+            "choices": [
+              {
+                "id": "careful",
+                "label": "Word: descend slow and roped",
+                "win": {
+                  "text": "{party} go down a handspan at a time, marking the way behind them against the forgetting. It is slow, and it is sane, and by the season's turn they are deep and still themselves.",
+                  "saga": "{party} descended into the Fracture-seam slow and roped, marking every step against the forgetting.",
+                  "effects": [
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "fast",
+                "label": "Word: descend fast, before the seam wakes",
+                "win": {
+                  "text": "{party} go down quick and reckless, and reach the deep with their nerve intact and half their marks forgotten behind them. Faster — but the way back is a rumour now.",
+                  "saga": "{party} plunged fast into the Fracture-seam, reaching the deep quickly but leaving the way home half-forgotten behind them.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-first-fragments",
+          "away": 3,
+          "scene": {
+            "title": "The First Fragments",
+            "intro": "Word comes back changed, the runner's hand shaking on the page. In the deep of the seam {party} have found fragments — shards of the world's first memory, the way things knew how to be before the Forgetting. It could be read, if a mind is strong enough to hold it. It could also unmake the mind that tries.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "wisdom"
+                },
+                "text": "This is why we sent them, Archon. Tell them to read — carefully, and only what they can carry. A single true page of the first memory is worth a year of lamp-oil scholarship."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "low"
+                  }
+                },
+                "text": "Or tell them to touch nothing. A mind is a small cup to pour the world's first memory into. It spills, and what spills does not come back."
+              }
+            ],
+            "choices": [
+              {
+                "id": "read",
+                "label": "Word: read the fragments, carefully",
+                "test": {
+                  "stat": "lore",
+                  "vs": 52
+                },
+                "win": {
+                  "text": "{party} read slow, and hold. Page by page the deep gives up a little of how the world once knew itself, and they copy it down with steady hands. The coven will be wiser for this, and older about the eyes.",
+                  "saga": "In the deep of the Fracture, {party} read fragments of the world's first memory and held their minds — a page of how things once knew how to be.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        10
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The fragments are too much, too fast. Something in the reading comes loose in {party}, and the seam around them begins, very gently, to come apart. They stop reading. They may have stopped too late.",
+                  "saga": "{party} reached into the Fracture's first memory and could not hold it; the reading came loose in them, and the seam began to unmake.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        4
+                      ]
+                    },
+                    {
+                      "expedition_goto": "the-unmaking"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-heart-of-the-seam",
+          "away": 4,
+          "scene": {
+            "title": "The Heart of the Seam",
+            "intro": "At the very heart of the seam, {party} find it: not a fragment but the whole of a memory, turning slow in the cold light — the world remembering, all at once, how magic was done before the Flame broke. They could take a shard of it and climb for daylight. Or they could reach for the whole, here, where it is anchored, and risk everything on one impossible grasp.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "guile"
+                },
+                "text": "A shard and a safe climb, Archon. What they can carry out alive is worth infinitely more than what they die reaching for."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "high"
+                  }
+                },
+                "text": "The whole memory, once, here, where it is anchored — we may never stand in such a place again. If they can hold it, the road back from the Forgetting opens under our feet."
+              }
+            ],
+            "choices": [
+              {
+                "id": "shard",
+                "label": "Word: take a shard and climb for daylight",
+                "win": {
+                  "text": "{party} break off what a mind can carry and begin the long climb up, the shard of first memory burning steady and cold against the chest. They come home wiser and whole, and that is no small thing to carry out of the Fracture.",
+                  "saga": "{party} took a shard of the world's first memory from the heart of the seam and climbed home wiser and whole.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        12
+                      ]
+                    },
+                    {
+                      "add": [
+                        "mana",
+                        8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        4
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "whole",
+                "label": "Word: reach for the whole memory, here where it is anchored",
+                "test": {
+                  "stat": "mana",
+                  "vs": 65
+                },
+                "win": {
+                  "text": "{party} reach into the whole of it, and for one impossible breath they hold the world's first memory entire — how magic was done, how it was meant to be, all of it. They cannot keep it. But they carry out enough, and something in them has seen the shape of the road home from the long forgetting.",
+                  "saga": "{party} reached for the whole of the world's first memory in the Fracture's heart and held it, one impossible breath — and carried out a glimpse of the road back from the Forgetting.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        18
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        10
+                      ]
+                    },
+                    {
+                      "add": [
+                        "mana",
+                        6
+                      ]
+                    },
+                    {
+                      "set_flag": "glimpsed_first_memory"
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The whole memory gives more than any mind can hold, and it takes {party} in exchange for the reaching. The seam folds shut over them, satisfied, and the cold light goes out. They are the Fracture's now.",
+                  "saga": "{party} reached for the whole of the world's first memory and it took them; the Fracture's heart closed over them and kept them.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        10
+                      ]
+                    },
+                    {
+                      "expedition_end": "lost"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-unmaking",
+          "away": 2,
+          "scene": {
+            "title": "The Unmaking",
+            "intro": "The seam is coming apart around {party}, slow and patient, the cold light beginning to forget the shape of the walls that hold it up. They send word by a runner who can no longer quite remember his own name: cut losses and climb now, or press deeper for the memory while there is still a deeper to reach?",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "low"
+                  }
+                },
+                "text": "Out, Archon. Now. A hold can survive an empty-handed party. It cannot survive learning what the bottom of an unmaking seam looks like."
+              },
+              {
+                "cast": {
+                  "most": "courage"
+                },
+                "text": "They are already this deep and already this changed. Tell them to press on — if there is a memory to be had at the bottom of this, it is worth what the climb will cost."
+              }
+            ],
+            "choices": [
+              {
+                "id": "cut-losses",
+                "label": "Word: cut losses and climb out now",
+                "win": {
+                  "text": "{party} abandon the reading and climb for the light, the seam unmaking the way behind them as fast as they can leave it. They reach the lip with nothing but their lives and the cold — but their lives are enough.",
+                  "saga": "{party} fled the unmaking Fracture-seam empty-handed, climbing out just ahead of the light forgetting the walls.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        4
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        -2
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "press",
+                "label": "Word: press deeper before the seam is gone",
+                "test": {
+                  "stat": "courage",
+                  "vs": 55
+                },
+                "win": {
+                  "text": "{party} go down into the unmaking rather than out of it, and against every sense they wrest a shard of the first memory from the collapsing deep before they turn and run for the light. They come home changed, and carrying something worth the change.",
+                  "saga": "{party} pressed into the unmaking Fracture-seam and tore a shard of the first memory from the collapsing deep before fleeing for the light.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        12
+                      ]
+                    },
+                    {
+                      "add": [
+                        "fracture",
+                        5
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        4
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "There is no shard, and there is no more up. The unmaking reaches {party} before they reach the light, and the seam closes over the place where they were as though it had forgotten they were ever there.",
+                  "saga": "{party} pressed deeper into the unmaking seam and it closed over them, forgetting they had ever been there.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        8
+                      ]
+                    },
+                    {
+                      "expedition_end": "lost"
                     }
                   ]
                 }
@@ -5484,6 +6383,301 @@
                 "lose": {
                   "text": "The stone gives more than they can hold. The pyramid wakes around them, the stair folds shut, and the dark takes the party with the working half-done.",
                   "saga": "{party} reached too deep into the pyramid's anchored stone; it woke the tomb around them, and they did not climb back into the light.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        6
+                      ]
+                    },
+                    {
+                      "expedition_end": "lost"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-rival-hearth-pilgrimage",
+      "title": "The Pilgrimage to the Rival Hearth",
+      "party": 2,
+      "partyPick": "most:guile",
+      "stages": [
+        {
+          "id": "the-road-there",
+          "away": 3,
+          "scene": {
+            "title": "The Road to the Rival Hearth",
+            "intro": "Word comes back from {party}: they are three weeks on the road to the hold that keeps another living Ember, and near its borders now. How they come to the door will shape how the door opens. They ask your word — as humble pilgrims, or as equals bearing a fire of their own?",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "Have them go humbly, Archon. Two shards tended together burn nearer to whole — and no one opens a door to a raised chin."
+              },
+              {
+                "cast": {
+                  "most": "guile"
+                },
+                "text": "Humility is a posture, not a surrender. Tell them to bow low and watch everything — a hearth shows its weaknesses to a guest it pities."
+              }
+            ],
+            "choices": [
+              {
+                "id": "humble",
+                "label": "Word: go as humble pilgrims",
+                "win": {
+                  "text": "{party} lay down their staves at the treeline and approach the rival hearth with open hands and bowed heads. The watchers on the wall soften, a little.",
+                  "saga": "You sent {party} to the rival hearth as humble pilgrims, hands open and heads bowed.",
+                  "effects": [
+                    {
+                      "add": [
+                        "faith",
+                        2
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "proud",
+                "label": "Word: go as equals, bearing a fire of your own",
+                "win": {
+                  "text": "{party} approach the rival hearth as one Circle to another, Runehold's name spoken plainly. The watchers stiffen, but they do not reach for wards.",
+                  "saga": "You sent {party} to the rival hearth as equals, Runehold's name spoken plainly at their gate.",
+                  "effects": [
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-threshold",
+          "away": 3,
+          "scene": {
+            "title": "The Threshold",
+            "intro": "The rival Archon meets {party} on the stone threshold, a working half-shaped in her hand. \"We know what you carry,\" she says. \"We know what you want. Two Embers are stronger than one — but not if one hold swallows the other.\" {party} send for your word: sue for an accord, or take the fire while they stand so close to it?",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "Treat with them, Archon. This is how the Flame comes home — thread by thread, not by conquest. Have our people sue for an accord."
+              },
+              {
+                "cast": {
+                  "class": "necromancer"
+                },
+                "text": "Or take theirs. One great fire in one strong hold outweighs two frightened ones. They would do the same to us, given the nerve — and our people are already inside the door."
+              }
+            ],
+            "choices": [
+              {
+                "id": "sue",
+                "label": "Word: sue for an accord between the hearths",
+                "test": {
+                  "stat": "guile",
+                  "vs": 50
+                },
+                "win": {
+                  "text": "{party} speak long and carefully, and something in the rival Archon's eyes eases. She sets her half-working down. There is a door here after all.",
+                  "saga": "At the rival hearth's threshold, {party} spoke well, and the rival Archon set aside her working to hear an accord.",
+                  "effects": [
+                    {
+                      "expedition_goto": "the-accord"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The words come out a shade too eager, and the rival Archon hears the want beneath them. Her hand does not leave the working. The door, for now, is closed.",
+                  "saga": "{party} sued for an accord at the rival hearth, but the want showed through their words, and the door stayed shut.",
+                  "effects": [
+                    {
+                      "expedition_goto": "the-cold-door"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "seize",
+                "label": "Word: take their Ember while you stand at the fire",
+                "win": {
+                  "text": "You send the cold word back down the road: take it. {party} exchange a look on the threshold, and reach for the working that will open the way to another hold's fire.",
+                  "saga": "You sent {party} to seize the rival hearth's Ember by force, standing already at its very fire.",
+                  "effects": [
+                    {
+                      "expedition_goto": "the-seizure"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-accord",
+          "away": 3,
+          "scene": {
+            "title": "The Accord Sworn",
+            "intro": "A season of careful talk, and it is done: {party} return to the threshold to seal it. Two hearths, two Embers, sworn to keep faith and share what they remember. Not a gathering yet — but the first true thread of one, and it holds.",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "This is the road home, Archon. Not the whole of it — but the first stone of it, and we laid it without a single working drawn in anger."
+              }
+            ],
+            "choices": [
+              {
+                "id": "seal",
+                "label": "Seal the accord and bring the party home",
+                "win": {
+                  "text": "{party} clasp hands over both hearth-runes, and for a moment the two Embers lean toward each other like they remember being one Flame. They come home with an accord and an ally where there was a stranger.",
+                  "saga": "{party} sealed an accord between Runehold and the rival hearth — two Embers sworn to keep faith, the first thread of a gathering.",
+                  "effects": [
+                    {
+                      "add": [
+                        "flamesRegard",
+                        8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        6
+                      ]
+                    },
+                    {
+                      "add": [
+                        "lore",
+                        4
+                      ]
+                    },
+                    {
+                      "set_flag": "hearth_accord"
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-cold-door",
+          "away": 2,
+          "scene": {
+            "title": "The Cold Door",
+            "intro": "There is no more to be done here. The rival hearth keeps its door shut and its fire close, and {party} have worn out what welcome they had. They send for your word, but there is only one word to send: come home.",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "low"
+                  }
+                },
+                "text": "We have not made an enemy, Archon — only failed to make a friend. Bring them home before failing becomes the other thing."
+              }
+            ],
+            "choices": [
+              {
+                "id": "withdraw",
+                "label": "Call the party home from the cold door",
+                "win": {
+                  "text": "{party} bow to the shut door one last time and take the long road home, empty-handed but whole. The rival hearth watches them go, and does not follow.",
+                  "saga": "Rebuffed at the rival hearth's cold door, {party} came home empty-handed but whole, no enemy made.",
+                  "effects": [
+                    {
+                      "add": [
+                        "faith",
+                        -3
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-seizure",
+          "away": 3,
+          "scene": {
+            "title": "The Taking of the Fire",
+            "intro": "It is done in a single terrible working, or it is not done at all. {party} stand inside a rival hold's ward-lines, reaching for a fire that is not theirs, and the rival Circle is already turning toward them with murder in their hands.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "power"
+                },
+                "text": "No half-measures now, Archon. They must take it clean and fast, or the rival Circle will make Souls of them on their own threshold."
+              }
+            ],
+            "choices": [
+              {
+                "id": "take",
+                "label": "Take the Ember by force of magic",
+                "test": {
+                  "stat": "power",
+                  "vs": 55
+                },
+                "win": {
+                  "text": "It is quick, and it is ugly. {party} tear the Ember from its hearth and are gone before the rival Circle can close — Runehold has two fires now, and the certain knowledge that every other hearth will bar its door and sharpen something for it.",
+                  "saga": "{party} tore a second Ember from the rival hearth by force — Runehold burns with two fires now, and every other hearth has turned against it.",
+                  "effects": [
+                    {
+                      "add": [
+                        "flamesRegard",
+                        12
+                      ]
+                    },
+                    {
+                      "add": [
+                        "lore",
+                        6
+                      ]
+                    },
+                    {
+                      "add": [
+                        "fracture",
+                        8
+                      ]
+                    },
+                    {
+                      "set_flag": "hearths_hostile"
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The rival Circle was readier than yours. The working shatters, the ward-lines close, and {party} do not come back out of that hold — not as themselves, not at all.",
+                  "saga": "{party} reached for the rival hearth's Ember by force and were overmatched; they did not come home from that hold.",
                   "effects": [
                     {
                       "add": [

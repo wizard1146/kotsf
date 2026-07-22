@@ -385,6 +385,26 @@ button.cb-res:active { transform: translateY(0); }
 .road-chip span { color: var(--ink-dim); font-size: 0.76rem; }
 /* expedition beat: a small tag marking that this scene is a party reporting in */
 .exp-tag { display: inline-block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--flame); border: 1px solid var(--flame-deep); border-radius: 4px; padding: 0.1rem 0.45rem; margin-bottom: 0.5rem; }
+/* the party picker */
+.party-picker { padding: 1.1rem 1.2rem; overflow-y: auto; }
+.pp-title { font-family: var(--display); color: var(--flame); margin: 0 0 0.3rem; font-size: 1.4rem; }
+.pp-lead { color: var(--ink-dim); margin: 0 0 1rem; font-size: 0.92rem; }
+.pp-count { font-family: var(--mono); font-size: 0.82rem; margin-left: 0.4rem; color: var(--ink-dim); }
+.pp-count.ok { color: var(--ok); }
+.pp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.7rem; }
+.pp-card { text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.5rem; cursor: pointer; transition: border-color .14s, transform .08s; }
+.pp-card:hover { border-color: var(--flame-deep); }
+.pp-card:active { transform: translateY(1px); }
+.pp-card.on { border-color: var(--flame); box-shadow: 0 0 0 1px var(--flame) inset; }
+.pp-img { position: relative; aspect-ratio: 3 / 4; border-radius: 7px; overflow: hidden; margin-bottom: 0.35rem; background: radial-gradient(120% 90% at 50% 28%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); }
+.pp-check { position: absolute; top: 0.3rem; right: 0.3rem; width: 1.5rem; height: 1.5rem; display: grid; place-items: center; border-radius: 50%; background: var(--flame); color: #1a130a; font-weight: 700; }
+.pp-name { font-family: var(--display); font-size: 0.98rem; color: var(--ink); }
+.pp-sub { font-size: 0.72rem; color: var(--ink-dim); }
+.pp-stat { font-family: var(--mono); font-size: 0.68rem; color: #c8b89a; margin-top: 0.15rem; }
+.pp-actions { display: flex; justify-content: flex-end; gap: 0.7rem; margin-top: 1.2rem; }
+.pp-cancel { background: none; border: 1px solid var(--line); color: var(--ink-dim); border-radius: 7px; padding: 0.5rem 1rem; cursor: pointer; }
+.pp-confirm { background: var(--flame); border: 0; color: #1a130a; font-weight: 600; border-radius: 7px; padding: 0.5rem 1.3rem; cursor: pointer; }
+.pp-confirm:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* The Workings screen — Mana sink + the Fracture's player-controlled counter */
 .working-mana { display: flex; align-items: center; gap: 0.6rem; max-width: 420px; margin: 0.6rem 0 1.2rem; font-family: var(--mono); font-size: 0.82rem; }

@@ -1,0 +1,25 @@
+{
+  "id": "a-dormant-ember-found",
+  "type": "quest",
+  "tags": ["embers"],
+  "title": "A Dormant Ember Found",
+  "weight": 4,
+  "trigger": { "all": [{ "no_expedition": true }, { "gte": ["lore", 36] }] },
+  "intro": "A dying wanderer spends his last strength on a gift: the location of a dead hold far to the east, and the thing still banked in its cold hearth. \"Not out — sleeping,\" he rasps. \"An Ember, dormant, waiting for hands to carry it somewhere it can burn again.\" It is a long road through hard country to fetch it home, and country like that is full of others who would want a sleeping fire for themselves.",
+  "advisors": [
+    { "cast": { "trait": { "piety": "high" } }, "text": "Every Ember we bring home is a candle against the long dark, Archon. If one sleeps out there waiting for hands, let them be our hands. Send a party to bear it home." },
+    { "cast": { "most": "guile" }, "text": "Send them, but send them careful. A sleeping Ember on an open road is a prize half the ruin would kill for. Whoever goes must be as good at not being seen as at fighting." }
+  ],
+  "choices": [
+    {
+      "id": "send",
+      "label": "Send a party to bear the Ember home",
+      "win": { "text": "You choose two hardy enough for the long east road and send them to fetch a sleeping fire out of a dead man's map. If they carry it home, Runehold is one shard nearer whole.", "saga": "You sent a party east to recover a dormant Ember from a dead hold and bear it home to Runehold.", "effects": [{ "expedition_offer": { "tmpl": "bear-an-ember-home" } }] }
+    },
+    {
+      "id": "decline",
+      "label": "Let the sleeping Ember lie",
+      "win": { "text": "You mark the dead man's map and set it aside. The east road is long and hungry, and a fire that has slept this long can sleep a while longer — until Runehold can spare the hands to fetch it safely.", "saga": "You let a rumoured dormant Ember lie in its dead hold rather than spend a party on the long east road.", "effects": [{ "add": ["lore", 2] }] }
+    }
+  ]
+}

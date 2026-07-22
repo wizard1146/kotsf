@@ -1,0 +1,114 @@
+{
+  "id": "the-rival-hearth-pilgrimage",
+  "title": "The Pilgrimage to the Rival Hearth",
+  "party": 2,
+  "partyPick": "most:guile",
+  "stages": [
+    {
+      "id": "the-road-there",
+      "away": 3,
+      "scene": {
+        "title": "The Road to the Rival Hearth",
+        "intro": "Word comes back from {party}: they are three weeks on the road to the hold that keeps another living Ember, and near its borders now. How they come to the door will shape how the door opens. They ask your word — as humble pilgrims, or as equals bearing a fire of their own?",
+        "advisors": [
+          { "cast": { "trait": { "piety": "high" } }, "text": "Have them go humbly, Archon. Two shards tended together burn nearer to whole — and no one opens a door to a raised chin." },
+          { "cast": { "most": "guile" }, "text": "Humility is a posture, not a surrender. Tell them to bow low and watch everything — a hearth shows its weaknesses to a guest it pities." }
+        ],
+        "choices": [
+          {
+            "id": "humble",
+            "label": "Word: go as humble pilgrims",
+            "win": { "text": "{party} lay down their staves at the treeline and approach the rival hearth with open hands and bowed heads. The watchers on the wall soften, a little.", "saga": "You sent {party} to the rival hearth as humble pilgrims, hands open and heads bowed.", "effects": [{ "add": ["faith", 2] }, { "expedition_advance": true }] }
+          },
+          {
+            "id": "proud",
+            "label": "Word: go as equals, bearing a fire of your own",
+            "win": { "text": "{party} approach the rival hearth as one Circle to another, Runehold's name spoken plainly. The watchers stiffen, but they do not reach for wards.", "saga": "You sent {party} to the rival hearth as equals, Runehold's name spoken plainly at their gate.", "effects": [{ "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-threshold",
+      "away": 3,
+      "scene": {
+        "title": "The Threshold",
+        "intro": "The rival Archon meets {party} on the stone threshold, a working half-shaped in her hand. \"We know what you carry,\" she says. \"We know what you want. Two Embers are stronger than one — but not if one hold swallows the other.\" {party} send for your word: sue for an accord, or take the fire while they stand so close to it?",
+        "advisors": [
+          { "cast": { "trait": { "piety": "high" } }, "text": "Treat with them, Archon. This is how the Flame comes home — thread by thread, not by conquest. Have our people sue for an accord." },
+          { "cast": { "class": "necromancer" }, "text": "Or take theirs. One great fire in one strong hold outweighs two frightened ones. They would do the same to us, given the nerve — and our people are already inside the door." }
+        ],
+        "choices": [
+          {
+            "id": "sue",
+            "label": "Word: sue for an accord between the hearths",
+            "test": { "stat": "guile", "vs": 50 },
+            "win": { "text": "{party} speak long and carefully, and something in the rival Archon's eyes eases. She sets her half-working down. There is a door here after all.", "saga": "At the rival hearth's threshold, {party} spoke well, and the rival Archon set aside her working to hear an accord.", "effects": [{ "expedition_goto": "the-accord" }] },
+            "lose": { "text": "The words come out a shade too eager, and the rival Archon hears the want beneath them. Her hand does not leave the working. The door, for now, is closed.", "saga": "{party} sued for an accord at the rival hearth, but the want showed through their words, and the door stayed shut.", "effects": [{ "expedition_goto": "the-cold-door" }] }
+          },
+          {
+            "id": "seize",
+            "label": "Word: take their Ember while you stand at the fire",
+            "win": { "text": "You send the cold word back down the road: take it. {party} exchange a look on the threshold, and reach for the working that will open the way to another hold's fire.", "saga": "You sent {party} to seize the rival hearth's Ember by force, standing already at its very fire.", "effects": [{ "expedition_goto": "the-seizure" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-accord",
+      "away": 3,
+      "scene": {
+        "title": "The Accord Sworn",
+        "intro": "A season of careful talk, and it is done: {party} return to the threshold to seal it. Two hearths, two Embers, sworn to keep faith and share what they remember. Not a gathering yet — but the first true thread of one, and it holds.",
+        "advisors": [
+          { "cast": { "trait": { "piety": "high" } }, "text": "This is the road home, Archon. Not the whole of it — but the first stone of it, and we laid it without a single working drawn in anger." }
+        ],
+        "choices": [
+          {
+            "id": "seal",
+            "label": "Seal the accord and bring the party home",
+            "win": { "text": "{party} clasp hands over both hearth-runes, and for a moment the two Embers lean toward each other like they remember being one Flame. They come home with an accord and an ally where there was a stranger.", "saga": "{party} sealed an accord between Runehold and the rival hearth — two Embers sworn to keep faith, the first thread of a gathering.", "effects": [{ "add": ["flamesRegard", 8] }, { "add": ["faith", 6] }, { "add": ["lore", 4] }, { "set_flag": "hearth_accord" }, { "expedition_end": "return" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-cold-door",
+      "away": 2,
+      "scene": {
+        "title": "The Cold Door",
+        "intro": "There is no more to be done here. The rival hearth keeps its door shut and its fire close, and {party} have worn out what welcome they had. They send for your word, but there is only one word to send: come home.",
+        "advisors": [
+          { "cast": { "trait": { "boldness": "low" } }, "text": "We have not made an enemy, Archon — only failed to make a friend. Bring them home before failing becomes the other thing." }
+        ],
+        "choices": [
+          {
+            "id": "withdraw",
+            "label": "Call the party home from the cold door",
+            "win": { "text": "{party} bow to the shut door one last time and take the long road home, empty-handed but whole. The rival hearth watches them go, and does not follow.", "saga": "Rebuffed at the rival hearth's cold door, {party} came home empty-handed but whole, no enemy made.", "effects": [{ "add": ["faith", -3] }, { "expedition_end": "return" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-seizure",
+      "away": 3,
+      "scene": {
+        "title": "The Taking of the Fire",
+        "intro": "It is done in a single terrible working, or it is not done at all. {party} stand inside a rival hold's ward-lines, reaching for a fire that is not theirs, and the rival Circle is already turning toward them with murder in their hands.",
+        "advisors": [
+          { "cast": { "most": "power" }, "text": "No half-measures now, Archon. They must take it clean and fast, or the rival Circle will make Souls of them on their own threshold." }
+        ],
+        "choices": [
+          {
+            "id": "take",
+            "label": "Take the Ember by force of magic",
+            "test": { "stat": "power", "vs": 55 },
+            "win": { "text": "It is quick, and it is ugly. {party} tear the Ember from its hearth and are gone before the rival Circle can close — Runehold has two fires now, and the certain knowledge that every other hearth will bar its door and sharpen something for it.", "saga": "{party} tore a second Ember from the rival hearth by force — Runehold burns with two fires now, and every other hearth has turned against it.", "effects": [{ "add": ["flamesRegard", 12] }, { "add": ["lore", 6] }, { "add": ["fracture", 8] }, { "set_flag": "hearths_hostile" }, { "expedition_end": "return" }] },
+            "lose": { "text": "The rival Circle was readier than yours. The working shatters, the ward-lines close, and {party} do not come back out of that hold — not as themselves, not at all.", "saga": "{party} reached for the rival hearth's Ember by force and were overmatched; they did not come home from that hold.", "effects": [{ "add": ["fracture", 6] }, { "expedition_end": "lost" }] }
+          }
+        ]
+      }
+    }
+  ]
+}

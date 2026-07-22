@@ -14,7 +14,7 @@
     {
       "id": "send",
       "label": "Send a champion to the lists",
-      "win": { "text": "You choose your strongest hand and send them south to the tourney-town with a purse for the road. Runehold has entered the lists.", "saga": "You sent a champion of the Circle south to fight in the champion's tourney for Runehold's name.", "effects": [{ "expedition_start": { "tmpl": "the-champions-tourney" } }] }
+      "win": { "text": "You choose your strongest hand and send them south to the tourney-town with a purse for the road. Runehold has entered the lists.", "saga": "You sent a champion of the Circle south to fight in the champion's tourney for Runehold's name.", "effects": [{ "expedition_offer": { "tmpl": "the-champions-tourney" } }] }
     },
     {
       "id": "decline",

@@ -14,7 +14,7 @@
     {
       "id": "send",
       "label": "Give your leave — let them follow the thread",
-      "win": { "text": "You clasp the Wizard's arm and let them go. They walk out the gate at dawn with a light pack and a long road, and Runehold is one Wizard fewer until they return — if they return.", "saga": "You gave one of the Circle leave to walk the long road alone after a thread of forgotten lore.", "effects": [{ "expedition_start": { "tmpl": "the-long-road" } }] }
+      "win": { "text": "You clasp the Wizard's arm and let them go. They walk out the gate at dawn with a light pack and a long road, and Runehold is one Wizard fewer until they return — if they return.", "saga": "You gave one of the Circle leave to walk the long road alone after a thread of forgotten lore.", "effects": [{ "expedition_offer": { "tmpl": "the-long-road" } }] }
     },
     {
       "id": "refuse",

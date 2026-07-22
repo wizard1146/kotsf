@@ -136,6 +136,37 @@ function nameSoulHTML(ctx) {
   </div>`;
 }
 
+// The party picker — choose WHO goes on an offered expedition. Any Wizard not
+// already away is eligible; the count is fixed by the quest.
+function partyPickerScreenHTML(ctx) {
+  const { state, partyPicker } = ctx;
+  const tmpl = (ctx.expeditionDefs || []).find((t) => t.id === partyPicker.tmpl);
+  const size = partyPicker.size;
+  const picked = new Set(partyPicker.picked);
+  const eligible = state.circle.filter((m) => !m.away);
+  const cards = eligible.map((m) => {
+    const on = picked.has(m.id);
+    const top = [['Pow', m.power], ['Wis', m.wisdom], ['Gui', m.guile], ['Cou', m.courage]].sort((a, b) => b[1] - a[1])[0];
+    const leader = state.circle[0] && state.circle[0].id === m.id;
+    return `<button class="pp-card${on ? ' on' : ''}" data-action="pick-member" data-member="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}">
+      <div class="pp-img">${portraitFill(m, ctx.portraits)}${on ? '<span class="pp-check">&#10003;</span>' : ''}</div>
+      <div class="pp-name">${esc(m.name)}${leader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</div>
+      <div class="pp-sub">${cap(m.school)} ${esc(CLASS_LABEL[m.class] || m.class)}</div>
+      <div class="pp-stat">${top[0]} ${top[1]}${m.rank === 'adept' ? ' · 2iC' : ''}</div>
+    </button>`;
+  }).join('');
+  const ready = picked.size === size;
+  return `<section class="screen party-picker">
+    <h2 class="pp-title">${esc(tmpl?.title || 'The Expedition')}</h2>
+    <p class="pp-lead">Choose <b>${size}</b> to send &mdash; they will be gone from the Circle until they return. <span class="pp-count ${ready ? 'ok' : ''}">${picked.size} / ${size} chosen</span></p>
+    <div class="pp-grid">${cards}</div>
+    <div class="pp-actions">
+      <button class="pp-cancel" data-action="cancel-party">Send no one</button>
+      <button class="pp-confirm" data-action="confirm-party" ${ready ? '' : 'disabled'}>Send them forth &rarr;</button>
+    </div>
+  </section>`;
+}
+
 // ---- the game screen: three KODP-style zones (hearth bar / stage / circle bar)
 
 // the rune menu — most entries swap the stage; Codex opens the full-page overlay.
@@ -410,6 +441,7 @@ function recapHTML(ctx) {
 }
 
 function stageHTML(ctx) {
+  if (ctx.partyPicker) return partyPickerScreenHTML(ctx);   // choosing who goes takes the stage
   if (ctx.phase === 'recap') return recapHTML(ctx);   // year's end takes the stage
   const v = ctx.gameView;
   if (v === 'saga') return sagaScreenHTML(ctx);

@@ -89,6 +89,7 @@ const NODES = [
   ['runehold','Runehold',T.ours,'OURS: the coven seat you lead. A guttering hearth-rune, a half-remembered claim to old power.'],
   ['archon','The Archon',T.ours,'OURS: the player role — aspiring Keeper. Leads through the Circle; decides, the world reacts.'],
   ['keeper','Keeper of the Flame',T.ours,'OURS: the victory horizon — re-light the Tower, end the Shadowing, become Keeper. Or dwindle into a Forgotten hold.'],
+  ['endgame','The Endgame Arc',T.ours,'DESIGN (ENDGAME_ARC.md): discover the Tower → find & redeem the 3 fallen original Keepers (mad / powerless hermit / imprisoned; optional) → recover ALL Embers (random 8–14) → elevate 3 Wizards to restore the Flame (fail → decline; succeed → SOFT WIN) → close the Fracture in a 7-choice finale (HARD WIN). Self-elevation forces Archon stats + adventure mode. Endings: Orchestrator / Keeper / sole-Keeper corruption.'],
   ['embers','The Embers',T.ours,'OURS: when the Keepers vanished & enemies gathered, the Tower coven broke the Sacred Flame into shards and scattered them to hidden hearths. Runehold keeps ONE; the rest are lost/kept/corrupted — the mid/late-game hunt. Reunite them to re-light the Tower. See EMBERS_AND_MEMORY.md.'],
   ['flame_memory','Flame = memory of magic',T.ours,'OURS: the Flame\'s true, once-unknown function — it permissively grants the world its MEMORY of magic. Split & dimmed, that memory leaks out → the Forgetting. Discovered through play, not known at the start.'],
   // — mechanics —
@@ -101,6 +102,7 @@ const NODES = [
   ['subseasons','Sub-seasons',T.mech,'Each season now ticks in thirds (Early/Mid/Late) — finer cadence; season economy unchanged.'],
   ['workings','Workings (spells)',T.mech,'BUILT: coven-cast spells on the Workings screen — each a school + a competence contest (Power/Wisdom/Guile/Courage vs difficulty). You pick the caster (2iC default); win/lose branches. School-match + Mastery raise the odds.'],
   ['mastery','School Mastery',T.mech,'BUILT: per-school command 0–100, SEPARATE from cult standing. Seeded from who sits in the Circle; casting a working practises its school and nudges it up. Higher mastery → better odds on that colour\'s workings.'],
+  ['expeditions','Expeditions',T.mech,'BUILT: multi-season quests. You pick a party; they LEAVE the Circle (out of circulation — no casting/counsel/tasks, but still on the roster) and return over several seasons through staged beats whose choices steer the outcome. A party can come home richer, changed, or not at all. The returning-Soul naming beat lives here. The vehicle for the whole endgame arc.'],
   // — content seeds (braindump) —
   ['spirit_world','Spirit world',T.content,'Braindump seed — draw from wizzypedia, pending review.'],
   ['monsters','Mythic monsters',T.content,'Braindump seed — Beasts, Nightmare Imps, Beast Spawn (canon).'],
@@ -155,6 +157,15 @@ const EDGES = [
   ['rune_magic','lore_p','feeds'],
   ['monsters','fracture_p','stir'],
   ['spirit_world','forgotten_souls','of'],
+  ['circle','expeditions','sends parties on'],
+  ['expeditions','forgotten_souls','a party may be lost to'],
+  ['expeditions','embers','bears home'],
+  ['expeditions','endgame','primitive for'],
+  ['archon','endgame','walks'],
+  ['endgame','keeper','win → becomes'],
+  ['endgame','embers','recover all (8–14)'],
+  ['endgame','secret_tower','relight'],
+  ['endgame','fracture_p','close to hard-win'],
 ];
 
 // ---- force-directed layout on canvas ----
