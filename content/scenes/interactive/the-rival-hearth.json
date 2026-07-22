@@ -1,0 +1,42 @@
+{
+  "id": "the-rival-hearth",
+  "type": "quest",
+  "tags": ["embers", "war"],
+  "title": "The Rival Hearth",
+  "weight": 6,
+  "once": true,
+  "trigger": { "flag": "ember_hunt" },
+  "intro": "This hearth still burns. A hold no larger than Runehold keeps its Ember behind a stone door and a wary Circle of its own, and its Archon meets you on the threshold with a working half-shaped in her hand. \"We know what you carry,\" she says. \"We know what you want. Two Embers are stronger than one — but not if one hold swallows the other.\"",
+  "advisors": [
+    { "cast": { "trait": { "piety": "high" } }, "text": "Two shards tended together burn nearer to whole. Treat with them, Archon. This is how the Flame comes home — not by conquest." },
+    { "cast": { "class": "necromancer" }, "text": "Or take theirs. One great fire, in one strong hold, is worth more than two frightened ones. They would do the same to us, given the nerve." }
+  ],
+  "choices": [
+    {
+      "id": "treat",
+      "label": "Swear an accord between the two hearths",
+      "test": { "stat": "faith", "vs": 45 },
+      "win": {
+        "text": "You clasp hands over both hearth-runes, and for a moment the two Embers lean toward each other like they remember being one Flame. An accord is sworn: not a gathering yet, but the first thread of one.",
+        "effects": [{ "add": ["flamesRegard", 12] }, { "add": ["faith", 6] }, { "add": ["lore", 4] }, { "set_flag": "ember_ally" }]
+      },
+      "lose": {
+        "text": "The words come out too grasping, and the other Archon's door closes in your face. You have not made an enemy — but you have not made a friend, and the road home is long.",
+        "effects": [{ "add": ["faith", -3] }]
+      }
+    },
+    {
+      "id": "seize",
+      "label": "Take their Ember by force of magic",
+      "test": { "stat": "mana", "vs": 60 },
+      "win": {
+        "text": "It is quick, and it is ugly. You leave with two Embers where you came with one — and with the certain knowledge that every other hearth will now bar its door to Runehold, and sharpen something for you.",
+        "effects": [{ "add": ["mana", -18] }, { "add": ["flamesRegard", 16] }, { "add": ["fracture", 10] }, { "add": ["faith", -8] }, { "set_flag": "ember_taken" }]
+      },
+      "lose": {
+        "text": "Their Circle was ready, and yours was not. You are driven off with nothing, and word will run ahead of you: Runehold reaches for other holds' fires. That name will cost you.",
+        "effects": [{ "add": ["mana", -18] }, { "add": ["fracture", 6] }, { "add": ["faith", -6] }]
+      }
+    }
+  ]
+}

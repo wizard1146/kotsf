@@ -1,6 +1,17 @@
 {
   "categories": [
     {
+      "id": "introduction",
+      "title": "Introduction",
+      "blurb": "The world you inherit, and the fire you keep.",
+      "entries": [
+        { "term": "The World Forgetting", "body": "Once the Sacred Flame was tended whole in the Secret Tower, and the world was whole with it. Then its keepers vanished, the Tower went dark — and the world began, slowly, to forget. Magic thins, runes slip from memory, and the great powers of the old age have dwindled to a scatter of guttering hearths in the dark." },
+        { "term": "You, the Archon", "body": "You are the appointed Archon of Runehold — though who named you, and why, is itself half-forgotten. As the Tower's enemies gathered, the coven that kept it broke the Flame into Embers and scattered them beyond reach. One was carried to your hearth-rune: the coven's heart, and its last thread to the old power. Let it die, and Runehold dies with it." },
+        { "term": "The Seven Cults", "body": "Beyond your walls the seven Colour Cults circle — each hoarding what magic remains, and no two of them allies for long. Win one to your side and you make an enemy of another. There is no pleasing all seven." },
+        { "term": "The Long Dark", "body": "Your Wizards will counsel you, and quarrel. Famine, feud, and worse are coming. Lead them through it — and, if the old stories are true, seek the other Embers before the dark finds them first. Keep the flame, or be forgotten." }
+      ]
+    },
+    {
       "id": "pressures",
       "title": "The Pressures",
       "blurb": "Seven meters and your standing with the Cults. Every scene reads and writes them.",

@@ -85,6 +85,7 @@
         "add": { "type": "array" },
         "set": { "type": "array" },
         "adjust_cult": { "type": "array" },
+        "adjust_mastery": { "type": "array" },
         "set_flag": { "type": "string" },
         "clear_flag": { "type": "string" },
         "unlock": { "type": "string" },

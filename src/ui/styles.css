@@ -64,8 +64,15 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 .hearth-id { display: flex; align-items: center; gap: 0.55rem; min-width: 14rem; }   /* reserve width so a longer date doesn't shove the rune tabs */
 .hearth-id .rune { font-size: 1.5rem; color: var(--flame); text-shadow: 0 0 16px rgba(232, 163, 61, 0.35); }
-.hearth-id b { color: var(--flame); letter-spacing: 0.02em; }
+.hearth-id b { font-weight: normal; color: var(--ink); letter-spacing: 0.02em; }
 .hearth-date { display: block; color: var(--ink-dim); font-variant: small-caps; letter-spacing: 0.06em; font-size: 1.06rem; white-space: nowrap; }
+/* the date takes the season's hue; the sub-season (Early/Mid/Late) shades it */
+.hearth-date.season-0 { color: #5bbf8a; }   /* Thaw — spring green */
+.hearth-date.season-1 { color: #e6c34d; }   /* Highsun — summer gold */
+.hearth-date.season-2 { color: #e0803e; }   /* Emberfall — autumn orange */
+.hearth-date.season-3 { color: #63bcd6; }   /* Deepfrost — winter aqua */
+.hearth-date.phase-0 { filter: brightness(0.88); }   /* Early */
+.hearth-date.phase-2 { filter: brightness(1.14); }   /* Late */
 .hearth-actions { margin-left: auto; display: flex; gap: 0.4rem; }
 /* in-game hamburger menu (replaces the Options / Save / Menu buttons) */
 .hearth-menu { position: relative; margin-left: 0.4rem; flex-shrink: 0; }
@@ -168,7 +175,7 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 }
 .lb-strip { grid-area: strip; display: flex; align-items: center; gap: 0.8rem; height: 2.6rem; padding: 0 0.4rem 0 0.8rem; border-bottom: 1px solid var(--line); background: var(--panel); position: relative; z-index: 50; }
 .lb-date { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; flex: none; }
-.lb-date b { color: var(--flame); letter-spacing: 0.02em; }
+.lb-date b { font-weight: normal; color: var(--ink); letter-spacing: 0.02em; }
 .lb-strip .hearth-date { font-size: 0.9rem; }
 .lb-res { display: flex; align-items: center; gap: 0.7rem; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .lb-res::-webkit-scrollbar { display: none; }
@@ -675,6 +682,8 @@ html[data-reduce-motion="1"] * { animation: none !important; transition: none !i
 .opt-danger > label { color: var(--ink-dim); }
 .opt-version { font-family: var(--mono); color: var(--flame); font-size: 0.9rem; }
 .opt-note { margin: 0.5rem 0 0; font-size: 0.8rem; }
+.opt-link { display: inline-block; font-family: var(--sans); color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 0.35rem 0.7rem; font-size: 0.85rem; text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+.opt-link:hover { border-color: var(--flame-deep); background: #332a22; }
 .seg { display: inline-flex; gap: 0.3rem; }
 .seg button.on, .toggle.on { border-color: var(--flame-deep); color: var(--flame); background: #2a2018; }
 button.danger { border-color: #5b2a23; color: #e29a92; }

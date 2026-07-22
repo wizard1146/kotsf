@@ -1,0 +1,32 @@
+{
+  "id": "a-rumour-of-embers",
+  "type": "interactive",
+  "tags": ["embers", "lore"],
+  "title": "A Rumour of Embers",
+  "weight": 5,
+  "once": true,
+  "trigger": { "gte": ["lore", 30] },
+  "intro": "A half-frozen wanderer is carried in from the passes, and before the hearth-rune he weeps — he knows this fire. \"Yours is not the only one,\" he rasps. \"When the Tower fell we broke the Flame and ran, each with a shard, to hearths no enemy could find. I have seen another still burning — north and east, in a hold whose name I dare not say aloud.\"",
+  "advisors": [
+    { "cast": { "most": "wisdom" }, "text": "If he speaks true, Archon, then Runehold is not alone — and a Flame gathered back to itself is a Flame that might one day be tended whole again." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "Or it is bait. Every fire out there has enemies, and following a stranger's map into the north is how covens end." }
+  ],
+  "choices": [
+    {
+      "id": "pursue",
+      "label": "Mark the road — the other Embers must be found",
+      "win": {
+        "text": "You set the wanderer's words to memory and to map. It is only a rumour, but the coven has a purpose now beyond survival: somewhere the Flame still burns in pieces, and the pieces can be sought.",
+        "effects": [{ "add": ["lore", 6] }, { "add": ["flamesRegard", 4] }, { "set_flag": "ember_hunt" }, { "unlock": "the-cold-hearth" }]
+      }
+    },
+    {
+      "id": "dismiss",
+      "label": "Tend your own fire; the north can keep its ghosts",
+      "win": {
+        "text": "You give the wanderer broth and a corner by the hearth, and let his rumour cool. Runehold has trouble enough of its own.",
+        "effects": [{ "add": ["provisions", -3] }, { "add": ["faith", 3] }]
+      }
+    }
+  ]
+}

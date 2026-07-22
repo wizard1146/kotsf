@@ -641,7 +641,7 @@ function gameHTML(ctx) {
   const { state } = ctx;
   return `<div class="hearth-bar">
       <div class="hearth-id"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
-        <div><b>Runehold</b><small class="hearth-date">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></div>
+        <div><b>Runehold</b><small class="hearth-date season-${state.season} phase-${state.phase || 0}">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></div>
       </div>
       ${runeMenuHTML(ctx, false)}
       ${hearthMenuHTML(ctx)}
@@ -694,7 +694,7 @@ function gameHTMLB(ctx) {
       <button class="lb-dock-close" data-action="toggle-card" data-card="${ctx.pinnedCard}" aria-label="Close">&times;</button>
     </div>` : '';
   return `<div class="lb-strip">
-      <span class="lb-date"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><b>Runehold</b> <small class="hearth-date">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></span>
+      <span class="lb-date"><img class="rune" src="assets/icons/icon_flame.png" alt="" aria-hidden="true"><b>Runehold</b> <small class="hearth-date season-${state.season} phase-${state.phase || 0}">${timeName(state.phase, state.season)} &middot; Year ${state.year}</small></span>
       <div class="cb-res-row lb-res">${pressureMetersHTML(ctx)}</div>
       ${hearthMenuHTML(ctx)}
     </div>
@@ -747,9 +747,24 @@ function modal(kind, title, body) {
   </div>`;
 }
 
+// Options ▸ Dev links to the design/authoring tools — shown only on local / LAN dev
+// hosts (and file://), never on the deployed build.
+const IS_DEV = typeof location !== 'undefined' && (
+  location.protocol === 'file:' ||
+  /^(localhost|127\.0\.0\.1|\[?::1\]?)$/i.test(location.hostname) ||
+  /\.local$/i.test(location.hostname) ||
+  /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(location.hostname)
+);
+const DEV_TOOLS = [
+  ['Portrait gallery', 'design/portraits.html'],
+  ['Icon gallery', 'design/icon-gallery.html'],
+  ['Storyboard', 'design/storyboard.html'],
+];
+
 function optionsHTML(ctx) {
   const s = ctx.settings;
   const sections = [{ id: 'display', title: 'Display' }, { id: 'saves', title: 'Saves' }, { id: 'data', title: 'Data' }, { id: 'about', title: 'About' }];
+  if (IS_DEV) sections.push({ id: 'dev', title: 'Dev' });
   const activeId = sections.some((x) => x.id === ctx.optionsTab) ? ctx.optionsTab : 'display';
   const side = sections.map((x) =>
     `<button class="panel-navitem ${x.id === activeId ? 'on' : ''}" data-action="options-tab" data-tab="${x.id}">${x.title}</button>`).join('');
@@ -771,6 +786,10 @@ function optionsHTML(ctx) {
     main = `<div class="opt"><label>Version</label><span class="opt-version">${esc(ctx.appVersion || '—')}</span></div>
       <div class="opt"><label>Check for update</label><button data-action="force-update">Update now</button></div>
       <p class="muted">Runehold installs as an app and runs offline. If a new version is out, this clears the cached app and reloads the latest. Your saved campaign is kept.</p>`;
+  } else if (activeId === 'dev') {
+    main = DEV_TOOLS.map(([label, href]) =>
+      `<div class="opt"><label>${label}</label><a class="opt-link" href="${href}" target="_blank" rel="noopener">Open &#8599;</a></div>`).join('')
+      + `<p class="muted opt-note">Design &amp; authoring tools, opened in a new tab. Shown on local/dev hosts only — hidden on the live build.</p>`;
   } else {
     main = `<div class="opt"><label>Layout</label><div class="seg">${['a', 'b'].map((v) => `<button class="${(s.layout || 'a') === v ? 'on' : ''}" data-action="set-option" data-key="layout" data-val="${v}">Layout ${v.toUpperCase()}</button>`).join('')}</div></div>
       <p class="muted opt-note">Layout A: classic — header tabs on top, advisor cards along the bottom. Layout B: thin top strip (date + meters), advisor portraits down the left edge, rune tabs down the right.</p>

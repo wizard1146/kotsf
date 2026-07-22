@@ -1,6 +1,90 @@
 {
   "scenes": [
     {
+      "id": "a-rumour-of-embers",
+      "type": "interactive",
+      "tags": [
+        "embers",
+        "lore"
+      ],
+      "title": "A Rumour of Embers",
+      "weight": 5,
+      "once": true,
+      "trigger": {
+        "gte": [
+          "lore",
+          30
+        ]
+      },
+      "intro": "A half-frozen wanderer is carried in from the passes, and before the hearth-rune he weeps — he knows this fire. \"Yours is not the only one,\" he rasps. \"When the Tower fell we broke the Flame and ran, each with a shard, to hearths no enemy could find. I have seen another still burning — north and east, in a hold whose name I dare not say aloud.\"",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "If he speaks true, Archon, then Runehold is not alone — and a Flame gathered back to itself is a Flame that might one day be tended whole again."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "Or it is bait. Every fire out there has enemies, and following a stranger's map into the north is how covens end."
+        }
+      ],
+      "choices": [
+        {
+          "id": "pursue",
+          "label": "Mark the road — the other Embers must be found",
+          "win": {
+            "text": "You set the wanderer's words to memory and to map. It is only a rumour, but the coven has a purpose now beyond survival: somewhere the Flame still burns in pieces, and the pieces can be sought.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  4
+                ]
+              },
+              {
+                "set_flag": "ember_hunt"
+              },
+              {
+                "unlock": "the-cold-hearth"
+              }
+            ]
+          }
+        },
+        {
+          "id": "dismiss",
+          "label": "Tend your own fire; the north can keep its ghosts",
+          "win": {
+            "text": "You give the wanderer broth and a corner by the hearth, and let his rumour cool. Runehold has trouble enough of its own.",
+            "effects": [
+              {
+                "add": [
+                  "provisions",
+                  -3
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  3
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "a-strayed-herd",
       "type": "interactive",
       "tags": [
@@ -573,6 +657,142 @@
       ]
     },
     {
+      "id": "the-cold-hearth",
+      "type": "quest",
+      "tags": [
+        "embers",
+        "lore"
+      ],
+      "title": "The Cold Hearth",
+      "weight": 6,
+      "once": true,
+      "trigger": {
+        "flag": "ember_hunt"
+      },
+      "intro": "The hold the wanderer named is a ruin, and its hearth is grey ash gone hard as stone. You are too late by a lifetime: this Ember guttered out long ago, and the little hold that kept it went out with it. Only char-marks on the walls remember there was ever a fire here — that, and a single scorched book the cold spared.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "Read the book before the wind takes it. A hearth that died has more to teach us than one that lived — this is how our own fire ends, if we let it."
+        },
+        {
+          "cast": {
+            "school": "blue"
+          },
+          "text": "The Athenaeum would give a great deal for what's on these pages. And so, Archon, should we."
+        }
+      ],
+      "choices": [
+        {
+          "id": "study",
+          "label": "Take the scorched book and study the dead hearth",
+          "test": {
+            "stat": "lore",
+            "vs": 40
+          },
+          "win": {
+            "text": "The pages tell of the slow going-out: workings that took twice the mana, then ten times, then none at all — until the last keeper could not remember the word for fire. A grim gift, but a gift. You understand the Forgetting a little better now, and how near it always is.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -3
+                ]
+              },
+              {
+                "set_flag": "read_a_failure_tale"
+              },
+              {
+                "unlock": "the-rival-hearth"
+              }
+            ]
+          },
+          "lose": {
+            "text": "The book crumbles to flakes before you can read it deeply. You carry away only the cold, and the knowledge that another Ember is gone for good.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  3
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -4
+                ]
+              },
+              {
+                "unlock": "the-rival-hearth"
+              }
+            ]
+          }
+        },
+        {
+          "id": "rekindle",
+          "label": "Wake an ember from the cold ash with your own Flame",
+          "test": {
+            "stat": "mana",
+            "vs": 55
+          },
+          "win": {
+            "text": "You touch a shaving of your own hearth-rune to the dead ash — and for one impossible breath, it glows. It does not last. But you have proven the Flame remembers itself across its shards, and that is worth more than the mana it cost.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -14
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              },
+              {
+                "unlock": "the-rival-hearth"
+              }
+            ]
+          },
+          "lose": {
+            "text": "The cold ash drinks your Flame and gives nothing back. Worse — something in the dead hearth stirs at the offering, and does not settle when you leave.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -14
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              },
+              {
+                "unlock": "the-rival-hearth"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-coven-divided",
       "type": "interactive",
       "tags": [
@@ -845,6 +1065,87 @@
                 "adjust_cult": [
                   "blue",
                   -6
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-drowned-conjuror",
+      "type": "interactive",
+      "tags": [
+        "tomes",
+        "lore"
+      ],
+      "title": "The Drowned Conjuror",
+      "weight": 4,
+      "once": true,
+      "trigger": {
+        "gte": [
+          "lore",
+          35
+        ]
+      },
+      "intro": "Apprentices sorting the salvage bring you a water-swollen tome, giggling and uneasy. It is the account of Maelor, who in the last bright age tried to raise a drowned city whole from the seabed — towers, gardens, ten thousand souls — in a single working. The final pages are written in a shaking hand: he could summon the towers, then only the gardens, then only a single drowned bell, and at the last could not recall the word for 'up'.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "He did not fail because he was weak, Archon. He failed because the memory was going out from under him mid-working. Read it as a warning: the further we reach, the further we have to fall."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
+          "text": "A city from the sea! Give me the mana and I'd finish what Maelor started. He simply ran out of Flame — we haven't yet."
+        }
+      ],
+      "choices": [
+        {
+          "id": "study",
+          "label": "Set the apprentices to copy and study the tome",
+          "win": {
+            "text": "You have the tome copied twice against loss, and its lesson read aloud in the hall: great workings die not from too little power but from too little memory. The coven is wiser, and a little more afraid.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "mana",
+                  -4
+                ]
+              },
+              {
+                "set_flag": "read_a_failure_tale"
+              }
+            ]
+          }
+        },
+        {
+          "id": "shelve",
+          "label": "Shelve it — the coven needs hope, not omens",
+          "win": {
+            "text": "You lock Maelor's drowned city away where the apprentices won't brood on it. Some mornings a keeper needs to believe the reaching still works.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  4
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  2
                 ]
               }
             ]
@@ -1166,6 +1467,215 @@
       ]
     },
     {
+      "id": "the-last-true-name",
+      "type": "quest",
+      "tags": [
+        "tomes",
+        "embers",
+        "lore"
+      ],
+      "title": "The Last True Name",
+      "weight": 5,
+      "once": true,
+      "trigger": {
+        "all": [
+          {
+            "flag": "read_a_failure_tale"
+          },
+          {
+            "gte": [
+              "lore",
+              45
+            ]
+          }
+        ]
+      },
+      "intro": "Piece by piece, the failure-tales have begun to rhyme. In every one, a great Wizard reaches, and the memory goes out beneath them at the worst moment. Tonight your eldest reader closes the last book with a shaking hand and says what none of you have dared: \"It is not that we grow weak. The world is forgetting how magic is done — and it began when the Flame was broken. The Flame was never only holy, Archon. It was memory. It was how the world remembered magic at all.\"",
+      "advisors": [
+        {
+          "cast": {
+            "school": "blue"
+          },
+          "text": "Then every Ember is a shard of the world's memory, and Runehold holds a piece of the only thing that can hold the Forgetting back. Gather them, and we do not merely survive — we remember."
+        },
+        {
+          "cast": {
+            "trait": {
+              "piety": "low"
+            }
+          },
+          "text": "If that's true, the ones who broke the Flame doomed us all to forget, to keep it from an enemy. I would like to know who that enemy was — and whether it is still hunting the shards."
+        }
+      ],
+      "choices": [
+        {
+          "id": "accept",
+          "label": "Set it down in plain words: the Flame is the world's memory",
+          "win": {
+            "text": "You write the truth into the coven's book at last, and the whole shape of your saga changes. Runehold is not merely a hold to keep alive — it is a keeper of memory, and the Embers are the road back from the long forgetting.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  14
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  8
+                ]
+              },
+              {
+                "set_flag": "knows_flame_is_memory"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-rival-hearth",
+      "type": "quest",
+      "tags": [
+        "embers",
+        "war"
+      ],
+      "title": "The Rival Hearth",
+      "weight": 6,
+      "once": true,
+      "trigger": {
+        "flag": "ember_hunt"
+      },
+      "intro": "This hearth still burns. A hold no larger than Runehold keeps its Ember behind a stone door and a wary Circle of its own, and its Archon meets you on the threshold with a working half-shaped in her hand. \"We know what you carry,\" she says. \"We know what you want. Two Embers are stronger than one — but not if one hold swallows the other.\"",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "Two shards tended together burn nearer to whole. Treat with them, Archon. This is how the Flame comes home — not by conquest."
+        },
+        {
+          "cast": {
+            "class": "necromancer"
+          },
+          "text": "Or take theirs. One great fire, in one strong hold, is worth more than two frightened ones. They would do the same to us, given the nerve."
+        }
+      ],
+      "choices": [
+        {
+          "id": "treat",
+          "label": "Swear an accord between the two hearths",
+          "test": {
+            "stat": "faith",
+            "vs": 45
+          },
+          "win": {
+            "text": "You clasp hands over both hearth-runes, and for a moment the two Embers lean toward each other like they remember being one Flame. An accord is sworn: not a gathering yet, but the first thread of one.",
+            "effects": [
+              {
+                "add": [
+                  "flamesRegard",
+                  12
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  4
+                ]
+              },
+              {
+                "set_flag": "ember_ally"
+              }
+            ]
+          },
+          "lose": {
+            "text": "The words come out too grasping, and the other Archon's door closes in your face. You have not made an enemy — but you have not made a friend, and the road home is long.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -3
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "seize",
+          "label": "Take their Ember by force of magic",
+          "test": {
+            "stat": "mana",
+            "vs": 60
+          },
+          "win": {
+            "text": "It is quick, and it is ugly. You leave with two Embers where you came with one — and with the certain knowledge that every other hearth will now bar its door to Runehold, and sharpen something for you.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -18
+                ]
+              },
+              {
+                "add": [
+                  "flamesRegard",
+                  16
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -8
+                ]
+              },
+              {
+                "set_flag": "ember_taken"
+              }
+            ]
+          },
+          "lose": {
+            "text": "Their Circle was ready, and yours was not. You are driven off with nothing, and word will run ahead of you: Runehold reaches for other holds' fires. That name will cost you.",
+            "effects": [
+              {
+                "add": [
+                  "mana",
+                  -18
+                ]
+              },
+              {
+                "add": [
+                  "fracture",
+                  6
+                ]
+              },
+              {
+                "add": [
+                  "faith",
+                  -6
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-sealed-stair",
       "type": "interactive",
       "tags": [
@@ -1238,6 +1748,102 @@
                 "add": [
                   "faith",
                   -4
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-tower-that-forgot",
+      "type": "interactive",
+      "tags": [
+        "tomes",
+        "lore"
+      ],
+      "title": "The Tower That Forgot",
+      "weight": 4,
+      "once": true,
+      "trigger": {
+        "gte": [
+          "lore",
+          30
+        ]
+      },
+      "intro": "A trader from the Bastion swaps you a Story for a sack of grain: the tale of the White wizard Serevane, who bound a fortress to walk on stone legs and carry her people out of the Fracture's path. It walked for a year and a day. Then, one still morning, it forgot how a wall holds up a roof — and came down all at once, with everyone she had meant to save still inside.",
+      "advisors": [
+        {
+          "cast": {
+            "school": "white"
+          },
+          "text": "Order is the first thing the Forgetting takes, Archon. Serevane's fortress did not break — it lost the memory of being whole. As may we all."
+        },
+        {
+          "cast": {
+            "trait": {
+              "temper": "low"
+            }
+          },
+          "text": "One story, told for grain. It may be true; it may be a Bastion's bad dream dressed as history. Weigh it — don't kneel to it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "record",
+          "label": "Record the Story in the coven's own book",
+          "win": {
+            "text": "Serevane's walking fortress joins your slow-growing library of the ways magic has failed. A grim shelf — and the truest map you own of the road the whole world is walking.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  9
+                ]
+              },
+              {
+                "adjust_cult": [
+                  "blue",
+                  4
+                ]
+              },
+              {
+                "set_flag": "read_a_failure_tale"
+              }
+            ]
+          }
+        },
+        {
+          "id": "haggle",
+          "label": "Trade the Story onward for coin",
+          "test": {
+            "stat": "coin",
+            "vs": 30
+          },
+          "win": {
+            "text": "A grim tale sells as well as a glad one. You pass Serevane's fall along the market roads and pocket the difference.",
+            "effects": [
+              {
+                "add": [
+                  "coin",
+                  10
+                ]
+              },
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
+              }
+            ]
+          },
+          "lose": {
+            "text": "No one wants to buy an omen this season. The Story stays with you, heavier for having tried to sell it.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  4
                 ]
               }
             ]
@@ -1616,6 +2222,29 @@
     }
   ],
   "codex": [
+    {
+      "id": "introduction",
+      "title": "Introduction",
+      "blurb": "The world you inherit, and the fire you keep.",
+      "entries": [
+        {
+          "term": "The World Forgetting",
+          "body": "Once the Sacred Flame was tended whole in the Secret Tower, and the world was whole with it. Then its keepers vanished, the Tower went dark — and the world began, slowly, to forget. Magic thins, runes slip from memory, and the great powers of the old age have dwindled to a scatter of guttering hearths in the dark."
+        },
+        {
+          "term": "You, the Archon",
+          "body": "You are the appointed Archon of Runehold — though who named you, and why, is itself half-forgotten. As the Tower's enemies gathered, the coven that kept it broke the Flame into Embers and scattered them beyond reach. One was carried to your hearth-rune: the coven's heart, and its last thread to the old power. Let it die, and Runehold dies with it."
+        },
+        {
+          "term": "The Seven Cults",
+          "body": "Beyond your walls the seven Colour Cults circle — each hoarding what magic remains, and no two of them allies for long. Win one to your side and you make an enemy of another. There is no pleasing all seven."
+        },
+        {
+          "term": "The Long Dark",
+          "body": "Your Wizards will counsel you, and quarrel. Famine, feud, and worse are coming. Lead them through it — and, if the old stories are true, seek the other Embers before the dark finds them first. Keep the flame, or be forgotten."
+        }
+      ]
+    },
     {
       "id": "pressures",
       "title": "The Pressures",

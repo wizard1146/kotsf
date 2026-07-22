@@ -1,0 +1,24 @@
+{
+  "id": "the-last-true-name",
+  "type": "quest",
+  "tags": ["tomes", "embers", "lore"],
+  "title": "The Last True Name",
+  "weight": 5,
+  "once": true,
+  "trigger": { "all": [{ "flag": "read_a_failure_tale" }, { "gte": ["lore", 45] }] },
+  "intro": "Piece by piece, the failure-tales have begun to rhyme. In every one, a great Wizard reaches, and the memory goes out beneath them at the worst moment. Tonight your eldest reader closes the last book with a shaking hand and says what none of you have dared: \"It is not that we grow weak. The world is forgetting how magic is done — and it began when the Flame was broken. The Flame was never only holy, Archon. It was memory. It was how the world remembered magic at all.\"",
+  "advisors": [
+    { "cast": { "school": "blue" }, "text": "Then every Ember is a shard of the world's memory, and Runehold holds a piece of the only thing that can hold the Forgetting back. Gather them, and we do not merely survive — we remember." },
+    { "cast": { "trait": { "piety": "low" } }, "text": "If that's true, the ones who broke the Flame doomed us all to forget, to keep it from an enemy. I would like to know who that enemy was — and whether it is still hunting the shards." }
+  ],
+  "choices": [
+    {
+      "id": "accept",
+      "label": "Set it down in plain words: the Flame is the world's memory",
+      "win": {
+        "text": "You write the truth into the coven's book at last, and the whole shape of your saga changes. Runehold is not merely a hold to keep alive — it is a keeper of memory, and the Embers are the road back from the long forgetting.",
+        "effects": [{ "add": ["lore", 14] }, { "add": ["flamesRegard", 8] }, { "set_flag": "knows_flame_is_memory" }]
+      }
+    }
+  ]
+}
