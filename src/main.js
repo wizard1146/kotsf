@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v26';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v27';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -87,8 +87,24 @@ function applySettings() {
   r.dataset.textSize = settings.textSize;
   r.dataset.reduceMotion = settings.reduceMotion ? '1' : '0';
 }
-// Orientation is enforced by the manifest ("orientation":"landscape") on the
-// installed PWA — no JS rotation/lock here (it only fought the OS and janked).
+// Enter fullscreen, then lock to landscape. The Screen Orientation API's lock()
+// only works in fullscreen — that's the piece the manifest alone can't do in a
+// browser tab. MUST be called from a user gesture. Both steps are best-effort:
+// denied on iOS / older browsers, which is fine (manifest still covers installed).
+async function goFullscreenLandscape() {
+  const el = document.documentElement;
+  try {
+    if (!document.fullscreenElement) {
+      if (el.requestFullscreen) await el.requestFullscreen({ navigationUI: 'hide' });
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    }
+  } catch { /* fullscreen denied — carry on */ }
+  try {
+    const lock = screen.orientation && screen.orientation.lock;
+    if (lock) await screen.orientation.lock('landscape');
+  } catch { /* orientation lock unsupported — carry on */ }
+}
+
 function setOption(key, val) {
   if (key === 'textSize' || key === 'layout') settings[key] = val;   // string-valued options
   else settings[key] = val === '1';
@@ -148,7 +164,7 @@ function proceed() {
 }
 
 // ---- shell navigation + saves ---------------------------------------------
-function startGame() { overlay = null; screen = 'game'; gameView = 'scene'; newRun(); }
+function startGame() { goFullscreenLandscape(); overlay = null; screen = 'game'; gameView = 'scene'; newRun(); }
 
 // New Coven overwrites the single continuous campaign — confirm first if one exists.
 function confirmNewCoven() {
@@ -343,7 +359,7 @@ app.addEventListener('click', (e) => {
     case 'continue': proceed(); break;
     case 'new-run': startGame(); break;
     // shell navigation
-    case 'enter': screen = 'menu'; draw(); break;
+    case 'enter': goFullscreenLandscape(); screen = 'menu'; draw(); break;
     case 'go-menu': overlay = null; screen = 'menu'; draw(); break;
     case 'game-view': gameView = el.dataset.view; selectedMember = null; draw(); break;
     case 'view-member': gameView = 'coven'; selectedMember = el.dataset.member; draw(); break;
@@ -369,7 +385,7 @@ app.addEventListener('click', (e) => {
     }
     case 'do-action': doAction(el.dataset.act); break;
     case 'set-caster': casterId = el.dataset.caster; draw(); break;
-    case 'resume-game': overlay = null; screen = 'game'; draw(); break;
+    case 'resume-game': goFullscreenLandscape(); overlay = null; screen = 'game'; draw(); break;
     case 'start-game': confirmNewCoven(); break;
     case 'confirm-new-yes': startGame(); break;
     case 'open': overlay = el.dataset.overlay; if (overlay === 'codex') codexQuery = ''; draw(); break;
