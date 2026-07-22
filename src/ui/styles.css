@@ -191,11 +191,11 @@ img.rune { height: 1.12em; width: auto; display: inline-block; vertical-align: -
 
 /* left advisor rail — a transparent see-through strip; portrait tiles hang off the
    left edge (peek ~60%) with a gentle fan, pop out on tap, and scroll with ▲▼. */
-.lb-advisors { grid-area: stage; align-self: stretch; justify-self: end; min-height: 0; position: relative; width: 5rem; z-index: 40; background: none; pointer-events: none; }
+.lb-advisors { grid-area: stage; align-self: stretch; justify-self: end; min-height: 0; position: relative; width: 5rem; z-index: 40; background: none; border: 0; padding: 0; pointer-events: none; }
 /* native vertical scroller (touch + momentum); clips the peek sideways */
 .lb-adv-scroll { height: 100%; overflow-y: auto; overflow-x: clip; scrollbar-width: none; -webkit-overflow-scrolling: touch; pointer-events: auto; overscroll-behavior: contain; }
 .lb-adv-scroll::-webkit-scrollbar { display: none; }
-.lb-adv-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.45rem; padding: 0.55rem 0; }
+.lb-adv-list { display: flex; flex-direction: column; align-items: flex-end; gap: 0.45rem; padding: 0; }
 .lb-adv { pointer-events: auto; position: relative; width: 4.6rem; flex: none; display: block; padding: 0; background: none; border: 0; cursor: pointer; transform: translateX(40%) rotate(calc((var(--i) - 1.5) * -2.2deg)); transform-origin: left center; transition: transform .25s cubic-bezier(.34,.1,.24,1); }
 .lb-adv:hover, .lb-adv.pinned { transform: translateX(0) rotate(0); z-index: 30; }
 .lb-adv-img { position: relative; display: block; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 10px; background: radial-gradient(120% 90% at 50% 26%, color-mix(in srgb, var(--cult) 42%, #14110f), #0c0a08); filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6)); }
