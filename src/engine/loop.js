@@ -3,6 +3,7 @@
 import { chronicle } from './state.js';
 import { resolveTest } from './resolver.js';
 import { applyEffects } from './effects.js';
+import { tickExpeditions } from './expeditions.js';
 
 // Per-tick drift. The Forgetting bites HERE: lore decays every season unless
 // the player spends effort to hold it. Mana regenerates; the Fracture creeps up.
@@ -19,6 +20,7 @@ const clampP = (v) => Math.max(0, Math.min(100, v));
 function applyRoles(state, roles) {
   if (!state.roles || !roles.length) return;
   for (const m of state.circle) {
+    if (m.away) continue;                       // a Wizard on the road can't work their task
     const def = roles.find((r) => r.id === state.roles[m.id]);
     if (!def) continue;
     const d = Math.max(1, Math.min(4, Math.round(((m[def.stat] || 0) - 20) / 18)));
@@ -29,6 +31,8 @@ function applyRoles(state, roles) {
 export function advanceTime(state, roles = []) {
   state.turn += 1;
   state.phase = ((state.phase || 0) + 1) % 3;
+  tickExpeditions(state);                        // parties on the road count down each tick
+
   if (state.phase === 0) {                 // a full season has turned
     for (const [k, d] of Object.entries(DECAY)) state.pressures[k] = clampP(state.pressures[k] + d);
     applyRoles(state, roles);              // advisor tasks pay out

@@ -3,6 +3,9 @@
 > **What we are trying to recreate.** This is the design conscience for KOTSF. When a feature,
 > scene, or system decision is ambiguous, it should be resolved in favour of the principles below.
 > Source: an analysis of *why King of Dragon Pass endures*, adopted as our guiding philosophy.
+>
+> **Where it's all heading:** the campaign's long-arc win condition and endings are speced in
+> **[`ENDGAME_ARC.md`](ENDGAME_ARC.md)** — the emergent season loop below is the *means*; that arc is the *destination*.
 
 ---
 

@@ -16,6 +16,8 @@ export function meets(state, cond) {
   if (cond.any) return cond.any.some((c) => meets(state, c));
   if (cond.not) return !meets(state, cond.not);
   if (cond.flag) return !!state.flags[cond.flag];
+  if (cond.no_expedition !== undefined) return ((state.expeditions || []).length === 0) === !!cond.no_expedition;
+  if (cond.expedition_running) return (state.expeditions || []).some((e) => e.tmpl === cond.expedition_running);
   for (const op of Object.keys(LEAF)) {
     if (cond[op]) {
       const [path, val] = cond[op];

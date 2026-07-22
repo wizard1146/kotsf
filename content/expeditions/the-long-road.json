@@ -1,0 +1,38 @@
+{
+  "id": "the-long-road",
+  "title": "The Long Road",
+  "party": 1,
+  "partyPick": "most:wisdom",
+  "stages": [
+    {
+      "id": "the-return",
+      "away": 4,
+      "scene": {
+        "title": "The Wanderer Returns",
+        "intro": "It has been the better part of a year since {name} walked out of Runehold's gate to follow a thread of old lore into the ash. Tonight the watch calls down: a figure on the road, coming home. But the season is late, the road is long, and the Forgetting takes travellers as surely as it takes workings.",
+        "advisors": [
+          { "cast": { "most": "wisdom" }, "text": "{name} was strong of mind, Archon. If anyone could walk that road and come back {themselves}, it is {them}. Go down and meet {them} — you will know at the gate." },
+          { "cast": { "trait": { "piety": "high" } }, "text": "Pray it is {name} who comes through that gate. The road gives back what it took, but not always as it took it." }
+        ],
+        "choices": [
+          {
+            "id": "meet",
+            "label": "Go down to the gate and meet the traveller",
+            "test": { "stat": "faith", "vs": 45 },
+            "win": { "text": "It is {name} — thinner, wind-burned, older about the eyes, but {them}, whole and knowing you. {They} carr{ies} a satchel of lore worth the year {they} spent, and the hearth is warmer tonight for {their} return.", "saga": "{name} came home from the long road whole and {themselves}, bearing a year's worth of hard-won lore.", "effects": [{ "add": ["lore", 12] }, { "add": ["faith", 6] }, { "expedition_end": "return" }] },
+            "lose": { "text": "The figure that stops at the edge of the firelight wears {name}'s face and {name}'s cloak — but the eyes are wrong, and it does not answer to {their} name. The road gave something back. It is not, quite, who set out.", "saga": "What came home on the long road wore {name}'s face, but the Forgetting had been at {them} — a Soul stood where {name} had been.", "effects": [{ "expedition_goto": "the-wrong-return" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-wrong-return",
+      "away": 0,
+      "kind": "name-soul",
+      "scene": {
+        "title": "Name the Returned",
+        "intro": "The Soul waits at the edge of the firelight to be known. It came home wearing {name}'s face — but the Flame has rewritten what is behind it, and the coven has learned that a returning Soul is not always the one who left. Sometimes it is one of your own, long lost, come back in a borrowed shape. Name it truly, and you give it a kind of peace. Name it wrong, and the Circle will wonder what else you have forgotten."
+      }
+    }
+  ]
+}

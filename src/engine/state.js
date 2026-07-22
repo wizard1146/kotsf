@@ -29,6 +29,8 @@ export function createInitialState(seed = 1) {
     mastery: { red: 0, yellow: 0, brown: 0, green: 0, blue: 0, purple: 0, white: 0 },
     roles: {},          // member.id -> role id (Steward, Warden, …) — passive per-season effects
     nextMemberId: 4,    // running id counter for recruits (the opening ring is wz-0..3)
+    expeditions: [],    // long-running quests in progress (see engine/expeditions.js)
+    nextExpeditionId: 0,
   };
   state.circle = rollCircle(state);
   // Opening mastery reflects who stands in the Circle: each Wizard lends practice to their school.
@@ -143,7 +145,8 @@ export function rollMember(state, rank = 'apprentice') {
 // Selectors: 'leader' | 'second' | 'any' | { class } | { school } | { trait: {axis:'high'|'low'} } | { most: '<stat>' }.
 // Returns null when nobody matches (so that voice simply isn't heard) — the emergent bit.
 export function castMember(state, sel, exclude) {
-  let pool = state.circle.filter((m) => !(exclude && exclude.has(m.id)));
+  // Members away on an expedition are out of circulation — they can't advise or cast.
+  let pool = state.circle.filter((m) => !m.away && !(exclude && exclude.has(m.id)));
   if (!pool.length) return null;
   if (sel === 'leader') return pool.find((m) => m.rank === 'ring-leader') || pool[0];
   if (sel === 'second') return pool.find((m) => m.rank === 'adept') || pool[1] || pool[0];

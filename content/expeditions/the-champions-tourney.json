@@ -1,0 +1,79 @@
+{
+  "id": "the-champions-tourney",
+  "title": "The Champion's Tourney",
+  "party": 1,
+  "partyPick": "most:power",
+  "stages": [
+    {
+      "id": "the-road",
+      "away": 2,
+      "scene": {
+        "title": "The Road to the Lists",
+        "intro": "{name} sends word from the road to the tourney-town, where holds and guilds send champions to fight for a purse and a season's glory. {They} ask{s} one thing before the first bout: is this to be won clean, on craft and courage — or should {they} carry a quiet working, and make certain?",
+        "advisors": [
+          { "cast": { "trait": { "piety": "high" } }, "text": "Clean, Archon. A crown of cheating is a crown of glass. If we win, let it be ours in truth." },
+          { "cast": { "class": "charmer" }, "text": "Everyone at those lists is cheating a little. Tell {name} to carry the working. Winning is the reputation; how, is only gossip." }
+        ],
+        "choices": [
+          {
+            "id": "clean",
+            "label": "Fight clean — craft and courage only",
+            "win": { "text": "You send back one word: honestly. {name} sets {their} jaw and rides on to the lists with nothing up {their} sleeve but skill.", "saga": "You sent {name} to the champion's tourney to fight clean, on craft and courage alone.", "effects": [{ "expedition_advance": true }] }
+          },
+          {
+            "id": "cheat",
+            "label": "Send a quiet working to make certain",
+            "win": { "text": "You send {name} a working folded small — a whisper to slow a blade, to steady a hand. It is not honest. It may be enough.", "saga": "You sent {name} to the tourney with a quiet working hidden — victory made certain, if none should see.", "effects": [{ "set_flag": "champion_cheats" }, { "add": ["faith", -2] }, { "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-bouts",
+      "away": 3,
+      "scene": {
+        "title": "The Early Bouts",
+        "intro": "{name} has come through the first rounds, and sends word by fast rider. The field narrows to the sharp and the lucky, and the crowd has begun to chant a name — {theirs}.",
+        "advisors": [
+          { "cast": { "most": "courage" }, "text": "{name} is fighting beautifully, Archon. Whatever we told {them} to do, tell {them} to keep doing it." }
+        ],
+        "choices": [
+          {
+            "id": "press-clean",
+            "label": "Word: fight on, and fairly",
+            "requires": { "not": { "flag": "champion_cheats" } },
+            "win": { "text": "{name} wins {their} bracket on skill alone, and the honest crowd loves {them} for it. On to the final.", "saga": "{name} fought clean through the tourney's early bouts and won a place in the final on skill alone.", "effects": [{ "add": ["faith", 3] }, { "expedition_advance": true }] }
+          },
+          {
+            "id": "press-cheat",
+            "label": "Word: keep the working hidden and win",
+            "requires": { "flag": "champion_cheats" },
+            "test": { "stat": "guile", "vs": 50 },
+            "win": { "text": "The working does its quiet work and no marshal is the wiser. {name} advances, {their} secret intact and {their} conscience less so. On to the final.", "saga": "{name} carried the hidden working through the tourney's early bouts unseen, and bought a place in the final.", "effects": [{ "expedition_advance": true }] },
+            "lose": { "text": "A grey-robed adjudicator feels the working's edge and calls it aloud. {name} is not disqualified — nothing is proven — but the whole field watches {them} now, and the crowd's love has curdled to suspicion.", "saga": "{name}'s hidden working was half-caught at the tourney; nothing was proven, but suspicion followed {them} into the final.", "effects": [{ "add": ["faith", -4] }, { "add": ["fracture", 3] }, { "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-final",
+      "away": 3,
+      "scene": {
+        "title": "The Final Bout",
+        "intro": "The final. {name} faces the tourney's iron favourite before every hold and guild that sent a champion. Whatever Runehold did to get {them} here, it comes down to this ring, this bout, this breath.",
+        "advisors": [
+          { "cast": { "most": "power" }, "text": "One bout, Archon. Whatever {name} carries into that ring — skill or secret — let {them} spend all of it now." }
+        ],
+        "choices": [
+          {
+            "id": "fight-final",
+            "label": "Let {name} fight the final",
+            "test": { "stat": "power", "vs": 55 },
+            "win": { "text": "{name} takes the favourite in three passes and the purse and the crown with it. Runehold's name rings around the lists — a small hearth with a champion. {They} ride{s} home in glory.", "saga": "{name} won the champion's tourney before every hold and guild, and carried the crown and purse home to Runehold.", "effects": [{ "add": ["coin", 18] }, { "add": ["faith", 8] }, { "add": ["flamesRegard", 6] }, { "clear_flag": "champion_cheats" }, { "expedition_end": "return" }] },
+            "lose": { "text": "{name} fights well and loses well, beaten clean by a better hand in the ring. No shame in it — but no crown either. {They} come{s} home the runner-up, and a little wiser.", "saga": "{name} reached the final of the champion's tourney and was beaten clean — runner-up, and no shame in it.", "effects": [{ "add": ["coin", 6] }, { "add": ["faith", 1] }, { "clear_flag": "champion_cheats" }, { "expedition_end": "return" }] }
+          }
+        ]
+      }
+    }
+  ]
+}

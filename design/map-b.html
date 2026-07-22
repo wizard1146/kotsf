@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOTSF · Map B — parchment lab</title>
+<style>
+  :root { --bg:#14110f; --panel:#1c1815; --panel2:#241f1b; --line:#3a322b; --ink:#e7dccb; --dim:#a99e8d; --flame:#e8a33d; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); padding:1.4rem clamp(1rem,3vw,2.5rem) 4rem; }
+  h1 { color:var(--flame); font-size:1.4rem; margin:0 0 .2rem; }
+  .sub { color:var(--dim); margin:0 0 1.2rem; font-size:.88rem; max-width:72ch; line-height:1.5; }
+  .sub code { color:var(--ink); }
+
+  .wrap { display:grid; grid-template-columns:1fr 310px; gap:1.4rem; align-items:start; }
+  @media (max-width:900px){ .wrap { grid-template-columns:1fr; } }
+
+  .stage { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:1rem; }
+  .stage svg { display:block; width:100%; height:auto; border-radius:8px; }
+
+  .rail { position:sticky; top:.8rem; display:flex; flex-direction:column; gap:.9rem; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:.8rem .9rem; }
+  .card h3 { margin:0 0 .6rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; color:var(--flame); }
+  .row { display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin:.35rem 0; font-size:.8rem; color:var(--dim); }
+  .row input[type=color] { width:34px; height:22px; padding:0; border:1px solid var(--line); border-radius:4px; background:none; cursor:pointer; }
+  .row input[type=range] { width:130px; accent-color:var(--flame); }
+  .row input[type=text] { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:.28rem .45rem; font:inherit; font-family:var(--mono); font-size:.8rem; width:9em; }
+  .row select { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:.28rem .4rem; font:inherit; font-size:.8rem; }
+  .row .val { font-family:var(--mono); color:var(--ink); min-width:2.6em; text-align:right; }
+  .btn { background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:6px; padding:.35rem .6rem; font:inherit; font-size:.8rem; cursor:pointer; }
+  .btn:hover { color:var(--flame); border-color:var(--flame); }
+  .btnrow { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .algo-note { font-size:.72rem; color:var(--dim); line-height:1.4; margin:.5rem 0 0; }
+  textarea { width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:6px; padding:.5rem; font-family:var(--mono); font-size:.68rem; min-height:5em; resize:vertical; margin-top:.5rem; }
+</style>
+</head>
+<body>
+  <h1>Map B — parchment lab</h1>
+  <p class="sub">Option B blown up, now with four land-mass algorithms to compare (the blobby one plus three that aren't). Same seed drives all of them; tune the parchment style on top. <b>Copy style JSON</b> when the look's locked and I'll bake it — plus the chosen algorithm — into <code>src/ui/mapgen.js</code>.</p>
+
+  <div class="wrap">
+    <div class="stage"><div id="map"></div></div>
+
+    <div class="rail">
+      <div class="card">
+        <h3>World</h3>
+        <div class="row"><span>Landmass</span>
+          <select id="method">
+            <option value="noise">Noise field (marching squares)</option>
+            <option value="metaballs">Metaballs</option>
+            <option value="cells">Cells (voronoi-ish)</option>
+            <option value="fractal">Fractal (midpoint)</option>
+            <option value="blob">Blob (radial — original)</option>
+          </select>
+        </div>
+        <p class="algo-note" id="algo-note"></p>
+        <div class="row"><span>Seed</span><input type="text" id="seed" value="runehold-01"></div>
+        <div class="row"><span>Fracture</span><input type="range" id="fracture" min="0" max="100" value="20"><span class="val" id="fracv">20</span></div>
+        <div class="btnrow"><button class="btn" id="reroll">🎲 New world</button><button class="btn" id="prev">‹</button><button class="btn" id="next">›</button></div>
+      </div>
+
+      <div class="card">
+        <h3>Palette</h3>
+        <div class="row"><span>Sea</span><input type="color" data-s="sea"></div>
+        <div class="row"><span>Land</span><input type="color" data-s="land"></div>
+        <div class="row"><span>Ink (coast · labels)</span><input type="color" data-s="ink"></div>
+        <div class="row"><span>Mountains</span><input type="color" data-s="mtnFill"></div>
+        <div class="row"><span>Forest</span><input type="color" data-s="forestFill"></div>
+        <div class="row"><span>River</span><input type="color" data-s="river"></div>
+        <div class="row"><span>Roads</span><input type="color" data-s="roadColor"></div>
+        <div class="row"><span>Ash</span><input type="color" data-s="ashColor"></div>
+      </div>
+
+      <div class="card">
+        <h3>Line &amp; density</h3>
+        <div class="row"><span>Coast weight</span><input type="range" data-s="coastW" min="0.2" max="1.6" step="0.05"><span class="val" data-v="coastW"></span></div>
+        <div class="row"><span>Wave opacity</span><input type="range" data-s="waveOpacity" min="0" max="1" step="0.05"><span class="val" data-v="waveOpacity"></span></div>
+        <div class="row"><span>Region tint</span><input type="range" data-s="tintOpacity" min="0" max="0.6" step="0.02"><span class="val" data-v="tintOpacity"></span></div>
+        <div class="row"><span>Glyph density</span><input type="range" data-s="glyphDensity" min="0" max="1" step="0.05"><span class="val" data-v="glyphDensity"></span></div>
+      </div>
+
+      <div class="card">
+        <h3>Chrome</h3>
+        <div class="row"><span>Roads from Runehold</span><input type="checkbox" data-s="roads"></div>
+        <div class="row"><span>Compass rose</span><input type="checkbox" data-s="compass"></div>
+        <div class="row"><span>Border frame</span><input type="checkbox" data-s="frame"></div>
+        <div class="row"><span>Serif labels</span><input type="checkbox" data-s="serif"></div>
+        <div class="btnrow"><button class="btn" id="copy">Copy style JSON</button><button class="btn" id="reset">Reset</button></div>
+        <textarea id="json" readonly></textarea>
+      </div>
+    </div>
+  </div>
+
+<script>
+const W = 140, H = 100;
+const HEX = { red:'#c0392b', yellow:'#d4ac0d', brown:'#8a5a1f', green:'#229954', blue:'#2471a3', purple:'#7d3c98', white:'#d5d8dc' };
+const NAME = { red:'The Gilded Reach', yellow:"Chronomancer's Riviera", brown:'The Delta Holds', green:'Green Wizard City', blue:'The Bastion', purple:'Purple Pavilion', white:'White Wizard Tower' };
+const ALGO_NOTE = {
+  noise: 'Value-noise heightmap × radial falloff, domain-warped, traced with marching squares. Bays, capes, offshore isles — the realistic default.',
+  metaballs: 'Sum of Gaussian bumps thresholded into a coastline. Multi-lobed continents with natural inlets where bumps meet.',
+  cells: 'A real Voronoi diagram (half-plane clipping + Lloyd relaxation). Cells marked land/water; the coast follows cell edges and cult provinces get faceted borders — the political-map look.',
+  fractal: 'A coarse ring refined by midpoint displacement — crinkly, fractal edge. Fixes "too smooth", still fairly convex.',
+  blob: 'The original radius-as-function-of-angle. Smooth but unavoidably blobby (star-convex). Kept for comparison.',
+};
+const f = (n) => (+n).toFixed(2);
+
+const DEFAULTS = {
+  sea:'#cdba8c', land:'#e6d4a6', ink:'#5c4a2e', mtnFill:'#8a7350', forestFill:'#6d7b3a', river:'#5b83a0', roadColor:'#7a6039', ashColor:'#2a2012',
+  coastW:0.2, waveOpacity:0.55, tintOpacity:0.30, glyphDensity:1,
+  roads:true, compass:true, frame:true, serif:true,
+};
+let STYLE = { ...DEFAULTS };
+
+// ---------------- seeded RNG + noise ----------------
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function hashSeed(s){ s=String(s); let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+function makeValueNoise(rng){
+  const p=[...Array(256).keys()];
+  for(let i=255;i>0;i--){ const j=Math.floor(rng()*(i+1)); const t=p[i]; p[i]=p[j]; p[j]=t; }
+  const perm=new Uint8Array(512); for(let i=0;i<512;i++) perm[i]=p[i&255];
+  const fade=t=>t*t*t*(t*(t*6-15)+10);
+  const val=(xi,yi)=>perm[(perm[xi&255]+(yi&255))&255]/255;
+  return (x,y)=>{ const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=fade(xf),v=fade(yf);
+    const aa=val(xi,yi),ba=val(xi+1,yi),ab=val(xi,yi+1),bb=val(xi+1,yi+1),L=(a,b,t)=>a+(b-a)*t;
+    return L(L(aa,ba,u),L(ab,bb,u),v); };
+}
+function makeFbm(rng){ const vn=makeValueNoise(rng); return (x,y)=>{ let a=0,amp=0.5,fr=1,n=0; for(let o=0;o<4;o++){ a+=amp*vn(x*fr,y*fr); n+=amp; amp*=0.5; fr*=2; } return a/n; }; }
+
+// ---------------- geometry helpers ----------------
+function makeBlob(cx, cy, base, ax, ay, rng, pts, rough) {
+  const ph=[rng()*6.283,rng()*6.283,rng()*6.283,rng()*6.283];
+  const rf=t=>base*(1+rough*Math.sin(3*t+ph[0])+0.15*Math.sin(5*t+ph[1])+0.09*Math.sin(7*t+ph[2])+0.05*Math.sin(11*t+ph[3]));
+  const points=[]; for(let i=0;i<pts;i++){ const t=i/pts*6.28318, r=rf(t)*(0.97+rng()*0.06); points.push({x:cx+r*ax*Math.cos(t),y:cy+r*ay*Math.sin(t)}); }
+  return { points, cx, cy };
+}
+function catmullClosed(p) {
+  const n=p.length; let d=`M ${f(p[0].x)} ${f(p[0].y)}`;
+  for (let i=0;i<n;i++){ const p0=p[(i-1+n)%n],p1=p[i],p2=p[(i+1)%n],p3=p[(i+2)%n];
+    const c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6,c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;
+    d+=` C ${f(c1x)} ${f(c1y)}, ${f(c2x)} ${f(c2y)}, ${f(p2.x)} ${f(p2.y)}`; }
+  return d+' Z';
+}
+const polyToPath = (p) => 'M ' + p.map(q=>`${f(q.x)} ${f(q.y)}`).join(' L ') + ' Z';
+const toPath = (p, curve) => curve ? catmullClosed(p) : polyToPath(p);
+const polyPath = (p) => 'M ' + p.map(q=>`${f(q.x)} ${f(q.y)}`).join(' L ');
+function pointInPoly(x,y,poly){ let inside=false; for(let i=0,j=poly.length-1;i<poly.length;j=i++){ const xi=poly[i].x,yi=poly[i].y,xj=poly[j].x,yj=poly[j].y; if(((yi>y)!==(yj>y)) && (x < (xj-xi)*(y-yi)/((yj-yi)||1e-9)+xi)) inside=!inside; } return inside; }
+function polyArea(p){ let a=0; for(let i=0,j=p.length-1;i<p.length;j=i++) a+=(p[j].x+p[i].x)*(p[j].y-p[i].y); return a/2; }
+function chaikin(pts, iters){ let p=pts; for(let k=0;k<iters;k++){ const q=[]; for(let i=0;i<p.length;i++){ const a=p[i],b=p[(i+1)%p.length]; q.push({x:a.x*0.75+b.x*0.25,y:a.y*0.75+b.y*0.25},{x:a.x*0.25+b.x*0.75,y:a.y*0.25+b.y*0.75}); } p=q; } return p; }
+function wavy(a, b, segs, amp, rng) {
+  const nx=-(b.y-a.y),ny=(b.x-a.x),L=Math.hypot(nx,ny)||1,out=[];
+  for(let i=0;i<=segs;i++){ const t=i/segs,x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,off=Math.sin(t*Math.PI*(2+rng()*2))*amp*(1-Math.abs(t-0.5)); out.push({x:x+nx/L*off,y:y+ny/L*off}); }
+  return out;
+}
+
+// ---------------- marching squares (linear-interp iso-contour → closed loops) ----------------
+function marchingSquares(field, cols, rows, cw, ch, level) {
+  const segs=[]; const ip=(x1,y1,v1,x2,y2,v2)=>{ const t=(level-v1)/((v2-v1)||1e-6); return {x:x1+(x2-x1)*t,y:y1+(y2-y1)*t}; };
+  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+    const x0=i*cw,y0=j*ch,x1=x0+cw,y1=y0+ch;
+    const tl=field(i,j),tr=field(i+1,j),br=field(i+1,j+1),bl=field(i,j+1);
+    let c=0; if(tl>level)c|=8; if(tr>level)c|=4; if(br>level)c|=2; if(bl>level)c|=1;
+    const T=()=>ip(x0,y0,tl,x1,y0,tr),R=()=>ip(x1,y0,tr,x1,y1,br),B=()=>ip(x0,y1,bl,x1,y1,br),Lf=()=>ip(x0,y0,tl,x0,y1,bl);
+    const pu=(a,b)=>segs.push([a,b]);
+    switch(c){ case 1:pu(Lf(),B());break; case 2:pu(B(),R());break; case 3:pu(Lf(),R());break; case 4:pu(T(),R());break;
+      case 5:pu(Lf(),T());pu(B(),R());break; case 6:pu(T(),B());break; case 7:pu(Lf(),T());break; case 8:pu(T(),Lf());break;
+      case 9:pu(T(),B());break; case 10:pu(T(),R());pu(Lf(),B());break; case 11:pu(T(),R());break; case 12:pu(R(),Lf());break;
+      case 13:pu(R(),B());break; case 14:pu(B(),Lf());break; }
+  }
+  const key=p=>Math.round(p.x*4)+','+Math.round(p.y*4);
+  const map=new Map(); segs.forEach((s,i)=>{ for(const e of [0,1]){ const k=key(s[e]); (map.get(k)||map.set(k,[]).get(k)).push([i,e]); } });
+  const used=new Array(segs.length).fill(false), loops=[];
+  for(let i=0;i<segs.length;i++){ if(used[i])continue;
+    const loop=[segs[i][0]]; let nxt=segs[i][1]; used[i]=true; loop.push(nxt); let guard=0;
+    while(guard++<segs.length+5){ const cand=(map.get(key(nxt))||[]).find(([si])=>!used[si]); if(!cand)break; const [si,se]=cand; used[si]=true; nxt=segs[si][se^1]; if(key(nxt)===key(loop[0]))break; loop.push(nxt); }
+    if(loop.length>4) loops.push(loop);
+  }
+  return loops;
+}
+
+// ---------------- the four land-mass generators ----------------
+// each returns { polys:[[{x,y}...]], center:{x,y}, curve:bool }
+const CX=80, CY=52, RADX=64, RADY=48;
+const falloff=(x,y,pw)=>Math.max(0, 1-Math.pow(Math.hypot((x-CX)/RADX,(y-CY)/RADY), pw));
+
+function genBlob(rng){ const b=makeBlob(CX,CY,44,1,0.8,rng,26,0.24); return { polys:[b.points], center:{x:CX,y:CY}, curve:true }; }
+function genFractal(rng){
+  let pts=makeBlob(CX,CY,42,1,0.8,rng,12,0.28).points;
+  for(let lvl=0;lvl<5;lvl++){ const np=[],amp=8.5*Math.pow(0.55,lvl);
+    for(let i=0;i<pts.length;i++){ const a=pts[i],b=pts[(i+1)%pts.length]; np.push(a);
+      const nx=-(b.y-a.y),ny=(b.x-a.x),L=Math.hypot(nx,ny)||1,d=(rng()*2-1)*amp;
+      np.push({x:(a.x+b.x)/2+nx/L*d, y:(a.y+b.y)/2+ny/L*d}); }
+    pts=np; }
+  return { polys:[pts], center:{x:CX,y:CY}, curve:false };
+}
+function genField(rng, kind){
+  const fbm=makeFbm(rng);
+  let centers=null;
+  if(kind==='metaballs'){ centers=[]; const n=5+Math.floor(rng()*3); for(let i=0;i<n;i++) centers.push({x:CX+(rng()*2-1)*36,y:CY+(rng()*2-1)*26,s:13+rng()*12}); }
+  const field=(x,y)=>{
+    if(kind==='noise'){ const wx=x+(fbm(x*0.03+5,y*0.03)-0.5)*22, wy=y+(fbm(x*0.03,y*0.03+9)-0.5)*22; return fbm(wx*0.05,wy*0.05)*falloff(x,y,2.2); }
+    let s=0; for(const c of centers){ const d2=(x-c.x)**2+(y-c.y)**2; s+=Math.exp(-d2/(2*c.s*c.s)); } return (s + (fbm(x*0.06,y*0.06)-0.5)*0.5) * (falloff(x,y,2.6)*0.6+0.4);
+  };
+  const level = kind==='noise'?0.15 : 0.55;
+  const cw=2.2, ch=2.2, cols=Math.ceil(W/cw)+1, rows=Math.ceil(H/ch)+1;
+  let loops=marchingSquares((i,j)=>field(i*cw,j*ch),cols,rows,cw,ch,level);
+  loops=loops.map(l=>chaikin(l,2)).filter(l=>Math.abs(polyArea(l))>22);
+  if(!loops.length) loops=[makeBlob(CX,CY,40,1,0.8,rng,24,0.2).points]; // safety net
+  return { polys:loops, center:{x:CX,y:CY}, curve:true };
+}
+
+// ---- real Voronoi: each cell = bounding box clipped by the perpendicular bisector against
+// every other site (Sutherland–Hodgman half-plane clip). No Delaunay, no library. ----
+function clipHalfPlane(poly, mx, my, nx, ny){
+  const out=[], side=p=>(p.x-mx)*nx+(p.y-my)*ny;
+  for(let i=0;i<poly.length;i++){ const a=poly[i], b=poly[(i+1)%poly.length], sa=side(a), sb=side(b);
+    if(sa<=0) out.push(a);
+    if((sa<0&&sb>0)||(sa>0&&sb<0)){ const t=sa/(sa-sb); out.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t}); } }
+  return out;
+}
+function voronoiCell(site, sites, bb){
+  let poly=[{x:bb.x0,y:bb.y0},{x:bb.x1,y:bb.y0},{x:bb.x1,y:bb.y1},{x:bb.x0,y:bb.y1}];
+  for(const o of sites){ if(o===site) continue; poly=clipHalfPlane(poly,(site.x+o.x)/2,(site.y+o.y)/2,o.x-site.x,o.y-site.y); if(poly.length<3) break; }
+  return poly;
+}
+function polyCentroid(poly){
+  let a=0,cx=0,cy=0; for(let i=0,j=poly.length-1;i<poly.length;j=i++){ const cr=poly[j].x*poly[i].y-poly[i].x*poly[j].y; a+=cr; cx+=(poly[j].x+poly[i].x)*cr; cy+=(poly[j].y+poly[i].y)*cr; }
+  a*=0.5; return Math.abs(a)<1e-6 ? {x:poly[0].x,y:poly[0].y} : {x:cx/(6*a),y:cy/(6*a)};
+}
+function genVoronoi(rng){
+  const fbm=makeFbm(rng), bb={x0:2,y0:2,x1:W-2,y1:H-2};
+  let sites=[]; for(let i=0;i<66;i++) sites.push({x:bb.x0+rng()*(bb.x1-bb.x0), y:bb.y0+rng()*(bb.y1-bb.y0)});
+  for(let it=0;it<2;it++) sites=sites.map(s=>polyCentroid(voronoiCell(s,sites,bb))); // Lloyd relaxation → even cells
+  const isLandAt=(x,y)=>(falloff(x,y,2.1)*0.98 + fbm(x*0.05,y*0.05)*0.5) > 0.6;
+  const cells=[];
+  for(const s of sites){ const poly=voronoiCell(s,sites,bb); if(poly.length>=3) cells.push({site:s, poly, land:isLandAt(s.x,s.y)}); }
+  const landCells=cells.filter(c=>c.land);
+  return { polys:landCells.map(c=>c.poly), center:{x:CX,y:CY}, curve:false, voronoi:{landCells} };
+}
+
+// ---------------- assemble a full world ----------------
+function generateWorld(method, seed) {
+  const rng = mulberry32(hashSeed(seed + '|' + method));
+  const g = method==='blob' ? genBlob(rng) : method==='fractal' ? genFractal(rng) : method==='cells' ? genVoronoi(rng) : genField(rng, method);
+  const island = makeBlob(19, 42 + rng()*16, 11, 1, 0.95, rng, 13, 0.32);
+  const landPolys = [...g.polys, island.points];
+  const isLand = (x,y) => landPolys.some(poly => pointInPoly(x,y,poly));
+
+  // land sample grid → robust "nearest land" placement so canon zones survive any coastline
+  const samples=[]; for(let y=6;y<H-4;y+=2) for(let x=4;x<W-4;x+=2) if(isLand(x,y)) samples.push({x,y});
+  const nearestLand=(tx,ty)=>{ let best=1e9,bp={x:CX,y:CY}; for(const s of samples){ const d=(s.x-tx)**2+(s.y-ty)**2; if(d<best){best=d;bp=s;} } return bp; };
+  const place=(deg,frac)=>{ const t=deg*Math.PI/180, tx=g.center.x+Math.cos(t)*frac*46, ty=g.center.y+Math.sin(t)*0.8*frac*46; return isLand(tx,ty)?{x:tx,y:ty}:nearestLand(tx,ty); };
+  const jit=(d,s)=>d+(rng()*2-1)*s;
+
+  const seats = [
+    { key:'red',    ...place(rng()*360, 0.14) },
+    { key:'yellow', ...place(jit(52,14), 0.8) },
+    { key:'green',  ...place(jit(115,18), 0.64) },
+    { key:'blue',   ...place(jit(186,16), 0.5) },
+    { key:'white',  ...place(jit(232,14), 0.76) },
+    { key:'brown',  ...place(jit(285,14), 0.7) },
+    { key:'purple', x: island.cx + (rng()*4-2), y: island.cy + (rng()*4-2) },
+  ].map(s => ({ ...s, name: NAME[s.key] }));
+  const home = place(jit(150,40), 0.32);
+  const tower = { x: 58 + rng()*64, y: 7 + rng()*6 };
+
+  const ma = place(jit(300,10), 0.5), mb = place(jit(150,10), 0.45);
+  const mountains=[]; for(let i=0;i<=11;i++){ const t=i/11,x=ma.x+(mb.x-ma.x)*t,y=ma.y+(mb.y-ma.y)*t,p={x:x+(rng()*4-2),y:y+(rng()*4-2),s:1.4+rng()*1.1}; if(isLand(p.x,p.y)) mountains.push(p); }
+  const forests=[]; for(let i=0;i<32;i++){ const p=place(jit(118,34), 0.36+rng()*0.44); if(isLand(p.x,p.y)) forests.push(p); }
+  const river = wavy(place(jit(285,8),0.4), place(jit(285,6),0.95), 10, 4, rng);
+  const roads = seats.map(s => [home, { x:s.x, y:s.y }]);
+  const ashCorner = rng()<0.5 ? {x:6,y:4} : {x:W-6,y:4};
+
+  const landPaths = g.polys.map(p => toPath(p, g.curve));
+  const islandPath = toPath(island.points, true);
+
+  // Voronoi: assign each land cell to its nearest continental cult → provinces, then classify
+  // every cell edge as coast (borders water) or province border (land cells, different owners).
+  let voronoi = null;
+  if (method === 'cells' && g.voronoi) {
+    const contSeats = seats.filter(s => s.key !== 'purple');
+    for (const c of g.voronoi.landCells) { let best=1e9, k=null; for (const s of contSeats){ const d=(s.x-c.site.x)**2+(s.y-c.site.y)**2; if(d<best){best=d;k=s.key;} } c.owner=k; }
+    const ekey=(a,b)=>{ const p=Math.round(a.x*8)+','+Math.round(a.y*8), q=Math.round(b.x*8)+','+Math.round(b.y*8); return p<q?p+'|'+q:q+'|'+p; };
+    const em=new Map();
+    g.voronoi.landCells.forEach((c,ci)=>{ const p=c.poly; for(let i=0;i<p.length;i++){ const a=p[i],b=p[(i+1)%p.length],k=ekey(a,b); (em.get(k)||em.set(k,[]).get(k)).push({ci,a,b}); } });
+    const coastEdges=[], provEdges=[];
+    for (const list of em.values()) { if (list.length===1) coastEdges.push(list[0]); else if (list.length===2 && g.voronoi.landCells[list[0].ci].owner!==g.voronoi.landCells[list[1].ci].owner) provEdges.push(list[0]); }
+    const provinces=contSeats.map(s=>({ key:s.key, cells:g.voronoi.landCells.filter(c=>c.owner===s.key).map(c=>polyToPath(c.poly)) }));
+    voronoi={ coastEdges, provEdges, provinces };
+  }
+  return { method, landPaths, islandPath, seats, home, tower, mountains, forests, river, roads, ashCorner, voronoi };
+}
+
+// ---------------- glyphs + renderer (parchment) ----------------
+function mountainsSVG(list, fill, stroke){ return list.map(m=>`<path d="M ${f(m.x-m.s)} ${f(m.y)} L ${f(m.x)} ${f(m.y-m.s*1.7)} L ${f(m.x+m.s)} ${f(m.y)} Z" fill="${fill}" stroke="${stroke}" stroke-width=".25" stroke-linejoin="round"/><path d="M ${f(m.x-m.s*0.35)} ${f(m.y-m.s*0.85)} L ${f(m.x)} ${f(m.y-m.s*1.7)} L ${f(m.x+m.s*0.35)} ${f(m.y-m.s*0.85)}" fill="none" stroke="${stroke}" stroke-width=".2"/>`).join(''); }
+function forestsSVG(list, fill, stroke){ return list.map(t=>`<path d="M ${f(t.x)} ${f(t.y-2)} L ${f(t.x-1)} ${f(t.y)} L ${f(t.x+1)} ${f(t.y)} Z" fill="${fill}" stroke="${stroke}" stroke-width=".15"/><line x1="${f(t.x)}" y1="${f(t.y)}" x2="${f(t.x)}" y2="${f(t.y+0.7)}" stroke="${stroke}" stroke-width=".25"/>`).join(''); }
+function tintDefs(seats, op){ return seats.map((s,i)=>`<radialGradient id="tb${i}" gradientUnits="userSpaceOnUse" cx="${f(s.x)}" cy="${f(s.y)}" r="22"><stop offset="0" stop-color="${HEX[s.key]}" stop-opacity="${op}"/><stop offset="1" stop-color="${HEX[s.key]}" stop-opacity="0"/></radialGradient>`).join(''); }
+function tintRects(seats){ return seats.map((s,i)=>`<rect width="${W}" height="${H}" fill="url(#tb${i})" style="mix-blend-mode:multiply"/>`).join(''); }
+function ashDefs(w, fr, color){ const c=w.ashCorner,r=34+fr*1.0; return `<radialGradient id="ab" gradientUnits="userSpaceOnUse" cx="${f(c.x)}" cy="${f(c.y)}" r="${f(r)}"><stop offset="0" stop-color="${color}" stop-opacity="${f(fr/100*0.85)}"/><stop offset=".7" stop-color="${color}" stop-opacity="${f(fr/100*0.4)}"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></radialGradient>`; }
+function seatMarker(s, textColor, halo, serif){ const left=s.x>104,tx=left?-2.5:2.5,anchor=left?'end':'start'; return `<g transform="translate(${f(s.x)},${f(s.y)})"><circle r="1.6" fill="${HEX[s.key]}" stroke="${halo}" stroke-width=".4"/><text x="${tx}" y=".85" text-anchor="${anchor}" font-size="2.5"${serif?' font-family="Georgia,serif"':''} fill="${textColor}" style="paint-order:stroke" stroke="${halo}" stroke-width=".8" stroke-linejoin="round">${s.name}</text></g>`; }
+function homeMarker(w, halo, serif){ const s=w.home; return `<g transform="translate(${f(s.x)},${f(s.y)})"><path d="M0,-2.6 L2.2,0 L0,2.6 L-2.2,0 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".4"/><circle r=".8" fill="#fff2cf"/><text x="0" y="4.6" text-anchor="middle" font-size="2.8"${serif?' font-family="Georgia,serif"':''} fill="#b06a1c" style="paint-order:stroke" stroke="${halo}" stroke-width=".9" stroke-linejoin="round">Runehold</text></g>`; }
+function towerMarker(w, textColor, halo, serif){ const s=w.tower; return `<g transform="translate(${f(s.x)},${f(s.y)})" opacity=".9"><rect x="-1" y="-1" width="2" height="3.4" fill="${textColor}" stroke="${halo}" stroke-width=".3"/><path d="M-1.4,-1 L0,-3 L1.4,-1 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".3"/><text x="0" y="-3.8" text-anchor="middle" font-size="2.2"${serif?' font-family="Georgia,serif"':''} fill="${textColor}" opacity=".8" style="paint-order:stroke" stroke="${halo}" stroke-width=".7" stroke-linejoin="round">The Secret Tower</text></g>`; }
+
+function renderB(w, fr, S) {
+  const dens=S.glyphDensity;
+  const forests=w.forests.slice(0,Math.round(w.forests.length*dens));
+  const mountains=w.mountains.slice(0,Math.max(2,Math.round(w.mountains.length*dens)));
+  const isVor=!!w.voronoi;
+  // land fill: no per-cell stroke for Voronoi (coast is drawn from cell edges); island always outlined
+  const mainFill=w.landPaths.map(d=>`<path d="${d}" fill="${S.land}" stroke="${isVor?'none':S.ink}" stroke-width="${S.coastW}" stroke-linejoin="round"/>`).join('');
+  const islandFill=`<path d="${w.islandPath}" fill="${S.land}" stroke="${S.ink}" stroke-width="${(S.coastW*0.85).toFixed(2)}"/>`;
+  const clip=w.landPaths.map(d=>`<path d="${d}"/>`).join('')+`<path d="${w.islandPath}"/>`;
+  const roads=S.roads?w.roads.map(([a,b])=>`<line x1="${f(a.x)}" y1="${f(a.y)}" x2="${f(b.x)}" y2="${f(b.y)}" stroke="${S.roadColor}" stroke-width=".4" stroke-dasharray="1 1.4" opacity=".7"/>`).join(''):'';
+  let underTerrain, overClip='';
+  if(isVor){
+    underTerrain=w.voronoi.provinces.map(pr=>pr.cells.map(d=>`<path d="${d}" fill="${HEX[pr.key]}" opacity="${f(S.tintOpacity*0.6)}"/>`).join('')).join('');
+    overClip=w.voronoi.provEdges.map(e=>`<line x1="${f(e.a.x)}" y1="${f(e.a.y)}" x2="${f(e.b.x)}" y2="${f(e.b.y)}" stroke="${S.ink}" stroke-width=".2" opacity=".45" stroke-dasharray=".8 .8"/>`).join('')
+      + w.voronoi.coastEdges.map(e=>`<line x1="${f(e.a.x)}" y1="${f(e.a.y)}" x2="${f(e.b.x)}" y2="${f(e.b.y)}" stroke="${S.ink}" stroke-width="${S.coastW}" stroke-linecap="round"/>`).join('');
+  } else {
+    underTerrain=tintRects(w.seats);
+  }
+  const compass=S.compass?`<g transform="translate(15,82)" opacity=".85"><circle r="6.5" fill="none" stroke="${S.ink}" stroke-width=".4"/><path d="M0,-6.5 L1.3,0 L0,6.5 L-1.3,0 Z" fill="${S.ink}"/><path d="M-6.5,0 L0,-1.3 L6.5,0 L0,1.3 Z" fill="${S.mtnFill}"/><text y="-7.6" text-anchor="middle" font-size="2.3"${S.serif?' font-family="Georgia,serif"':''} fill="${S.ink}">N</text></g>`:'';
+  const frame=S.frame?`<rect x="1.5" y="1.5" width="${W-3}" height="${H-3}" fill="none" stroke="${S.ink}" stroke-width=".5"/><rect x="3" y="3" width="${W-6}" height="${H-6}" fill="none" stroke="${S.ink}" stroke-width=".3"/>`:'';
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs>${isVor?'':tintDefs(w.seats,S.tintOpacity)}${ashDefs(w,fr,S.ashColor)}
+      <clipPath id="landB">${clip}</clipPath>
+      <pattern id="wavesB" width="9" height="6" patternUnits="userSpaceOnUse"><path d="M0 3 q 2.2 -2 4.5 0 t 4.5 0" fill="none" stroke="${S.ink}" stroke-width=".3" opacity=".55"/></pattern></defs>
+    <rect width="${W}" height="${H}" fill="${S.sea}"/>
+    <rect width="${W}" height="${H}" fill="url(#wavesB)" opacity="${S.waveOpacity}"/>
+    ${mainFill}${islandFill}
+    <g clip-path="url(#landB)">
+      ${underTerrain}
+      ${roads}
+      <path d="${polyPath(w.river)}" fill="none" stroke="${S.river}" stroke-width=".7" stroke-linecap="round"/>
+      ${forestsSVG(forests,S.forestFill,S.ink)}
+      ${mountainsSVG(mountains,S.mtnFill,S.ink)}
+    </g>
+    ${overClip}
+    <rect width="${W}" height="${H}" fill="url(#ab)"/>
+    ${w.seats.map(s=>seatMarker(s,S.ink,S.land,S.serif)).join('')}
+    ${towerMarker(w,S.ink,S.land,S.serif)}
+    ${homeMarker(w,S.land,S.serif)}
+    ${compass}${frame}</svg>`;
+}
+
+// ---------------- wire up ----------------
+const $ = (id) => document.getElementById(id);
+function render() {
+  const method=$('method').value, seed=$('seed').value||'seed', fr=+$('fracture').value;
+  $('fracv').textContent=fr; $('algo-note').textContent=ALGO_NOTE[method];
+  $('map').innerHTML=renderB(generateWorld(method,seed),fr,STYLE);
+  $('json').value=JSON.stringify({ algorithm:method, ...STYLE });
+}
+function syncControls(){ document.querySelectorAll('[data-s]').forEach(el=>{ const k=el.dataset.s; if(el.type==='checkbox') el.checked=!!STYLE[k]; else el.value=STYLE[k]; const v=document.querySelector(`[data-v="${k}"]`); if(v) v.textContent=STYLE[k]; }); }
+document.querySelectorAll('[data-s]').forEach(el=>{ el.addEventListener('input',()=>{ const k=el.dataset.s; if(el.type==='checkbox')STYLE[k]=el.checked; else if(el.type==='range')STYLE[k]=parseFloat(el.value); else STYLE[k]=el.value; const v=document.querySelector(`[data-v="${k}"]`); if(v)v.textContent=STYLE[k]; render(); }); });
+$('method').addEventListener('change', render);
+let n=1; const setSeed=v=>{ $('seed').value='runehold-'+String(v).padStart(2,'0'); render(); };
+$('reroll').addEventListener('click',()=>setSeed(++n));
+$('prev').addEventListener('click',()=>{ n=Math.max(1,n-1); setSeed(n); });
+$('next').addEventListener('click',()=>setSeed(++n));
+$('seed').addEventListener('input',render);
+$('fracture').addEventListener('input',render);
+$('reset').addEventListener('click',()=>{ STYLE={...DEFAULTS}; syncControls(); render(); });
+$('copy').addEventListener('click',(e)=>{ navigator.clipboard.writeText(JSON.stringify({algorithm:$('method').value,...STYLE},null,2)).then(()=>{ e.target.textContent='Copied ✓'; setTimeout(()=>e.target.textContent='Copy style JSON',1400); }); });
+syncControls();
+render();
+</script>
+</body>
+</html>

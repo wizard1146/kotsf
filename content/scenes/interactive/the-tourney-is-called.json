@@ -1,0 +1,25 @@
+{
+  "id": "the-tourney-is-called",
+  "type": "quest",
+  "tags": ["fracture"],
+  "title": "The Tourney is Called",
+  "weight": 4,
+  "trigger": { "all": [{ "no_expedition": true }, { "gte": ["faith", 44] }] },
+  "intro": "A herald rides the circuit of the holds: the champion's tourney is called again in the tourney-town, a purse of coin and a season's glory to whichever hearth or guild sends the last one standing. A small hold could make a great name — if it had a champion to send, and could spare that Wizard the season.",
+  "advisors": [
+    { "cast": { "most": "power" }, "text": "Send our best, Archon. A win at the lists is worth a hundred fair words about Runehold — every hold that sneers at us would learn our champion's name." },
+    { "cast": { "class": "charmer" }, "text": "Or send no one and keep our pride whole. A champion who loses brings home a story we'd rather not tell." }
+  ],
+  "choices": [
+    {
+      "id": "send",
+      "label": "Send a champion to the lists",
+      "win": { "text": "You choose your strongest hand and send them south to the tourney-town with a purse for the road. Runehold has entered the lists.", "saga": "You sent a champion of the Circle south to fight in the champion's tourney for Runehold's name.", "effects": [{ "expedition_start": { "tmpl": "the-champions-tourney" } }] }
+    },
+    {
+      "id": "decline",
+      "label": "Send no one — glory is not grain",
+      "win": { "text": "You let the herald ride on. Runehold's name will not ring at the lists this year; nor will one of your own be gone a season chasing a crown.", "saga": "You let the champion's tourney pass, keeping your Wizards home rather than chase a season's glory.", "effects": [] }
+    }
+  ]
+}

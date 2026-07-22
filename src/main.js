@@ -9,11 +9,12 @@ import { meets } from './engine/conditions.js';
 import { pickScene } from './engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from './engine/loop.js';
 import { applyEffects } from './engine/effects.js';
+import { registerExpeditions, dueExpedition, expeditionScene, nameReturningSoul } from './engine/expeditions.js';
 import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v33';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v34';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -28,6 +29,7 @@ let counsel = {};              // screen id -> ambient advisor line pool (footer
 let portraits = [];            // member portrait filenames (assets/portraits/*.webp)
 let creationDefs = [];         // new-coven creation wizard steps (from bundle)
 let rolesDefs = [];            // advisor task/role definitions (from bundle)
+let expeditionDefs = [];       // long-running quest templates (from bundle)
 
 // app-shell UI state
 let screen = 'splash';         // 'splash' | 'menu' | 'create' | 'game'
@@ -132,6 +134,9 @@ function advanceToScene() {
     end = checkEnd(state);
     if (end) { phase = 'end'; current = null; return; }
     if (state.year !== prevYear) { openYearRecap(prevYear); return; }  // pause at year's end
+    // A party come due this season interrupts the normal pool with its beat.
+    const exp = dueExpedition(state);
+    if (exp) { state._activeExp = exp.id; current = expeditionScene(state, exp); phase = 'scene'; return; }
     const s = pickScene(state, scenes);
     if (s) { current = s; phase = 'scene'; return; }
   }
@@ -197,8 +202,35 @@ function finishCreation() {
 function choose(id) {
   const ch = current?.choices.find((c) => c.id === id);
   if (!ch || !meets(state, ch.requires)) return;
+  if (current._exp) state._activeExp = current._exp;   // bind expedition_* effects to this instance
   const outcome = applyChoice(state, current, ch);
   lastOutcome = ch[outcome] || ch.win;
+  delete state._activeExp;
+  end = checkEnd(state);
+  phase = 'outcome';
+  draw();
+}
+
+// A returning Soul is named. Resolve the guess (blessing if right, a wound if wrong),
+// finalise the expedition, and show the truth as the outcome.
+function nameSoul(guess) {
+  if (!current?._exp) return;
+  const exp = (state.expeditions || []).find((e) => e.id === current._exp);
+  if (!exp) return;
+  const r = nameReturningSoul(state, exp, guess);
+  const who = r.name ? r.name : 'no Wizard you had lost — a nameless Soul';
+  if (r.correct) {
+    applyEffects(state, [{ add: ['faith', 6] }, { add: ['flamesRegard', 6] }]);
+    chronicle(state, r.name
+      ? `You named the returning Soul true: ${r.name}, come back to you. Naming it was a grace, and the hearth burned warmer for it.`
+      : `You saw the returning Soul for what it was — nameless, and one of your own no longer. There is a cold mercy in being right.`);
+    lastOutcome = { text: `You named it true. It was ${who}. A grace passes between you, and the coven takes heart.` };
+  } else {
+    applyEffects(state, [{ add: ['faith', -5] }, { add: ['fracture', 4] }]);
+    chronicle(state, `You named the returning Soul wrongly. It was ${who}. The mistake sits ill with the Circle.`);
+    lastOutcome = { text: `You named it wrongly. It was ${who}. The Circle looks at you differently now.` };
+  }
+  delete state._activeExp;
   end = checkEnd(state);
   phase = 'outcome';
   draw();
@@ -293,7 +325,7 @@ function clearData() {
 // ---- render ----------------------------------------------------------------
 function ctx() {
   return {
-    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, pendingRole, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
+    screen, overlay, gameView, hearthMenuOpen, pinnedCard, casterId, selectedMember, cardsOpen, creation, creationDefs, rolesDefs, expeditionDefs, pendingRole, sagaPage, settings, codex, actions, counsel, portraits, yearRecap, codexTab, codexQuery, optionsTab, appVersion: APP_VERSION, inGame: !!state,
     saves: { auto: metaOf(readSlot(AUTOSAVE_KEY)), manual: metaOf(readSlot(MANUAL_KEY)) },
     state, defs, phase, current, lastOutcome, end,
   };
@@ -407,6 +439,7 @@ app.addEventListener('click', (e) => {
   switch (action) {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
+    case 'name-soul': nameSoul(el.dataset.name); break;
     case 'continue': proceed(); break;
     case 'create-next': if (creation) { creation.step = Math.min(creation.plan.length - 1, creation.step + 1); draw(); scrollTop(); } break;
     case 'create-back': if (creation && creation.step > 0) { creation.step -= 1; draw(); scrollTop(); } break;
@@ -520,6 +553,8 @@ window.addEventListener('keydown', (e) => {
   portraits = bundle.portraits || [];
   creationDefs = bundle.creation || { steps: [], pool: [] };
   rolesDefs = bundle.roles || [];
+  expeditionDefs = bundle.expeditions || [];
+  registerExpeditions(expeditionDefs);             // hand the quest templates to the engine
   applySettings();
   screen = 'splash'; overlay = null;
   draw();

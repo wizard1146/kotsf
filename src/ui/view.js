@@ -114,13 +114,26 @@ function centerHTML(ctx) {
         <button class="choice cont" data-action="continue">Continue &rarr;</button>
       </div></section>`;
   }
-  return `<section class="scene scene-split">
+  return `<section class="scene scene-split${current._exp ? ' scene-expedition' : ''}">
     <div class="scene-art">${sigil(current.title)}</div>
     <div class="scene-body">
+      ${current._exp ? '<div class="exp-tag">Expedition</div>' : ''}
       <p class="intro">${esc(current.intro || '')}</p>
       ${advisorsHTML(state, current)}
-      <div class="choices">${choicesHTML(state, current)}</div>
+      ${current.kind === 'name-soul' ? nameSoulHTML(ctx) : `<div class="choices">${choicesHTML(state, current)}</div>`}
     </div></section>`;
+}
+
+// The returning-Soul naming beat: guesses are built from the expedition's rolled
+// candidates (your own lost/burned Wizards), plus the always-present nameless option.
+function nameSoulHTML(ctx) {
+  const exp = (ctx.state.expeditions || []).find((e) => e.id === ctx.current._exp);
+  const cands = exp?.data?.candidates || [];
+  const btn = (name, label) => `<button class="choice" data-action="name-soul" data-name="${esc(name)}"><span>${esc(label)}</span></button>`;
+  return `<div class="choices">
+    ${cands.map((n) => btn(n, `It is ${n} — one of ours, come back.`)).join('')}
+    ${btn('__nameless__', 'It has no name I know — a nameless Soul.')}
+  </div>`;
 }
 
 // ---- the game screen: three KODP-style zones (hearth bar / stage / circle bar)
@@ -237,11 +250,11 @@ function sagaScreenHTML(ctx) {
 // second-in-command (the default caster). May be null pre-game / empty Circle.
 function activeCaster(ctx) {
   const state = ctx.state;
-  return (ctx.casterId && state.circle.find((m) => m.id === ctx.casterId)) || castMember(state, 'second');
+  return (ctx.casterId && state.circle.find((m) => m.id === ctx.casterId && !m.away)) || castMember(state, 'second');
 }
 
 function casterPickerHTML(state, caster) {
-  const pills = state.circle.map((m) => {
+  const pills = state.circle.filter((m) => !m.away).map((m) => {
     const on = caster && m.id === caster.id;
     return `<button class="caster-pill${on ? ' on' : ''}" data-action="set-caster" data-caster="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(m.name)} — ${CLASS_LABEL[m.class] || m.class}, ${cap(m.school)} school${m.rank === 'adept' ? ' (default caster)' : ''}">
       <span class="cp-dot"></span>${esc(m.name)}</button>`;
@@ -450,13 +463,29 @@ function portraitFill(m, portraits) {
   return `<img class="member-photo is-placeholder" src="${PORTRAIT_PLACEHOLDER}" alt="" aria-hidden="true"><span class="pcard-init">${esc((m.name[0] || '?').toUpperCase())}</span>`;
 }
 
-function memberCard(m, isLeader, portraits, roleLabel) {
-  const tip = `${m.name} — ${CLASS_LABEL[m.class] || m.class} · ${CULT_NAMES[m.school]} · ${m.rank} · Pow ${m.power} Wis ${m.wisdom} Gui ${m.guile} Cou ${m.courage}`;
-  return `<button class="pcard${isLeader ? ' leader' : ''}" data-action="view-member" data-member="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
-    <div class="pcard-img">${portraitFill(m, portraits)}${roleLabel ? `<span class="pcard-role">${esc(roleLabel)}</span>` : ''}</div>
+function memberCard(m, isLeader, portraits, roleLabel, awayLabel) {
+  const tip = awayLabel
+    ? `${m.name} is away — ${awayLabel}`
+    : `${m.name} — ${CLASS_LABEL[m.class] || m.class} · ${CULT_NAMES[m.school]} · ${m.rank} · Pow ${m.power} Wis ${m.wisdom} Gui ${m.guile} Cou ${m.courage}`;
+  const badge = awayLabel
+    ? `<span class="pcard-role pcard-away">Away</span>`
+    : (roleLabel ? `<span class="pcard-role">${esc(roleLabel)}</span>` : '');
+  return `<button class="pcard${isLeader ? ' leader' : ''}${awayLabel ? ' away' : ''}" data-action="view-member" data-member="${esc(m.id)}" style="--cult:${CULT_HEX[m.school] || '#777'}" title="${esc(tip)}">
+    <div class="pcard-img">${portraitFill(m, portraits)}${badge}</div>
     <div class="pcard-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</div>
-    <div class="pcard-sub">${esc(CLASS_LABEL[m.class] || m.class)}</div>
+    <div class="pcard-sub">${awayLabel ? esc(awayLabel) : esc(CLASS_LABEL[m.class] || m.class)}</div>
   </button>`;
+}
+
+// "on the road: The Nameless Pyramid · returns ~1 season" for an away member.
+function awayInfo(ctx, m) {
+  if (!m.away) return null;
+  const exp = (ctx.state.expeditions || []).find((e) => e.id === m.away);
+  const tmpl = (ctx.expeditionDefs || []).find((t) => t.id === exp?.tmpl);
+  const title = tmpl?.title || 'a distant road';
+  const ticks = Math.max(0, exp?.wait ?? 0);
+  const when = ticks <= 0 ? 'back this season' : ticks === 1 ? 'back within the season' : `~${Math.ceil(ticks / 3)} season(s) out`;
+  return `${title} · ${when}`;
 }
 
 // full-stage advisor sheet — navigated into from a Coven portrait (not a modal)
@@ -530,7 +559,17 @@ function covenScreenHTML(ctx) {
   const n = state.circle.length;
   const soulCount = state.souls.length;
   const roleLabel = (m) => { const r = (ctx.rolesDefs || []).find((x) => x.id === (state.roles || {})[m.id]); return r ? r.label : ''; };
-  const members = state.circle.map((m, i) => memberCard(m, i === 0, ctx.portraits, roleLabel(m))).join('');
+  const members = state.circle.map((m, i) => memberCard(m, i === 0, ctx.portraits, roleLabel(m), awayInfo(ctx, m))).join('');
+  const away = (state.expeditions || []).length
+    ? `<h3 class="coven-subhead">On the Road <small>${state.expeditions.length}</small></h3>
+       <div class="road-roll">${state.expeditions.map((e) => {
+         const tmpl = (ctx.expeditionDefs || []).find((t) => t.id === e.tmpl);
+         const who = (e.party || []).map((id) => state.circle.find((m) => m.id === id)?.name).filter(Boolean).map(esc).join(', ');
+         const ticks = Math.max(0, e.wait ?? 0);
+         const when = ticks <= 0 ? 'returning now' : ticks === 1 ? 'back within the season' : `~${Math.ceil(ticks / 3)} season(s) out`;
+         return `<div class="road-chip"><b>${esc(tmpl?.title || 'A journey')}</b><span>${who || 'a party'} &middot; ${when}</span></div>`;
+       }).join('')}</div>`
+    : '';
   const souls = soulCount
     ? `<h3 class="coven-subhead">Forgotten Souls <small>${soulCount}</small></h3>
        <div class="souls-roll">${state.souls.map((m) =>
@@ -545,6 +584,7 @@ function covenScreenHTML(ctx) {
       <div class="coven-main">
         <p class="coven-faithline">Faith &mdash; <b class="cult-standing ${fCls}">${fLabel}</b> (${faith})</p>
         <div class="portrait-grid">${members}</div>
+        ${away}
         ${souls}
         <p class="muted coven-note">Recruitment rites are not yet established — in time, new Wizards will be drawn to a coven of high Faith, and apprentices raised into the Circle.</p>
       </div>
@@ -679,6 +719,7 @@ function circleBarHTML(ctx) {
   const useThumb = ctx.settings?.footerPortraits !== false;   // portrait thumb vs the plain colour dot
   const voices = onScene ? new Map(sceneVoices(state, ctx.current).map(({ m, text }) => [m.id, text])) : null;
   const cards = state.circle.map((m, i) => {
+    if (m.away) return '';                                   // away on an expedition — not here to counsel (index kept for pinnedCard)
     const role = m.rank === 'ring-leader' ? 'leader' : (CLASS_LABEL[m.class] || m.class);
     const thought = onScene ? (voices.get(m.id) || 'No strong counsel here.') : screenCounsel(ctx, m);
     const face = useThumb
@@ -756,7 +797,7 @@ function lbAdvTile(ctx, m, i) {
 }
 
 function lbAdvisorsHTML(ctx) {
-  const cards = ctx.state.circle.map((m, i) => lbAdvTile(ctx, m, i)).join('');
+  const cards = ctx.state.circle.map((m, i) => (m.away ? '' : lbAdvTile(ctx, m, i))).join('');
   // native vertical scroll (touch + momentum) with ▲▼ affordances outside the scroller
   return `<aside class="lb-advisors">
     <button class="lb-adv-arrow up" data-action="adv-scroll" data-dir="-1" aria-label="Scroll advisors up">&lsaquo;</button>

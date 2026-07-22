@@ -1,0 +1,25 @@
+{
+  "id": "a-map-in-the-ash",
+  "type": "quest",
+  "tags": ["lore"],
+  "title": "A Map in the Ash",
+  "weight": 4,
+  "trigger": { "all": [{ "no_expedition": true }, { "gte": ["lore", 34] }] },
+  "intro": "A pedlar trades you a scrap of skin-vellum for a loaf and a lie: a map, old past reckoning, marking a nameless pyramid out in the ash-flats. \"Older than the Burning,\" he says, \"and never opened. What's inside remembers things the world's let go.\" It would take a party of your own the better part of a year to reach it and return.",
+  "advisors": [
+    { "cast": { "most": "wisdom" }, "text": "A sealed place older than the Burning, Archon, in a world that is forgetting? If there is memory anywhere, it is there. Worth the Wizards it would cost us for a season." },
+    { "cast": { "trait": { "boldness": "low" } }, "text": "It would strip the Circle of two while they are gone — no casting, no counsel from them. Weigh that before you send anyone into a tomb on a pedlar's word." }
+  ],
+  "choices": [
+    {
+      "id": "send",
+      "label": "Send a party to the nameless pyramid",
+      "win": { "text": "You mark the road and choose who goes. Two of the Circle shoulder packs and set out into the ash; it will be seasons before you know what they found.", "saga": "You sent a party of the Circle into the ash-flats to open the nameless pyramid marked on a pedlar's old map.", "effects": [{ "expedition_start": { "tmpl": "the-nameless-pyramid" } }] }
+    },
+    {
+      "id": "decline",
+      "label": "Keep the Circle whole — burn the map",
+      "win": { "text": "You feed the map to the hearth-rune. Whatever the pyramid remembers, it can keep — Runehold cannot spare the hands.", "saga": "You burned the pedlar's map to the nameless pyramid rather than spare the Wizards to open it.", "effects": [{ "add": ["lore", 2] }] }
+    }
+  ]
+}

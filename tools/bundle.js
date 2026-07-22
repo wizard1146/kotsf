@@ -52,6 +52,11 @@ export function buildBundle() {
       try { return JSON.parse(readFileSync(join(ROOT, 'content', 'roles.json'), 'utf8')).roles || []; }
       catch { return []; }
     })(),
+    // long-running expeditions (multi-stage quests that take members out of circulation)
+    expeditions: (() => {
+      try { return loadJson(join(ROOT, 'content', 'expeditions'), false); }
+      catch { return []; }
+    })(),
   };
   writeFileSync(join(ROOT, 'content', 'bundle.json'), JSON.stringify(bundle, null, 2));
   return bundle;
@@ -59,5 +64,5 @@ export function buildBundle() {
 
 if (process.argv[1] && process.argv[1].endsWith('bundle.js')) {
   const b = buildBundle();
-  console.log(`bundled ${b.scenes.length} scenes, ${b.circle.length} circle members, ${b.codex.length} codex categories, ${b.actions.length} actions → content/bundle.json`);
+  console.log(`bundled ${b.scenes.length} scenes, ${b.circle.length} circle members, ${b.codex.length} codex categories, ${b.actions.length} actions, ${b.expeditions.length} expeditions → content/bundle.json`);
 }

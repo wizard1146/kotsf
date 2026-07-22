@@ -1,0 +1,86 @@
+{
+  "id": "the-nameless-pyramid",
+  "title": "The Nameless Pyramid",
+  "party": 2,
+  "partyPick": "most:courage",
+  "stages": [
+    {
+      "id": "approach",
+      "away": 3,
+      "scene": {
+        "title": "The Pyramid's Foot",
+        "intro": "Word comes back from {party}: they have reached the nameless pyramid in the ash-flats, a black tooth of stone older than the Burning. Its one door is sealed with a rune that drinks the light. They send a runner for your word — force it, or find the patient way?",
+        "advisors": [
+          { "cast": { "most": "power" }, "text": "A door is only a wall that gave up once. Tell them to break it, Archon — we did not send them to admire the masonry." },
+          { "cast": { "trait": { "boldness": "low" } }, "text": "Old seals were set by someone. Tell them to look for the maker's own way in, before they wake whatever the seal was keeping." }
+        ],
+        "choices": [
+          {
+            "id": "force",
+            "label": "Send word: break the seal with power",
+            "test": { "stat": "mana", "vs": 45 },
+            "win": { "text": "They pour the working into the rune until it cracks, and the black door grinds inward on a breath of very old air.", "saga": "{party} broke the light-drinking seal of the nameless pyramid with sheer power, and walked into the dark beneath it.", "effects": [{ "add": ["mana", -8] }, { "add": ["lore", 4] }, { "expedition_advance": true }] },
+            "lose": { "text": "The rune drinks the working whole and gives nothing back. Worse — something deeper in the stone answers, and the party pulls back to regroup.", "saga": "{party} tried to break the pyramid's seal by force; it drank their working, and something within stirred.", "effects": [{ "add": ["mana", -10] }, { "add": ["fracture", 3] }, { "expedition_goto": "antechamber" }] }
+          },
+          {
+            "id": "patient",
+            "label": "Send word: find the maker's hidden way",
+            "win": { "text": "Days of cold searching, and Nyx's runner reports a servants' stair beneath a fallen slab. They go down quietly, the seal untouched.", "saga": "{party} found the maker's own hidden stair into the nameless pyramid, and went down without waking the seal.", "effects": [{ "add": ["lore", 6] }, { "expedition_goto": "antechamber" }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "antechamber",
+      "away": 3,
+      "scene": {
+        "title": "The Antechamber of Names",
+        "intro": "The party is deep now, and their season's word is uneasy. They have come to a hall whose walls are carved floor to vault with names — thousands of them, in a script that hurts to read. Some of the names, {party} swear, are of the living. One of yours is on the wall.",
+        "advisors": [
+          { "cast": { "most": "wisdom" }, "text": "A hall of names in a forgetting world is not decoration, Archon. It is a ledger. Tell them to copy what they can and touch nothing." },
+          { "cast": { "trait": { "piety": "high" } }, "text": "If our name is written here, this place has a claim on us. Tell them to leave an offering, and go carefully to the heart." }
+        ],
+        "choices": [
+          {
+            "id": "copy",
+            "label": "Have them copy the ledger of names",
+            "test": { "stat": "lore", "vs": 50 },
+            "win": { "text": "They fill three books before their lamps gutter. Whatever this pyramid was, it kept a record of the world's memory — and now, in part, so do you.", "saga": "In the pyramid's antechamber {party} copied a great ledger of names — a record of the world's memory, salvaged for Runehold.", "effects": [{ "add": ["lore", 12] }, { "add": ["flamesRegard", 4] }, { "expedition_advance": true }] },
+            "lose": { "text": "The script writhes as they copy it, and two of the books come away blank. They press on toward the heart, unsettled and a little less certain of their own names.", "saga": "{party} tried to copy the pyramid's ledger of names, but the script would not hold to the page.", "effects": [{ "add": ["lore", 3] }, { "add": ["faith", -3] }, { "expedition_advance": true }] }
+          },
+          {
+            "id": "press",
+            "label": "Press straight for the heart of the pyramid",
+            "win": { "text": "They leave the names unread and go down toward the heart, quicker but blinder for it.", "saga": "{party} pressed past the pyramid's hall of names, leaving its ledger unread, and went down toward the heart.", "effects": [{ "expedition_advance": true }] }
+          }
+        ]
+      }
+    },
+    {
+      "id": "heart",
+      "away": 3,
+      "scene": {
+        "title": "The Heart of the Pyramid",
+        "intro": "At the pyramid's heart, {party} find a chamber holding a single object: a rune-cut stone that hums like a struck bell and remembers, they say, everything. It could be carried home — or they could work it here, where its power is anchored, and risk waking the pyramid fully.",
+        "advisors": [
+          { "cast": { "most": "guile" }, "text": "Take it and go, Archon. A bird in the hand outlives a working in a haunted vault." },
+          { "cast": { "trait": { "boldness": "high" } }, "text": "Anchored power is power doubled. Tell them to use it here, once, before it is ours to keep — we may never stand in such a place again." }
+        ],
+        "choices": [
+          {
+            "id": "carry",
+            "label": "Carry the singing stone home",
+            "win": { "text": "They wrap the stone and climb for daylight. It sings all the way home, and Runehold is richer in memory and wonder for it.", "saga": "{party} bore the singing memory-stone home from the heart of the nameless pyramid — a treasure of old memory for Runehold.", "effects": [{ "add": ["lore", 10] }, { "add": ["mana", 8] }, { "add": ["flamesRegard", 6] }, { "expedition_end": "return" }] }
+          },
+          {
+            "id": "work-it",
+            "label": "Work the stone here, where it is anchored",
+            "test": { "stat": "mana", "vs": 60 },
+            "win": { "text": "They draw on the anchored stone and it answers past all hope — a season's forgotten workings come flooding back into their hands. They carry both the knowing and the stone up into the light.", "saga": "At the pyramid's heart {party} worked the anchored memory-stone and drew back a flood of forgotten magic — then bore the stone home besides.", "effects": [{ "add": ["mana", 16] }, { "add": ["lore", 14] }, { "add": ["flamesRegard", 8] }, { "expedition_end": "return" }] },
+            "lose": { "text": "The stone gives more than they can hold. The pyramid wakes around them, the stair folds shut, and the dark takes the party with the working half-done.", "saga": "{party} reached too deep into the pyramid's anchored stone; it woke the tomb around them, and they did not climb back into the light.", "effects": [{ "add": ["fracture", 6] }, { "expedition_end": "lost" }] }
+          }
+        ]
+      }
+    }
+  ]
+}

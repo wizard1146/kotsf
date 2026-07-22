@@ -2,6 +2,8 @@
 
 Companion to `PLANNING_01.md`. Covers the tech decision, the minimalist architecture, the structured file system for scenes, the scene data contract, and the phased build plan.
 
+> **The destination:** the long-arc win condition (discover the Tower → redeem the three original Keepers → recover all Embers → elevate three Wizards to restore the Flame → close the Fracture; self-elevation, adventure mode, and the named endings) lives in **[`ENDGAME_ARC.md`](ENDGAME_ARC.md)**. Read it before building anything endgame-shaped. The **expedition subsystem** (`src/engine/expeditions.js`, `content/expeditions/`) is the first primitive toward it.
+
 ---
 
 ## 1. Tech stack decision (Steam-bound)

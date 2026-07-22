@@ -374,6 +374,17 @@ button.cb-res:active { transform: translateY(0); }
 .souls-roll { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .soul-chip { display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; color: var(--ink-dim); font-style: italic; border: 1px solid var(--line); border-radius: 6px; padding: 0.3rem 0.6rem; }
 .coven-note { margin-top: 1.4rem; font-size: 0.82rem; }
+/* a Wizard away on an expedition: dimmed roster card + an "Away" badge */
+.pcard.away { opacity: 0.62; filter: saturate(0.7); }
+.pcard.away .pcard-img::after { content: ''; position: absolute; inset: 0; background: rgba(8, 6, 5, 0.35); }
+.pcard-role.pcard-away { color: #c8b89a; font-style: italic; }
+/* the "On the Road" panel: one chip per party in the field */
+.road-roll { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.road-chip { display: flex; flex-direction: column; gap: 0.1rem; border: 1px solid var(--flame-deep); border-left-width: 3px; border-radius: 6px; padding: 0.35rem 0.65rem; background: rgba(232, 163, 61, 0.05); }
+.road-chip b { color: var(--flame); font-size: 0.9rem; }
+.road-chip span { color: var(--ink-dim); font-size: 0.76rem; }
+/* expedition beat: a small tag marking that this scene is a party reporting in */
+.exp-tag { display: inline-block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--flame); border: 1px solid var(--flame-deep); border-radius: 4px; padding: 0.1rem 0.45rem; margin-bottom: 0.5rem; }
 
 /* The Workings screen — Mana sink + the Fracture's player-controlled counter */
 .working-mana { display: flex; align-items: center; gap: 0.6rem; max-width: 420px; margin: 0.6rem 0 1.2rem; font-family: var(--mono); font-size: 0.82rem; }

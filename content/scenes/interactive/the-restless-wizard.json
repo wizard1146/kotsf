@@ -1,0 +1,25 @@
+{
+  "id": "the-restless-wizard",
+  "type": "quest",
+  "tags": ["hearth"],
+  "title": "The Restless Wizard",
+  "weight": 3,
+  "trigger": { "all": [{ "no_expedition": true }, { "gte": ["lore", 30] }] },
+  "intro": "One of the Circle comes to you at the hearth with a road already in their eyes. There is a thread of old lore, they say — a rumour of a working the world has forgotten — and it runs out of Runehold and into the ash. They ask your leave to follow it alone, though it may take the better part of a year, and the road is not kind to those who walk it far.",
+  "advisors": [
+    { "cast": { "trait": { "boldness": "high" } }, "text": "Let them go, Archon. A Wizard with a road in their eyes is no use kept behind walls — and they may come home with something worth the year." },
+    { "cast": { "trait": { "piety": "high" } }, "text": "The far road takes as often as it gives. Give your leave with open eyes: not everyone who walks that far comes home as they went." }
+  ],
+  "choices": [
+    {
+      "id": "send",
+      "label": "Give your leave — let them follow the thread",
+      "win": { "text": "You clasp the Wizard's arm and let them go. They walk out the gate at dawn with a light pack and a long road, and Runehold is one Wizard fewer until they return — if they return.", "saga": "You gave one of the Circle leave to walk the long road alone after a thread of forgotten lore.", "effects": [{ "expedition_start": { "tmpl": "the-long-road" } }] }
+    },
+    {
+      "id": "refuse",
+      "label": "Refuse — the Circle keeps its own",
+      "win": { "text": "You tell them the Circle is too few to lose even one to a rumour. They bow to it, but the road stays in their eyes, and something in them cools toward you.", "saga": "You refused a restless Wizard leave to walk the long road; they obeyed, but it cost you something with them.", "effects": [{ "add": ["faith", -2] }] }
+    }
+  ]
+}

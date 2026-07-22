@@ -1,6 +1,78 @@
 {
   "scenes": [
     {
+      "id": "a-map-in-the-ash",
+      "type": "quest",
+      "tags": [
+        "lore"
+      ],
+      "title": "A Map in the Ash",
+      "weight": 4,
+      "trigger": {
+        "all": [
+          {
+            "no_expedition": true
+          },
+          {
+            "gte": [
+              "lore",
+              34
+            ]
+          }
+        ]
+      },
+      "intro": "A pedlar trades you a scrap of skin-vellum for a loaf and a lie: a map, old past reckoning, marking a nameless pyramid out in the ash-flats. \"Older than the Burning,\" he says, \"and never opened. What's inside remembers things the world's let go.\" It would take a party of your own the better part of a year to reach it and return.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "wisdom"
+          },
+          "text": "A sealed place older than the Burning, Archon, in a world that is forgetting? If there is memory anywhere, it is there. Worth the Wizards it would cost us for a season."
+        },
+        {
+          "cast": {
+            "trait": {
+              "boldness": "low"
+            }
+          },
+          "text": "It would strip the Circle of two while they are gone — no casting, no counsel from them. Weigh that before you send anyone into a tomb on a pedlar's word."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send",
+          "label": "Send a party to the nameless pyramid",
+          "win": {
+            "text": "You mark the road and choose who goes. Two of the Circle shoulder packs and set out into the ash; it will be seasons before you know what they found.",
+            "saga": "You sent a party of the Circle into the ash-flats to open the nameless pyramid marked on a pedlar's old map.",
+            "effects": [
+              {
+                "expedition_start": {
+                  "tmpl": "the-nameless-pyramid"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Keep the Circle whole — burn the map",
+          "win": {
+            "text": "You feed the map to the hearth-rune. Whatever the pyramid remembers, it can keep — Runehold cannot spare the hands.",
+            "saga": "You burned the pedlar's map to the nameless pyramid rather than spare the Wizards to open it.",
+            "effects": [
+              {
+                "add": [
+                  "lore",
+                  2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "a-rumour-of-embers",
       "type": "interactive",
       "tags": [
@@ -2015,6 +2087,80 @@
       ]
     },
     {
+      "id": "the-restless-wizard",
+      "type": "quest",
+      "tags": [
+        "hearth"
+      ],
+      "title": "The Restless Wizard",
+      "weight": 3,
+      "trigger": {
+        "all": [
+          {
+            "no_expedition": true
+          },
+          {
+            "gte": [
+              "lore",
+              30
+            ]
+          }
+        ]
+      },
+      "intro": "One of the Circle comes to you at the hearth with a road already in their eyes. There is a thread of old lore, they say — a rumour of a working the world has forgotten — and it runs out of Runehold and into the ash. They ask your leave to follow it alone, though it may take the better part of a year, and the road is not kind to those who walk it far.",
+      "advisors": [
+        {
+          "cast": {
+            "trait": {
+              "boldness": "high"
+            }
+          },
+          "text": "Let them go, Archon. A Wizard with a road in their eyes is no use kept behind walls — and they may come home with something worth the year."
+        },
+        {
+          "cast": {
+            "trait": {
+              "piety": "high"
+            }
+          },
+          "text": "The far road takes as often as it gives. Give your leave with open eyes: not everyone who walks that far comes home as they went."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send",
+          "label": "Give your leave — let them follow the thread",
+          "win": {
+            "text": "You clasp the Wizard's arm and let them go. They walk out the gate at dawn with a light pack and a long road, and Runehold is one Wizard fewer until they return — if they return.",
+            "saga": "You gave one of the Circle leave to walk the long road alone after a thread of forgotten lore.",
+            "effects": [
+              {
+                "expedition_start": {
+                  "tmpl": "the-long-road"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse — the Circle keeps its own",
+          "win": {
+            "text": "You tell them the Circle is too few to lose even one to a rumour. They bow to it, but the road stays in their eyes, and something in them cools toward you.",
+            "saga": "You refused a restless Wizard leave to walk the long road; they obeyed, but it cost you something with them.",
+            "effects": [
+              {
+                "add": [
+                  "faith",
+                  -2
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "the-rival-hearth",
       "type": "quest",
       "tags": [
@@ -2237,6 +2383,69 @@
                 ]
               }
             ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-tourney-is-called",
+      "type": "quest",
+      "tags": [
+        "fracture"
+      ],
+      "title": "The Tourney is Called",
+      "weight": 4,
+      "trigger": {
+        "all": [
+          {
+            "no_expedition": true
+          },
+          {
+            "gte": [
+              "faith",
+              44
+            ]
+          }
+        ]
+      },
+      "intro": "A herald rides the circuit of the holds: the champion's tourney is called again in the tourney-town, a purse of coin and a season's glory to whichever hearth or guild sends the last one standing. A small hold could make a great name — if it had a champion to send, and could spare that Wizard the season.",
+      "advisors": [
+        {
+          "cast": {
+            "most": "power"
+          },
+          "text": "Send our best, Archon. A win at the lists is worth a hundred fair words about Runehold — every hold that sneers at us would learn our champion's name."
+        },
+        {
+          "cast": {
+            "class": "charmer"
+          },
+          "text": "Or send no one and keep our pride whole. A champion who loses brings home a story we'd rather not tell."
+        }
+      ],
+      "choices": [
+        {
+          "id": "send",
+          "label": "Send a champion to the lists",
+          "win": {
+            "text": "You choose your strongest hand and send them south to the tourney-town with a purse for the road. Runehold has entered the lists.",
+            "saga": "You sent a champion of the Circle south to fight in the champion's tourney for Runehold's name.",
+            "effects": [
+              {
+                "expedition_start": {
+                  "tmpl": "the-champions-tourney"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "decline",
+          "label": "Send no one — glory is not grain",
+          "win": {
+            "text": "You let the herald ride on. Runehold's name will not ring at the lists this year; nor will one of your own be gone a season chasing a crown.",
+            "saga": "You let the champion's tourney pass, keeping your Wizards home rather than chase a season's glory.",
+            "effects": []
           }
         }
       ]
@@ -4678,6 +4887,620 @@
       "stat": "power",
       "pressure": "mana",
       "dir": 1
+    }
+  ],
+  "expeditions": [
+    {
+      "id": "the-champions-tourney",
+      "title": "The Champion's Tourney",
+      "party": 1,
+      "partyPick": "most:power",
+      "stages": [
+        {
+          "id": "the-road",
+          "away": 2,
+          "scene": {
+            "title": "The Road to the Lists",
+            "intro": "{name} sends word from the road to the tourney-town, where holds and guilds send champions to fight for a purse and a season's glory. {They} ask{s} one thing before the first bout: is this to be won clean, on craft and courage — or should {they} carry a quiet working, and make certain?",
+            "advisors": [
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "Clean, Archon. A crown of cheating is a crown of glass. If we win, let it be ours in truth."
+              },
+              {
+                "cast": {
+                  "class": "charmer"
+                },
+                "text": "Everyone at those lists is cheating a little. Tell {name} to carry the working. Winning is the reputation; how, is only gossip."
+              }
+            ],
+            "choices": [
+              {
+                "id": "clean",
+                "label": "Fight clean — craft and courage only",
+                "win": {
+                  "text": "You send back one word: honestly. {name} sets {their} jaw and rides on to the lists with nothing up {their} sleeve but skill.",
+                  "saga": "You sent {name} to the champion's tourney to fight clean, on craft and courage alone.",
+                  "effects": [
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "cheat",
+                "label": "Send a quiet working to make certain",
+                "win": {
+                  "text": "You send {name} a working folded small — a whisper to slow a blade, to steady a hand. It is not honest. It may be enough.",
+                  "saga": "You sent {name} to the tourney with a quiet working hidden — victory made certain, if none should see.",
+                  "effects": [
+                    {
+                      "set_flag": "champion_cheats"
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        -2
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-bouts",
+          "away": 3,
+          "scene": {
+            "title": "The Early Bouts",
+            "intro": "{name} has come through the first rounds, and sends word by fast rider. The field narrows to the sharp and the lucky, and the crowd has begun to chant a name — {theirs}.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "courage"
+                },
+                "text": "{name} is fighting beautifully, Archon. Whatever we told {them} to do, tell {them} to keep doing it."
+              }
+            ],
+            "choices": [
+              {
+                "id": "press-clean",
+                "label": "Word: fight on, and fairly",
+                "requires": {
+                  "not": {
+                    "flag": "champion_cheats"
+                  }
+                },
+                "win": {
+                  "text": "{name} wins {their} bracket on skill alone, and the honest crowd loves {them} for it. On to the final.",
+                  "saga": "{name} fought clean through the tourney's early bouts and won a place in the final on skill alone.",
+                  "effects": [
+                    {
+                      "add": [
+                        "faith",
+                        3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "press-cheat",
+                "label": "Word: keep the working hidden and win",
+                "requires": {
+                  "flag": "champion_cheats"
+                },
+                "test": {
+                  "stat": "guile",
+                  "vs": 50
+                },
+                "win": {
+                  "text": "The working does its quiet work and no marshal is the wiser. {name} advances, {their} secret intact and {their} conscience less so. On to the final.",
+                  "saga": "{name} carried the hidden working through the tourney's early bouts unseen, and bought a place in the final.",
+                  "effects": [
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "A grey-robed adjudicator feels the working's edge and calls it aloud. {name} is not disqualified — nothing is proven — but the whole field watches {them} now, and the crowd's love has curdled to suspicion.",
+                  "saga": "{name}'s hidden working was half-caught at the tourney; nothing was proven, but suspicion followed {them} into the final.",
+                  "effects": [
+                    {
+                      "add": [
+                        "faith",
+                        -4
+                      ]
+                    },
+                    {
+                      "add": [
+                        "fracture",
+                        3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-final",
+          "away": 3,
+          "scene": {
+            "title": "The Final Bout",
+            "intro": "The final. {name} faces the tourney's iron favourite before every hold and guild that sent a champion. Whatever Runehold did to get {them} here, it comes down to this ring, this bout, this breath.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "power"
+                },
+                "text": "One bout, Archon. Whatever {name} carries into that ring — skill or secret — let {them} spend all of it now."
+              }
+            ],
+            "choices": [
+              {
+                "id": "fight-final",
+                "label": "Let {name} fight the final",
+                "test": {
+                  "stat": "power",
+                  "vs": 55
+                },
+                "win": {
+                  "text": "{name} takes the favourite in three passes and the purse and the crown with it. Runehold's name rings around the lists — a small hearth with a champion. {They} ride{s} home in glory.",
+                  "saga": "{name} won the champion's tourney before every hold and guild, and carried the crown and purse home to Runehold.",
+                  "effects": [
+                    {
+                      "add": [
+                        "coin",
+                        18
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        6
+                      ]
+                    },
+                    {
+                      "clear_flag": "champion_cheats"
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "{name} fights well and loses well, beaten clean by a better hand in the ring. No shame in it — but no crown either. {They} come{s} home the runner-up, and a little wiser.",
+                  "saga": "{name} reached the final of the champion's tourney and was beaten clean — runner-up, and no shame in it.",
+                  "effects": [
+                    {
+                      "add": [
+                        "coin",
+                        6
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        1
+                      ]
+                    },
+                    {
+                      "clear_flag": "champion_cheats"
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-long-road",
+      "title": "The Long Road",
+      "party": 1,
+      "partyPick": "most:wisdom",
+      "stages": [
+        {
+          "id": "the-return",
+          "away": 4,
+          "scene": {
+            "title": "The Wanderer Returns",
+            "intro": "It has been the better part of a year since {name} walked out of Runehold's gate to follow a thread of old lore into the ash. Tonight the watch calls down: a figure on the road, coming home. But the season is late, the road is long, and the Forgetting takes travellers as surely as it takes workings.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "wisdom"
+                },
+                "text": "{name} was strong of mind, Archon. If anyone could walk that road and come back {themselves}, it is {them}. Go down and meet {them} — you will know at the gate."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "Pray it is {name} who comes through that gate. The road gives back what it took, but not always as it took it."
+              }
+            ],
+            "choices": [
+              {
+                "id": "meet",
+                "label": "Go down to the gate and meet the traveller",
+                "test": {
+                  "stat": "faith",
+                  "vs": 45
+                },
+                "win": {
+                  "text": "It is {name} — thinner, wind-burned, older about the eyes, but {them}, whole and knowing you. {They} carr{ies} a satchel of lore worth the year {they} spent, and the hearth is warmer tonight for {their} return.",
+                  "saga": "{name} came home from the long road whole and {themselves}, bearing a year's worth of hard-won lore.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        12
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        6
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The figure that stops at the edge of the firelight wears {name}'s face and {name}'s cloak — but the eyes are wrong, and it does not answer to {their} name. The road gave something back. It is not, quite, who set out.",
+                  "saga": "What came home on the long road wore {name}'s face, but the Forgetting had been at {them} — a Soul stood where {name} had been.",
+                  "effects": [
+                    {
+                      "expedition_goto": "the-wrong-return"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "the-wrong-return",
+          "away": 0,
+          "kind": "name-soul",
+          "scene": {
+            "title": "Name the Returned",
+            "intro": "The Soul waits at the edge of the firelight to be known. It came home wearing {name}'s face — but the Flame has rewritten what is behind it, and the coven has learned that a returning Soul is not always the one who left. Sometimes it is one of your own, long lost, come back in a borrowed shape. Name it truly, and you give it a kind of peace. Name it wrong, and the Circle will wonder what else you have forgotten."
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-nameless-pyramid",
+      "title": "The Nameless Pyramid",
+      "party": 2,
+      "partyPick": "most:courage",
+      "stages": [
+        {
+          "id": "approach",
+          "away": 3,
+          "scene": {
+            "title": "The Pyramid's Foot",
+            "intro": "Word comes back from {party}: they have reached the nameless pyramid in the ash-flats, a black tooth of stone older than the Burning. Its one door is sealed with a rune that drinks the light. They send a runner for your word — force it, or find the patient way?",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "power"
+                },
+                "text": "A door is only a wall that gave up once. Tell them to break it, Archon — we did not send them to admire the masonry."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "low"
+                  }
+                },
+                "text": "Old seals were set by someone. Tell them to look for the maker's own way in, before they wake whatever the seal was keeping."
+              }
+            ],
+            "choices": [
+              {
+                "id": "force",
+                "label": "Send word: break the seal with power",
+                "test": {
+                  "stat": "mana",
+                  "vs": 45
+                },
+                "win": {
+                  "text": "They pour the working into the rune until it cracks, and the black door grinds inward on a breath of very old air.",
+                  "saga": "{party} broke the light-drinking seal of the nameless pyramid with sheer power, and walked into the dark beneath it.",
+                  "effects": [
+                    {
+                      "add": [
+                        "mana",
+                        -8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "lore",
+                        4
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The rune drinks the working whole and gives nothing back. Worse — something deeper in the stone answers, and the party pulls back to regroup.",
+                  "saga": "{party} tried to break the pyramid's seal by force; it drank their working, and something within stirred.",
+                  "effects": [
+                    {
+                      "add": [
+                        "mana",
+                        -10
+                      ]
+                    },
+                    {
+                      "add": [
+                        "fracture",
+                        3
+                      ]
+                    },
+                    {
+                      "expedition_goto": "antechamber"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "patient",
+                "label": "Send word: find the maker's hidden way",
+                "win": {
+                  "text": "Days of cold searching, and Nyx's runner reports a servants' stair beneath a fallen slab. They go down quietly, the seal untouched.",
+                  "saga": "{party} found the maker's own hidden stair into the nameless pyramid, and went down without waking the seal.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        6
+                      ]
+                    },
+                    {
+                      "expedition_goto": "antechamber"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "antechamber",
+          "away": 3,
+          "scene": {
+            "title": "The Antechamber of Names",
+            "intro": "The party is deep now, and their season's word is uneasy. They have come to a hall whose walls are carved floor to vault with names — thousands of them, in a script that hurts to read. Some of the names, {party} swear, are of the living. One of yours is on the wall.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "wisdom"
+                },
+                "text": "A hall of names in a forgetting world is not decoration, Archon. It is a ledger. Tell them to copy what they can and touch nothing."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "piety": "high"
+                  }
+                },
+                "text": "If our name is written here, this place has a claim on us. Tell them to leave an offering, and go carefully to the heart."
+              }
+            ],
+            "choices": [
+              {
+                "id": "copy",
+                "label": "Have them copy the ledger of names",
+                "test": {
+                  "stat": "lore",
+                  "vs": 50
+                },
+                "win": {
+                  "text": "They fill three books before their lamps gutter. Whatever this pyramid was, it kept a record of the world's memory — and now, in part, so do you.",
+                  "saga": "In the pyramid's antechamber {party} copied a great ledger of names — a record of the world's memory, salvaged for Runehold.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        12
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        4
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The script writhes as they copy it, and two of the books come away blank. They press on toward the heart, unsettled and a little less certain of their own names.",
+                  "saga": "{party} tried to copy the pyramid's ledger of names, but the script would not hold to the page.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        3
+                      ]
+                    },
+                    {
+                      "add": [
+                        "faith",
+                        -3
+                      ]
+                    },
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "press",
+                "label": "Press straight for the heart of the pyramid",
+                "win": {
+                  "text": "They leave the names unread and go down toward the heart, quicker but blinder for it.",
+                  "saga": "{party} pressed past the pyramid's hall of names, leaving its ledger unread, and went down toward the heart.",
+                  "effects": [
+                    {
+                      "expedition_advance": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "heart",
+          "away": 3,
+          "scene": {
+            "title": "The Heart of the Pyramid",
+            "intro": "At the pyramid's heart, {party} find a chamber holding a single object: a rune-cut stone that hums like a struck bell and remembers, they say, everything. It could be carried home — or they could work it here, where its power is anchored, and risk waking the pyramid fully.",
+            "advisors": [
+              {
+                "cast": {
+                  "most": "guile"
+                },
+                "text": "Take it and go, Archon. A bird in the hand outlives a working in a haunted vault."
+              },
+              {
+                "cast": {
+                  "trait": {
+                    "boldness": "high"
+                  }
+                },
+                "text": "Anchored power is power doubled. Tell them to use it here, once, before it is ours to keep — we may never stand in such a place again."
+              }
+            ],
+            "choices": [
+              {
+                "id": "carry",
+                "label": "Carry the singing stone home",
+                "win": {
+                  "text": "They wrap the stone and climb for daylight. It sings all the way home, and Runehold is richer in memory and wonder for it.",
+                  "saga": "{party} bore the singing memory-stone home from the heart of the nameless pyramid — a treasure of old memory for Runehold.",
+                  "effects": [
+                    {
+                      "add": [
+                        "lore",
+                        10
+                      ]
+                    },
+                    {
+                      "add": [
+                        "mana",
+                        8
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        6
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "work-it",
+                "label": "Work the stone here, where it is anchored",
+                "test": {
+                  "stat": "mana",
+                  "vs": 60
+                },
+                "win": {
+                  "text": "They draw on the anchored stone and it answers past all hope — a season's forgotten workings come flooding back into their hands. They carry both the knowing and the stone up into the light.",
+                  "saga": "At the pyramid's heart {party} worked the anchored memory-stone and drew back a flood of forgotten magic — then bore the stone home besides.",
+                  "effects": [
+                    {
+                      "add": [
+                        "mana",
+                        16
+                      ]
+                    },
+                    {
+                      "add": [
+                        "lore",
+                        14
+                      ]
+                    },
+                    {
+                      "add": [
+                        "flamesRegard",
+                        8
+                      ]
+                    },
+                    {
+                      "expedition_end": "return"
+                    }
+                  ]
+                },
+                "lose": {
+                  "text": "The stone gives more than they can hold. The pyramid wakes around them, the stair folds shut, and the dark takes the party with the working half-done.",
+                  "saga": "{party} reached too deep into the pyramid's anchored stone; it woke the tomb around them, and they did not climb back into the light.",
+                  "effects": [
+                    {
+                      "add": [
+                        "fracture",
+                        6
+                      ]
+                    },
+                    {
+                      "expedition_end": "lost"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }

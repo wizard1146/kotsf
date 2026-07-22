@@ -91,7 +91,11 @@
         "clear_flag": { "type": "string" },
         "unlock": { "type": "string" },
         "transform_member": { "type": "string" },
-        "recruit_member": { "type": "boolean" }
+        "recruit_member": { "type": "boolean" },
+        "expedition_start": { "type": "object" },
+        "expedition_advance": { "type": "boolean" },
+        "expedition_goto": { "type": "string" },
+        "expedition_end": { "type": "string" }
       }
     }
   }

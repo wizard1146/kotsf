@@ -11,6 +11,7 @@ import { createInitialState, pickIndex, seasonName } from '../src/engine/state.j
 import { meets } from '../src/engine/conditions.js';
 import { pickScene } from '../src/engine/selector.js';
 import { advanceTime, applyChoice, checkEnd } from '../src/engine/loop.js';
+import { registerExpeditions, dueExpedition, expeditionScene, nameReturningSoul } from '../src/engine/expeditions.js';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const SCENES_DIR = join(__dir, '..', 'content', 'scenes');
@@ -30,6 +31,7 @@ const validChoices = (state, scene) => scene.choices.filter((c) => meets(state, 
 const maxTurns = Number(process.argv[2] || 60);
 const seed = Number(process.argv[3] || 12345);
 const scenes = loadScenes(SCENES_DIR);
+registerExpeditions(loadScenes(join(__dir, '..', 'content', 'expeditions')));
 const state = createInitialState(seed);
 
 console.log(`\n=== Keeper of the Sacred Flame — headless run (seed ${seed}, ${scenes.length} scenes loaded) ===\n`);
@@ -37,6 +39,25 @@ console.log(`\n=== Keeper of the Sacred Flame — headless run (seed ${seed}, ${
 let end = null;
 while (state.turn < maxTurns && !end) {
   advanceTime(state);
+  // A party come due interrupts the pool with its beat (mirrors main.js advanceToScene).
+  const exp = dueExpedition(state);
+  if (exp) {
+    state._activeExp = exp.id;
+    const beat = expeditionScene(state, exp);
+    if (beat.kind === 'name-soul') {
+      const cands = [...(exp.data.candidates || []), '__nameless__'];
+      const r = nameReturningSoul(state, exp, cands[pickIndex(state, cands.length)]);
+      console.log(`T${String(state.turn).padStart(2)} ${seasonName(state.season).padEnd(9)} Y${state.year} | ${beat.title} -> named [${r.correct ? 'right' : 'wrong'}]`);
+    } else {
+      const chs = validChoices(state, beat);
+      const ch = (chs.length ? chs : beat.choices)[pickIndex(state, (chs.length ? chs : beat.choices).length)];
+      const outcome = applyChoice(state, beat, ch);
+      console.log(`T${String(state.turn).padStart(2)} ${seasonName(state.season).padEnd(9)} Y${state.year} | ${beat.title} -> "${ch.label}" [exp:${outcome}]`);
+    }
+    delete state._activeExp;
+    end = checkEnd(state);
+    continue;
+  }
   const scene = pickScene(state, scenes);
   if (!scene) continue; // nothing eligible this season — the world is quiet
   const choices = validChoices(state, scene);
