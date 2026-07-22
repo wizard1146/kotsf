@@ -14,7 +14,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v36';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v37';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -138,6 +138,7 @@ function advanceToScene() {
     // A party come due this season interrupts the normal pool with its beat.
     const exp = dueExpedition(state);
     if (exp) { state._activeExp = exp.id; current = expeditionScene(state, exp); phase = 'scene'; return; }
+    delete state._activeExp;                          // not in a beat → clear any stale binding
     const s = pickScene(state, scenes);
     if (s) { current = s; phase = 'scene'; return; }
   }

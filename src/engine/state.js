@@ -197,5 +197,15 @@ export function getPath(state, path) {
   if (path in state.pressures) return state.pressures[path];
   if (path === 'turn') return state.turn;
   if (path === 'year') return state.year;
+  // Member competence (power/wisdom/guile/courage) is NOT a coven-wide value, so it
+  // only resolves inside an active EXPEDITION beat — as the best of the party you
+  // sent. This is what makes "who you send matters": a bold party clears a courage
+  // test a timid one would fail. Outside an expedition it stays undefined (scenes
+  // must test coven paths, not competence).
+  if (path === 'power' || path === 'wisdom' || path === 'guile' || path === 'courage') {
+    const exp = (state.expeditions || []).find((e) => e.id === state._activeExp);
+    const party = exp ? (exp.party || []).map((id) => state.circle.find((m) => m.id === id)).filter(Boolean) : [];
+    return party.length ? Math.max(...party.map((m) => m[path] || 0)) : undefined;
+  }
   return undefined;
 }

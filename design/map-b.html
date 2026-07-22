@@ -73,6 +73,15 @@
       </div>
 
       <div class="card">
+        <h3>Painterly (KODP)</h3>
+        <div class="row"><span>Rough edges (turbulence)</span><input type="checkbox" data-s="rough"></div>
+        <div class="row"><span>Rough amount</span><input type="range" data-s="roughAmt" min="0" max="3" step="0.1"><span class="val" data-v="roughAmt"></span></div>
+        <div class="row"><span>Land texture / mottle</span><input type="checkbox" data-s="texture"></div>
+        <div class="row"><span>Terrain tint (green/brown)</span><input type="checkbox" data-s="terrainTint"></div>
+        <div class="row"><span>Shaded mountains</span><input type="checkbox" data-s="shadedMtn"></div>
+      </div>
+
+      <div class="card">
         <h3>Line &amp; density</h3>
         <div class="row"><span>Coast weight</span><input type="range" data-s="coastW" min="0.2" max="1.6" step="0.05"><span class="val" data-v="coastW"></span></div>
         <div class="row"><span>Wave opacity</span><input type="range" data-s="waveOpacity" min="0" max="1" step="0.05"><span class="val" data-v="waveOpacity"></span></div>
@@ -110,8 +119,9 @@ const f = (n) => (+n).toFixed(2);
 
 const DEFAULTS = {
   sea:'#cdba8c', land:'#e6d4a6', ink:'#5c4a2e', mtnFill:'#8a7350', forestFill:'#6d7b3a', river:'#5b83a0', roadColor:'#7a6039', ashColor:'#2a2012',
-  coastW:0.2, waveOpacity:0.55, tintOpacity:0.30, glyphDensity:1, chaikin:0,
+  coastW:0.2, waveOpacity:0.55, tintOpacity:0.24, glyphDensity:1, chaikin:0,
   roads:true, compass:true, frame:true, serif:true,
+  rough:true, roughAmt:1.2, texture:true, terrainTint:true, shadedMtn:true,
 };
 let STYLE = { ...DEFAULTS };
 
@@ -334,6 +344,8 @@ function generateWorld(method, seed, sea=0) {
   const river = chaikinOpen(wavy(place(jit(285,8),0.42), place(jit(285,6),0.96), 16, 2.2, rng), 2);
   const roads = seats.map(s => [home, { x:s.x, y:s.y }]);
   const ashCorner = rng()<0.5 ? {x:6,y:4} : {x:W-6,y:4};
+  const fseed = hashSeed(seed) % 1000;                       // deterministic seed for SVG turbulence filters
+  const mottle=[]; for(let i=0;i<10;i++) mottle.push({ x:8+rng()*(W-16), y:6+rng()*(H-12), r:9+rng()*15, d:(rng()<0.5?-1:1) }); // tonal paint blobs
 
   // coast kept as point-loops so a live Chaikin knob can smooth them at render time
   // Voronoi: assign each land cell to its nearest continental cult → provinces, then classify
@@ -350,7 +362,7 @@ function generateWorld(method, seed, sea=0) {
     const provinces=contSeats.map(s=>({ key:s.key, cells:g.voronoi.landCells.filter(c=>c.owner===s.key).map(c=>polyToPath(c.poly)) }));
     voronoi={ provBorders, provinces };
   }
-  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: islandLoop, seats, home, tower, mountains, forests, river, roads, ashCorner, voronoi };
+  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: islandLoop, seats, home, tower, mountains, forests, river, roads, ashCorner, fseed, mottle, voronoi };
 }
 
 // ---------------- glyphs + renderer (parchment) ----------------

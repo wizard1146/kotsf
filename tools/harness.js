@@ -31,8 +31,25 @@ const validChoices = (state, scene) => scene.choices.filter((c) => meets(state, 
 const maxTurns = Number(process.argv[2] || 60);
 const seed = Number(process.argv[3] || 12345);
 const scenes = loadScenes(SCENES_DIR);
-registerExpeditions(loadScenes(join(__dir, '..', 'content', 'expeditions')));
+const expeditions = loadScenes(join(__dir, '..', 'content', 'expeditions'));
+registerExpeditions(expeditions);
 const state = createInitialState(seed);
+
+// Lint: a SCENE test/requires must resolve against a coven path (pressures,
+// mastery.<school>, cult.<colour>, turn, year). Member competence only resolves
+// inside an expedition beat — testing it in a plain scene silently always-loses.
+// (This is exactly the class of bug that made 8 expedition checks always fail.)
+(() => {
+  const COMP = new Set(['power', 'wisdom', 'guile', 'courage']);
+  const resolvable = (p) => typeof p === 'string' && (p.startsWith('mastery.') || p.startsWith('cult.') || ['mana', 'provisions', 'coin', 'lore', 'faith', 'flamesRegard', 'fracture', 'turn', 'year'].includes(p));
+  const warns = [];
+  const walkReq = (id, cond) => { if (!cond || typeof cond !== 'object') return; for (const k of ['gte', 'lte', 'gt', 'lt', 'eq']) if (cond[k] && !resolvable(cond[k][0])) warns.push(`${id}: requires "${cond[k][0]}" won't resolve`); for (const k of ['all', 'any']) if (cond[k]) cond[k].forEach((c) => walkReq(id, c)); if (cond.not) walkReq(id, cond.not); };
+  for (const s of scenes) for (const c of s.choices || []) {
+    if (c.test && !resolvable(c.test.stat)) warns.push(`${s.id}/${c.id}: test "${c.test.stat}" won't resolve${COMP.has(c.test.stat) ? ' (member competence — use a coven path in scenes)' : ''}`);
+    walkReq(`${s.id}/${c.id}`, c.requires);
+  }
+  if (warns.length) { console.log('LINT WARNINGS (non-resolvable scene paths):'); warns.forEach((w) => console.log('  ! ' + w)); console.log(''); }
+})();
 
 console.log(`\n=== Keeper of the Sacred Flame — headless run (seed ${seed}, ${scenes.length} scenes loaded) ===\n`);
 
