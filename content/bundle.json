@@ -1693,11 +1693,15 @@
       "entries": [
         {
           "term": "The Sacred Flame",
-          "body": "In the basement of the Secret Tower it burns. Wizards who step into it become Forgotten Souls — you might get back something greater, or something undesirable (roughly one in ten). The greatest power and the greatest loss in the world."
+          "body": "Once tended whole in the Secret Tower, the greatest power and the greatest loss in the world. When the Tower's keepers vanished and its enemies gathered, the coven that kept it broke the Flame into EMBERS and scattered them to hidden hearths rather than let it be seized. Draw on an Ember and you may work great magic — but Wizards who step too far into it become Forgotten Souls (roughly one in ten, something undesirable)."
+        },
+        {
+          "term": "The Embers",
+          "body": "The shards of the Sacred Flame, carried out of the Secret Tower and scattered so no enemy could take the whole. Each is the burning heart of a hearth like Runehold. How many survived, and where, is unknown — kept, lost, gone cold, or in the wrong hands. Reuniting the Embers is the long road back to re-lighting the Tower. You hold one; there are others to find."
         },
         {
           "term": "The Forgetting",
-          "body": "Magic is real but thinning; the world is literally forgetting itself. Lore decays every season unless held — gains erode if unmaintained."
+          "body": "The world is literally forgetting itself — magic thins, runes slip from memory, and once-simple workings unravel. In game terms Lore decays every season unless held. Tomes and Stories the coven recovers point to a single cause: the Forgetting began when the Flame was broken. What that truly means, the wise are only starting to grasp."
         },
         {
           "term": "The Fracture",
@@ -1724,8 +1728,12 @@
           "body": "Wizards transformed by the Flame. When a Circle member is taken, the loss is permanent — they leave the Circle but persist in the world as a Soul you may later meet, bargain with, or mourn."
         },
         {
+          "term": "Tomes & Stories",
+          "body": "Fragments of the old world the coven recovers — a burned tome, a survivor's account, a cautionary tale of some great Wizard who reached for an epic working and failed catastrophically as the memory drained out from under them. Each fills in the Codex and, piece by piece, the truth of the Flame and the Embers. The Blue Bastion and its Forgotten Athenaeum chase them hardest."
+        },
+        {
           "term": "Runehold",
-          "body": "Your coven seat — a few dozen souls around a guttering hearth-rune and a half-remembered claim to old power. Grow it from a hearth to a power, or dwindle into a Forgotten hold."
+          "body": "Your coven seat, and one of the scattered hearths — a few dozen souls keeping an EMBER of the Sacred Flame alive in a guttering hearth-rune. It is the coven's heart and its last thread to the old power: let it die and Runehold dies with it. Grow it from a hearth to a power, or dwindle into a Forgotten hold."
         }
       ]
     }

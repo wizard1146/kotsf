@@ -13,7 +13,7 @@ import { resolveContest } from './engine/resolver.js';
 import { serialize, deserialize } from './engine/save.js';
 import { render } from './ui/view.js';
 
-const APP_VERSION = 'v27';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
+const APP_VERSION = 'v28';              // shell build — KEEP IN SYNC with sw.js CACHE ('kotsf-vN')
 const AUTOSAVE_KEY = 'kotsf-save-v1';   // the single continuous campaign
 const MANUAL_KEY = 'kotsf-manual-v1';   // the one manual bookmark slot
 const SETTINGS_KEY = 'kotsf-settings-v1';
@@ -143,7 +143,7 @@ function newRun(seed) {
   end = null; lastOutcome = null; current = null; yearRecap = null;
   casterId = null; selectedMember = null; cardsOpen = false;   // fresh coven — clear per-Circle UI selections
   yearOpenPressures = { ...state.pressures };
-  advanceToScene();
+  phase = 'intro';   // one-time opening card before the first scene
   draw();
 }
 
@@ -357,6 +357,7 @@ app.addEventListener('click', (e) => {
     // in-game play
     case 'choose': choose(el.dataset.choice); break;
     case 'continue': proceed(); break;
+    case 'begin-saga': advanceToScene(); draw(); break;   // leave the intro card into the first scene
     case 'new-run': startGame(); break;
     // shell navigation
     case 'enter': goFullscreenLandscape(); screen = 'menu'; draw(); break;

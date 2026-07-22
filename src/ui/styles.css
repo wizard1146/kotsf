@@ -407,6 +407,16 @@ button.cb-res:active { transform: translateY(0); }
 .recap-circle { color: var(--ink); margin: 0; }
 .recap-screen .cont { margin-top: 1.4rem; }
 
+/* one-time opening card (new coven) */
+.intro-screen { max-width: 680px; margin: 0 auto; text-align: center; padding: 0.5rem 0.5rem 2rem; }
+.intro-mark { font-size: 2.8rem; color: var(--flame); }
+.intro-title { font-family: var(--display); color: var(--flame); font-size: clamp(1.5rem, 5vw, 2.1rem); margin: 0.4rem 0 1.3rem; letter-spacing: 0.02em; text-shadow: 0 0 26px rgba(232, 163, 61, 0.3); }
+.intro-body { text-align: left; color: var(--ink); line-height: 1.68; }
+.intro-body p { margin: 0 0 0.95rem; }
+.intro-body b { color: var(--flame); font-weight: 600; }
+.intro-tag { color: var(--flame); font-style: italic; font-size: 1.05rem; margin: 1.3rem 0 1.5rem; }
+.intro-begin { display: inline-flex; width: auto; margin: 0 auto; padding: 0.7rem 1.7rem; }
+
 aside { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem; }
 aside h3 { margin: 0.2rem 0 0.7rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-dim); }
 

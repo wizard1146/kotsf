@@ -26,6 +26,21 @@ lever**, never a global constant — bake them into the subject line only. Do NO
 "weathered face / real age / ash and hard living / grizzled" to the shared style, or the whole cast reads
 old (Ember and Wisp are teenagers; the Yellow cult is youthful).
 
+**Make every face individual (do this — it's the fix for "they all look the same").** The shared style
+locks the *look*; it must NOT lock the *face*. Bake a handful of hard identifiers into the subject line of
+each character: **face shape, jaw & chin, brow, a nose-or-eye trait, skin tone, and one or two permanent
+marks** (a scar, freckles, moles, dimples, a tattoo/cult-sigil, a birthmark, a gap-tooth, a notched ear).
+These are *identity*, so they stay **constant across that character's young/middle/old set** — only age,
+dress, and regalia change. The gallery's prompt generator (`design/portraits.html`) does this automatically:
+it seeds a fixed unique face from the character number, so `#001` and `#002` never look alike but each
+person's three ages match. Don't add skin-tone to a class that already fixes pallor (necromancer, ghost-eater).
+
+**Framing — the face should fill ~55–60% of the frame** (like `portraits_green_female_001b`, the reference
+crop). Every prompt ends with `a tight head-and-shoulders crop with the head and face filling 55-60% of the
+frame, centered`. If an older/borrowed render came back zoomed-out (small face), don't rush to re-roll — the
+in-game portraiture and the gallery's **Face-zoom** slider crop into the face, so a slightly loose frame is
+recoverable.
+
 **Params:** `--ar 4:5 --style raw --v 6`. **v6 is the recommended model for this set** — for a painterly,
 consistent multi-character roster it holds the KODP look and responds to `--sref`/`--seed` more predictably.
 v7 has sharper detail and prompt adherence but tends to over-render toward glossy/photoreal and drifts more

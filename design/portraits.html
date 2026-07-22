@@ -5,18 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KOTSF · Portrait Gallery</title>
 <style>
-  :root { --bg:#14110f; --panel:#1c1815; --panel2:#241f1b; --line:#3a322b; --ink:#e7dccb; --dim:#a99e8d; --flame:#e8a33d; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  :root { --bg:#14110f; --panel:#1c1815; --panel2:#241f1b; --line:#3a322b; --ink:#e7dccb; --dim:#a99e8d; --flame:#e8a33d; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; --zoom:1; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); padding:1.5rem clamp(1rem,4vw,3rem) 4rem; }
   h1 { color:var(--flame); font-size:1.5rem; margin:0 0 .2rem; }
   .sub { color:var(--dim); margin:0 0 1.2rem; font-size:.9rem; }
   .school-hex { display:inline-block; width:.7em; height:.7em; border-radius:2px; vertical-align:middle; margin-right:.35em; }
+  code { color:var(--ink); }
 
-  .controls { display:flex; flex-wrap:wrap; gap:1.2rem; align-items:center; margin:0 0 1.4rem; padding:.7rem .9rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
-  .controls label { font-size:.85rem; color:var(--dim); display:inline-flex; align-items:center; gap:.4rem; cursor:pointer; }
-  .controls .seg { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; }
-  .controls .seg button { background:var(--panel2); color:var(--dim); border:0; padding:.35rem .7rem; font:inherit; font-size:.82rem; cursor:pointer; }
-  .controls .seg button.on { background:#2a2018; color:var(--flame); }
+  .controls { display:flex; flex-wrap:wrap; gap:.7rem 1.2rem; align-items:center; margin:0 0 1.4rem; padding:.7rem .9rem; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+  .controls .ctl { font-size:.82rem; color:var(--dim); display:inline-flex; align-items:center; gap:.4rem; }
+  .controls select, .controls input[type=search] { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:.28rem .45rem; font:inherit; font-size:.8rem; }
+  .controls input[type=range] { accent-color:var(--flame); width:120px; }
+  .seg { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+  .seg button { background:var(--panel2); color:var(--dim); border:0; padding:.35rem .7rem; font:inherit; font-size:.82rem; cursor:pointer; }
+  .seg button.on { background:#2a2018; color:var(--flame); }
+  .btn { background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:6px; padding:.32rem .6rem; font:inherit; font-size:.8rem; cursor:pointer; }
+  .btn:hover { color:var(--flame); border-color:var(--flame); }
+  #count { color:var(--dim); font-size:.85rem; margin-left:auto; }
 
   /* coverage matrix */
   .coverage { margin:0 0 1.8rem; overflow-x:auto; }
@@ -42,9 +48,10 @@
   .gen-ctrl { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1.1rem; margin:0 0 .9rem; padding:.6rem .7rem; background:var(--panel2); border:1px solid var(--line); border-radius:8px; }
   .gen-ctrl label { font-size:.8rem; color:var(--dim); display:inline-flex; align-items:center; gap:.4rem; }
   .gen-ctrl select, .gen-ctrl input[type=text] { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:.28rem .45rem; font:inherit; font-size:.8rem; }
-  .gen-ctrl input[type=text] { min-width:min(320px,60vw); font-family:var(--mono); }
+  .gen-ctrl input.sref { min-width:min(300px,55vw); font-family:var(--mono); }
   .gen-note { color:var(--dim); font-size:.76rem; margin:0 0 .9rem; line-height:1.45; }
   .gen-note b { color:var(--flame); font-weight:600; }
+  .gen-note .face { color:var(--ink); }
   .variant { margin:0 0 .8rem; }
   .variant:last-child { margin-bottom:0; }
   .variant-h { display:flex; align-items:center; gap:.5rem; margin:0 0 .35rem; font-size:.82rem; }
@@ -52,16 +59,20 @@
   .variant-h .vcode { font-family:var(--mono); color:var(--dim); }
   .variant-h .anchor { font-size:.68rem; color:var(--bg); background:var(--flame); border-radius:3px; padding:.05rem .35rem; font-weight:600; }
   .variant-h .copy { margin-left:auto; background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:5px; padding:.22rem .6rem; font:inherit; font-size:.75rem; cursor:pointer; }
-  .variant-h .copy:hover { color:var(--flame); border-color:var(--flame); }
-  .variant-h .copy.done { color:var(--flame); border-color:var(--flame); }
+  .variant-h .copy:hover, .variant-h .copy.done { color:var(--flame); border-color:var(--flame); }
   .variant textarea { width:100%; box-sizing:border-box; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:6px; padding:.5rem .6rem; font-family:var(--mono); font-size:.72rem; line-height:1.5; resize:vertical; min-height:5.2em; }
 
-  .group-h { color:var(--flame); font-size:1.05rem; margin:1.6rem 0 .7rem; text-transform:capitalize; border-bottom:1px solid var(--line); padding-bottom:.3rem; }
-  .warn { color:#e0803e; font-size:.8rem; margin-left:.5rem; font-weight:400; text-transform:none; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
-  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
-  .frame { position:relative; aspect-ratio:3/4; background:repeating-conic-gradient(#211c18 0% 25%, #191510 0% 50%) 50%/22px 22px; display:grid; place-items:center; }
-  .frame img { width:100%; height:100%; display:block; }
+  .group-h { color:var(--flame); font-size:1.05rem; margin:1.6rem 0 .7rem; text-transform:capitalize; border-bottom:1px solid var(--line); padding-bottom:.3rem; display:flex; align-items:center; gap:.5rem; cursor:pointer; user-select:none; }
+  .group-h .caret { display:inline-block; transition:transform .15s; color:var(--dim); font-size:.8rem; }
+  .group-h.collapsed .caret { transform:rotate(-90deg); }
+  .group-h .gcount { color:var(--dim); font-size:.78rem; font-weight:400; text-transform:none; }
+  .warn { color:#e0803e; font-size:.8rem; font-weight:400; text-transform:none; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-bottom:.4rem; }
+  .grid.collapsed { display:none; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; cursor:pointer; transition:border-color .12s, transform .12s; }
+  .card:hover { border-color:var(--flame); transform:translateY(-2px); }
+  .frame { position:relative; aspect-ratio:3/4; overflow:hidden; background:repeating-conic-gradient(#211c18 0% 25%, #191510 0% 50%) 50%/22px 22px; display:grid; place-items:center; }
+  .frame img { width:100%; height:100%; display:block; transform:scale(var(--zoom)); transform-origin:50% 32%; transition:transform .12s; }
   body[data-fit="cover"] .frame img { object-fit:cover; }
   body[data-fit="contain"] .frame img { object-fit:contain; }
   .meta { padding:.5rem .6rem .6rem; }
@@ -72,25 +83,74 @@
   .tag.bad { color:#e0803e; border-color:#5a3a22; }
   .dim-note { font-family:var(--mono); font-size:.68rem; color:var(--dim); margin-top:.35rem; }
   .dim-note.small { color:#e0803e; }
+  .empty { color:var(--dim); font-size:.9rem; padding:2rem 0; }
   .err { color:#e0803e; background:var(--panel); border:1px solid #5a3a22; border-radius:8px; padding:1rem; }
+
+  /* lightbox */
+  .lb { position:fixed; inset:0; background:rgba(8,6,5,.92); display:none; z-index:50; align-items:center; justify-content:center; padding:2vh 1rem; }
+  .lb.open { display:flex; }
+  .lb-stage { display:flex; flex-direction:column; align-items:center; gap:.7rem; max-height:96vh; }
+  .lb-imgwrap { position:relative; display:inline-block; line-height:0; overflow:hidden; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+  .lb-imgwrap img { display:block; max-height:min(80vh,760px); max-width:94vw; width:auto; height:auto; }
+  /* dashed rectangle = the proposed in-game crop; its box-shadow dims everything outside it */
+  .lb-crop { position:absolute; border:2px dashed var(--flame); box-shadow:0 0 0 100vmax rgba(8,6,5,.55); pointer-events:none; box-sizing:border-box; }
+  .lb-crop-label { position:absolute; top:0; left:0; background:var(--flame); color:var(--bg); font:600 .62rem/1.4 var(--mono); padding:.05em .4em; border-radius:3px 0 3px 0; white-space:nowrap; }
+  .lb-cap { color:var(--ink); font-family:var(--mono); font-size:.78rem; text-align:center; display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; justify-content:center; }
+  .lb-cap .muted { color:var(--dim); }
+  .lb-nav { position:absolute; top:50%; transform:translateY(-50%); background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:50%; width:48px; height:48px; font-size:1.4rem; cursor:pointer; display:grid; place-items:center; }
+  .lb-nav:hover { color:var(--flame); border-color:var(--flame); }
+  .lb-prev { left:2vw; } .lb-next { right:2vw; }
+  .lb-close { position:absolute; top:2vh; right:2vw; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:.35rem .7rem; font:inherit; cursor:pointer; }
+  .lb-close:hover { color:var(--flame); border-color:var(--flame); }
+  .lb-hint { color:var(--dim); font-size:.72rem; }
 </style>
 </head>
 <body data-fit="cover">
   <h1>Portrait Gallery</h1>
-  <p class="sub">Every file in <code>assets/portraits/</code> (from the build manifest). Naming: <code>portrait_&lt;school&gt;_&lt;gender&gt;_&lt;NNN&gt;&lt;a|b|c&gt;.webp</code> — a/b/c = young/middle/old. Serve via the dev server (this page fetches the bundle).</p>
+  <p class="sub">Every file in <code>assets/portraits/</code> (from the build manifest). Naming: <code>portrait_&lt;school&gt;_&lt;gender&gt;_&lt;NNN&gt;&lt;a|b|c&gt;.webp</code> — a/b/c = young/middle/old, NNN = the character number (one face, aged three ways). Click a card to open it full-size (←/→ or arrow keys to move, Esc to close). Serve via the dev server.</p>
 
   <div class="controls">
-    <span style="color:var(--dim);font-size:.85rem">Fit</span>
-    <div class="seg" id="fit">
-      <button data-fit="cover" class="on">Cropped (in-game 3:4)</button>
-      <button data-fit="contain">Full image</button>
-    </div>
-    <span id="count" style="color:var(--dim);font-size:.85rem;margin-left:auto"></span>
+    <span class="ctl">Gender
+      <div class="seg" id="f-gender">
+        <button data-v="all" class="on">All</button><button data-v="female">Female</button><button data-v="male">Male</button>
+      </div></span>
+    <label class="ctl">School <select id="f-school"><option value="all">All</option></select></label>
+    <span class="ctl">Age
+      <div class="seg" id="f-age">
+        <button data-v="all" class="on">All</button><button data-v="a">Young</button><button data-v="b">Middle</button><button data-v="c">Old</button>
+      </div></span>
+    <label class="ctl">Search <input type="search" id="f-q" placeholder="filename…" style="width:9em"></label>
+    <span class="ctl">View
+      <div class="seg" id="f-view">
+        <button data-v="grouped" class="on">Grouped</button><button data-v="flat">Flat</button>
+      </div></span>
+    <button class="btn" id="collapse-all">Collapse all</button>
+    <button class="btn" id="expand-all">Expand all</button>
+    <span class="ctl">Fit
+      <div class="seg" id="fit">
+        <button data-fit="cover" class="on">Cropped 3:4</button><button data-fit="contain">Full image</button>
+      </div></span>
+    <label class="ctl">Face&nbsp;zoom <input type="range" id="zoom" min="1" max="2" step="0.05" value="1"><span id="zoom-v" style="font-family:var(--mono)">1.00×</span></label>
+    <span id="count"></span>
   </div>
 
   <div class="gen" id="gen"></div>
-
+  <div id="cov"></div>
   <div id="out"><p class="sub">Loading…</p></div>
+
+  <div class="lb" id="lb" aria-hidden="true">
+    <button class="lb-close" id="lb-close">Esc ✕</button>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous">‹</button>
+    <button class="lb-nav lb-next" id="lb-next" aria-label="Next">›</button>
+    <div class="lb-stage">
+      <div class="lb-imgwrap" id="lb-imgwrap">
+        <img id="lb-img" alt="">
+        <div class="lb-crop" id="lb-crop"><span class="lb-crop-label" id="lb-crop-label"></span></div>
+      </div>
+      <div class="lb-cap" id="lb-cap"></div>
+      <div class="lb-hint">full image · dashed box = the in-game 3:4 crop · drag <b>Face-zoom</b> above to tighten it · ← / → to move · Esc to close</div>
+    </div>
+  </div>
 
 <script>
 const SCHOOLS = ['red','yellow','brown','green','blue','purple','white','black'];
@@ -99,13 +159,11 @@ const HEX = { red:'#c0392b', yellow:'#d4ac0d', brown:'#8a5a1f', green:'#229954',
 const AGE = { a:'young', b:'middle', c:'old' };
 const PLACEHOLDER = '../assets/portraits/portrait_placeholder.svg';
 
-/* ---- Midjourney prompt generator (per design/PORTRAIT_PROMPTS.md §3) ----
-   A matrix cell fixes school + gender; the class picker sets the idiom;
-   the a/b/c tier lever sets seniority (age + dress + regalia + bearing). */
+/* ================= Midjourney prompt generator (per design/PORTRAIT_PROMPTS.md §3) =================
+   A matrix cell fixes school + gender; the class picker sets the idiom; the a/b/c tier lever sets
+   seniority; the character number seeds a fixed, unique face that stays constant across all three ages. */
 
-// robe colour word (b/c robes) — hats use the plain school word (blue, red, …)
 const SCHOOL_ROBE = { red:'crimson', yellow:'gold', brown:'earth-brown', green:'moss-green', blue:'indigo-blue', purple:'violet', white:'bone-white', black:'charcoal-black' };
-// per-school accent light (the cult drives hat, robe trim, and magic light)
 const SCHOOL_LIGHT = {
   red:    'warm crimson firelight raking one side of the face',
   yellow: 'warm gold light on one side',
@@ -116,30 +174,65 @@ const SCHOOL_LIGHT = {
   white:  'cold pale light with a thread of violet at the edges',
   black:  'deep shadow with a thin cold rim of violet-black glow on one side',
 };
-// the {TIER} lever — rise shows across face, wardrobe, regalia, and posture
 const TIER = {
   a: { article:'a young',        face:'a smooth unlined face and eager unproven eyes',
        robePrefix:'plain undyed roughspun', robeSuffix:'with no insignia, a simple cord belt and a single small charm',
        hat:'a plain pointed',    staff:'holding no staff' },
-  b: { article:'a middle-aged',  face:'a lined competent face and steady assured eyes',
+  b: { article:'a middle-aged',  face:'a lived-in adult face and steady assured eyes',
        robePrefix:'well-made {COLOR}',      robeSuffix:'with embroidered trim and a modest rank-brooch, several earned rune-charms',
        hat:'a pointed',          staff:'carrying a carved working-staff with a rune-etched head' },
   c: { article:'an old',         face:'a deeply lined weathered face, grey hair and sunken knowing eyes',
        robePrefix:'rich layered {COLOR}',   robeSuffix:'of office heavy with gold-and-rune embroidery, a rank medallion and fine fur trim, many rune-charms',
        hat:'a tall pointed',     staff:'bearing an ornate staff of office, a commanding presence' },
 };
-// one entry per class in view.js CLASS_LABEL / PORTRAIT_PROMPTS.md §3
+// one entry per class in view.js CLASS_LABEL / PORTRAIT_PROMPTS.md §3.  skin:true → the class fixes
+// pallor, so we suppress the random complexion to avoid a contradiction.
 const CLASSES = {
   magus:       { label:'Magus',        adj:'composed learned magus',       feat:'a measured gaze',                                    robe:'scholar-mage robes',              flavor:'a keeper of balanced disciplines' },
-  sorcerer:    { label:'Sorcerer',     adj:'intense sorcerer',             feat:'taut features and faint glowing veins of magic at the temples', robe:'mage-robes',            flavor:'channeling raw innate power, dangerous and self-taught' },
+  sorcerer:    { label:'Sorcerer',     adj:'intense sorcerer',             feat:'faint glowing veins of magic at the temples',        robe:'mage-robes',                      flavor:'channeling raw innate power, dangerous and self-taught' },
   druid:       { label:'Druid',        adj:'wild druid',                   feat:'leaf-tangled hair and a weather-bright gaze',        robe:'hide-and-moss robes',             flavor:'a keeper of the broken land' },
-  necromancer: { label:'Necromancer',  adj:'gaunt hollow-eyed necromancer',feat:'ash-pale skin and a cold patient stare',             robe:'bone-charm robes',                flavor:'a small skull familiar at the shoulder, grim and unhurried' },
-  pyromancer:  { label:'Pyromancer',   adj:'fervent pyromancer',           feat:'singed brows and eyes lit with reflected fire',      robe:'scorch-marked robes',             flavor:'small flames dancing at the fingertips, zealous and volatile' },
-  enchanter:   { label:'Enchanter',    adj:'meticulous enchanter',         feat:"fine features and a jeweler's focus",                robe:'rune-stitched robes',             flavor:'rings of worked silver on every finger, patient and precise' },
+  necromancer: { label:'Necromancer',  adj:'gaunt hollow-eyed necromancer',feat:'a cold patient stare',                               robe:'bone-charm robes', skin:true,     flavor:'ash-pale skin, a small skull familiar at the shoulder, grim and unhurried' },
+  pyromancer:  { label:'Pyromancer',   adj:'fervent pyromancer',           feat:'eyes lit with reflected fire',                       robe:'scorch-marked robes',             flavor:'small flames dancing at the fingertips, zealous and volatile' },
+  enchanter:   { label:'Enchanter',    adj:'meticulous enchanter',         feat:"a jeweler's focus",                                  robe:'rune-stitched robes',             flavor:'rings of worked silver on every finger, patient and precise' },
   charmer:     { label:'Charmer',      adj:'beguiling charmer',            feat:'a warm knowing smile and bright disarming eyes',     robe:'well-kept robes',                 flavor:'a single charmed songbird familiar, persuasive and quick' },
-  chaosmage:   { label:'Chaos Mage',   adj:'erratic chaos mage',           feat:'asymmetric wild hair and a manic uneven grin',       robe:'patchwork robes',                 flavor:'sparks and glitching magic around the hands, unpredictable and grinning' },
-  ghosteater:  { label:'Ghost Eater',  adj:'haunted ghost-eater',          feat:'sunken cheeks and a faintly glowing throat',         robe:'wind-worn spirit-robes',          flavor:'a captured ghost-light in a jar at the collar, hollow and hungry and quiet' },
+  chaosmage:   { label:'Chaos Mage',   adj:'erratic chaos mage',           feat:'a manic uneven grin',                                robe:'patchwork robes',                 flavor:'sparks and glitching magic around the hands, unpredictable and grinning' },
+  ghosteater:  { label:'Ghost Eater',  adj:'haunted ghost-eater',          feat:'a faintly glowing throat',                           robe:'wind-worn spirit-robes', skin:true, flavor:'wan grey skin, a captured ghost-light in a jar at the collar, hollow and hungry and quiet' },
 };
+
+/* ---- distinctive-features engine ----------------------------------------------------------------
+   Deterministic per (school,gender,number) so a character has ONE unique face, identical across its
+   young/middle/old renders, but different from every other numbered character. Fixes the "same-ish"
+   problem: bone structure + jaw/chin + brows + a nose-or-eye trait + one or two hard identifiers
+   (scar / tattoo / freckles / moles / dimples / birthmark …). */
+const FACE_SHAPE = ['an oval face','a square face','a round full face','a heart-shaped face','a long angular face','a broad flat-planed face','a narrow gaunt face','a diamond-shaped face','a craggy weathered face','a delicate fine-boned face'];
+const JAW_CHIN   = ['a strong square jaw and a cleft chin','a sharp angular jawline and a pointed chin','a soft rounded jaw and a small chin','a heavy lantern jaw','high sharp cheekbones and a jutting chin','hollow cheeks and a recessive chin','a wide heavy jaw and a broad chin','a slender jaw and a tapered chin','a jaw set slightly off-true'];
+const BROWS      = ['thick heavy eyebrows','thin high-arched eyebrows','one eyebrow split by an old scar','bushy untamed eyebrows','fine straight eyebrows','a permanent sardonic arch to one brow','pale near-invisible brows','dark low brooding brows'];
+const NOSE       = ['a hooked aquiline nose','a broad flat nose','a long straight patrician nose','a small upturned nose','a crooked once-broken nose','a strong bridged nose','a narrow pinched nose'];
+const EYES       = ['deep-set shadowed eyes','wide-set watchful eyes','narrow hooded eyes','large round expressive eyes','close-set piercing eyes','heavy-lidded sleepy eyes','mismatched eyes, one paler than the other','a slight cast to one eye'];
+const MARKS      = [
+  'a thin pale scar across one cheekbone','an old burn-scar climbing the jaw','a scar nicking the upper lip',
+  'a dense spray of freckles over the nose and cheeks','a scatter of dark moles along one cheek','a single beauty-mark just above the lip',
+  'a small mole at the corner of one eye','deep dimples that crease when the face sets','a faded rune tattooed at one temple',
+  'a small inked cult-sigil beneath one eye','a spiral of old ink curling up the throat','weathered tribal ink across one cheekbone',
+  'a wine-dark birthmark down one side of the jaw','a gap between the front teeth','a notched, once-torn earlobe',
+  'a shaved scar-line through one brow','faint pockmarking across the skin','deep laugh-lines bracketing the mouth',
+];
+const COMPLEXION = ['deep brown skin','warm bronze skin','olive-toned skin','pale freckled skin','ruddy wind-burned skin','ashen fair skin','dark umber skin','sallow weathered skin','tan sun-darkened skin','light copper-toned skin'];
+
+function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+function identity(school, gender, num, skipComplexion) {
+  const rng = mulberry32(hashStr(`${school}|${gender}|${num}`));
+  const pick = a => a[Math.floor(rng()*a.length)];
+  const noseEye = rng() < 0.5 ? pick(NOSE) : pick(EYES);
+  const marks = [pick(MARKS)];
+  if (rng() < 0.45) { let m2; do { m2 = pick(MARKS); } while (m2 === marks[0]); marks.push(m2); }
+  const parts = [];
+  if (!skipComplexion) parts.push(pick(COMPLEXION));
+  parts.push(`${pick(FACE_SHAPE)} with ${pick(JAW_CHIN)}`, pick(BROWS), noseEye, ...marks);
+  return parts.join(', ');
+}
 
 function buildPrompt(school, gender, age, classKey, opts = {}) {
   const t = TIER[age], c = CLASSES[classKey];
@@ -148,26 +241,39 @@ function buildPrompt(school, gender, age, classKey, opts = {}) {
   const robes = `${t.robePrefix.replace('{COLOR}', color)} ${c.robe} ${t.robeSuffix}`;
   const hat = `${t.hat} ${school} wizard hat`;
   const light = SCHOOL_LIGHT[school] || 'firelit from one side';
-  const subject = `${t.article} ${g} ${c.adj} with ${t.face}, ${c.feat}, ${robes}, ${hat}, ${t.staff}, ${c.flavor}`;
-  const style = `slight three-quarter turn with eyes to camera, painterly semi-realistic illustration in the style of King of Dragon's Pass character portraits, matte finish with visible brushwork, muted earthy palette, no linework, occult-folk post-cataclysm Forgotten Runes wizard, ${light} against a softly-lit environmental backdrop, a warm firelit hall or hold suggested in muted mid-tones, clearly visible but out of focus behind the figure, gentle atmospheric depth, soft rim light, dark fantasy, characterful face, centered bust crop, no text, no lettering`;
+  const id = identity(school, gender, opts.num || '001', c.skin);
+  const subject = `${t.article} ${g} ${c.adj} with ${t.face}, ${c.feat}, ${id}, ${robes}, ${hat}, ${t.staff}, ${c.flavor}`;
+  const style = `slight three-quarter turn with eyes to camera, painterly semi-realistic illustration in the style of King of Dragon's Pass character portraits, matte finish with visible brushwork, muted earthy palette, no linework, occult-folk post-cataclysm Forgotten Runes wizard, ${light} against a softly-lit environmental backdrop, a warm firelit hall or hold suggested in muted mid-tones, clearly visible but out of focus behind the figure, gentle atmospheric depth, soft rim light, dark fantasy, a distinctive one-of-a-kind face unlike any other, a tight head-and-shoulders crop with the head and face filling 55-60% of the frame, centered, no text, no lettering`;
   let p = `head-and-shoulders character portrait of ${subject}, ${style} --ar 4:5 --style raw --v 6`;
   if (opts.sref && age !== 'b') p += ` --sref ${opts.sref}`;   // b is the anchor; sref the young & old to it
   if (opts.seed) p += ` --seed ${opts.seed}`;
   return p;
 }
 
-// --- generator panel state + render ---
-const sel = { school: SCHOOLS[0], gender: 'female', classKey: 'magus' };
+// ================= state =================
+let ALL_ITEMS = [];
+const sel = { school: SCHOOLS[0], gender: 'female', classKey: 'magus', num: '001' };
 const genOpts = { seed: '777', sref: '' };
+const filters = { gender:'all', school:'all', age:'all', view:'grouped', q:'' };
+const collapsed = new Set();
 
+const pad3 = n => String(n).padStart(3, '0');
+function nextNum(school, gender) {
+  let max = 0;
+  for (const p of ALL_ITEMS) if (p.school === school && p.gender === gender) { const n = parseInt(p.num, 10); if (!isNaN(n) && n > max) max = n; }
+  return pad3(max + 1);
+}
+
+// ================= generator panel =================
 function renderGen() {
   const gen = document.getElementById('gen');
   const s = sel.school, hex = HEX[s] || '#777';
   const classOpts = Object.entries(CLASSES).map(([k, v]) => `<option value="${k}"${k === sel.classKey ? ' selected' : ''}>${v.label}</option>`).join('');
+  const idText = identity(s, sel.gender, sel.num, CLASSES[sel.classKey].skin);
   const order = ['b', 'a', 'c']; // anchor (middle) first, per the matched-set workflow
   const variants = order.map(a => {
-    const prompt = buildPrompt(s, sel.gender, a, sel.classKey, { seed: genOpts.seed.trim(), sref: genOpts.sref.trim() });
-    const fname = `portrait_${s}_${sel.gender}_NNN${a}.webp`;
+    const prompt = buildPrompt(s, sel.gender, a, sel.classKey, { num: sel.num, seed: genOpts.seed.trim(), sref: genOpts.sref.trim() });
+    const fname = `portrait_${s}_${sel.gender}_${sel.num}${a}.webp`;
     return `<div class="variant">
       <div class="variant-h">
         <span class="age">${AGE[a]}</span><span class="vcode">${a} · ${fname}</span>
@@ -181,7 +287,7 @@ function renderGen() {
   gen.innerHTML = `
     <div class="gen-head">
       <h2 class="gen-title">Prompt generator</h2>
-      <span class="gen-sel"><span class="school-hex" style="background:${hex}"></span><span>${s}</span><span class="muted">·</span><span>${sel.gender}</span><span class="muted">·</span><span>${CLASSES[sel.classKey].label}</span></span>
+      <span class="gen-sel"><span class="school-hex" style="background:${hex}"></span><span>${s}</span><span class="muted">·</span><span>${sel.gender}</span><span class="muted">·</span><span>${CLASSES[sel.classKey].label}</span><span class="muted">·</span><span>#${sel.num}</span></span>
     </div>
     <div class="gen-ctrl">
       <label>Class <select id="gen-class">${classOpts}</select></label>
@@ -190,14 +296,19 @@ function renderGen() {
           <option value="female"${sel.gender === 'female' ? ' selected' : ''}>female</option>
           <option value="male"${sel.gender === 'male' ? ' selected' : ''}>male</option>
         </select></label>
-      <label>Seed <input type="text" id="gen-seed" value="${genOpts.seed}" style="min-width:5em;width:5em" placeholder="none"></label>
-      <label>--sref URL <input type="text" id="gen-sref" value="${genOpts.sref.replace(/"/g, '&quot;')}" placeholder="paste the middle (b) image URL, applied to young &amp; old"></label>
+      <label>Character # <input type="text" id="gen-num" value="${sel.num}" style="width:4.5em"></label>
+      <button class="btn" id="gen-reroll" title="next number = a different face">🎲 next face</button>
+      <label>Seed <input type="text" id="gen-seed" value="${genOpts.seed}" style="width:5em" placeholder="none"></label>
+      <label>--sref URL <input type="text" class="sref" id="gen-sref" value="${genOpts.sref.replace(/"/g, '&quot;')}" placeholder="paste the middle (b) image URL, applied to young &amp; old"></label>
     </div>
-    <p class="gen-note"><b>Click any matrix cell below</b> to point the generator at that school &amp; gender slot. Then generate the <b>middle (b)</b> portrait first, upscale the best, paste its image URL into <b>--sref</b> above so the young &amp; old variants render as the same person risen through the ranks. Keep the <b>seed</b> fixed across the set.</p>
+    <p class="gen-note">This character's fixed face (identical across all three ages): <span class="face">${idText}</span>. Change <b>Character #</b> or hit <b>🎲 next face</b> for a different one.</p>
+    <p class="gen-note"><b>Click a matrix cell below</b> to point the generator at a school &amp; gender slot (auto-picks the next free #). Generate the <b>middle (b)</b> first, upscale, paste its image URL into <b>--sref</b> so young &amp; old match. Keep the <b>seed</b> fixed across the set.</p>
     ${variants}`;
 
   gen.querySelector('#gen-class').addEventListener('change', e => { sel.classKey = e.target.value; renderGen(); });
-  gen.querySelector('#gen-gender').addEventListener('change', e => { sel.gender = e.target.value; syncCells(); renderGen(); });
+  gen.querySelector('#gen-gender').addEventListener('change', e => { sel.gender = e.target.value; sel.num = nextNum(sel.school, sel.gender); syncCells(); renderGen(); });
+  gen.querySelector('#gen-num').addEventListener('change', e => { const n = parseInt(e.target.value, 10); sel.num = isNaN(n) ? '001' : pad3(n); renderGen(); });
+  gen.querySelector('#gen-reroll').addEventListener('click', () => { sel.num = pad3(parseInt(sel.num, 10) + 1); renderGen(); });
   gen.querySelector('#gen-seed').addEventListener('input', e => { genOpts.seed = e.target.value; renderGen(); });
   gen.querySelector('#gen-sref').addEventListener('input', e => { genOpts.sref = e.target.value; renderGen(); });
   gen.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', e => {
@@ -215,38 +326,12 @@ function syncCells() {
   });
 }
 
+// ================= parsing + coverage =================
 function parseName(f) {
   const base = f.replace(/^portraits?_/, '').replace(/\.[a-z0-9]+$/i, '');
   const [school, gender, idv = ''] = base.split('_');
   const v = (idv.match(/[a-z]$/i) || [''])[0].toLowerCase();
   return { f, school, gender, num: idv.replace(/[a-z]$/i, ''), variant: v, age: AGE[v] || '?' };
-}
-
-function card(p) {
-  const badSchool = !SCHOOLS.includes(p.school);
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.innerHTML = `
-    <div class="frame"><img src="../assets/portraits/${p.f}" alt="${p.f}" loading="lazy"></div>
-    <div class="meta">
-      <div class="fname">${p.f}</div>
-      <div class="tags">
-        <span class="tag ${badSchool ? 'bad' : ''}">${badSchool ? '⚠ ' : ''}<span class="school-hex" style="background:${HEX[p.school] || '#777'}"></span>${p.school}</span>
-        <span class="tag">${p.gender}</span>
-        <span class="tag age">${p.age}${p.variant ? ' ('+p.variant+')' : ''}</span>
-        ${p.num ? `<span class="tag">#${p.num}</span>` : ''}
-      </div>
-      <div class="dim-note" data-dim>measuring…</div>
-    </div>`;
-  const img = el.querySelector('img');
-  const dim = el.querySelector('[data-dim]');
-  img.addEventListener('load', () => {
-    const w = img.naturalWidth, h = img.naturalHeight;
-    dim.textContent = `${w}×${h}px · ${(w/h).toFixed(2)}:1`;
-    if (Math.min(w, h) < 360) dim.classList.add('small'), dim.textContent += '  ⚠ small';
-  });
-  img.addEventListener('error', () => { dim.textContent = '⚠ failed to load'; dim.classList.add('small'); });
-  return el;
 }
 
 function coverage(items) {
@@ -266,16 +351,160 @@ function coverage(items) {
     }
     rows += r + '</tr>';
   }
-  wrap.innerHTML = `<table>${head}${rows}</table><p class="hint">Click a cell to load its Midjourney prompt in the generator above. Numbers = portraits already in the bundle for that slot.</p>`;
+  wrap.innerHTML = `<table>${head}${rows}</table><p class="hint">Click a cell to aim the generator at that slot. Numbers = portraits already in the bundle.</p>`;
   wrap.addEventListener('click', e => {
     const td = e.target.closest('td.cell'); if (!td) return;
-    sel.school = td.dataset.school; sel.gender = td.dataset.gender;
+    sel.school = td.dataset.school; sel.gender = td.dataset.gender; sel.num = nextNum(sel.school, sel.gender);
     syncCells(); renderGen();
     document.getElementById('gen').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
   return wrap;
 }
 
+// ================= gallery =================
+function tagsHtml(p) {
+  const bad = !SCHOOLS.includes(p.school);
+  return `<span class="tag ${bad ? 'bad' : ''}">${bad ? '⚠ ' : ''}<span class="school-hex" style="background:${HEX[p.school] || '#777'}"></span>${p.school}</span>`
+    + `<span class="tag">${p.gender}</span>`
+    + `<span class="tag age">${p.age}${p.variant ? ' ('+p.variant+')' : ''}</span>`
+    + (p.num ? `<span class="tag">#${p.num}</span>` : '');
+}
+
+function card(p, idx) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div class="frame"><img src="../assets/portraits/${p.f}" alt="${p.f}" loading="lazy"></div>
+    <div class="meta">
+      <div class="fname">${p.f}</div>
+      <div class="tags">${tagsHtml(p)}</div>
+      <div class="dim-note" data-dim>measuring…</div>
+    </div>`;
+  const img = el.querySelector('img'), dim = el.querySelector('[data-dim]');
+  img.addEventListener('load', () => {
+    const w = img.naturalWidth, h = img.naturalHeight;
+    dim.textContent = `${w}×${h}px · ${(w/h).toFixed(2)}:1`;
+    if (Math.min(w, h) < 360) { dim.classList.add('small'); dim.textContent += '  ⚠ small'; }
+  });
+  img.addEventListener('error', () => { dim.textContent = '⚠ failed to load'; dim.classList.add('small'); });
+  el.addEventListener('click', () => openLightbox(idx));
+  return el;
+}
+
+function schoolOrder(keys) {
+  return [...SCHOOLS.filter(s => keys.includes(s)), ...keys.filter(s => !SCHOOLS.includes(s))];
+}
+function sortItems(arr) {
+  return arr.slice().sort((a, b) => {
+    const sa = SCHOOLS.indexOf(a.school), sb = SCHOOLS.indexOf(b.school);
+    return (sa < 0 ? 99 : sa) - (sb < 0 ? 99 : sb) || (a.gender+a.num+a.variant).localeCompare(b.gender+b.num+b.variant);
+  });
+}
+
+let VIEW_LIST = []; // flat ordered list currently shown → drives lightbox nav
+
+function renderGallery() {
+  const out = document.getElementById('out');
+  out.innerHTML = '';
+  const q = filters.q.trim().toLowerCase();
+  const shown = ALL_ITEMS.filter(p =>
+    (filters.gender === 'all' || p.gender === filters.gender) &&
+    (filters.school === 'all' || p.school === filters.school) &&
+    (filters.age === 'all' || p.variant === filters.age) &&
+    (!q || p.f.toLowerCase().includes(q)));
+  document.getElementById('count').textContent = `${shown.length} of ${ALL_ITEMS.length} shown`;
+
+  // placeholder preview (not part of lightbox nav)
+  const ph = document.createElement('div');
+  ph.innerHTML = `<div class="group-h" style="cursor:default"><span>Placeholder</span> <span class="gcount">shown for any member with no matching portrait</span></div>`;
+  const phGrid = document.createElement('div'); phGrid.className = 'grid';
+  const phCard = document.createElement('div'); phCard.className = 'card'; phCard.style.cursor = 'default';
+  phCard.innerHTML = `<div class="frame"><img src="${PLACEHOLDER}" alt="placeholder"></div><div class="meta"><div class="fname">portrait_placeholder.svg</div></div>`;
+  phGrid.appendChild(phCard); ph.appendChild(phGrid); out.appendChild(ph);
+
+  if (!shown.length) { const e = document.createElement('p'); e.className = 'empty'; e.textContent = 'No portraits match these filters.'; out.appendChild(e); VIEW_LIST = []; return; }
+
+  VIEW_LIST = sortItems(shown);
+  const indexOf = new Map(VIEW_LIST.map((p, i) => [p.f, i]));
+
+  if (filters.view === 'flat') {
+    const grid = document.createElement('div'); grid.className = 'grid';
+    for (const p of VIEW_LIST) grid.appendChild(card(p, indexOf.get(p.f)));
+    out.appendChild(grid);
+    return;
+  }
+
+  // grouped by school
+  const bySchool = {};
+  for (const p of VIEW_LIST) (bySchool[p.school] ||= []).push(p);
+  for (const s of schoolOrder(Object.keys(bySchool))) {
+    const bad = !SCHOOLS.includes(s), hid = HIDDEN.has(s);
+    const h = document.createElement('div');
+    h.className = 'group-h' + (collapsed.has(s) ? ' collapsed' : '');
+    h.innerHTML = `<span class="caret">▾</span><span class="school-hex" style="background:${HEX[s] || '#777'}"></span>${s}`
+      + `<span class="gcount">${bySchool[s].length}</span>`
+      + (hid ? ` <span class="warn">— hidden 8th cult; kept out of the seven-school player UI</span>` : '')
+      + (bad ? ` <span class="warn">— not one of the schools; never matches a member</span>` : '');
+    const grid = document.createElement('div'); grid.className = 'grid' + (collapsed.has(s) ? ' collapsed' : '');
+    for (const p of bySchool[s]) grid.appendChild(card(p, indexOf.get(p.f)));
+    h.addEventListener('click', () => {
+      if (collapsed.has(s)) collapsed.delete(s); else collapsed.add(s);
+      h.classList.toggle('collapsed'); grid.classList.toggle('collapsed');
+    });
+    out.appendChild(h); out.appendChild(grid);
+  }
+}
+
+// ================= lightbox =================
+let lbIndex = -1;
+function openLightbox(i) {
+  if (i == null || i < 0 || i >= VIEW_LIST.length) return;
+  lbIndex = i; paintLightbox();
+  document.getElementById('lb').classList.add('open');
+  document.getElementById('lb').setAttribute('aria-hidden', 'false');
+}
+function closeLightbox() {
+  document.getElementById('lb').classList.remove('open');
+  document.getElementById('lb').setAttribute('aria-hidden', 'true');
+  lbIndex = -1;
+}
+function lbStep(d) {
+  if (lbIndex < 0 || !VIEW_LIST.length) return;
+  lbIndex = (lbIndex + d + VIEW_LIST.length) % VIEW_LIST.length;
+  paintLightbox();
+}
+function paintLightbox() {
+  const p = VIEW_LIST[lbIndex]; if (!p) return;
+  const img = document.getElementById('lb-img');
+  img.src = `../assets/portraits/${p.f}`; img.alt = p.f;
+  if (img.complete && img.naturalWidth) updateCrop(); // cached image fires no load event
+  document.getElementById('lb-cap').innerHTML =
+    `<span>${p.f}</span><span class="muted">·</span>${tagsHtml(p)}<span class="muted">${lbIndex + 1}/${VIEW_LIST.length}</span>`;
+}
+
+// Draw the dashed rectangle = exactly what the in-game 3:4 frame + Face-zoom would crop, in the
+// image's own coordinates (so % left/top/width/height over the full image maps 1:1).
+const FRAME_AR = 3 / 4, ORIGIN_X = 0.5, ORIGIN_Y = 0.32; // must match the .frame img transform-origin
+function updateCrop() {
+  const img = document.getElementById('lb-img'), crop = document.getElementById('lb-crop');
+  if (!img.naturalWidth) return;
+  const ai = img.naturalWidth / img.naturalHeight;
+  const zoom = parseFloat(document.getElementById('zoom').value) || 1;
+  // step 1: object-fit:cover — the centered slice of the image the 3:4 frame shows at zoom 1
+  let u0 = 0, v0 = 0, du = 1, dv = 1;
+  if (ai > FRAME_AR) { du = FRAME_AR / ai; u0 = (1 - du) / 2; }      // image too wide → crop sides
+  else if (ai < FRAME_AR) { dv = ai / FRAME_AR; v0 = (1 - dv) / 2; } // image too tall → crop top/bottom
+  // step 2: scale(zoom) about the face anchor, inside that cover slice
+  const U0 = u0 + (ORIGIN_X - ORIGIN_X / zoom) * du;
+  const U1 = u0 + (ORIGIN_X + (1 - ORIGIN_X) / zoom) * du;
+  const V0 = v0 + (ORIGIN_Y - ORIGIN_Y / zoom) * dv;
+  const V1 = v0 + (ORIGIN_Y + (1 - ORIGIN_Y) / zoom) * dv;
+  crop.style.left = (U0 * 100) + '%'; crop.style.top = (V0 * 100) + '%';
+  crop.style.width = ((U1 - U0) * 100) + '%'; crop.style.height = ((V1 - V0) * 100) + '%';
+  document.getElementById('lb-crop-label').textContent = `in-game crop · ${zoom.toFixed(2)}×`;
+}
+
+// ================= init =================
 renderGen(); // generator works without the bundle; cells wire up once coverage renders
 
 (async () => {
@@ -283,45 +512,53 @@ renderGen(); // generator works without the bundle; cells wire up once coverage 
   let bundle;
   try { bundle = await (await fetch('../content/bundle.json', { cache: 'no-store' })).json(); }
   catch (e) { out.innerHTML = `<div class="err">Couldn't load <code>../content/bundle.json</code>. Open this page through the dev server (<code>http://localhost:8000/design/portraits.html</code>), not via file://.</div>`; return; }
-  const files = (bundle.portraits || []).slice().sort();
-  const items = files.map(parseName);
-  document.getElementById('count').textContent = `${items.length} portraits`;
 
-  out.innerHTML = '';
-  out.appendChild(coverage(items));
-  syncCells(); // highlight the generator's current school+gender slot
+  ALL_ITEMS = (bundle.portraits || []).filter(f => /\.(webp|png)$/i.test(f)).map(parseName);
+  sel.num = nextNum(sel.school, sel.gender);
 
-  // placeholder preview
-  const ph = document.createElement('div');
-  ph.innerHTML = `<div class="group-h">Placeholder <span class="warn">shown for any member with no matching portrait</span></div>`;
-  const phGrid = document.createElement('div'); phGrid.className = 'grid';
-  const phCard = document.createElement('div'); phCard.className = 'card';
-  phCard.innerHTML = `<div class="frame" style="background:radial-gradient(120% 90% at 50% 28%, #2a2018, #0c0a08)"><img src="${PLACEHOLDER}" alt="placeholder"></div><div class="meta"><div class="fname">portrait_placeholder.svg</div></div>`;
-  phGrid.appendChild(phCard); ph.appendChild(phGrid); out.appendChild(ph);
+  // school filter options
+  const fSchool = document.getElementById('f-school');
+  for (const s of schoolOrder([...new Set(ALL_ITEMS.map(p => p.school))]))
+    fSchool.insertAdjacentHTML('beforeend', `<option value="${s}">${s}${HIDDEN.has(s) ? ' (hidden)' : ''}</option>`);
 
-  // group by school (unknown schools last)
-  const bySchool = {};
-  for (const p of items) (bySchool[p.school] ||= []).push(p);
-  const order = [...SCHOOLS.filter(s => bySchool[s]), ...Object.keys(bySchool).filter(s => !SCHOOLS.includes(s))];
-  for (const s of order) {
-    const h = document.createElement('div');
-    const bad = !SCHOOLS.includes(s);
-    const hid = HIDDEN.has(s);
-    h.className = 'group-h';
-    h.innerHTML = `<span class="school-hex" style="background:${HEX[s] || '#777'}"></span>${s}`
-      + (hid ? ` <span class="warn">— hidden 8th cult; a real portrait slot, kept out of the seven-school player UI</span>` : '')
-      + (bad ? ` <span class="warn">— not one of the schools; these never match a member</span>` : '');
-    out.appendChild(h);
-    const grid = document.createElement('div'); grid.className = 'grid';
-    for (const p of bySchool[s].sort((a,b) => (a.gender+a.num+a.variant).localeCompare(b.gender+b.num+b.variant))) grid.appendChild(card(p));
-    out.appendChild(grid);
-  }
+  document.getElementById('cov').appendChild(coverage(ALL_ITEMS));
+  syncCells();
+  renderGen();
+  renderGallery();
 })();
 
-document.getElementById('fit').addEventListener('click', (e) => {
-  const b = e.target.closest('button'); if (!b) return;
-  document.body.dataset.fit = b.dataset.fit;
-  for (const x of e.currentTarget.children) x.classList.toggle('on', x === b);
+// ================= control wiring =================
+function segWire(id, apply) {
+  document.getElementById(id).addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    for (const x of e.currentTarget.children) x.classList.toggle('on', x === b);
+    apply(b.dataset.v ?? b.dataset.fit);
+  });
+}
+segWire('f-gender', v => { filters.gender = v; renderGallery(); });
+segWire('f-age',    v => { filters.age = v; renderGallery(); });
+segWire('f-view',   v => { filters.view = v; renderGallery(); });
+segWire('fit',      v => { document.body.dataset.fit = v; });
+document.getElementById('f-school').addEventListener('change', e => { filters.school = e.target.value; renderGallery(); });
+document.getElementById('f-q').addEventListener('input', e => { filters.q = e.target.value; renderGallery(); });
+document.getElementById('collapse-all').addEventListener('click', () => { SCHOOLS.forEach(s => collapsed.add(s)); [...new Set(ALL_ITEMS.map(p=>p.school))].forEach(s => collapsed.add(s)); renderGallery(); });
+document.getElementById('expand-all').addEventListener('click', () => { collapsed.clear(); renderGallery(); });
+document.getElementById('zoom').addEventListener('input', e => {
+  document.documentElement.style.setProperty('--zoom', e.target.value); // gallery cards zoom
+  document.getElementById('zoom-v').textContent = parseFloat(e.target.value).toFixed(2) + '×';
+  if (document.getElementById('lb').classList.contains('open')) updateCrop(); // lightbox stays full, box redraws
+});
+
+document.getElementById('lb-img').addEventListener('load', updateCrop);
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-prev').addEventListener('click', () => lbStep(-1));
+document.getElementById('lb-next').addEventListener('click', () => lbStep(1));
+document.getElementById('lb').addEventListener('click', e => { if (e.target.id === 'lb') closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lb').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  else if (e.key === 'ArrowLeft') lbStep(-1);
+  else if (e.key === 'ArrowRight') lbStep(1);
 });
 </script>
 </body>

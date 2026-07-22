@@ -285,6 +285,25 @@ const warScreenHTML = (ctx) => actionScreenHTML(ctx, 'war', 'Magic vs Steel',
 
 // The Tula-style end-of-year recap: how the year moved the coven, who stands,
 // and the year's deeds — a pause and a page-turn before the next year.
+// One-time opening shown when a new coven begins (phase === 'intro'). Sets the
+// premise but hides the deeper lore — the Flame's true function, the other Embers,
+// who appointed you — for the player to discover through play + the Codex.
+function introHTML() {
+  const paras = [
+    'Once, the Sacred Flame burned in the Secret Tower, and the world was whole. Then its keepers vanished, the Tower went dark &mdash; and the world began, slowly, to forget.',
+    'You are the appointed Archon of Runehold &mdash; though who named you, and why, is itself half-forgotten. As the Tower&rsquo;s enemies gathered, the coven that kept it broke the Flame into <b>Embers</b> and scattered them beyond reach. One was carried here, to your hearth-rune: the coven&rsquo;s heart, and its last thread to the old power. Let it die, and Runehold dies with it.',
+    'Beyond your walls, the seven <b>Colour Cults</b> circle &mdash; each hoarding what magic remains, and no two of them allies for long. Win one to your side and you make an enemy of another.',
+    'Your Wizards will counsel you, and quarrel. Lead them through famine, feud, and the long dark &mdash; and, if the old stories are true, seek the other Embers before the dark finds them first.',
+  ].map((p) => `<p>${p}</p>`).join('');
+  return `<section class="screen intro-screen">
+    <img class="rune intro-mark" src="assets/icons/icon_flame.png" alt="" aria-hidden="true">
+    <h2 class="intro-title">Keeper of the Sacred Flame</h2>
+    <div class="intro-body">${paras}</div>
+    <p class="intro-tag">Keep the flame, or be forgotten.</p>
+    <button class="choice intro-begin" data-action="begin-saga">Begin the saga &rarr;</button>
+  </section>`;
+}
+
 function recapHTML(ctx) {
   const { state } = ctx;
   const r = ctx.yearRecap || { year: state.year, deltas: {}, beats: [] };
@@ -310,6 +329,7 @@ function recapHTML(ctx) {
 }
 
 function stageHTML(ctx) {
+  if (ctx.phase === 'intro') return introHTML(ctx);   // one-time opening on a new coven
   if (ctx.phase === 'recap') return recapHTML(ctx);   // year's end takes the stage
   const v = ctx.gameView;
   if (v === 'saga') return sagaScreenHTML(ctx.state);

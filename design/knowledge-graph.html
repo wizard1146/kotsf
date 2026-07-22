@@ -89,6 +89,8 @@ const NODES = [
   ['runehold','Runehold',T.ours,'OURS: the coven seat you lead. A guttering hearth-rune, a half-remembered claim to old power.'],
   ['archon','The Archon',T.ours,'OURS: the player role — aspiring Keeper. Leads through the Circle; decides, the world reacts.'],
   ['keeper','Keeper of the Flame',T.ours,'OURS: the victory horizon — re-light the Tower, end the Shadowing, become Keeper. Or dwindle into a Forgotten hold.'],
+  ['embers','The Embers',T.ours,'OURS: when the Keepers vanished & enemies gathered, the Tower coven broke the Sacred Flame into shards and scattered them to hidden hearths. Runehold keeps ONE; the rest are lost/kept/corrupted — the mid/late-game hunt. Reunite them to re-light the Tower. See EMBERS_AND_MEMORY.md.'],
+  ['flame_memory','Flame = memory of magic',T.ours,'OURS: the Flame\'s true, once-unknown function — it permissively grants the world its MEMORY of magic. Split & dimmed, that memory leaks out → the Forgetting. Discovered through play, not known at the start.'],
   // — mechanics —
   ['circle','The Circle',T.mech,'BUILT: a ring of Wizards rolled fresh each campaign (seeded) — each with a school, one of 9 classes, a rank, 4 competence stats + 3 temperament axes. Recruitment/progression: next.'],
   ['casting','Casting by shape',T.mech,'BUILT: scenes cast a ROLE (most-wisdom, boldest, a Necromancer…) not a name; the engine fills it from your rolled Circle and substitutes {name}+pronouns. No match → the line is silent.'],
@@ -103,6 +105,7 @@ const NODES = [
   ['spirit_world','Spirit world',T.content,'Braindump seed — draw from wizzypedia, pending review.'],
   ['monsters','Mythic monsters',T.content,'Braindump seed — Beasts, Nightmare Imps, Beast Spawn (canon).'],
   ['cult_hqs','Cult headquarters',T.content,'Give each of the seven cults its canon seat (see the schools).'],
+  ['tomes','Tomes & Stories',T.content,'OURS: recovered lore fragments — great Wizards reaching for epic workings and failing spectacularly as the memory drained. Reveal the Flame\'s function piecemeal; fill the Codex; some unlock Ember-quests. Chased hardest by Blue / the Athenaeum.'],
 ];
 
 const EDGES = [
@@ -115,6 +118,14 @@ const EDGES = [
   ['sacred_flame','infinity_veil','housed in'],
   ['shadowing','the_forgetting','symptom'],
   ['shadowing','quantum_shadow','let in'],
+  ['sacred_flame','embers','broken into'],
+  ['embers','runehold','one kept at'],
+  ['sacred_flame','flame_memory','truly is'],
+  ['flame_memory','the_forgetting','its loss →'],
+  ['tomes','flame_memory','reveal'],
+  ['archon','embers','seeks the others'],
+  ['embers','keeper','reunite to re-light'],
+  ['tomes','blue_school','chased by'],
   ['quantum_shadow','shadow_hats','home of'],
   ['the_forgetting','lore_p','drives'],
   ['sacred_flame','regard_p','meters'],
