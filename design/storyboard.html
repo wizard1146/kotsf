@@ -55,6 +55,11 @@
   .choice .test{font-family:var(--mono);font-size:.68rem;color:#c8b89a;font-style:italic}
   .br{margin:.2rem 0 .1rem;padding-left:.6rem;border-left:2px solid #2a231d}
   .br .brn{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim)}
+  .br .txt{font-size:.8rem;color:var(--ink);line-height:1.42}
+  /* the chronicle synopsis written to the Saga for this outcome (differs per win/lose) */
+  .saga{font-family:var(--sans);font-size:.78rem;font-style:italic;color:#e8c98a;line-height:1.45;margin:.28rem 0 .1rem;padding:.3rem .5rem;background:#0e0b09;border:1px solid var(--flame-deep);border-radius:6px}
+  .saga .sglabel{font-family:var(--mono);font-style:normal;font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;color:var(--flame-deep);margin-right:.35rem}
+  .saga.missing{color:var(--danger);border-color:#5b2a23;font-style:normal}
   .chips{display:flex;gap:.3rem;flex-wrap:wrap;margin:.2rem 0}
   .chip{font-family:var(--mono);font-size:.68rem;border-radius:5px;padding:.06rem .35rem;border:1px solid var(--line)}
   .chip.up{color:var(--ok);border-color:#2e5a34}.chip.dn{color:var(--danger);border-color:#5b2a23}
@@ -131,7 +136,12 @@ function card(s){
     opens?`<span class="tag opens">opens chain</span>`:''].filter(Boolean).join('');
   const adv=(s.advisors||[]).map(a=>`<div class="adv" style="--adv:${flameOrCult(a)}"><b>${esc(a.member)}</b>${a.if?` <span class="req">[${cond(a.if)}]</span>`:''} — ${esc(a.text)}</div>`).join('');
   const choices=(s.choices||[]).map(ch=>{
-    const branches=['win','lose'].filter(b=>ch[b]).map(b=>`<div class="br"><span class="brn">${b}${ch.test?'':' →'}</span> ${esc(ch[b].text||'')}<div class="chips">${effChips(ch[b].effects)}</div></div>`).join('');
+    const branches=['win','lose'].filter(b=>ch[b]).map(b=>{
+      const saga=ch[b].saga
+        ? `<div class="saga"><span class="sglabel">Saga</span>${esc(ch[b].saga)}</div>`
+        : `<div class="saga missing"><span class="sglabel">Saga</span>none — falls back to “${esc(s.title||s.id)}: ${esc((ch[b].text||'').slice(0,50))}…”</div>`;
+      return `<div class="br"><span class="brn">${b}${ch.test?'':' →'}</span> <span class="txt">${esc(ch[b].text||'')}</span>${saga}<div class="chips">${effChips(ch[b].effects)}</div></div>`;
+    }).join('');
     return `<div class="choice"><div class="lbl">${esc(ch.label)}</div>
       ${ch.requires?`<span class="req">needs ${cond(ch.requires)}</span> `:''}${ch.test?`<span class="test">contest: ${PL[ch.test.stat]||ch.test.stat} vs ${ch.test.vs}</span>`:''}
       ${branches}</div>`;
@@ -150,7 +160,10 @@ function coverage(){
   const cells=P.map(p=>{ let up=0,dn=0; for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) for(const e of (ch[b]?.effects)||[]) if(e.add&&e.add[0]===p){ e.add[1]>=0?up++:dn++; }
     return `<div class="cov"><b>${PL[p]}</b><span class="up">▲${up}</span> <span class="dn">▼${dn}</span></div>`; }).join('');
   const cults=Object.keys(CULTHEX).map(c=>{ let n=0; for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) for(const e of (ch[b]?.effects)||[]) if(e.adjust_cult&&e.adjust_cult[0]===c) n++; return `<span style="color:${CULTHEX[c]}">${c[0].toUpperCase()}·${n}</span>`; }).join(' ');
-  el.innerHTML=cells+`<div class="cov"><b>Cult touches</b><span class="stat">${cults}</span></div>`;
+  let sagaN=0,brN=0; for(const s of SCENES) for(const ch of s.choices||[]) for(const b of ['win','lose']) if(ch[b]){ brN++; if(ch[b].saga) sagaN++; }
+  const sagaCls=sagaN===brN?'up':'dn';
+  el.innerHTML=cells+`<div class="cov"><b>Cult touches</b><span class="stat">${cults}</span></div>`
+    +`<div class="cov"><b>Saga synopses</b><span class="${sagaCls}">${sagaN}/${brN}</span> branches</div>`;
 }
 
 function render(){
