@@ -77,6 +77,14 @@ granularity than the season loop.
 
 ---
 
+## The board it plays out on
+
+The arc has a **map**: [`design/MAP_SEEDING.md`](design/MAP_SEEDING.md) seeds KOTSF's
+overworld from the canonical Forgotten Runes world map (154 places in
+[`design/forgotten-runes-locations.json`](design/forgotten-runes-locations.json)) —
+the seven cult seats, the Secret Tower (this arc's destination), the Ember-hearths
+(the 8–14), and dungeon/Keeper sites are all real Runiverse locations.
+
 ## How it connects to what already exists
 
 - **Embers** → the Ember target (8–14) becomes a campaign counter (`state.embersGoal` /

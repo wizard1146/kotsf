@@ -1,0 +1,700 @@
+{
+  "_source": "Forgotten Runes — canonical world-map locations (wizzypedia Category:Locations, mirrors forgottenrunes.com/map). Pulled 2026-07-23. Reference data for seeding the KOTSF overworld map; see design/MAP_SEEDING.md.",
+  "count": 154,
+  "kinds": [
+    "city",
+    "cosmic",
+    "cult_seat",
+    "dead_hearth",
+    "dungeon",
+    "mountain",
+    "plain",
+    "stronghold",
+    "water",
+    "wild",
+    "wood"
+  ],
+  "cultSeats": {
+    "red": [
+      "The Corporation HQ",
+      "Red Navy Port",
+      "Red Wizard Capital"
+    ],
+    "yellow": [
+      "Chronomancer's Citadel",
+      "Chronomancer's Riviera",
+      "Yellow Wizard Haven"
+    ],
+    "brown": [
+      "Brown Hat Delta"
+    ],
+    "green": [
+      "The Emerald Forest",
+      "Green Wizard City"
+    ],
+    "blue": [
+      "Blue Wizard Bastion"
+    ],
+    "purple": [
+      "The Court of Chaos Magic",
+      "Purple Wizard Pavilion"
+    ],
+    "white": [
+      "White Wizard Tower"
+    ]
+  },
+  "cosmic": [
+    "The Cave of the Platonic Shadow",
+    "The Expanse",
+    "The Gate to the Seventh Realm",
+    "The Infinity Veil",
+    "The Quantum Downs",
+    "The Quantum Shadow",
+    "The Sacred Pillars",
+    "The Secret Tower",
+    "The Tower at the End of the World",
+    "World Shaper Spire"
+  ],
+  "locations": [
+    {
+      "name": "The Alchemist's Archipelago",
+      "kind": "water"
+    },
+    {
+      "name": "Aldo's Isle",
+      "kind": "water"
+    },
+    {
+      "name": "Alessar's Keep",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Ascension Key Caves",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Asmodeus's Surf",
+      "kind": "water"
+    },
+    {
+      "name": "Asphodel Meadows",
+      "kind": "plain"
+    },
+    {
+      "name": "The Atelier",
+      "kind": "wild"
+    },
+    {
+      "name": "Atlanta's Pool",
+      "kind": "water"
+    },
+    {
+      "name": "Avalon",
+      "kind": "wild"
+    },
+    {
+      "name": "Bamboo Forests",
+      "kind": "wild"
+    },
+    {
+      "name": "Banana Groves",
+      "kind": "wild"
+    },
+    {
+      "name": "Baobabs",
+      "kind": "wood"
+    },
+    {
+      "name": "BattleMage Mountains",
+      "kind": "mountain"
+    },
+    {
+      "name": "Bear Cave",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Black Mountains",
+      "kind": "mountain"
+    },
+    {
+      "name": "BlackSand: The City That Once Was",
+      "kind": "dead_hearth",
+      "note": "a dead Ember-hearth — the city that once was"
+    },
+    {
+      "name": "The Bloodfalls",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Blue Wizard Bastion",
+      "kind": "cult_seat",
+      "cult": "blue"
+    },
+    {
+      "name": "Brigand's Pass",
+      "kind": "mountain"
+    },
+    {
+      "name": "Brimstone Havens",
+      "kind": "wild"
+    },
+    {
+      "name": "The Brine",
+      "kind": "water"
+    },
+    {
+      "name": "Brown Hat Delta",
+      "kind": "cult_seat",
+      "cult": "brown"
+    },
+    {
+      "name": "Bubonic Beaches",
+      "kind": "water"
+    },
+    {
+      "name": "Buffkin Plains",
+      "kind": "plain"
+    },
+    {
+      "name": "Bugbear Boonies",
+      "kind": "wild"
+    },
+    {
+      "name": "The Cabinet of Curiosities",
+      "kind": "wild"
+    },
+    {
+      "name": "Cactus Patch",
+      "kind": "wild"
+    },
+    {
+      "name": "Calista's Citadel",
+      "kind": "dungeon"
+    },
+    {
+      "name": "The Carnival Pass",
+      "kind": "mountain"
+    },
+    {
+      "name": "The Cave of the Platonic Shadow",
+      "kind": "cosmic",
+      "note": "shadow/forgetting site"
+    },
+    {
+      "name": "Charybdis Sea",
+      "kind": "water"
+    },
+    {
+      "name": "Chroma Crystal Row",
+      "kind": "wild"
+    },
+    {
+      "name": "Chronomancer's Citadel",
+      "kind": "cult_seat",
+      "cult": "yellow"
+    },
+    {
+      "name": "Chronomancer's Riviera",
+      "kind": "cult_seat",
+      "cult": "yellow"
+    },
+    {
+      "name": "Cock's Comb Ridge",
+      "kind": "mountain"
+    },
+    {
+      "name": "The Corporation HQ",
+      "kind": "cult_seat",
+      "cult": "red"
+    },
+    {
+      "name": "The Court of Chaos Magic",
+      "kind": "cult_seat",
+      "cult": "purple"
+    },
+    {
+      "name": "Crystal Caves",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Cuckoo Land and the Psychic Leap",
+      "kind": "wild"
+    },
+    {
+      "name": "Cumberland",
+      "kind": "wild"
+    },
+    {
+      "name": "The Dark Sentinel",
+      "kind": "stronghold"
+    },
+    {
+      "name": "Donut Atoll",
+      "kind": "water"
+    },
+    {
+      "name": "Dread Tower",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Dream Master Lake",
+      "kind": "water"
+    },
+    {
+      "name": "Drok's Hollow",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Duck Alliance Headquarters",
+      "kind": "city"
+    },
+    {
+      "name": "Duckwood",
+      "kind": "wood"
+    },
+    {
+      "name": "Egg Island",
+      "kind": "water"
+    },
+    {
+      "name": "Elder Moors",
+      "kind": "plain"
+    },
+    {
+      "name": "Elysian Fields",
+      "kind": "plain"
+    },
+    {
+      "name": "Elysian Gates",
+      "kind": "wild"
+    },
+    {
+      "name": "The Emerald Forest",
+      "kind": "cult_seat",
+      "cult": "green"
+    },
+    {
+      "name": "Eternal Echo Cavern",
+      "kind": "dungeon"
+    },
+    {
+      "name": "The Expanse",
+      "kind": "cosmic",
+      "note": "the great beyond"
+    },
+    {
+      "name": "Fetid Fire Canyons",
+      "kind": "wild"
+    },
+    {
+      "name": "The Fey",
+      "kind": "wild"
+    },
+    {
+      "name": "The Fjords",
+      "kind": "water"
+    },
+    {
+      "name": "Forest of the Imps",
+      "kind": "wood"
+    },
+    {
+      "name": "Forgotten Puppet's Theater",
+      "kind": "wild"
+    },
+    {
+      "name": "Fort Turtle",
+      "kind": "stronghold"
+    },
+    {
+      "name": "Frog Master Marsh",
+      "kind": "wood"
+    },
+    {
+      "name": "Fur Gnome Wold",
+      "kind": "wood"
+    },
+    {
+      "name": "The Gate to the Seventh Realm",
+      "kind": "cosmic",
+      "note": "cosmic threshold"
+    },
+    {
+      "name": "Ghoulish Boglands",
+      "kind": "wild"
+    },
+    {
+      "name": "Goat Grasslands",
+      "kind": "plain"
+    },
+    {
+      "name": "Goblin Town",
+      "kind": "city"
+    },
+    {
+      "name": "Gorgon City",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Great Owl Obelisk",
+      "kind": "stronghold"
+    },
+    {
+      "name": "The Great Blue Water",
+      "kind": "water"
+    },
+    {
+      "name": "Green Wizard City",
+      "kind": "cult_seat",
+      "cult": "green"
+    },
+    {
+      "name": "Grimoire Grove",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Halcyon Sanctum",
+      "kind": "stronghold"
+    },
+    {
+      "name": "Hall of Cats",
+      "kind": "wild"
+    },
+    {
+      "name": "The Hall of the Mountain King",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Hedge Wizard Wood",
+      "kind": "wood"
+    },
+    {
+      "name": "The Highlands",
+      "kind": "mountain"
+    },
+    {
+      "name": "The Hole",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Honor Mountain",
+      "kind": "wild"
+    },
+    {
+      "name": "Hot Springs",
+      "kind": "wild"
+    },
+    {
+      "name": "Hue Master's Pass",
+      "kind": "mountain"
+    },
+    {
+      "name": "Hydromancer Reef",
+      "kind": "water"
+    },
+    {
+      "name": "Ice Fey",
+      "kind": "wild"
+    },
+    {
+      "name": "Ice Mage Bay",
+      "kind": "water"
+    },
+    {
+      "name": "The Ice Abyss",
+      "kind": "dungeon"
+    },
+    {
+      "name": "The Infinity Veil",
+      "kind": "cosmic",
+      "note": "canon: houses the Flame"
+    },
+    {
+      "name": "Kaiju Bay",
+      "kind": "water"
+    },
+    {
+      "name": "Kelpie's Bay",
+      "kind": "water"
+    },
+    {
+      "name": "Kobold's Crossroad",
+      "kind": "city"
+    },
+    {
+      "name": "Lake of Lanterns",
+      "kind": "water"
+    },
+    {
+      "name": "Lenora's Lighthouse",
+      "kind": "water"
+    },
+    {
+      "name": "Mandrake Vale",
+      "kind": "wild"
+    },
+    {
+      "name": "Manticore Valley",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Merlin's Tower",
+      "kind": "dungeon"
+    },
+    {
+      "name": "MimicWood",
+      "kind": "wild"
+    },
+    {
+      "name": "Mount Kirama",
+      "kind": "mountain"
+    },
+    {
+      "name": "Mount Titan",
+      "kind": "mountain"
+    },
+    {
+      "name": "Mount Umbra",
+      "kind": "mountain"
+    },
+    {
+      "name": "Muscle Mountain",
+      "kind": "wild"
+    },
+    {
+      "name": "Nasty Town",
+      "kind": "city"
+    },
+    {
+      "name": "The Nightmare Dominion",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Obsidian City",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Omega Oxbow",
+      "kind": "water"
+    },
+    {
+      "name": "Penguin Capital",
+      "kind": "city"
+    },
+    {
+      "name": "Peryton Wood",
+      "kind": "wood"
+    },
+    {
+      "name": "Peyote Button Dunes",
+      "kind": "plain"
+    },
+    {
+      "name": "Purple Wizard Pavilion",
+      "kind": "cult_seat",
+      "cult": "purple"
+    },
+    {
+      "name": "The Quantum Downs",
+      "kind": "cosmic",
+      "note": "the Shadow's marches"
+    },
+    {
+      "name": "The Quantum Shadow",
+      "kind": "cosmic",
+      "note": "primordial darkness — the Shadowing"
+    },
+    {
+      "name": "Rabbit Lake",
+      "kind": "water"
+    },
+    {
+      "name": "Racoon Mountains",
+      "kind": "mountain"
+    },
+    {
+      "name": "Raptor Caye",
+      "kind": "water"
+    },
+    {
+      "name": "Red Navy Port",
+      "kind": "cult_seat",
+      "cult": "red"
+    },
+    {
+      "name": "Red Wizard Capital",
+      "kind": "cult_seat",
+      "cult": "red"
+    },
+    {
+      "name": "Redhorn Wood",
+      "kind": "wood"
+    },
+    {
+      "name": "Reilly River",
+      "kind": "water"
+    },
+    {
+      "name": "The Sacred Pillars",
+      "kind": "cosmic",
+      "note": "Flame-adjacent sacred site"
+    },
+    {
+      "name": "The Salt",
+      "kind": "plain"
+    },
+    {
+      "name": "Salt Flats",
+      "kind": "plain"
+    },
+    {
+      "name": "The Sand",
+      "kind": "plain"
+    },
+    {
+      "name": "The Secret Tower",
+      "kind": "cosmic",
+      "note": "seat of the Sacred Flame — the endgame destination (Ember reunification)"
+    },
+    {
+      "name": "Shapeshifter Wood",
+      "kind": "wood"
+    },
+    {
+      "name": "Shroom Shack",
+      "kind": "wild"
+    },
+    {
+      "name": "Skeleton Mines",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Skylord Rookery",
+      "kind": "wild"
+    },
+    {
+      "name": "The Slime Pits",
+      "kind": "wild"
+    },
+    {
+      "name": "Solomon's Tomb",
+      "kind": "dungeon"
+    },
+    {
+      "name": "The Spike",
+      "kind": "mountain"
+    },
+    {
+      "name": "Spirit Villa",
+      "kind": "city"
+    },
+    {
+      "name": "Starbridge",
+      "kind": "wild"
+    },
+    {
+      "name": "Starfall Stronghold",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Summoner's Cove",
+      "kind": "wild"
+    },
+    {
+      "name": "The Thorn",
+      "kind": "wild"
+    },
+    {
+      "name": "The Toadstools",
+      "kind": "wood"
+    },
+    {
+      "name": "Torment Manor",
+      "kind": "dungeon"
+    },
+    {
+      "name": "The Tower at the End of the World",
+      "kind": "cosmic",
+      "note": "cosmic terminus"
+    },
+    {
+      "name": "Troll Mountains",
+      "kind": "mountain"
+    },
+    {
+      "name": "Two Crows' Bazaar",
+      "kind": "city"
+    },
+    {
+      "name": "The Unicorn Gardens",
+      "kind": "wild"
+    },
+    {
+      "name": "Valley of the Gnostics",
+      "kind": "wild"
+    },
+    {
+      "name": "Valley of the Void Disciple",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Vampyre Castle",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Vampyre Mist",
+      "kind": "wild"
+    },
+    {
+      "name": "The Veld",
+      "kind": "plain"
+    },
+    {
+      "name": "The Waste",
+      "kind": "plain"
+    },
+    {
+      "name": "The Watermill",
+      "kind": "wild"
+    },
+    {
+      "name": "The Weird House",
+      "kind": "wild"
+    },
+    {
+      "name": "White Wizard Tower",
+      "kind": "cult_seat",
+      "cult": "white"
+    },
+    {
+      "name": "The Wild",
+      "kind": "wild"
+    },
+    {
+      "name": "Windfields",
+      "kind": "plain"
+    },
+    {
+      "name": "The Witch's Finger",
+      "kind": "dungeon"
+    },
+    {
+      "name": "Wolf Dungeon",
+      "kind": "dungeon"
+    },
+    {
+      "name": "World Shaper Spire",
+      "kind": "cosmic",
+      "note": "world-magic site"
+    },
+    {
+      "name": "Yellow Wizard Haven",
+      "kind": "cult_seat",
+      "cult": "yellow"
+    },
+    {
+      "name": "Zaros Oasis",
+      "kind": "plain"
+    }
+  ]
+}

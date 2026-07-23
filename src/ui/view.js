@@ -551,6 +551,7 @@ function advisorSheetHTML(ctx, m) {
       <aside class="sheet-portrait-col">
         <div class="sheet-portrait">${portraitFill(m, ctx.portraits)}</div>
         <h2 class="sheet-name">${esc(m.name)}${isLeader ? ' <span class="pcard-star" title="Ring leader">&#9733;</span>' : ''}</h2>
+        ${m.fullName ? `<div class="sheet-fullname">${esc(m.fullName)}</div>` : ''}
         <div class="sheet-tags"><span class="wk-school" style="--cult:${CULT_HEX[m.school] || '#777'}">${cap(m.school)}</span> <span class="sheet-class">${esc(cls)}</span></div>
         <div class="sheet-rank">${esc(rank)}${m.age != null ? ` &middot; ${m.age} years` : ''}</div>
       </aside>

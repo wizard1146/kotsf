@@ -79,6 +79,7 @@
         <div class="row"><span>Land texture / mottle</span><input type="checkbox" data-s="texture"></div>
         <div class="row"><span>Terrain tint (green/brown)</span><input type="checkbox" data-s="terrainTint"></div>
         <div class="row"><span>Shaded mountains</span><input type="checkbox" data-s="shadedMtn"></div>
+        <div class="row"><span>Edge vignette</span><input type="checkbox" data-s="vignette"></div>
       </div>
 
       <div class="card">
@@ -121,7 +122,7 @@ const DEFAULTS = {
   sea:'#cdba8c', land:'#e6d4a6', ink:'#5c4a2e', mtnFill:'#8a7350', forestFill:'#6d7b3a', river:'#5b83a0', roadColor:'#7a6039', ashColor:'#2a2012',
   coastW:0.2, waveOpacity:0.55, tintOpacity:0.24, glyphDensity:1, chaikin:0,
   roads:true, compass:true, frame:true, serif:true,
-  rough:true, roughAmt:1.2, texture:true, terrainTint:true, shadedMtn:true,
+  rough:true, roughAmt:1.2, texture:true, terrainTint:true, shadedMtn:true, vignette:true,
 };
 let STYLE = { ...DEFAULTS };
 
@@ -269,10 +270,10 @@ function fractalizeLoop(pts, rng, levels, amp, decay){ // midpoint displacement,
     p=np; }
   return p;
 }
-// Soften a raw (angular) loop into a natural coast: fractal midpoint displacement for irregular
-// detail, then two Chaikin passes to round the sharp reversals so it flows like a real shoreline
-// instead of reading as electric zigzag.
-const softenCoast = (loop, rng, scale=1) => chaikin(fractalizeLoop(resampleLoop(loop, 3.5), rng, 3, 2.0*scale, 0.52), 2);
+// Soften a raw (angular) loop into a natural coast:
+//   resample → Chaikin FIRST (rounds the sharp Voronoi cell corners) → gentle fractal detail
+//   → Chaikin again. Pre-rounding is what removes the intermittent jutty spikes/notches.
+const softenCoast = (loop, rng, scale=1) => chaikin(fractalizeLoop(chaikin(resampleLoop(loop, 3), 1), rng, 2, 1.4*scale, 0.5), 2);
 // open-polyline variants (keep endpoints fixed) — for province borders, softened lightly
 function fractalizeOpen(pts, rng, levels, amp, decay){ let p=pts; for(let lvl=0;lvl<levels;lvl++){ const np=[], a2=amp*Math.pow(decay,lvl); for(let i=0;i<p.length-1;i++){ const a=p[i],b=p[i+1]; np.push(a); const nx=-(b.y-a.y),ny=(b.x-a.x),L=Math.hypot(nx,ny)||1,d=(rng()*2-1)*a2; np.push({x:(a.x+b.x)/2+nx/L*d,y:(a.y+b.y)/2+ny/L*d}); } np.push(p[p.length-1]); p=np; } return p; }
 function chaikinOpen(pts, iters){ let p=pts; for(let k=0;k<iters;k++){ if(p.length<3) break; const q=[p[0]]; for(let i=0;i<p.length-1;i++){ const a=p[i],b=p[i+1]; q.push({x:a.x*0.75+b.x*0.25,y:a.y*0.75+b.y*0.25},{x:a.x*0.25+b.x*0.75,y:a.y*0.25+b.y*0.75}); } q.push(p[p.length-1]); p=q; } return p; }
@@ -346,6 +347,9 @@ function generateWorld(method, seed, sea=0) {
   const ashCorner = rng()<0.5 ? {x:6,y:4} : {x:W-6,y:4};
   const fseed = hashSeed(seed) % 1000;                       // deterministic seed for SVG turbulence filters
   const mottle=[]; for(let i=0;i<10;i++) mottle.push({ x:8+rng()*(W-16), y:6+rng()*(H-12), r:9+rng()*15, d:(rng()<0.5?-1:1) }); // tonal paint blobs
+  // scattered low hills (relief between lowland and mountains), clear of markers/mountains/forest
+  const hills=[]; for(let i=0;i<44 && hills.length<15;i++){ const p=place(rng()*360, 0.3+rng()*0.5);
+    if(isLand(p.x,p.y) && clearOf(p.x,p.y) && mountains.every(m=>Math.hypot(p.x-m.x,p.y-m.y)>5) && forests.every(t=>Math.hypot(p.x-t.x,p.y-t.y)>4)) hills.push({ x:p.x, y:p.y, s:1.0+rng()*0.8 }); }
 
   // coast kept as point-loops so a live Chaikin knob can smooth them at render time
   // Voronoi: assign each land cell to its nearest continental cult → provinces, then classify
@@ -362,12 +366,59 @@ function generateWorld(method, seed, sea=0) {
     const provinces=contSeats.map(s=>({ key:s.key, cells:g.voronoi.landCells.filter(c=>c.owner===s.key).map(c=>polyToPath(c.poly)) }));
     voronoi={ provBorders, provinces };
   }
-  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: islandLoop, seats, home, tower, mountains, forests, river, roads, ashCorner, fseed, mottle, voronoi };
+  return { method, landLoops: g.polys, landCurve: g.curve, islandPts: islandLoop, seats, home, tower, mountains, forests, hills, river, roads, ashCorner, fseed, mottle, voronoi };
 }
 
 // ---------------- glyphs + renderer (parchment) ----------------
-function mountainsSVG(list, fill, stroke){ return list.map(m=>`<path d="M ${f(m.x-m.s)} ${f(m.y)} L ${f(m.x)} ${f(m.y-m.s*1.7)} L ${f(m.x+m.s)} ${f(m.y)} Z" fill="${fill}" stroke="${stroke}" stroke-width=".25" stroke-linejoin="round"/><path d="M ${f(m.x-m.s*0.35)} ${f(m.y-m.s*0.85)} L ${f(m.x)} ${f(m.y-m.s*1.7)} L ${f(m.x+m.s*0.35)} ${f(m.y-m.s*0.85)}" fill="none" stroke="${stroke}" stroke-width=".2"/>`).join(''); }
-function forestsSVG(list, fill, stroke){ return list.map(t=>`<path d="M ${f(t.x)} ${f(t.y-2)} L ${f(t.x-1)} ${f(t.y)} L ${f(t.x+1)} ${f(t.y)} Z" fill="${fill}" stroke="${stroke}" stroke-width=".15"/><line x1="${f(t.x)}" y1="${f(t.y)}" x2="${f(t.x)}" y2="${f(t.y+0.7)}" stroke="${stroke}" stroke-width=".25"/>`).join(''); }
+function mountainsSVG(list, S){
+  const stroke=S.ink;
+  if(!S.shadedMtn) return list.map(m=>`<path d="M ${f(m.x-m.s)} ${f(m.y)} L ${f(m.x)} ${f(m.y-m.s*1.7)} L ${f(m.x+m.s)} ${f(m.y)} Z" fill="${S.mtnFill}" stroke="${stroke}" stroke-width=".25" stroke-linejoin="round"/><path d="M ${f(m.x-m.s*0.35)} ${f(m.y-m.s*0.85)} L ${f(m.x)} ${f(m.y-m.s*1.7)} L ${f(m.x+m.s*0.35)} ${f(m.y-m.s*0.85)}" fill="none" stroke="${stroke}" stroke-width=".2"/>`).join('');
+  return list.map(m=>{ const L=m.x-m.s, R=m.x+m.s, b=m.y, ax=m.x, ay=m.y-m.s*1.7;
+    return `<path d="M ${f(L)} ${f(b)} L ${f(ax)} ${f(ay)} L ${f(R)} ${f(b)} Z" fill="url(#mtnGrad)" stroke="${stroke}" stroke-width=".2" stroke-linejoin="round"/>`
+      + `<path d="M ${f(ax)} ${f(ay)} L ${f(R)} ${f(b)} L ${f(ax)} ${f(b)} Z" fill="#000" opacity=".16"/>`
+      + `<path d="M ${f(ax-m.s*0.34)} ${f(ay+m.s*0.55)} L ${f(ax)} ${f(ay)} L ${f(ax+m.s*0.34)} ${f(ay+m.s*0.55)} L ${f(ax)} ${f(ay+m.s*0.3)} Z" fill="#efe9dc" opacity=".85"/>`;
+  }).join('');
+}
+// lighten (amt>0 → toward white) / darken (amt<0 → toward black) a #rrggbb
+function shade(hex, amt){ const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255; const to=amt<0?0:255, t=Math.abs(amt); r=Math.round(r+(to-r)*t); g=Math.round(g+(to-g)*t); b=Math.round(b+(to-b)*t); return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1); }
+// tonal paint blobs (within-region variation) + terrain-type washes (green lowlands / brown highlands)
+function mottleSVG(w){ return w.mottle.map(m=>`<circle cx="${f(m.x)}" cy="${f(m.y)}" r="${f(m.r)}" fill="${m.d<0?'#000':'#fff'}" opacity=".055" style="mix-blend-mode:${m.d<0?'multiply':'soft-light'}"/>`).join(''); }
+function terrainTintSVG(w){ return `<g style="mix-blend-mode:multiply">`
+  + w.forests.map(t=>`<circle cx="${f(t.x)}" cy="${f(t.y)}" r="7" fill="url(#gGreen)"/>`).join('')
+  + w.mountains.map(m=>`<circle cx="${f(m.x)}" cy="${f(m.y)}" r="8.5" fill="url(#gBrown)"/>`).join('') + `</g>`; }
+// extra <defs> for the painterly layers: turbulence filters, terrain-wash gradients, mountain gradient
+function painterDefs(w, S){ let d='';
+  if(S.rough) d+=`<filter id="rough" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="1" seed="${w.fseed}" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="${S.roughAmt}" xChannelSelector="R" yChannelSelector="G"/></filter>`;
+  if(S.texture) d+=`<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="${(w.fseed+7)%1000}" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>`;
+  if(S.terrainTint) d+=`<radialGradient id="gGreen"><stop offset="0" stop-color="#5f7a3a" stop-opacity=".5"/><stop offset="1" stop-color="#5f7a3a" stop-opacity="0"/></radialGradient><radialGradient id="gBrown"><stop offset="0" stop-color="#7a6142" stop-opacity=".42"/><stop offset="1" stop-color="#7a6142" stop-opacity="0"/></radialGradient>`;
+  if(S.shadedMtn) d+=`<linearGradient id="mtnGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(S.mtnFill,0.28)}"/><stop offset="1" stop-color="${shade(S.mtnFill,-0.3)}"/></linearGradient>`;
+  if(S.vignette) d+=`<radialGradient id="vign" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".72" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#1a120a" stop-opacity=".3"/></radialGradient>`;
+  return d;
+}
+// rounded canopy tufts (KODP-style): clusters of small ellipses that merge into a forest mass
+function forestsSVG(list, S){ const g=S.forestFill, dk=shade(g,-0.28);
+  return list.map(t=>`<g><ellipse cx="${f(t.x)}" cy="${f(t.y-0.4)}" rx="1.7" ry="1.35" fill="${g}" stroke="${dk}" stroke-width=".12"/><ellipse cx="${f(t.x-1.1)}" cy="${f(t.y+0.25)}" rx="1.15" ry="0.95" fill="${g}" stroke="${dk}" stroke-width=".1"/><ellipse cx="${f(t.x+1.1)}" cy="${f(t.y+0.15)}" rx="1.2" ry="1.0" fill="${g}" stroke="${dk}" stroke-width=".1"/><ellipse cx="${f(t.x-0.4)}" cy="${f(t.y-1)}" rx=".8" ry=".7" fill="${shade(g,0.12)}" stroke="none"/></g>`).join(''); }
+// low shaded hills — small domes with a soft shadow side
+function hillsSVG(list, S){ return list.map(h=>`<path d="M ${f(h.x-h.s*1.7)} ${f(h.y)} Q ${f(h.x)} ${f(h.y-h.s*1.8)} ${f(h.x+h.s*1.7)} ${f(h.y)} Z" fill="${shade(S.land,-0.12)}" stroke="${S.ink}" stroke-width=".12" opacity=".8"/><path d="M ${f(h.x)} ${f(h.y-h.s*1.0)} Q ${f(h.x+h.s*1.0)} ${f(h.y-h.s*0.5)} ${f(h.x+h.s*1.7)} ${f(h.y)} L ${f(h.x)} ${f(h.y)} Z" fill="#000" opacity=".07"/>`).join(''); }
+// braided-rope border: two interweaving sine strands between two rules, corner bosses hide the joins
+function borderSVG(S){
+  const A=1.25, WL=6, cen=3.4, m=3.4;      // amplitude, wavelength, strand centre-from-edge, corner margin
+  const strand=(x0,y0,x1,y1,horiz)=>{
+    const len = horiz ? (x1-x0) : (y1-y0), n = Math.max(6, Math.round(len/(WL/8)));
+    let p1='', p2='';
+    for(let i=0;i<=n;i++){ const d=i/n*len, s=Math.sin(d/WL*6.28318)*A;
+      const bx=horiz?x0+d:x0, by=horiz?y0:y0+d, ox=horiz?0:s, oy=horiz?s:0;
+      p1 += (i?'L':'M')+f(bx+ox)+' '+f(by+oy)+' ';
+      p2 += (i?'L':'M')+f(bx-ox)+' '+f(by-oy)+' '; }
+    return `<path d="${p1}" fill="none" stroke="${S.ink}" stroke-width=".34" opacity=".78" stroke-linecap="round"/><path d="${p2}" fill="none" stroke="${S.ink}" stroke-width=".34" opacity=".78" stroke-linecap="round"/>`;
+  };
+  const boss=(x,y)=>`<circle cx="${f(x)}" cy="${f(y)}" r="1.3" fill="${S.ink}"/><circle cx="${f(x)}" cy="${f(y)}" r=".5" fill="${S.land}"/>`;
+  return `<rect x="1.4" y="1.4" width="${W-2.8}" height="${H-2.8}" fill="none" stroke="${S.ink}" stroke-width=".55"/>`
+    + `<rect x="5.4" y="5.4" width="${W-10.8}" height="${H-10.8}" fill="none" stroke="${S.ink}" stroke-width=".3"/>`
+    + strand(m, cen, W-m, cen, true) + strand(m, H-cen, W-m, H-cen, true)
+    + strand(cen, m, cen, H-m, false) + strand(W-cen, m, W-cen, H-m, false)
+    + boss(cen,cen)+boss(W-cen,cen)+boss(cen,H-cen)+boss(W-cen,H-cen);
+}
 function tintDefs(seats, op){ return seats.map((s,i)=>`<radialGradient id="tb${i}" gradientUnits="userSpaceOnUse" cx="${f(s.x)}" cy="${f(s.y)}" r="22"><stop offset="0" stop-color="${HEX[s.key]}" stop-opacity="${op}"/><stop offset="1" stop-color="${HEX[s.key]}" stop-opacity="0"/></radialGradient>`).join(''); }
 function tintRects(seats){ return seats.map((s,i)=>`<rect width="${W}" height="${H}" fill="url(#tb${i})" style="mix-blend-mode:multiply"/>`).join(''); }
 function ashDefs(w, fr, color){ const c=w.ashCorner,r=34+fr*1.0; return `<radialGradient id="ab" gradientUnits="userSpaceOnUse" cx="${f(c.x)}" cy="${f(c.y)}" r="${f(r)}"><stop offset="0" stop-color="${color}" stop-opacity="${f(fr/100*0.85)}"/><stop offset=".7" stop-color="${color}" stop-opacity="${f(fr/100*0.4)}"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></radialGradient>`; }
@@ -376,7 +427,8 @@ function homeMarker(w, halo, serif){ const s=w.home; return `<g transform="trans
 function towerMarker(w, textColor, halo, serif){ const s=w.tower; return `<g transform="translate(${f(s.x)},${f(s.y)})" opacity=".9"><rect x="-1" y="-1" width="2" height="3.4" fill="${textColor}" stroke="${halo}" stroke-width=".3"/><path d="M-1.4,-1 L0,-3 L1.4,-1 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".3"/><text x="0" y="-3.8" text-anchor="middle" font-size="2.2"${serif?' font-family="Georgia,serif"':''} fill="${textColor}" opacity=".8" style="paint-order:stroke" stroke="${halo}" stroke-width=".7" stroke-linejoin="round">The Secret Tower</text></g>`; }
 
 // --- dots (fixed at the site) + separately laid-out labels (vertically de-cluttered) ---
-function seatDot(s, halo){ return `<circle cx="${f(s.x)}" cy="${f(s.y)}" r="1.6" fill="${HEX[s.key]}" stroke="${halo}" stroke-width=".4"/>`; }
+// settlement icon — a little cult-coloured hold (base + roof) instead of a plain dot
+function seatDot(s, halo, ink){ return `<g transform="translate(${f(s.x)},${f(s.y)})"><circle r="2.1" fill="${halo}" opacity=".55"/><rect x="-1.35" y="-.4" width="2.7" height="2" rx=".25" fill="${HEX[s.key]}" stroke="${ink}" stroke-width=".3"/><path d="M-1.65,-.4 L0,-2.2 L1.65,-.4 Z" fill="${shade(HEX[s.key],-0.22)}" stroke="${ink}" stroke-width=".3" stroke-linejoin="round"/></g>`; }
 function homeDot(w, halo){ const s=w.home; return `<g transform="translate(${f(s.x)},${f(s.y)})"><path d="M0,-2.6 L2.2,0 L0,2.6 L-2.2,0 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".4"/><circle r=".8" fill="#fff2cf"/></g>`; }
 function towerDot(w, textColor, halo){ const s=w.tower; return `<g transform="translate(${f(s.x)},${f(s.y)})" opacity=".9"><rect x="-1" y="-1" width="2" height="3.4" fill="${textColor}" stroke="${halo}" stroke-width=".3"/><path d="M-1.4,-1 L0,-3 L1.4,-1 Z" fill="#b06a1c" stroke="${halo}" stroke-width=".3"/></g>`; }
 function layoutLabels(w){
@@ -407,6 +459,9 @@ function renderB(w, fr, S) {
   const ck=Math.max(0,Math.round(S.chaikin||0));
   const landPaths=w.landLoops.map(p=>toPath(ck?chaikin(p,ck):p, w.landCurve));
   const islandPath=toPath(ck?chaikin(w.islandPts,ck):w.islandPts, true);
+  // soft beach/shallow-water fringe just outside the coast (a lighter wide stroke under the land)
+  const beachCol=shade(S.land,0.16);
+  const beach=[...landPaths, islandPath].map(d=>`<path d="${d}" fill="none" stroke="${beachCol}" stroke-width="1.3" stroke-linejoin="round" opacity=".7"/>`).join('');
   const mainFill=landPaths.map(d=>`<path d="${d}" fill="${S.land}" stroke="${S.ink}" stroke-width="${S.coastW}" stroke-linejoin="round"/>`).join('');
   const islandFill=`<path d="${islandPath}" fill="${S.land}" stroke="${S.ink}" stroke-width="${(S.coastW*0.85).toFixed(2)}"/>`;
   const clip=landPaths.map(d=>`<path d="${d}"/>`).join('')+`<path d="${islandPath}"/>`;
@@ -420,23 +475,34 @@ function renderB(w, fr, S) {
     underTerrain=tintRects(w.seats);
   }
   const compass=S.compass?`<g transform="translate(15,82)" opacity=".85"><circle r="6.5" fill="none" stroke="${S.ink}" stroke-width=".4"/><path d="M0,-6.5 L1.3,0 L0,6.5 L-1.3,0 Z" fill="${S.ink}"/><path d="M-6.5,0 L0,-1.3 L6.5,0 L0,1.3 Z" fill="${S.mtnFill}"/><text y="-7.6" text-anchor="middle" font-size="2.3"${S.serif?' font-family="Georgia,serif"':''} fill="${S.ink}">N</text></g>`:'';
-  const frame=S.frame?`<rect x="1.5" y="1.5" width="${W-3}" height="${H-3}" fill="none" stroke="${S.ink}" stroke-width=".5"/><rect x="3" y="3" width="${W-6}" height="${H-6}" fill="none" stroke="${S.ink}" stroke-width=".3"/>`:'';
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs>${isVor?'':tintDefs(w.seats,S.tintOpacity)}${ashDefs(w,fr,S.ashColor)}
+  const frame=S.frame?borderSVG(S):'';
+  const vign=S.vignette?`<rect width="${W}" height="${H}" fill="url(#vign)"/>`:'';
+  const terrainWash = S.terrainTint ? terrainTintSVG(w) : '';
+  const texture = S.texture ? mottleSVG(w) + `<rect width="${W}" height="${H}" filter="url(#grain)" opacity=".1" style="mix-blend-mode:overlay"/>` : '';
+  const roughOpen = S.rough ? '<g filter="url(#rough)">' : '<g>';
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs>${isVor?'':tintDefs(w.seats,S.tintOpacity)}${ashDefs(w,fr,S.ashColor)}${painterDefs(w,S)}
       <clipPath id="landB">${clip}</clipPath>
       <pattern id="wavesB" width="9" height="6" patternUnits="userSpaceOnUse"><path d="M0 3 q 2.2 -2 4.5 0 t 4.5 0" fill="none" stroke="${S.ink}" stroke-width=".3" opacity=".55"/></pattern></defs>
     <rect width="${W}" height="${H}" fill="${S.sea}"/>
     <rect width="${W}" height="${H}" fill="url(#wavesB)" opacity="${S.waveOpacity}"/>
-    ${mainFill}${islandFill}
-    <g clip-path="url(#landB)">
-      ${underTerrain}
-      ${roads}
-      <path d="${polyPath(w.river)}" fill="none" stroke="${S.river}" stroke-width=".7" stroke-linecap="round"/>
-      ${forestsSVG(forests,S.forestFill,S.ink)}
-      ${mountainsSVG(mountains,S.mtnFill,S.ink)}
-      ${overClip}
+    ${roughOpen}
+      ${beach}
+      ${mainFill}${islandFill}
+      <g clip-path="url(#landB)">
+        ${terrainWash}
+        ${texture}
+        ${underTerrain}
+        ${roads}
+        <path d="${polyPath(w.river)}" fill="none" stroke="${S.river}" stroke-width=".7" stroke-linecap="round"/>
+        ${hillsSVG(w.hills,S)}
+        ${forestsSVG(forests,S)}
+        ${mountainsSVG(mountains,S)}
+        ${overClip}
+      </g>
     </g>
     <rect width="${W}" height="${H}" fill="url(#ab)"/>
-    ${w.seats.map(s=>seatDot(s,S.land)).join('')}${towerDot(w,S.ink,S.land)}${homeDot(w,S.land)}
+    ${vign}
+    ${w.seats.map(s=>seatDot(s,S.land,S.ink)).join('')}${towerDot(w,S.ink,S.land)}${homeDot(w,S.land)}
     ${labelsSVG(w,S)}
     ${compass}${frame}</svg>`;
 }

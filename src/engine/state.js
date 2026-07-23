@@ -73,13 +73,58 @@ export function pickIndex(state, n) {
 // ---- character generation: a fresh Circle is rolled each campaign, seeded so a
 // run is reproducible. Names are invented in the Runiverse voice (swap a handful
 // for canon Forgotten Runes names later). See design/MAGIC_AND_CIRCLE.md.
+// Real Forgotten Runes wizards (sampled from the on-chain collection via
+// portal.forgottenrunes.com/api/wizards/data/<id>). Each carries its short call-name
+// (`n`, shown inline + on cards), its full canonical name (`full` — front title +
+// name + back title, shown on the advisor sheet), and a grammatical gender (`g`;
+// 'they' for the collection's gender-ambiguous wizards). See design/PORTRAIT_PROMPTS
+// / the roster. Names are distinct so the Circle never doubles up.
 const NAMES = [
-  ['Vela', 'she'], ['Wisp', 'she'], ['Sabra', 'she'], ['Nyx', 'she'], ['Corvane', 'she'], ['Lyra', 'she'],
-  ['Ashling', 'she'], ['Thessa', 'she'], ['Mirren', 'she'], ['Ondine', 'she'], ['Bryn', 'she'], ['Saffron', 'she'],
-  ['Elowen', 'she'], ['Isolde', 'she'], ['Wren', 'she'], ['Marent', 'she'],
-  ['Korr', 'he'], ['Ember', 'he'], ['Bram', 'he'], ['Dain', 'he'], ['Osric', 'he'], ['Fenn', 'he'], ['Garrow', 'he'],
-  ['Roan', 'he'], ['Cael', 'he'], ['Alric', 'he'], ['Emrys', 'he'], ['Tobar', 'he'], ['Silas', 'he'], ['Vane', 'he'],
-  ['Hale', 'he'], ['Rune', 'he'],
+  { n: 'Caligari', full: 'Voodoo Priest Caligari of the Mount', g: 'he' },
+  { n: 'Voidoth', full: 'Cosmic Mage Voidoth of the Ether', g: 'they' },
+  { n: 'Lamia', full: 'Shaman Lamia of the Berg', g: 'she' },
+  { n: 'Durm', full: 'Battle Mage Durm of the Bastion', g: 'he' },
+  { n: 'Alessar', full: 'Arch-Magician Alessar of Mu', g: 'he' },
+  { n: 'Molek', full: 'Shaman Molek of the Valley', g: 'he' },
+  { n: 'Eizo', full: 'Druid Eizo of the Plains', g: 'he' },
+  { n: 'Imeena', full: 'Hedge Wizard Imeena of the Plains', g: 'she' },
+  { n: 'Lilith', full: 'Witch Lilith of the Pit', g: 'she' },
+  { n: 'Aldo', full: 'Thaumaturge Aldo of the Light', g: 'he' },
+  { n: 'Chooki', full: 'Necromancer Chooki of the Toadstools', g: 'they' },
+  { n: 'Jahid', full: 'Adept Jahid of the Keep', g: 'he' },
+  { n: 'Ofaris', full: 'Arch-Magician Ofaris', g: 'he' },
+  { n: 'Magpie', full: 'Transmuter Magpie of the Mist', g: 'they' },
+  { n: 'Lumos', full: 'Archmagus Lumos in the Shadows', g: 'they' },
+  { n: 'Diana', full: 'Enchanter Diana of the Road', g: 'she' },
+  { n: 'Asphodel', full: 'Oracle Asphodel of the Wood', g: 'she' },
+  { n: 'Victoria', full: 'Arch-Magician Victoria of the Field', g: 'she' },
+  { n: 'Ekmira', full: 'Sage Ekmira of the Wood', g: 'she' },
+  { n: 'Poppy', full: 'Geomancer Poppy of the Canyon', g: 'she' },
+  { n: 'Cromwell', full: 'Battle Mage Cromwell of the Gnostics', g: 'he' },
+  { n: 'Fark', full: 'Enchanter Fark of the Thorn', g: 'they' },
+  { n: 'Lucien', full: 'Runecaster Lucien of Limbo', g: 'he' },
+  { n: 'Merlon', full: 'Artificer Merlon of the Wood', g: 'he' },
+  { n: 'Aleister', full: 'Archmagus Aleister out of the Blizzard', g: 'he' },
+  { n: 'Ariadne', full: 'Enchanter Ariadne of the Plains', g: 'she' },
+  { n: 'Bathsheba', full: 'Enchanter Bathsheba of the Wold', g: 'she' },
+  { n: 'Cosmo', full: 'Aeromancer Cosmo of the Tower', g: 'he' },
+  { n: 'Finn', full: 'Magus Finn of the Hills', g: 'he' },
+  { n: 'Zeromus', full: 'Void Disciple Zeromus of Mu', g: 'he' },
+  { n: 'Alizam', full: 'Shaman Alizam of the Canyon', g: 'he' },
+  { n: 'Hagar', full: 'Battle Mage Hagar of the Wild', g: 'she' },
+  { n: 'Pierre', full: 'Voodoo Priest Pierre of the Palms', g: 'he' },
+  { n: 'Cybele', full: 'Enchanter Cybele of the Lake', g: 'she' },
+  { n: "C'thalpa", full: "Shaman C'thalpa of Arcadia", g: 'they' },
+  { n: 'Jadis', full: 'Enchanter Jadis of the Sun', g: 'she' },
+  { n: 'Jerret', full: 'Archmagus Jerret of the Mist', g: 'he' },
+  { n: 'Nixie', full: 'Summoner Nixie of the Palms', g: 'she' },
+  { n: 'Talbot', full: 'Aeromancer Talbot of the Mount', g: 'he' },
+  { n: 'Bayard', full: 'Battle Mage Bayard of the Fey', g: 'he' },
+  { n: 'Tundror', full: 'Battle Mage Tundror of the Valley', g: 'he' },
+  { n: 'Samuel', full: 'Aeromancer Samuel of the Wood', g: 'he' },
+  { n: 'Maia', full: 'Enchanter Maia of the Grotto', g: 'she' },
+  { n: 'Ulysse', full: 'Battle Mage Ulysse of the Wold', g: 'he' },
+  { n: 'Iprix', full: 'Archmagus Iprix of the Field', g: 'they' },
 ];
 export const CLASSES = ['magus', 'sorcerer', 'druid', 'necromancer', 'pyromancer', 'enchanter', 'charmer', 'chaos-mage', 'ghost-eater'];
 // mild class → competence lean (a nudge, not a cap)
@@ -106,13 +151,13 @@ export function rollCircle(state) {
   const rankBase = { 'ring-leader': 56, adept: 50, apprentice: 38 };
   const rankAge = { 'ring-leader': 54, adept: 38, apprentice: 22 };   // seniority reads as age
   return ranks.map((rank, i) => {
-    const [name, gender] = names[i];
+    const { n: name, full: fullName, g: gender } = names[i];
     const cls = classes[i];
     const school = schools[i];
     const bias = CLASS_BIAS[cls] || {};
     const stat = (k) => clampStat(rankBase[rank] + (bias[k] || 0) + rollRange(state, -14, 14));
     return {
-      id: `wz-${i}`, name, gender, school, class: cls, rank,
+      id: `wz-${i}`, name, fullName, gender, school, class: cls, rank,
       age: rankAge[rank] + rollRange(state, -6, 8),
       power: stat('power'), wisdom: stat('wisdom'), guile: stat('guile'), courage: stat('courage'),
       boldness: rollRange(state, 15, 85), piety: rollRange(state, 15, 85), temper: rollRange(state, 15, 85),
@@ -124,8 +169,8 @@ export function rollCircle(state) {
 // from those not already in the Circle or among the Souls; school/class are free.
 export function rollMember(state, rank = 'apprentice') {
   const used = new Set([...state.circle, ...state.souls].map((m) => m.name));
-  const pool = NAMES.filter(([n]) => !used.has(n));
-  const [name, gender] = (pool.length ? pool : NAMES)[pickIndex(state, (pool.length ? pool : NAMES).length)];
+  const pool = NAMES.filter((e) => !used.has(e.n));
+  const { n: name, full: fullName, g: gender } = (pool.length ? pool : NAMES)[pickIndex(state, (pool.length ? pool : NAMES).length)];
   const cls = CLASSES[pickIndex(state, CLASSES.length)];
   const school = CULTS[pickIndex(state, CULTS.length)];
   const bias = CLASS_BIAS[cls] || {};
@@ -134,7 +179,7 @@ export function rollMember(state, rank = 'apprentice') {
   const stat = (k) => clampStat(rankBase + (bias[k] || 0) + rollRange(state, -14, 14));
   const id = `wz-${state.nextMemberId != null ? state.nextMemberId++ : state.circle.length}`;
   return {
-    id, name, gender, school, class: cls, rank,
+    id, name, fullName, gender, school, class: cls, rank,
     age: rankAge + rollRange(state, -6, 8),
     power: stat('power'), wisdom: stat('wisdom'), guile: stat('guile'), courage: stat('courage'),
     boldness: rollRange(state, 15, 85), piety: rollRange(state, 15, 85), temper: rollRange(state, 15, 85),
@@ -179,14 +224,25 @@ export function workingOdds(state, working, caster) {
 }
 
 // Substitute {name} + gendered pronoun tokens ({they}/{them}/{their}/{theirs}) into scene text.
+// Gender is three-way: 'she' / 'he' / 'they' (the Runiverse has many gender-ambiguous
+// Wizards). Singular 'they' takes plural verb agreement, so the conjugation tokens
+// {s}/{es}/{ies} drop to the bare stem for 'they' — write "ask{s}", "carr{ies}",
+// "go{es}" and it reads right for all three (she asks / they ask).
 export function castText(text, m) {
   if (!m || !text) return text || '';
-  const she = m.gender === 'she';
-  const P = { they: she ? 'she' : 'he', them: she ? 'her' : 'him', their: she ? 'her' : 'his', theirs: she ? 'hers' : 'his' };
+  const g = m.gender === 'she' ? 'she' : m.gender === 'he' ? 'he' : 'they';
+  const plural = g === 'they';
+  const P = g === 'she' ? { they: 'she', them: 'her', their: 'her', theirs: 'hers', themselves: 'herself' }
+    : g === 'he' ? { they: 'he', them: 'him', their: 'his', theirs: 'his', themselves: 'himself' }
+      : { they: 'they', them: 'them', their: 'their', theirs: 'theirs', themselves: 'themselves' };
+  const cap = (w) => w[0].toUpperCase() + w.slice(1);
   return String(text)
     .replace(/\{name\}/g, m.name)
-    .replace(/\{(they|them|their|theirs)\}/g, (_, k) => P[k])
-    .replace(/\{(They|Them|Their|Theirs)\}/g, (_, k) => { const w = P[k.toLowerCase()]; return w[0].toUpperCase() + w.slice(1); })
+    .replace(/\{(they|them|their|theirs|themselves)\}/g, (_, k) => P[k])
+    .replace(/\{(They|Them|Their|Theirs|Themselves)\}/g, (_, k) => cap(P[k.toLowerCase()]))
+    .replace(/\{s\}/g, plural ? '' : 's')
+    .replace(/\{es\}/g, plural ? '' : 'es')
+    .replace(/\{ies\}/g, plural ? 'y' : 'ies')
     .replace(/\{class\}/g, m.class).replace(/\{school\}/g, m.school);
 }
 
