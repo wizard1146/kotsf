@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KOTSF — Content Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#14110f;--panel:#1f1a16;--panel2:#2a231d;--line:#3a3128;--ink:#e7dccb;--ink-dim:#9c8f7d;
+    --flame:#e8a33d;--flame-deep:#b5641c;--ok:#4e9a51;--danger:#c0392b;--warn:#d4ac0d;
+    --sans:"Barlow",system-ui,sans-serif;--display:"Barlow Semi Condensed",sans-serif;--mono:ui-monospace,Menlo,monospace;}
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  body{margin:0;background:radial-gradient(1200px 800px at 78% -10%,#241c14 0%,var(--bg) 60%) fixed;color:var(--ink);font-family:var(--sans);line-height:1.55;padding-bottom:5rem}
+  a{color:var(--flame)}
+  code{font-family:var(--mono);font-size:.86em;background:#0e0b09;border:1px solid var(--line);border-radius:4px;padding:.03rem .3rem;color:#d8c8a8}
+  header{position:sticky;top:0;z-index:20;background:#100d0be8;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.75rem 1.4rem}
+  .bar{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+  .brand{font-family:var(--display);font-weight:700;color:var(--flame);font-size:1.25rem;letter-spacing:.01em}
+  .sub{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim)}
+  .legend{margin-left:auto;display:flex;gap:.4rem;flex-wrap:wrap}
+  .shell{max-width:1180px;margin:1.5rem auto 0;padding:0 1.4rem;display:grid;grid-template-columns:200px 1fr;gap:2.2rem;align-items:start}
+  nav.toc{position:sticky;top:4.4rem;font-size:.86rem;border-left:1px solid var(--line);padding-left:.9rem}
+  nav.toc a{display:block;color:var(--ink-dim);text-decoration:none;padding:.2rem 0;border-left:2px solid transparent;margin-left:-.9rem;padding-left:.9rem}
+  nav.toc a:hover{color:var(--ink)}
+  nav.toc a.crit{color:#e6947e}
+  main{min-width:0}
+  section{margin:0 0 2.4rem;scroll-margin-top:4.6rem}
+  h2{font-family:var(--display);font-size:1.5rem;margin:0 0 .2rem;color:var(--flame);border-bottom:2px solid var(--flame-deep);padding-bottom:.3rem}
+  h2 .n{font-family:var(--mono);font-size:.9rem;color:var(--ink-dim);font-weight:400;margin-right:.5rem}
+  h3{font-family:var(--display);font-size:1.05rem;margin:1.3rem 0 .5rem;color:var(--ink)}
+  p{margin:.55rem 0}
+  ul{margin:.5rem 0;padding-left:1.2rem}li{margin:.3rem 0}
+  table{border-collapse:collapse;width:100%;margin:.7rem 0;font-size:.9rem}
+  th,td{border:1px solid var(--line);padding:.4rem .6rem;text-align:left;vertical-align:top}
+  th{background:var(--panel2);font-family:var(--display);font-weight:600;color:var(--ink)}
+  tbody tr:nth-child(odd){background:rgba(255,255,255,.015)}
+  .scroll{overflow-x:auto}
+  /* badges */
+  .b{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border-radius:20px;padding:.08rem .5rem;border:1px solid;white-space:nowrap;vertical-align:middle}
+  .b.crit{color:#f0a08a;border-color:var(--danger);background:rgba(192,57,43,.14)}
+  .b.p0{color:#f0a08a;border-color:var(--danger)}
+  .b.p1{color:#ecc94e;border-color:var(--warn)}
+  .b.p2{color:#7fbf86;border-color:#2e5a34}
+  .b.fixed{color:#1a130a;background:var(--ok);border-color:var(--ok)}
+  .b.strong{color:#7fbf86;border-color:#2e5a34}
+  .b.adeq{color:#ecc94e;border-color:var(--warn)}
+  .b.thin{color:#e6947e;border-color:var(--danger)}
+  /* callout cards */
+  .cards{display:grid;gap:.8rem;margin:.8rem 0}
+  .call{border:1px solid var(--line);border-left:3px solid var(--flame-deep);border-radius:9px;padding:.7rem .9rem;background:var(--panel)}
+  .call.bug{border-left-color:var(--danger)}
+  .call.ok{border-left-color:var(--ok)}
+  .call h4{margin:0 0 .3rem;font-family:var(--display);font-size:1rem;color:var(--ink);display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap}
+  .call p{margin:.2rem 0;font-size:.92rem;color:var(--ink)}
+  .muted{color:var(--ink-dim)}
+  .rec{border:1px solid var(--line);border-radius:9px;padding:.6rem .9rem;margin:.6rem 0;background:var(--panel);display:flex;gap:.7rem;align-items:baseline}
+  .rec .num{font-family:var(--display);font-size:1.1rem;color:var(--flame);min-width:1.3rem}
+  .rec.done{opacity:.72}
+  .rec.done .body{text-decoration:none}
+  .fixnote{color:var(--ok);font-size:.82rem;font-style:italic;margin-top:.25rem}
+  @media(max-width:820px){.shell{grid-template-columns:1fr}nav.toc{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <span class="brand">Content Audit</span>
+    <span class="sub">53 scenes · 6 expeditions · generated 2026-07-23 · <a href="CONTENT_AUDIT.md">source .md</a></span>
+    <span class="legend">
+      <span class="b p0">P0 bug</span><span class="b p1">P1 gap</span><span class="b p2">P2 win</span><span class="b fixed">✓ fixed</span>
+    </span>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="toc">
+    <a href="#tldr" class="crit">TL;DR — top 3</a>
+    <a href="#s1">1 · Inventory &amp; shape</a>
+    <a href="#s2">2 · Skill-check deficits</a>
+    <a href="#s3">3 · Colour / school</a>
+    <a href="#s4">4 · Narrative gaps</a>
+    <a href="#s5">5 · Continuity &amp; flags</a>
+    <a href="#s6">6 · Emotional beats</a>
+    <a href="#s7">7 · Recommendations</a>
+  </nav>
+
+  <main>
+    <section id="tldr">
+      <h2>TL;DR — the three things that matter</h2>
+      <div class="cards">
+        <div class="call ok">
+          <h4>1 · Critical bug — 8 expedition skill-checks silently always-lost <span class="b fixed">✓ fixed v37</span></h4>
+          <p>Every expedition <code>test</code> on <code>power</code>/<code>guile</code>/<code>courage</code> resolved to <code>0</code> (the engine's <code>getPath</code> can't read member competence) &rarr; <b>P(win)=0</b>. The <b>Champion's Tourney was unwinnable</b>, the endgame flag <b><code>hearth_accord</code> was unreachable</b>, and the seizure / ambush branches <b>always killed the party</b>.</p>
+          <p class="fixnote">Fixed: <code>getPath</code> now resolves competence inside an active expedition beat as the best of the party you sent — so "who you send matters." A harness lint now rejects non-resolvable scene paths.</p>
+        </div>
+        <div class="call">
+          <h4>2 · 41 of 47 flags are orphans (set, never read) <span class="b p2">cheap win</span></h4>
+          <p>The entire creation backstory (<code>deed_*</code>, <code>belief_*</code>, <code>fear_*</code>, <code>mark_*</code>, <code>path_*</code>, <code>player_*</code>) and every endgame flag (<code>ember_borne</code>, <code>glimpsed_first_memory</code>, <code>hearth_accord</code>) gate nothing. Only <b>6 flags</b> are actually consumed.</p>
+        </div>
+        <div class="call">
+          <h4>3 · The endgame spine is unbuilt <span class="b p1">biggest gap</span></h4>
+          <p>No Ember counter, no Keepers, no Secret Tower, no elevation. Ember-hunt <i>scenes</i> exist but feed no campaign counter — the hunt has no destination.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s1">
+      <h2><span class="n">1</span>Inventory &amp; shape</h2>
+      <p><b>53 scenes</b> + <b>6 expeditions</b> + a creation wizard. Scene types: interactive 40 · quest 11 · news 2. (<code>quest</code> here = single-scene beats, distinct from multi-stage expeditions.)</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Well-stocked</th><th>Thin / missing</th></tr></thead>
+        <tbody>
+          <tr><td>Cult diplomacy — 13 scenes, all 7 colours touched</td><td><b>Keepers / Secret Tower — 0 scenes</b> (endgame spine)</td></tr>
+          <tr><td>Fracture / war pressure — 8</td><td>Coven / personality drama — <b>1</b> primary-tag scene</td></tr>
+          <tr><td>Mana economy — 12 mana-gain scenes</td><td>Famine / fields — <b>2</b> scenes</td></tr>
+          <tr><td>Lore / tomes — 6 + 3</td><td>Recruitment — <b>2</b> scenes</td></tr>
+          <tr><td>Ember-hunt — 7 scenes + <code>bear-an-ember-home</code></td><td>Ember <i>counter</i> (state) — not implemented</td></tr>
+          <tr><td>Expeditions — 6 multi-stage quests</td><td>Recurring named characters — near-zero</td></tr>
+        </tbody>
+      </table></div>
+      <p class="muted">Primary-tag spread: cults 13 · fracture 8 · lore 6 · hearth 6 · embers 5 · flame 5 · war 4 · tomes 3 · famine 2 · coven 1. <code>mana</code> appears as a <i>secondary</i> tag on 12 scenes but is never a primary category.</p>
+    </section>
+
+    <section id="s2">
+      <h2><span class="n">2</span>Skill-check deficits</h2>
+      <p><b>44 tests total</b> — 30 in scenes, 14 in expeditions. 28/53 scenes carry ≥1 test; 10 more gate with <code>requires</code> only; <b>15 are pure narrative</b> (no test, no gate) — notably most <code>quest</code>-type beats, which are currently the <i>least</i> mechanically interactive content.</p>
+
+      <h3>2a · Bugs — tests on non-resolvable paths <span class="b fixed">✓ fixed v37</span></h3>
+      <p>These 8 checks could never be won (silently). The root cause was doubly clear: every affected expedition sets <code>partyPick:"most:power|courage|guile"</code> — competence <i>was</i> meant to decide them. Fixed by resolving competence against the party.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Expedition : stage : choice</th><th>stat</th><th>vs</th><th>Was-broken consequence</th></tr></thead>
+        <tbody>
+          <tr><td><code>the-champions-tourney : the-final : fight-final</code></td><td>power</td><td>55</td><td><b>Crown unwinnable</b> — the jackpot was unreachable</td></tr>
+          <tr><td><code>the-champions-tourney : the-bouts : press-cheat</code></td><td>guile</td><td>50</td><td>Cheat path always half-caught</td></tr>
+          <tr><td><code>the-rival-hearth-pilgrimage : the-threshold : sue</code></td><td>guile</td><td>50</td><td><b><code>hearth_accord</code> unreachable</b> — always routed to cold-door</td></tr>
+          <tr><td><code>the-rival-hearth-pilgrimage : the-seizure : take</code></td><td>power</td><td>55</td><td><b>Seizure always fatal</b> (<code>lost</code>)</td></tr>
+          <tr><td><code>bear-an-ember-home : the-ambush : fight-through</code></td><td>courage</td><td>55</td><td><b>Always killed the party</b></td></tr>
+          <tr><td><code>bear-an-ember-home : the-hunted-road : evade</code></td><td>guile</td><td>50</td><td>Always routed into the ambush</td></tr>
+          <tr><td><code>bear-an-ember-home : the-hunted-road : fight-clear</code></td><td>power</td><td>52</td><td>Always took the bloodied branch</td></tr>
+          <tr><td><code>the-deep-fracture-descent : the-unmaking : press</code></td><td>courage</td><td>55</td><td>Always fatal</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fixnote">Scenes were clean — every scene test already used a resolvable path. Only expeditions had this. A harness lint now catches the whole class.</p>
+
+      <h3>2b · Distribution across masteries vs pressures</h3>
+      <ul>
+        <li><b>Pressures dominate; two schools are never checked.</b> <code>mastery.red</code> and <code>mastery.yellow</code> are <b>never</b> a test path (nor a trigger/requires). Red &amp; Yellow can raise mastery at creation but the coven can never <i>show it off</i>.</li>
+        <li><b><code>lore</code> is over-used</b> — 11 of 30 scene tests, 14 tags, the most common trigger path. <code>faith</code> (9) and <code>mana</code> (6) follow. <code>provisions</code> is never a test stat despite two famine scenes.</li>
+        <li><b>Mastery checks are swingy 0%/35% gates.</b> A coven with no purple hits <code>mastery.purple vs40</code> at ~0% — effectively "do you own this school", a softer cousin of the 2a bug.</li>
+      </ul>
+
+      <h3>2c · Difficulty spread</h3>
+      <p>Resolvable checks cluster <b>33–54%</b> at opening pressures — nothing trivially easy, nothing certain (bounded model). Two structural notes: mana-checks trigger when mana is <i>low</i>, so effective odds are worse than base (punishing but on-theme); and several checks reward the same pressure they test (mild rich-get-richer).</p>
+    </section>
+
+    <section id="s3">
+      <h2><span class="n">3</span>Colour / school representation</h2>
+      <p>All seven colours receive cult-standing touches, and the +/− balance is healthy — <b>cult standing is the healthiest system in the game</b>, genuinely zero-sum.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Colour</th><th>cult + / −</th><th>mastery adjust</th><th>mastery test</th><th>player_* read?</th></tr></thead>
+        <tbody>
+          <tr><td>red</td><td>7 / 8</td><td>1</td><td>0</td><td class="muted">no</td></tr>
+          <tr><td>yellow</td><td>5 / 2</td><td>1</td><td>0</td><td class="muted">no</td></tr>
+          <tr><td>brown</td><td>4 / 3</td><td>2</td><td>1</td><td class="muted">no</td></tr>
+          <tr><td>green</td><td>7 / 4</td><td>2</td><td>1</td><td class="muted">no</td></tr>
+          <tr><td>blue</td><td>5 / 5</td><td>3</td><td>1</td><td class="muted">no</td></tr>
+          <tr><td>purple</td><td>4 / 4</td><td>1</td><td>2</td><td class="muted">no</td></tr>
+          <tr><td>white</td><td>5 / 4</td><td>1</td><td>2</td><td class="muted">no</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b><code>player_&lt;colour&gt;</code> is mechanically inert</b> — all seven set at creation, <b>never read</b>. The Archon's school does nothing beyond a +12 mastery nudge — the most identity-defining choice gates zero content.</li>
+        <li><b>Red &amp; Yellow are flavour-only for mastery</b> (0 tests). Purple &amp; White are the most mechanically live schools.</li>
+      </ul>
+    </section>
+
+    <section id="s4">
+      <h2><span class="n">4</span>Narrative gaps <span class="muted" style="font-size:.7rem">vs North Star &amp; Endgame Arc</span></h2>
+      <ul>
+        <li><b>The endgame spine is essentially unbuilt.</b> Secret Tower (0 scenes), the three Keepers — mad / power-lost hermit / imprisoned (0 scenes), elevation of 3 Wizards (no subsystem), the Fracture-close 7-choice finale (0 scenes), and the Archon's own tracked stats (absent). None of it exists yet.</li>
+        <li><b>Ember density vs the 8–14 target.</b> Hunt <i>scenes</i> are stocked, but there's <b>no campaign counter</b>; the flags that should feed it (<code>ember_borne</code>, <code>ember_taken</code>, <code>ember_ally</code>) are orphans. The hunt has no destination.</li>
+        <li><b>Inter-Circle personality drama is the biggest thin spot.</b> Only <b>1</b> primary-<code>coven</code> scene and <b>1 conditional advisor line in the entire content set</b>. Advisors are static two-voice pairs that rarely react to state, backstory, or each other — under-serving North Star #5 (no perfect info) and #6 (distinct personalities).</li>
+        <li><b>Warriors / steel-vs-magic</b> is present but shallow; <code>warriors_disdain</code> / <code>warriors_none</code> are orphans, so two of four backstory answers pay off nothing.</li>
+        <li><b>Recurring characters</b> barely exist — <code>the-old-archons-kin</code> is the one true callback.</li>
+      </ul>
+    </section>
+
+    <section id="s5">
+      <h2><span class="n">5</span>Continuity &amp; flag hygiene</h2>
+      <p><b>47 flags set. 6 genuinely read.</b> No material lore contradictions — the Runiverse voice (Forgetting / Embers / Flame-as-memory / Souls) is consistent across scenes, creation, and expeditions.</p>
+      <h3>The 6 working gates</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Flag</th><th>Set by</th><th>Read by</th></tr></thead>
+        <tbody>
+          <tr><td><code>ember_hunt</code></td><td><code>a-rumour-of-embers</code></td><td><code>the-cold-hearth</code>, <code>the-rival-hearth</code></td></tr>
+          <tr><td><code>read_a_failure_tale</code></td><td>3 tome scenes</td><td><code>the-last-true-name</code></td></tr>
+          <tr><td><code>appointed_usurper</code></td><td>creation</td><td><code>the-old-archons-kin</code> <span class="muted">(best example)</span></td></tr>
+          <tr><td><code>warriors_allies</code></td><td>creation</td><td><code>the-warrior-levy</code></td></tr>
+          <tr><td><code>warriors_enemies</code></td><td>creation</td><td><code>steel-at-the-gate</code>, <code>the-warrior-levy</code></td></tr>
+          <tr><td><code>champion_cheats</code></td><td><code>the-champions-tourney</code></td><td>same expedition (intra-quest)</td></tr>
+        </tbody>
+      </table></div>
+      <h3>41 orphan flags (set, never read)</h3>
+      <p>Whole creation categories dead: <code>deed_*</code> (4), <code>belief_*</code> (4), <code>fear_*</code> (4), <code>mark_*</code> (4), <code>path_*</code> (4), <code>player_*</code> (7), plus <code>appointed_named/raised/alone</code> and <code>warriors_disdain/none</code>. <b>Every endgame flag is an orphan</b> (<code>ember_borne</code>, <code>glimpsed_first_memory</code>, <code>hearth_accord</code>, …) — expected while the endgame is unbuilt; each is a wired hook waiting for a consumer.</p>
+      <p class="muted">The one "read-never-set" hit — <code>the-sealed-stair</code>'s <code>{flag:"__never"}</code> trigger — is an <b>intentional sentinel</b> making the scene unlock-only. Working as designed, but it looks like a bug; worth a first-class "unlock-only" idiom.</p>
+    </section>
+
+    <section id="s6">
+      <h2><span class="n">6</span>Emotional-beat coverage</h2>
+      <div class="scroll"><table>
+        <thead><tr><th>Beat</th><th>Rating</th><th>Reasoning</th></tr></thead>
+        <tbody>
+          <tr><td><b>Surprise</b></td><td><span class="b adeq">Adequate</span></td><td>Mechanisms exist (<code>once</code> scenes, unlock chains, the hidden <code>the-sealed-stair</code>, random-apprentice loss, the returning-soul naming, the usurper callback) — but only 1 conditional advisor and few "safe choice that still bites." Surprise is structural, not authored-in.</td></tr>
+          <tr><td><b>Decision</b></td><td><span class="b strong">Strong</span></td><td>Nearly every scene has real opposition — cult-vs-cult zero-sum, advisors disagree, no dominant option. The game's clear strength.</td></tr>
+          <tr><td><b>Disappointment</b><br><span class="muted" style="font-size:.8rem">(failure writing)</span></td><td><span class="b strong">Strong</span></td><td>Lose branches are authored and story-generating to the KODP bar. <span class="muted">(The always-lose bug that made some failures arbitrary is now fixed.)</span></td></tr>
+          <tr><td><b>Elation</b></td><td><span class="b adeq">Adequate</span></td><td>Jackpots exist (<code>the-purple-dare</code> +16, <code>the-white-audit</code> +16, the tourney crown — now winnable again). Wins are otherwise mostly modest.</td></tr>
+          <tr><td><b>Investment</b></td><td><span class="b thin">Thin payoff</span></td><td>Named Wizards, permanent loss, persisting Souls and a rich creation backstory all build attachment — <b>but that backstory is ~95% inert</b> (§5), so early investment is rarely repaid. Wiring the orphan flags is the highest-leverage win.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s7">
+      <h2><span class="n">7</span>Prioritised recommendations</h2>
+
+      <h3>P0 — Bugs <span class="b fixed">✓ both done v37</span></h3>
+      <div class="rec done"><span class="num">1</span><div class="body"><b>Fix the 8 always-lose expedition checks.</b> <span class="fixnote">Done — competence now resolves against the party lead; Tourney winnable, <code>hearth_accord</code> reachable.</span></div></div>
+      <div class="rec done"><span class="num">2</span><div class="body"><b>Add a content lint</b> rejecting any <code>test.stat</code> / path not resolvable by <code>getPath</code>. <span class="fixnote">Done — the harness now warns on non-resolvable scene paths.</span></div></div>
+
+      <h3>P1 — Highest-value content gaps <span class="b p1">open</span></h3>
+      <div class="rec"><span class="num">3</span><div class="body"><b>Wire the Ember campaign counter</b> (<code>embersFound</code> / <code>embersGoal</code> 8–14) and make <code>ember_borne</code>/<code>ember_taken</code>/<code>ember_ally</code> increment it. Gives the whole hunt a destination; un-orphans 3 flags.</div></div>
+      <div class="rec"><span class="num">4</span><div class="body"><b>Build the Keepers / Secret Tower first beat.</b> Even one expedition that discovers the Tower (gated on high <code>lore</code> + an Ember count) turns the arc from design intent into playable spine. The largest missing block.</div></div>
+      <div class="rec"><span class="num">5</span><div class="body"><b>Deepen inter-Circle drama.</b> Add conditional advisor lines and a few <code>coven</code>-tag scenes where members feud / grieve / react to state. Cheapest route to North Star #5/#6.</div></div>
+
+      <h3>P2 — Cheap wins (mostly wiring existing orphans) <span class="b p2">open</span></h3>
+      <div class="rec"><span class="num">6</span><div class="body"><b>Pay off the creation backstory.</b> Read <code>player_&lt;colour&gt;</code> and a few <code>deed_*</code>/<code>fear_*</code>/<code>mark_*</code> flags in triggers &amp; advisor-<code>if</code>. <code>the-old-archons-kin</code> is the proven template — enormous investment payoff, pure content.</div></div>
+      <div class="rec"><span class="num">7</span><div class="body"><b>Give Red &amp; Yellow a mastery check each</b> so all seven schools can be shown off, not just banked.</div></div>
+      <div class="rec"><span class="num">8</span><div class="body"><b>Add conditional advisor lines broadly</b> (<code>advisor.if</code>) keyed on cult standing / backstory — only 1 exists today.</div></div>
+      <div class="rec"><span class="num">9</span><div class="body"><b>Add a <code>provisions</code> test</b> to at least one famine scene (never a test stat despite being a survival axis).</div></div>
+    </section>
+  </main>
+</div>
+</body>
+</html>
